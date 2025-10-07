@@ -1,0 +1,53 @@
+﻿@model  IEnumerable<Latest_Staff_Portal.ViewModel.FixedAsset>
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; ">
+        <thead style="background-color:black;color:white">
+        <tr>
+            <th>#</th>
+            <th>Asset Number</th>
+            <th>Asset Serial Number</th>
+            <th>Description</th>
+            @*<th>Tag Number</th>*@
+            @*<th style="text-align:right">Actions</th>*@
+        </tr>
+        </thead>
+        <tbody>
+        @{
+            if (Model != null && Model.Count() > 0)
+            {
+                var i = 1;
+                foreach (var item in Model)
+                {
+                    <tr>
+
+
+                        <td>
+                            @i
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.No)
+
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Serial_No)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                    </tr>
+                    i++;
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="4" style="color:red">
+                        No Records Found
+                    </td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>

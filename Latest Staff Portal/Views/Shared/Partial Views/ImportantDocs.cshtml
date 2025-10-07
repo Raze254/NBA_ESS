@@ -1,0 +1,84 @@
+﻿@model Latest_Staff_Portal.ViewModel.DocumentAttachmentList
+
+<style>
+    .btnPadding {
+        padding: 5px;
+        font-size: 10px;
+    }
+</style>
+<table id="DocumentAttachmnts" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+    <thead style="background-color:black;color:white">
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            File Extension
+        </th>
+        <th>
+            Document Type
+        </th>
+        <th>
+            Action
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    @{
+        if (Model.DocList != null)
+        {
+            if (Model.DocList.Any())
+            {
+                foreach (var item in Model.DocList)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FileExtension)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DocumentType)
+                        </td>
+						<td>
+							<button id="btnview" class="btn btn-primary btnPadding"
+									onclick="ViewAttachment('@item.DocumentType', '@item.DocumentId');">
+								View Attachment
+							</button>
+
+							@* @if (Model.Status == "Pending" || Model.Status == "Open") *@
+							@* { *@
+							@* 	<button id="btndelete" class="btn btn-danger btnPadding" onclick="DeleteAttachment('@item.ID','@item.No','@item.ID');">Delete</button> *@
+							@* } *@
+						</td>
+                    </tr>
+                }
+            }
+        }
+    }
+    </tbody>
+    <tfoot>
+    <tr class="HideLineButton">
+        <td class="text-right" colspan="4">
+            <input type="button" value="Add Attachment" class="btn btn-danger BtnPadding" onclick="AddAttachment();"/>
+        </td>
+    </tr>
+    </tfoot>
+</table>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var status = '@Model.Status';
+        if (status == "Pending" || status == "Open" || status == "New") {
+            $(".HideLineButton").show();
+        }
+        else {
+            $(".HideLineButton").hide();
+        }
+    });
+    $("#DocumentAttachmnts").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100],
+        "bDestroy": true
+    });
+</script>

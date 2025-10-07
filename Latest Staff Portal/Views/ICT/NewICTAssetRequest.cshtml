@@ -1,0 +1,146 @@
+﻿@model Latest_Staff_Portal.ViewModel.NewICTRequisition
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Donor", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(model => model.Directorate, Model.ListOfDirectorate, "--select Donor--", new { @class = "form-control", id = "ddlDirectorate", @readonly = "readonly", style = "background-color:#dedebd" })
+                @Html.ValidationMessageFor(model => model.Directorate, "", new { @class = "text-danger" })
+            </div>
+
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Project", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(model => model.Department, Model.ListOfDepartment, "--Select Project--", new { @class = "form-control", id = "ddlDim2", @readonly = "readonly", style = "background-color:#dedebd" })
+                @Html.ValidationMessageFor(model => model.Department, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Date Requires", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="datetime" class="form-control" placeholder="dd/mm/yyyy" id="dtPicker" onkeydown="return false;" autocomplete="off"/>
+                @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Asset Description", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <textarea id="txtRemarks" rows="3" class="form-control"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Reason for Request", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <textarea id="txtReason" rows="3" class="form-control"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+<hr/>
+<div align="center">
+    <input type="button" class="btn btn-primary waves-effect waves-light" value="Submit Request" onclick="SubmitRequisition();"/>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#dtPicker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-0:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy',
+            minDate: 0
+        });
+        $(window).resize(function () {
+            $('#dtPicker').datepicker('hide');
+            $('#dtPicker').blur();
+        });
+    });
+   
+    var FilterDimension2 = function () {
+        var Dim1 = $("#ddlDim1").children("option:selected").val();
+
+        if (Dim1 == "") {
+            $("#ddlDim2 option").remove();
+            $('#ddlDim2').empty().append('<option selected="selected" value="">--Select Project--</option>');
+        }
+        else {
+            ShowProgress();
+            $("#ddlDim2 option").remove();
+            $('#ddlDim2').empty().append('<option selected="selected" value="">--Select Project---</option>');
+
+            $.getJSON("/Common/FilterDimension2", { Dim1: Dim1 },
+                function (data) {
+                    $('#ddlDim2').empty().append('<option selected="selected" value="">--Select Project--</option>');
+                    $.each(data.ListOfDim2, function () {
+                        $("#ddlDim2").append($("<option></option>").val(this['Value']).html(this['Text']));
+                    });
+                    HideProgress();
+                });
+        }
+    }
+    var FilterDimension3 = function () {
+        var Dim1 = $("#ddlDim1").children("option:selected").val();
+        var Dim2 = $("#ddlDim2").children("option:selected").val();
+        var Dim3 = $("#ddlDim3").children("option:selected").val();
+        if (Dim1 == "") {
+            $("#ddlDim3 option").remove();
+            $('#ddlDim3').empty().append('<option selected="selected" value="">--Select Project--</option>');
+        }
+        else {
+            ShowProgress();
+            $("#ddlDim3 option").remove();
+            $('#ddlDim3').empty().append('<option selected="selected" value="">--Select Programme Area---</option>');
+
+            $.getJSON("/Common/FilterDimension3", { Dim1: Dim1, Dim2: Dim2, Dim3: Dim3 },
+                function (data) {
+                    $('#ddlDim3').empty().append('<option selected="selected" value="">--Select Programme Area--</option>');
+                    $.each(data.ListOfDim3, function () {
+                        $("#ddlDim3").append($("<option></option>").val(this['Value']).html(this['Text']));
+                    });
+                    HideProgress();
+                });
+        }
+    }
+    var FilterDimension4 = function () {
+        var Dim1 = $("#ddlDim1").children("option:selected").val();
+        var Dim2 = $("#ddlDim2").children("option:selected").val();
+        var Dim3 = $("#ddlDim3").children("option:selected").val();
+        if (Dim1 == "") {
+            $("#ddlDim4 option").remove();
+            $('#ddlDim4').empty().append('<option selected="selected" value="">--Select Activity--</option>');
+        }
+        else {
+            ShowProgress();
+            $("#ddlDim4 option").remove();
+            $('#ddlDim4').empty().append('<option selected="selected" value="">--Select Activity---</option>');
+
+            $.getJSON("/Common/FilterDimension4", { Dim1: Dim1, Dim2: Dim2, Dim3: Dim3 },
+                function (data) {
+                    $('#ddlDim4').empty().append('<option selected="selected" value="">--Select Activity--</option>');
+                    $.each(data.ListOfDim4, function () {
+                        $("#ddlDim4").append($("<option></option>").val(this['Value']).html(this['Text']));
+                    });
+                    HideProgress();
+                });
+        }
+    }
+</script>

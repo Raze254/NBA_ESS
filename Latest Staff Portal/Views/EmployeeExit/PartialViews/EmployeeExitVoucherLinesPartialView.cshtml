@@ -1,0 +1,91 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.ExitPlanLines>
+
+@{
+    ViewBag.Title = "EmployeeExitVoucherLinesPartialView";
+}
+
+
+<div class="table-responsive">
+    <table id="datatable-buttons2" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th>Exit Header No</th>
+                <th>Document Type</th>
+                <th>Line No</th>
+                <th>Primary Directorate</th>
+                <th>Primary Directorate Name</th>
+                <th>Responsible Employee</th>
+                <th>Responsible Employee Name</th>
+                <th>Planned Date</th>
+                <th>Actual Date</th>
+                <th>Status</th>
+                <th>Cleared By</th>
+                <th>Action</th>
+            </tr>
+
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Exit_Header_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Document_Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LineNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PrimaryDirectorate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PrimaryDirectorateName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ResponsibleEmployee)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Responsible_Employee_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PlannedDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ActualDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.clearedBy)
+                    </td>
+                    <td>
+                        <button class="btn btn-success  btn-sm" data-toggle="tooltip" data-placement="top" title="Edit"
+                                onclick="EditItem('@item.Exit_Header_No', '@item.LineNo' , '@item.PrimaryDirectorate', '@item.PlannedDate');">
+                            Edit Line
+                        </button>
+                        <button class="btn btn-danger  btn-sm ml-3" data-toggle="tooltip" data-placement="top" title="Delete" onclick="RemoveItem('@item.Exit_Header_No', '@item.LineNo');">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div style="text-align:right">
+    <button class="btn btn-primary action-buttons2" onclick="AddExitVoucherLine();">
+        <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Line
+    </button>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#datatable-buttons2").DataTable({
+            lengthChange: true,
+            lengthMenu: [5, 10, 25, 50, 100] // Same options for the second table
+        });
+    });
+</script>

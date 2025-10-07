@@ -1,0 +1,73 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.PurchaseRequisitions>
+
+<div class="table-responsive">
+    <table id="datatable-buttons2" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead>
+            <tr>
+                <th>Action</th>
+                <th>No</th>
+                <th>Document Date</th>
+                <th>Description</th>
+                <th>Department Name</th>
+                @*<th>Project Name</th>*@
+                <th>Procurement Plan ID</th>
+                @*<th>Assigned Officer</th> *@
+                <th>Requisition Product Group</th>
+                <th>Status</th>
+            </tr>
+
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <input type="button" onclick="ViewDoc('@item.No');" class="btn btn-primary btn-sm action-buttons3" value="Select" />
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.No)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Document_Date)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Department_Name)
+                    </td>
+
+                    @* <td>
+                            @Html.DisplayFor(modelItem => item.Project_Name)
+                        </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Procurement_Plan_ID)
+                    </td>
+
+                    @* <td>
+                            @Html.DisplayFor(modelItem => item.Assigned_Officer)
+                        </td>
+                    *@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Requisition_Product_Group)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+
+                </tr>
+            }
+    </table>
+</div>
+
+<script>
+    $("#datatable-buttons2").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100] // Same options for the second table
+    });
+</script>

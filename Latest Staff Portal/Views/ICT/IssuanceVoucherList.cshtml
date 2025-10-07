@@ -1,0 +1,424 @@
+﻿@{
+    ViewBag.Title = "ICTRequisitionList";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 8px;
+        font-size: 12px;
+    }
+</style>
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/Dashboard/Dashboard">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active">Issuance Voucher List</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<hr />
+<br />
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-6"><h4>Issuance Voucher List</h4></div>
+            <div class="col-md-6" style="text-align:right">
+                @*<a href="#" onclick="NewICTRequisition();" class="btn btn-primary BtnPadding action-buttons">New Request</a>*@
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div id="divRegList"></div>
+    </div>
+
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <label id="labelF"></label>
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadIssuanceVoucherList();
+        var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+        var Errormsg = '@Request.RequestContext.HttpContext.Session["ErrorMsg"]';
+        if (Successmsg != "") {
+            Swal.fire('Success', Successmsg, 'success',true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+        if (Errormsg != "") {
+            Swal.fire('Warning', Errormsg, 'warning',true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+    });
+    var LoadIssuanceVoucherList = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: "/ICT/IssuanceVoucherListPartialView",
+            success: function (data) {
+                $("#divRegList").html(data);
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+
+    var ViewDoc = function (No) {
+        ShowProgress();
+        var form = $('<form>', {
+            action: '/ICT/IssuanceVoucherDocumentView',
+            method: 'POST'
+        }).append($('<input>', {
+            type: 'hidden',
+            name: 'No',
+            value: No
+        }));
+        form.appendTo('body').submit();
+    };
+
+
+
+
+
+
+    var NewICTRequisition = function () {
+        $("#labelF").text("New ICT Request");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/ICT/NewICTRequest',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var SubmitRequisition = function () {
+        var Category = $("#ddlCategory").children("option:selected").val();
+        var Directorate = $("#ddlDirectorate").children("option:selected").val();
+        var Department = $("#ddlDim2").children("option:selected").val();
+        var Urgency = $("#ddlUrgency").children("option:selected").val();
+        var dateRequired = $('#dtPicker').val();
+        var Remarks = $("#txtRemarks").val();
+        if (Category == "") {
+            Swal.fire('error', 'Select Category', 'error');
+            return;
+        }
+        else if (Directorate == "") {
+            Swal.fire('error', 'Select Directorate', 'error');
+            return;
+        }
+        else if (Department == "") {
+            Swal.fire('error', 'Select Department', 'error');
+            return;
+        }
+        else if (Urgency == "") {
+            Swal.fire('error', 'Select Urgency of the issues', 'error');
+            return;
+        }
+        else if (dateRequired == "") {
+            Swal.fire('error', 'Select Date Required', 'error');
+            return;
+        }
+        else if (Remarks == "") {
+            Swal.fire('error', 'Enter general remarks of the issues', 'error');
+            return;
+        }
+        else {
+            var ICTRequest = {};
+            ICTRequest.Directorate = Directorate;
+            ICTRequest.Department = Department;
+            ICTRequest.Urgency = Urgency;
+            ICTRequest.RequiredDate = dateRequired;
+            ICTRequest.ReqCat = Category;
+            ICTRequest.Description = Remarks;
+            var filename; var base64string; var filetype;
+            var files = document.getElementById('LeavefileAttachment').files;
+            if (files.length) {
+                var file = files[0];
+                if (file.size > 10000000)
+                {
+                    Swal.fire('Warning', 'Please only files less than 10MB allowed. Thanks!!', 'warning');
+                }
+                else
+                {
+                    var blob = file.slice();
+                    filetype = file.type;
+                    filename = file.name;
+                    var reader = new FileReader();
+                    reader.onloadend = function (evt)
+                    {
+                        if (evt.target.readyState == FileReader.DONE)
+                        { // DONE == 2
+                            var cont = evt.target.result
+                            base64String = getB64Str(cont);
+                        }
+                        ShowProgress();
+                        $.ajax({
+                            type: "post",
+                            url: "/ICT/SubmitICTRequest",
+                            data: JSON.stringify({ NewReq: ICTRequest, base64Upload: base64String, fileName: filename, Extn: filetype }),
+                            contentType: "application/json; charset = utf-8",
+                            success: function (data) {
+                                if (data.success == true) {
+                                    HideProgress();
+                                    LoadICTReqList();
+                                    $("#myModal").modal("hide");
+                                    Swal.fire('Success', data.message, 'success');
+                                }
+                                else {
+                                    HideProgress();
+                                    Swal.fire('error', data.message, 'error');
+                                }
+                            },
+                            error: function () {
+                                HideProgress();
+                                Swal.fire('error', data.message, 'error');
+                            }
+                        });
+                    };
+                    reader.readAsArrayBuffer(blob);
+                }
+            }
+            else {
+
+
+            ShowProgress();
+            $.ajax({
+                type: "post",
+                url: "/ICT/SubmitICTRequest",
+                data: JSON.stringify({ NewReq: ICTRequest, base64Upload: "", fileName: "", Extn: "" }),
+                contentType: "application/json; charset = utf-8",
+                success: function (data) {
+                    if (data.success == true) {
+                        HideProgress();
+                        LoadICTReqList();
+                        $("#myModal").modal("hide");
+                        Swal.fire('Success', data.message, 'success');
+                    }
+                    else {
+                        HideProgress();
+                        Swal.fire('error', data.message, 'error');
+                    }
+                },
+                error: function () {
+                    HideProgress();
+                    Swal.fire('error', data.message, 'error');
+                }
+            });
+            }
+        }
+    }
+    function getB64Str(buffer) {
+        var binary = '';
+        var bytes = new Uint8Array(buffer);
+        var len = bytes.byteLength;
+        for (var i = 0; i < len; i++) {
+            binary += String.fromCharCode(bytes[i]);
+        }
+        return window.btoa(binary);
+    }
+    var CancelRequest = function (DocNo) {
+        $("#labelF").text("Cancel Remarks");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            data: JSON.stringify({ DocNo: DocNo }),
+            url: '/ICT/CancelICTRequestForm',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    };
+    var SubmitCancelrequestRequisition = function (DocNo) {
+        var Remarks = $("#txtCancelR").val();
+
+        if (Remarks == "") {
+            Swal.fire('error', 'Enter cancel remarks for this issue', 'error');
+            return;
+        }
+        else {
+            ShowProgress();
+            $.ajax({
+                type: "post",
+                url: "/ICT/CancelICTRequest",
+                data: JSON.stringify({ DocNo: DocNo, CancelR: Remarks }),
+                contentType: "application/json; charset = utf-8",
+                success: function (data) {
+                    if (data.success == true) {
+                        HideProgress();
+                        LoadICTReqList();
+                        $("#myModal").modal("hide");
+                        Swal.fire('Success', data.message, 'success');
+                    }
+                    else {
+                        HideProgress();
+                        Swal.fire('error', data.message, 'error');
+                    }
+                },
+                error: function () {
+                    HideProgress();
+                    Swal.fire('error', data.message, 'error');
+                }
+            });
+        }
+    }
+    var ConfirmRequest = function (DocNo) {
+        $("#labelF").text("Confirmation Remarks");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            data: JSON.stringify({ DocNo: DocNo }),
+            url: '/ICT/ConfirmICTRequestForm',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    };
+    var SubmitConfirmationrequest = function (DocNo) {
+        var Remarks = $("#txtConfirmR").val();
+        var Resolved = $("#ddlResolved").children("option:selected").val();
+        if (Resolved == "") {
+            Swal.fire('error', 'State whether issue resolved or escalated', 'error');
+            return;
+        }
+        if (Remarks == "") {
+            Swal.fire('error', 'Enter Remarks', 'error');
+            return;
+        }
+        else {
+            ShowProgress();
+            $.ajax({
+                type: "post",
+                url: "/ICT/ConfirmICTRequest",
+                data: JSON.stringify({ DocNo: DocNo, Resolved: Resolved, ConfirmR: Remarks }),
+                contentType: "application/json; charset = utf-8",
+                success: function (data) {
+                    if (data.success == true) {
+                        HideProgress();
+                        LoadICTReqList();
+                        $("#myModal").modal("hide");
+                        Swal.fire('Success', data.message, 'success');
+                    }
+                    else {
+                        HideProgress();
+                        Swal.fire('error', data.message, 'error');
+                    }
+                },
+                error: function () {
+                    HideProgress();
+                    Swal.fire('error', data.message, 'error');
+                }
+            });
+        }
+    }
+    var ICTResolveRequest = function (DocNo) {
+        var Remarks = $("#txtConfirmR").val();
+        var Resolved = $("#ddlResolved").children("option:selected").val();
+        if (Resolved == "") {
+            Swal.fire('error', 'State whether issue resolved or escalated', 'error');
+            return;
+        }
+        if (Remarks == "") {
+            Swal.fire('error', 'Enter Remarks', 'error');
+            return;
+        }
+        else {
+            ShowProgress();
+            $.ajax({
+                type: "post",
+                url: "/ICT/ResolveICTRequest",
+                data: JSON.stringify({ DocNo: DocNo, Resolved: Resolved, ConfirmR: Remarks }),
+                contentType: "application/json; charset = utf-8",
+                success: function (data) {
+                    if (data.success == true) {
+                        HideProgress();
+                        LoadICTReqList();
+                        $("#myModal").modal("hide");
+                        Swal.fire('Success', data.message, 'success');
+                    }
+                    else {
+                        HideProgress();
+                        Swal.fire('error', data.message, 'error');
+                    }
+                },
+                error: function () {
+                    HideProgress();
+                    Swal.fire('error', data.message, 'error');
+                }
+            });
+        }
+    }
+</script>

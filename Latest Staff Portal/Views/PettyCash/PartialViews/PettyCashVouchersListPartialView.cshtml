@@ -1,0 +1,91 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.PettyCashVouchers>
+
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th>Action</th>
+                <th>No</th>
+                <th>Date</th>
+                <th>Pay Mode</th>
+               
+                <th>Paying Bank Account</th>
+                <th>Payee</th>
+                <th>Total Amount LCY</th>
+                <th>Currency Code</th>
+               @* <th>Created By</th>*@
+                <th>Status</th>
+                <th>Posted</th>
+          @*      <th>Posted By</th>
+                <th>Posted Date</th>*@
+                <th>Region</th>
+                <th>Department</th>
+
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <input type="button" onclick="ViewDoc('@item.No');" class="btn btn-primary btn-sm action-buttons3" value="Select" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Pay_Mode)
+                    </td>
+                    
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Paying_Bank_Account)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Payee)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Total_Amount_LCY)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Currency_Code)
+                    </td>
+                  @*  <td>
+                        @Html.DisplayFor(modelItem => item.Created_By)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Posted)
+                    </td>
+                    @*<td>
+                        @Html.DisplayFor(modelItem => item.Posted_By)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Posted_Date)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Shortcut_Dimension_1_Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Shortcut_Dimension_2_Code)
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#datatable").DataTable(), $("#datatable-buttons").DataTable({
+            lengthChange: !1
+        }).buttons().container().appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)")
+    });
+</script>
+

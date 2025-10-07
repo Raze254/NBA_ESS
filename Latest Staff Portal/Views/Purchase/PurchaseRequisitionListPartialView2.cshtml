@@ -1,0 +1,215 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.PurchaseRequisitions>
+
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th>Action</th>
+                <th>
+                    @Html.DisplayNameFor(model => model.No)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RequisitionType)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CurrencyCode)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Job)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.JobName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Document_Type)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PRN_Type)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PrnType)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Document_Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Location_Code)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Requisition_Product_Group)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Product_Group_)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Priority_Level)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.priority)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Requester_ID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Request_By_No)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Request_By_Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Shortcut_Dimension_1_Code)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LocationName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Shortcut_Dimension_2_Code)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AdminUnitName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Procurement_Plan_ID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PP_Planning_Category)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Job_Task_No)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PP_Total_Budget)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PP_Total_Commitments)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PP_Total_Available_Budget)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Requisition_Amount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DimensionSetId)
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>Select</td>
+                  
+                    <td>
+                        @Html.DisplayFor(modelItem => item.No)
+                    </td>
+               
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RequisitionType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CurrencyCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Job)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.JobName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Document_Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PRN_Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PrnType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Document_Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Location_Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Requisition_Product_Group)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Product_Group_)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Priority_Level)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.priority)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Requester_ID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Request_By_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Request_By_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Shortcut_Dimension_1_Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LocationName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Shortcut_Dimension_2_Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AdminUnitName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Procurement_Plan_ID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PP_Planning_Category)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Job_Task_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PP_Total_Budget)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PP_Total_Commitments)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PP_Total_Available_Budget)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Requisition_Amount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DimensionSetId)
+                    </td>
+                  
+                </tr>
+            }
+
+    </table>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#datatable").DataTable(), $("#datatable-buttons").DataTable({
+            lengthChange: !1
+        }).buttons().container().appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)")
+    });
+</script>

@@ -1,0 +1,42 @@
+﻿@{
+    ViewBag.Title = "LeaveStatement";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+<div class="card pre-scrollable">
+    <div class="card-title">Leave Statement</div>
+    <div class="card-body">
+        <div id="ReportViewBody" style="width:100%;height:450px"></div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script src="~/assets/js/pdfobject.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        GetLeaveStatementReport();
+    });
+    var GetLeaveStatementReport = function () {
+        ShowProgress();
+        $.ajax({
+            url: '/ViewDocument/GetLeaveStatementReport',
+            datatype: "json",
+            type: "POST",
+            contentType: "application/json; charset = utf-8",
+            success: function (data) {
+                if (data.success == true) {
+                    var viewer = $("#ReportViewBody");
+                    PDFObject.embed(data.message, viewer);
+                    HideProgress();
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+</script>

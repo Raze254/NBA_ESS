@@ -1,0 +1,106 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.StoreRequisitionsLines>
+@{
+    var Status = ViewBag.Status;
+}
+
+<div class="table-responsive">
+    <table id="datatable-buttons3" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th>Document Type</th>
+                <th>Document No</th>
+                @*<th>Line No</th>*@
+                <th>Item Category</th>
+                @*  <th>Service Item Code</th>*@
+                @*<th>Type</th>*@
+                <th>No</th>
+                <th>Description</th>
+                @*<th>Location Code</th>*@
+                @*  <th>Variant Code</th>*@
+                <th>Unit of Measure Code</th>
+                <th>Quantity in Store</th>
+                <th>Qty Requested</th>
+                <th></th>
+            </tr>
+
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Document_Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Document_No)
+                    </td>
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.Line_No)
+                        </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Item_Category)
+                    </td>
+                    @* <td>
+                            @Html.DisplayFor(modelItem => item.Service_Item_Code)
+                        </td>*@
+                    @*   <td>
+                            @Html.DisplayFor(modelItem => item.Type)
+                        </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    @*  <td>
+                            @Html.DisplayFor(modelItem => item.Location_Code)
+                        </td>*@
+                    @* <td>
+                            @Html.DisplayFor(modelItem => item.Variant_Code)
+                        </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Unit_of_Measure_Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Quantity_In_Store)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Qty_Requested)
+                    </td>
+                    <td>
+                        @*<button class="btn btn-success  btn-sm" data-toggle="tooltip" data-placement="top" title="Edit"
+                                    onclick="EditItem('@item.Document_No', , '@item.Line_No');">
+                                Edit Line
+                            </button>*@
+                        @if (@Status == "Open")
+                        {
+                            <button class="btn btn-danger  btn-sm ml-3" data-toggle="tooltip" data-placement="top" title="Delete" onclick="RemoveItem('@item.Document_No', '@item.Line_No');">Delete</button>
+                        }
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+</div>
+
+@if (@Status == "Open")
+{
+    <div style="text-align:right; margin-top: 20px">
+        <button class="btn btn-primary action-buttons2" onclick="AddStoreRequisitionLine();">
+            <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Line
+        </button>
+    </div>
+}
+
+
+
+
+
+<script>
+    $("#datatable-buttons3").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100] // Same options for the second table
+    });
+</script>

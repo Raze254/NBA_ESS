@@ -1,0 +1,542 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.PersonalGoalsObjectives>
+
+@{
+    ViewBag.Title = "ObjectivesLines";
+    var Appraisal_Stage = (ViewBag.Appraisal_Stage as string ?? "").Trim();
+    var Status = (ViewBag.Status as string ?? "").Trim();
+
+    var LoggedInUserID = ViewBag.LoggedInUserID;
+    var SupervisorID = ViewBag.SupervisorID;
+}
+
+
+
+<div class="table-responsive">
+    <table id="datatable-buttonsObj" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead>
+            <tr>
+
+                @*<th>Appraisal No</th>
+                    <th>Appraisal Period</th>
+                    <th>Employee No</th>
+                    <th>Categorize As</th>
+                    <th>Line No</th>
+                    <th>Sub Category</th>*@
+                <th>Agreed Performance Targets</th>
+                @*     <th>Min Target Score</th>
+                    <th>Max Target Score</th>*@
+                @*<th>Target</th>*@
+                <th>Weight</th>
+                @*<th>Key Performance Indicator</th>*@
+                <th>Self Rating</th>
+                @if (Appraisal_Stage == "End Year Evalauation" && Status == "Appeal Stage" && LoggedInUserID == SupervisorID)
+                {
+                    <th>Moderated Score</th>
+                }
+                <th>Employee Comments</th>
+                <th>Supervisor Rating</th>
+                <th>Supervisor Comments</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @{
+                decimal totalSelfRating = 0;
+                decimal totalSupervisorRating = 0;
+            }
+
+            @foreach (var item in Model)
+            {
+
+                totalSelfRating += item.Self_Rating;
+                totalSupervisorRating += item.Supervisor_Rating;
+
+
+                if (Appraisal_Stage == "Target Setting")
+                {
+                    <tr>
+                        <td>
+                            @Html.TextAreaFor(modelItem => item.Perfomance_Goals_and_Targets, new
+                            {
+                                @class = "form-control",
+                                @id = "Perfomance_Goals_and_Targets_" + item.Line_No,
+                                rows = "3"
+                            })
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" value="10" id="Weight_@item.Line_No" readonly />
+
+                            @*@Html.TextBoxFor(modelItem => item.Weight, new { @class = "form-control", @id = "Weight_" + item.Line_No, @readonly = "readonly", @value="10" })*@
+                        </td>
+
+                        @* <td>
+                                @Html.TextBoxFor(modelItem => item.Key_Perfomance_Indicator, new { @class = "form-control", @id = "Key_Perfomance_Indicator_" + item.Line_No })
+                            </td>*@
+
+                        <td>
+                            @Html.TextBoxFor(modelItem => item.Self_Rating, new { @class = "form-control", @id = "Self_Rating_" + item.Line_No, @readonly = "readonly" })
+                        </td>
+
+                        <td>
+                            @Html.TextAreaFor(modelItem => item.Employee_Comments, new { @class = "form-control", rows = "2", @id = "Employee_Comments_" + item.Line_No, @readonly = "readonly" })
+                        </td>
+
+                        <td>
+                            @Html.TextBoxFor(modelItem => item.Supervisor_Rating, new { @class = "form-control", @id = "Supervisor_Rating_" + item.Line_No, @readonly = "readonly" })
+                        </td>
+
+                        <td>
+                            @Html.TextAreaFor(modelItem => item.Supervisor_Comments, new { @class = "form-control", rows = "2", @id = "Supervisor_Comments_" + item.Line_No, @readonly = "readonly" })
+                        </td>
+
+                        <td class="mt-2">
+                            <button class="btn btn-primary btn-sm action-buttons2 bg-success" onclick="ViewKPIs(`@item.Appraisal_No`,`@item.Line_No`,`@item.Perfomance_Goals_and_Targets`,`@Appraisal_Stage`, `@LoggedInUserID`,`@SupervisorID` );">
+                                <i class="fas fa-eye" aria-hidden="true"></i> View KPIs
+                            </button>
+                            <button class="btn btn-primary action-buttons2" onclick="UpdateObjectiveLine(`@item.Appraisal_No`,`@item.Line_No`);">
+                                <i class="fas fa-pen" aria-hidden="true"></i> Update
+                            </button>
+                            <button class="btn btn-danger btn-sm" onclick="DeleteObjectiveLine(`@item.Appraisal_No`,`@item.Line_No`);">
+                                <i class="fa fa-plus-circle" aria-hidden="true"></i> Delete
+                            </button>
+                        </td>
+                    </tr>
+
+
+                }
+                if (Appraisal_Stage == "Target Approval")
+                {
+                    <tr>
+                        <td>
+
+                            @Html.TextAreaFor(modelItem => item.Perfomance_Goals_and_Targets, new
+                            {
+                                @class = "form-control",
+                                @id = "Perfomance_Goals_and_Targets_" + item.Line_No,
+                                @readonly = "readonly",
+                                rows = "3"
+                            })
+
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" value="10" id="Weight_@item.Line_No" readonly />
+                            @* @Html.TextBoxFor(modelItem => item.Weight, new { @class = "form-control", @id = "Weight_" + item.Line_No, @readonly = "readonly" })*@
+                        </td>
+
+                        @*<td>
+                                @Html.TextBoxFor(modelItem => item.Key_Perfomance_Indicator, new { @class = "form-control", @id = "Key_Perfomance_Indicator_" + item.Line_No, @readonly = "readonly" })
+                            </td>*@
+
+                        <td>
+                            @Html.TextBoxFor(modelItem => item.Self_Rating, new { @class = "form-control", @id = "Self_Rating_" + item.Line_No, @readonly = "readonly" })
+                        </td>
+
+                        <td>
+                            @Html.TextAreaFor(modelItem => item.Employee_Comments, new { @class = "form-control", rows = "2", @id = "Employee_Comments_" + item.Line_No, @readonly = "readonly" })
+                        </td>
+
+                        <td>
+                            @Html.TextBoxFor(modelItem => item.Supervisor_Rating, new { @class = "form-control", @id = "Supervisor_Rating_" + item.Line_No, @readonly = "readonly" })
+                        </td>
+
+                        <td>
+                            @Html.TextAreaFor(modelItem => item.Supervisor_Comments, new { @class = "form-control", rows = "2", @id = "Supervisor_Comments_" + item.Line_No, @readonly = "readonly" })
+                        </td>
+
+                        <td class="mt-2">
+                            <button class="btn btn-primary btn-sm action-buttons2 bg-success" onclick="ViewKPIs(`@item.Appraisal_No`,`@item.Line_No`,`@item.Perfomance_Goals_and_Targets`,`@Appraisal_Stage`, `@LoggedInUserID`,`@SupervisorID` );">
+                                <i class="fas fa-eye" aria-hidden="true"></i> View KPIs
+                            </button>
+                            <button class="btn btn-secondary btn-sm" disabled>
+                                <i class="fas fa-pen" aria-hidden="true"></i> Update
+                            </button>
+                            <button class="btn btn-secondary btn-sm" disabled>
+                                <i class="fa fa-plus-circle" aria-hidden="true"></i> Delete
+                            </button>
+                        </td>
+                    </tr>
+                }
+
+
+                if (Appraisal_Stage == "End Year Evalauation" && Status == "Appraisee Reviewed" && LoggedInUserID != SupervisorID)
+                {
+                    <tr>
+                        <td>
+                            @Html.TextAreaFor(modelItem => item.Perfomance_Goals_and_Targets, new
+                            {
+                                @class = "form-control",
+                                @id = "Perfomance_Goals_and_Targets_" + item.Line_No,
+                                @readonly = "readonly",
+                                rows = "3"
+                            })
+                        </td>
+
+                        <td>
+                            <input class="form-control" type="text" value="10" id="Weight_@item.Line_No" readonly />
+                            @*@Html.TextBoxFor(modelItem => item.Weight, new { @class = "form-control", @id = "Weight_" + item.Line_No, @readonly = "readonly" })*@
+                        </td>
+
+                        @*<td>
+                                @Html.TextBoxFor(modelItem => item.Key_Perfomance_Indicator, new { @class = "form-control", @id = "Key_Perfomance_Indicator_" + item.Line_No, @readonly = "readonly" })
+                            </td>*@
+
+                        <td>
+                            @Html.TextBoxFor(modelItem => item.Self_Rating, new { @class = "form-control", @id = "Self_Rating_" + item.Line_No })
+                        </td>
+
+                        <td>
+                            @Html.TextAreaFor(modelItem => item.Employee_Comments, new { @class = "form-control", rows = "2", @id = "Employee_Comments_" + item.Line_No })
+                        </td>
+
+                        <td>
+                            @Html.TextBoxFor(modelItem => item.Supervisor_Rating, new { @class = "form-control", @id = "Supervisor_Rating_" + item.Line_No, @readonly = "readonly" })
+                        </td>
+
+                        <td>
+                            @Html.TextAreaFor(modelItem => item.Supervisor_Comments, new { @class = "form-control", rows = "2", @id = "Supervisor_Comments_" + item.Line_No, @readonly = "readonly" })
+                        </td>
+
+                        <td class="mt-2">
+                            <button class="btn btn-primary action-buttons2" onclick="UpdateObjectiveLine(`@item.Appraisal_No`,`@item.Line_No`);">
+                                <i class="fas fa-pen" aria-hidden="true"></i> Update
+                            </button>
+
+                        </td>
+                    </tr>
+                }
+                if (Appraisal_Stage == "End Year Evalauation" && Status == "Appraisee Reviewed" && LoggedInUserID == SupervisorID)
+                {
+                    <tr>
+                        <td>
+
+                            @Html.TextAreaFor(modelItem => item.Perfomance_Goals_and_Targets, new
+                                {
+                                    @class = "form-control",
+                                    @id = "Perfomance_Goals_and_Targets_" + item.Line_No,
+                                    @readonly = "readonly",
+                                    rows = "3"
+                                })
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" value="10" id="Weight_@item.Line_No" readonly />
+                            @*@Html.TextBoxFor(modelItem => item.Weight, new { @class = "form-control", @id = "Weight_" + item.Line_No, @readonly = "readonly" })*@
+                        </td>
+
+                        @*<td>
+                                @Html.TextBoxFor(modelItem => item.Key_Perfomance_Indicator, new { @class = "form-control", @id = "Key_Perfomance_Indicator_" + item.Line_No, @readonly = "readonly" })
+                            </td>*@
+
+                        <td>
+                            @Html.TextBoxFor(modelItem => item.Self_Rating, new { @class = "form-control", @id = "Self_Rating_" + item.Line_No, @readonly = "readonly" })
+                        </td>
+
+                        <td>
+                            @Html.TextAreaFor(modelItem => item.Employee_Comments, new { @class = "form-control", rows = "2", @id = "Employee_Comments_" + item.Line_No, @readonly = "readonly" })
+                        </td>
+
+                        <td>
+                            @Html.TextBoxFor(modelItem => item.Supervisor_Rating, new { @class = "form-control", @id = "Supervisor_Rating_" + item.Line_No, @readonly = "readonly" })
+                        </td>
+
+                        <td>
+                            @Html.TextAreaFor(modelItem => item.Supervisor_Comments, new { @class = "form-control", rows = "2", @id = "Supervisor_Comments_" + item.Line_No, @readonly = "readonly" })
+                        </td>
+
+                        <td class="mt-2">
+                            <button class="btn btn-secondary btn-sm" disabled>
+                                <i class="fas fa-pen" aria-hidden="true"></i> Update
+                            </button>
+                            <button class="btn btn-secondary btn-sm" disabled>
+                                <i class="fa fa-plus-circle" aria-hidden="true"></i> Delete
+                            </button>
+                        </td>
+                    </tr>
+                }
+                if (Appraisal_Stage == "End Year Evalauation" && Status == "Immediate Supervisor Reviewed" && LoggedInUserID == SupervisorID)
+                {
+                    <tr>
+                        <td>
+                            @Html.TextAreaFor(modelItem => item.Perfomance_Goals_and_Targets, new
+                             {
+                                 @class = "form-control",
+                                 @id = "Perfomance_Goals_and_Targets_" + item.Line_No,
+                                 @readonly = "readonly",
+                                 rows = "3"
+                             })
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" value="10" id="Weight_@item.Line_No" readonly />
+                            @*@Html.TextBoxFor(modelItem => item.Weight, new { @class = "form-control", @id = "Weight_" + item.Line_No, @readonly = "readonly" })*@
+                        </td>
+
+                        @*<td>
+                                @Html.TextBoxFor(modelItem => item.Key_Perfomance_Indicator, new { @class = "form-control", @id = "Key_Perfomance_Indicator_" + item.Line_No, @readonly = "readonly" })
+                            </td>*@
+
+                        <td>
+                            @Html.TextBoxFor(modelItem => item.Self_Rating, new { @class = "form-control", @id = "Self_Rating_" + item.Line_No, @readonly = "readonly" })
+                        </td>
+
+                        <td>
+                            @Html.TextAreaFor(modelItem => item.Employee_Comments, new { @class = "form-control", rows = "2", @id = "Employee_Comments_" + item.Line_No, @readonly = "readonly" })
+                        </td>
+
+                        <td>
+                            @Html.TextBoxFor(modelItem => item.Supervisor_Rating, new { @class = "form-control", @id = "Supervisor_Rating_" + item.Line_No })
+                        </td>
+
+                        <td>
+                            @Html.TextAreaFor(modelItem => item.Supervisor_Comments, new { @class = "form-control", rows = "2", @id = "Supervisor_Comments_" + item.Line_No })
+                        </td>
+
+                        <td class="mt-2">
+                            <button class="btn btn-primary action-buttons2" onclick="UpdateObjectiveLine(`@item.Appraisal_No`,`@item.Line_No`);">
+                                <i class="fas fa-pen" aria-hidden="true"></i> Update
+                            </button>
+
+                        </td>
+                    </tr>
+                }
+                if (Appraisal_Stage == "End Year Evalauation" && Status == "Immediate Supervisor Reviewed" && LoggedInUserID != SupervisorID)
+                {
+                    <tr>
+                        <td>
+
+                            @Html.TextAreaFor(modelItem => item.Perfomance_Goals_and_Targets, new
+                             {
+                                 @class = "form-control",
+                                 @id = "Perfomance_Goals_and_Targets_" + item.Line_No,
+                                 @readonly = "readonly",
+                                 rows = "3"
+                             })
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" value="10" id="Weight_@item.Line_No" readonly />
+                            @*@Html.TextBoxFor(modelItem => item.Weight, new { @class = "form-control", @id = "Weight_" + item.Line_No, @readonly = "readonly" })*@
+                        </td>
+
+                        @*<td>
+                                @Html.TextBoxFor(modelItem => item.Key_Perfomance_Indicator, new { @class = "form-control", @id = "Key_Perfomance_Indicator_" + item.Line_No, @readonly = "readonly" })
+                            </td>*@
+
+                        <td>
+                            @Html.TextBoxFor(modelItem => item.Self_Rating, new { @class = "form-control", @id = "Self_Rating_" + item.Line_No, @readonly = "readonly" })
+                        </td>
+
+                        <td>
+                            @Html.TextAreaFor(modelItem => item.Employee_Comments, new { @class = "form-control", rows = "2", @id = "Employee_Comments_" + item.Line_No, @readonly = "readonly" })
+                        </td>
+
+                        <td>
+                            @Html.TextBoxFor(modelItem => item.Supervisor_Rating, new { @class = "form-control", @id = "Supervisor_Rating_" + item.Line_No, @readonly = "readonly" })
+                        </td>
+
+                        <td>
+                            @Html.TextAreaFor(modelItem => item.Supervisor_Comments, new { @class = "form-control", rows = "2", @id = "Supervisor_Comments_" + item.Line_No, @readonly = "readonly" })
+                        </td>
+
+                        <td class="mt-2">
+                            <button class="btn btn-primary btn-sm action-buttons2 bg-success" onclick="ViewKPIs(`@item.Appraisal_No`,`@item.Line_No`,`@item.Perfomance_Goals_and_Targets`,`@Appraisal_Stage`, `@LoggedInUserID`,`@SupervisorID` );">
+                                <i class="fas fa-eye" aria-hidden="true"></i> View KPIs
+                            </button>
+                            <button class="btn btn-secondary btn-sm" disabled>
+                                <i class="fas fa-pen" aria-hidden="true"></i> Update
+                            </button>
+                            <button class="btn btn-secondary btn-sm" disabled>
+                                <i class="fa fa-plus-circle" aria-hidden="true"></i> Delete
+                            </button>
+                        </td>
+                    </tr>
+                }
+                if (Appraisal_Stage == "End Year Evalauation" && Status == "Appeal Stage" && LoggedInUserID != SupervisorID)
+                {
+                    <tr>
+                        <td>
+
+                            @Html.TextAreaFor(modelItem => item.Perfomance_Goals_and_Targets, new
+                             {
+                                 @class = "form-control",
+                                 @id = "Perfomance_Goals_and_Targets_" + item.Line_No,
+                                 @readonly = "readonly",
+                                 rows = "3"
+                             })
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" value="10" id="Weight_@item.Line_No" readonly />
+                            @*@Html.TextBoxFor(modelItem => item.Weight, new { @class = "form-control", @id = "Weight_" + item.Line_No, @readonly = "readonly" })*@
+                        </td>
+
+                        @*<td>
+                                @Html.TextBoxFor(modelItem => item.Key_Perfomance_Indicator, new { @class = "form-control", @id = "Key_Perfomance_Indicator_" + item.Line_No, @readonly = "readonly" })
+                            </td>*@
+
+                        <td>
+                            @Html.TextBoxFor(modelItem => item.Self_Rating, new { @class = "form-control", @id = "Self_Rating_" + item.Line_No, @readonly = "readonly" })
+                        </td>
+
+                        <td>
+                            @Html.TextAreaFor(modelItem => item.Employee_Comments, new { @class = "form-control", rows = "2", @id = "Employee_Comments_" + item.Line_No, @readonly = "readonly" })
+                        </td>
+
+                        <td>
+                            @Html.TextBoxFor(modelItem => item.Supervisor_Rating, new { @class = "form-control", @id = "Supervisor_Rating_" + item.Line_No, @readonly = "readonly" })
+                        </td>
+
+                        <td>
+                            @Html.TextAreaFor(modelItem => item.Supervisor_Comments, new { @class = "form-control", rows = "2", @id = "Supervisor_Comments_" + item.Line_No, @readonly = "readonly" })
+                        </td>
+
+                        <td class="mt-2">
+                            <button class="btn btn-primary btn-sm action-buttons2 bg-success" onclick="ViewKPIs(`@item.Appraisal_No`,`@item.Line_No`,`@item.Perfomance_Goals_and_Targets`,`@Appraisal_Stage`, `@LoggedInUserID`,`@SupervisorID` );">
+                                <i class="fas fa-eye" aria-hidden="true"></i> View KPIs
+                            </button>
+                            <button class="btn btn-secondary btn-sm" disabled>
+                                <i class="fas fa-pen" aria-hidden="true"></i> Update
+                            </button>
+                            <button class="btn btn-secondary btn-sm" disabled>
+                                <i class="fa fa-plus-circle" aria-hidden="true"></i> Delete
+                            </button>
+                        </td>
+                    </tr>
+                }
+                if (Appraisal_Stage == "End Year Evalauation" && Status == "Appeal Stage" && LoggedInUserID == SupervisorID)
+                {
+                    <tr>
+                        <td>
+
+                            @Html.TextAreaFor(modelItem => item.Perfomance_Goals_and_Targets, new
+                             {
+                                 @class = "form-control",
+                                 @id = "Perfomance_Goals_and_Targets_" + item.Line_No,
+                                 @readonly = "readonly",
+                                 rows = "3"
+                             })
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" value="10" id="Weight_@item.Line_No" readonly />
+                            @*@Html.TextBoxFor(modelItem => item.Weight, new { @class = "form-control", @id = "Weight_" + item.Line_No, @readonly = "readonly" })*@
+                        </td>
+
+                        @*<td>
+                                @Html.TextBoxFor(modelItem => item.Key_Perfomance_Indicator, new { @class = "form-control", @id = "Key_Perfomance_Indicator_" + item.Line_No, @readonly = "readonly" })
+                            </td>*@
+
+                        <td>
+                            @Html.TextBoxFor(modelItem => item.Self_Rating, new { @class = "form-control", @id = "Self_Rating_" + item.Line_No, @readonly = "readonly" })
+                        </td>
+
+                        <td>
+                            @Html.TextBoxFor(modelItem => item.Moderated_Score, new { @class = "form-control", @id = "Moderated_Score_" + item.Line_No, })
+                        </td>
+
+                        <td>
+                            @Html.TextAreaFor(modelItem => item.Employee_Comments, new { @class = "form-control", rows = "2", @id = "Employee_Comments_" + item.Line_No, @readonly = "readonly" })
+                        </td>
+
+                        <td>
+                            @Html.TextBoxFor(modelItem => item.Supervisor_Rating, new { @class = "form-control", @id = "Supervisor_Rating_" + item.Line_No, @readonly = "readonly" })
+                        </td>
+
+                        <td>
+                            @Html.TextAreaFor(modelItem => item.Supervisor_Comments, new { @class = "form-control", rows = "2", @id = "Supervisor_Comments_" + item.Line_No, @readonly = "readonly" })
+                        </td>
+
+                        <td class="mt-2">
+                            <button class="btn btn-primary btn-sm action-buttons2 bg-success" onclick="ViewKPIs(`@item.Appraisal_No`,`@item.Line_No`,`@item.Perfomance_Goals_and_Targets`,`@Appraisal_Stage`, `@LoggedInUserID`,`@SupervisorID` );">
+                                <i class="fas fa-eye" aria-hidden="true"></i> View KPIs
+                            </button>
+                            <button class="btn btn-primary action-buttons2" onclick="UpdateObjectiveLine(`@item.Appraisal_No`,`@item.Line_No`);">
+                                <i class="fas fa-pen" aria-hidden="true"></i> Update
+                            </button>
+                            <button class="btn btn-secondary btn-sm" disabled>
+                                <i class="fa fa-plus-circle" aria-hidden="true"></i> Delete
+                            </button>
+                        </td>
+                    </tr>
+                }         
+                if (Appraisal_Stage == "End Year Evalauation" && Status == "Approved/Closed/HR")
+                {
+                    <tr>
+                        <td>
+
+                            @Html.TextAreaFor(modelItem => item.Perfomance_Goals_and_Targets, new
+                             {
+                                 @class = "form-control",
+                                 @id = "Perfomance_Goals_and_Targets_" + item.Line_No,
+                                 @readonly = "readonly",
+                                 rows = "3"
+                             })
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" value="10" id="Weight_@item.Line_No" readonly />
+                            @*@Html.TextBoxFor(modelItem => item.Weight, new { @class = "form-control", @id = "Weight_" + item.Line_No, @readonly = "readonly" })*@
+                        </td>
+
+                        @*<td>
+                                @Html.TextBoxFor(modelItem => item.Key_Perfomance_Indicator, new { @class = "form-control", @id = "Key_Perfomance_Indicator_" + item.Line_No, @readonly = "readonly" })
+                            </td>*@
+
+                        <td>
+                            @Html.TextBoxFor(modelItem => item.Self_Rating, new { @class = "form-control", @id = "Self_Rating_" + item.Line_No, @readonly = "readonly" })
+                        </td>
+
+                        <td>
+                            @Html.TextAreaFor(modelItem => item.Employee_Comments, new { @class = "form-control", rows = "2", @id = "Employee_Comments_" + item.Line_No, @readonly = "readonly" })
+                        </td>
+
+                        <td>
+                            @Html.TextBoxFor(modelItem => item.Supervisor_Rating, new { @class = "form-control", @id = "Supervisor_Rating_" + item.Line_No, @readonly = "readonly" })
+                        </td>
+
+                        <td>
+                            @Html.TextAreaFor(modelItem => item.Supervisor_Comments, new { @class = "form-control", rows = "2", @id = "Supervisor_Comments_" + item.Line_No, @readonly = "readonly" })
+                        </td>
+
+                        <td class="mt-2">
+                            <button class="btn btn-secondary btn-sm" disabled>
+                                <i class="fas fa-eye" aria-hidden="true"></i> View KPIs
+                            </button>
+                            <button class="btn btn-secondary btn-sm" disabled>
+                                <i class="fas fa-pen" aria-hidden="true"></i> Update
+                            </button>
+                            <button class="btn btn-secondary btn-sm" disabled>
+                                <i class="fa fa-plus-circle" aria-hidden="true"></i> Delete
+                            </button>
+                        </td>
+                    </tr>
+                }
+
+            }
+        </tbody>
+        <tfoot>
+            <tr style="font-weight: bold; font-size: 18px;">
+                <td>Totals</td>
+                <td>N/a</td>
+                <td> @totalSelfRating.ToString("F2")</td>
+                <td>N/a</td>
+                <td>@totalSupervisorRating.ToString("F2")</td>
+                <td>N/a</td>
+                <td>N/a</td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+<div style="text-align:right; margin-top: 20px">
+    @if (Appraisal_Stage == "Target Setting")
+    {
+        <button class="btn btn-primary action-buttons2" onclick="AddObjective();">
+            <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Line
+        </button>
+    }
+
+</div>
+
+<script>
+    $("#datatable-buttonsObj").DataTable({
+        lengthChange: true,
+        lengthMenu: [10, 15, 20, 25, 50, 100] // Same options for the second table
+    });
+</script>

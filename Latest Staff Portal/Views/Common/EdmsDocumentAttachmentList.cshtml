@@ -1,0 +1,95 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.EdmsDocuments>
+
+<style>
+    .btnPadding {
+        padding: 5px;
+        font-size: 10px;
+    }
+</style>
+
+<div class="container-fluid">
+    <!-- Ensures full width if Bootstrap is used -->
+    <div class="table-responsive">
+        <table id="DocumentAttachmnts" class="table table-bordered w-100" style="width: 100%;">
+            <thead>
+                <tr>
+                    <th style="display: none;">
+                        @Html.DisplayNameFor(model => model.LineNo)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DocumentNo)
+                    </th>
+                    <th style="display: none;">
+                        @Html.DisplayNameFor(model => model.Module)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FileName)
+                    </th>
+                    <th style="display: none;">
+                        @Html.DisplayNameFor(model => model.DocumentId)
+                    </th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td style="display: none;">
+                                @Html.DisplayFor(modelItem => item.LineNo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DocumentNo)
+                            </td>
+                            <td style="display: none;">
+                                @Html.DisplayFor(modelItem => item.Module)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FileName)
+                            </td>
+                            <td style="display: none;">
+                                @Html.DisplayFor(modelItem => item.DocumentId)
+                            </td>
+                            <td>
+                                <button id="btnview" class="btn btn-primary btnPadding"
+                                        onclick="ViewAttachment('@item.Module', '@item.DocumentNo','@item.DocumentId');">
+                                    View Attachment
+                                </button>
+                                @if (ViewBag.Status == "Open")
+                                {
+                                    <button id="btndelete" class="btn btn-danger btnPadding"
+                                            onclick="DeleteAttachment('@item.DocumentId','@item.LineNo');">
+                                        Delete Attachment
+                                    </button>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+
+        </table>
+    </div>
+</div>
+
+@if (ViewBag.Status == "Open")
+{
+    <div style="text-align: right">
+        <input type="button" id="addAttachment" value="Add Attachment" class="btn btn-primary action-buttons2" onclick="AddAttachment();" />
+    </div>
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#DocumentAttachmnts').DataTable({
+            lengthChange: true,
+            lengthMenu: [5, 10, 25, 50, 100],
+            bDestroy: true,
+            responsive: true,
+            autoWidth: false,
+            scrollX: true
+        });
+    });
+</script>

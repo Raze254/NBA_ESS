@@ -1,0 +1,50 @@
+﻿@model Latest_Staff_Portal.ViewModel.FleetRequestLines
+
+@{
+    ViewBag.Title = "NewTransportRequisitionLine2";
+}
+
+
+    
+<div class="row">
+   
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Employee_No", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.DropDownListFor(model => model.Employee_No, Model.ListOfEmployees, "Select Option", new { @class = "form-control", @id = "Employee_No2" })
+            @Html.ValidationMessageFor(model => model.Employee_No, "", new { @class = "text-danger" })
+        </div>
+    </div>
+   
+
+</div>
+
+    <div align="center">
+        <input type="button" class="btn btn-primary action-buttons" value="Submit Record" onclick="SubmitTransportRequisitionLine();" />
+    </div>
+    <script>
+        $(document).ready(function () {
+            $('#Date_of_Trip2').datepicker({
+                changeMonth: true,
+                changeYear: true,
+                autoclose: true,
+                yearRange: '-0:+2',
+                showOtherMonths: true,
+                dateFormat: 'dd/mm/yy',
+                minDate: 0
+            });
+
+
+            $("#ddlDim1,#ddlDim2,#ddlDim3,#ddlDim4,#ddlDim5,#ddlRespC,#ddlImprestDueType").select2({
+                width: '100%'
+            });
+            $("#DdlEmployee").select2();
+            $("#TxtFrom").select2();
+            //  $("#ddlImprestDueType").val('IMPREST');
+            document.getElementById("ddlDim1").disabled = true;
+            document.getElementById("ddlDim2").disabled = true;
+            //  document.getElementById("ddlImprestDueType").disabled = true;
+
+        });
+    </script>

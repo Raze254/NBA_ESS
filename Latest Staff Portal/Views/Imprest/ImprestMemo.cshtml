@@ -1,0 +1,117 @@
+﻿@{
+    ViewBag.Title = "ImprestMemo";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+<style>
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+</style>
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#" onclick="AccountsLink();">Accounts</a>
+                </li>
+                <li class="breadcrumb-item active">Imprest Memos</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<hr />  <br />  
+<div class="card">
+    <div class="card-body">
+        <hr />
+        <div id="divRegList"></div>
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">New Travel Advance Requisition</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal Links////////////////////////////*@
+<div class="modal fade" id="myModalLinks" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Actions</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodyLinks">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadImprestReqList();
+    });
+    var LoadImprestReqList = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: "/Imprest/ImprestMemoList",
+            success: function (data) {
+                $("#divRegList").html(data);
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+    var ViewDoc = function (DocNo) {
+        ShowProgress();
+        var form = $('<form>', {
+            action: '/Imprest/ImprestMemoDocument',
+            method: 'POST'
+        }).append($('<input>', {
+            type: 'hidden',
+            name: 'DocNo',
+            value: DocNo
+        }));
+        form.appendTo('body').submit();
+    };
+</script>

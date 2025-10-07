@@ -1,0 +1,180 @@
+﻿
+@{
+    ViewBag.Title = "AieView";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 7px;
+        font-size: 12px;
+    }
+</style>
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#" onclick="FinanceLink();">Finance</a>
+                </li>
+                <li class="breadcrumb-item active">Authority to Incur Expense</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <hr />
+        <div id="divAie"></div>
+    </div>
+</div>
+
+<script src="~/assets/js/ShowProgression.js"></script>
+@*//////////////////////Report Type////////////////////////////*@
+<div class="modal fade" id="myReportTModal" data-toggle="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0">Report Type</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodyReportT">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal fade" id="myModalUnits" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalTitle"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodyUnits">
+                <iframe id="iframe" style="width:100%;height:450px"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#myModal').on('shown.bs.modal', function () {
+            setTimeout(function () {
+                $('.select2').select2({
+                    dropdownParent: $('#myModal')
+                });
+            }, 200);
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadAieList();
+    });
+	var LoadAieList = function () {
+        var aie = '@ViewBag.AieType';
+        ShowProgress();
+        $.ajax({
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            data: JSON.stringify({ aieType: aie }),
+            url: "/ExpenseRequisition/AieList",
+            success: function (data) {
+                $("#divAie").empty().html(data);
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+    var ReportType = function (documentNo) {
+        ShowProgress();
+        $.ajax({
+            url: '/ExpenseRequisition/AieReport',
+            datatype: "json",
+            type: "POST",
+            data: JSON.stringify({ docNo: documentNo }),
+            contentType: "application/json; charset = utf-8",
+            success: function (data) {
+                $("#modalBodyReportT").html(data);
+                HideProgress();
+                $("#myReportTModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var GenerateAieReport = function (documentNo) {
+    var reportType = $("#ddlType").children("option:selected").val();
+    ShowProgress();
+    $("#modalTitle").text("Authority to Incur Expenses");
+
+    $.ajax({
+        async: true,
+        datatype: "json",
+        type: "POST",
+        data: JSON.stringify({ documentNumber: documentNo, reportType: reportType }),
+        processData: false,
+        contentType: "application/json; charset=utf-8",
+        url: '/ExpenseRequisition/GenerateAieReport',
+        success: function (data) {
+            HideProgress();
+
+            if (data.success) {
+                if (reportType == "1") {
+                    var byteCharacters = atob(data.message);
+                    var byteNumbers = new Array(byteCharacters.length);
+                    for (var i = 0; i < byteCharacters.length; i++) {
+                        byteNumbers[i] = byteCharacters.charCodeAt(i);
+                    }
+                    var byteArray = new Uint8Array(byteNumbers);
+                    var blob = new Blob([byteArray], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = `${documentNo}_AIE_REPORT.xlsx`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    $("#myReportTModal").modal("hide");
+                } else {
+                    $("#myReportTModal").modal("hide");
+                    $('iframe').attr('src', "data:application/pdf;base64," + data.message);
+                    $("#myModalUnits").modal("show");
+                }
+            } else {
+                Swal.fire('Warning', data.message, 'warning');
+            }
+        },
+        error: function (err) {
+            HideProgress();
+            Swal.fire('Warning', err, 'warning');
+        }
+    });
+}
+</script>
+

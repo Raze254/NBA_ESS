@@ -1,0 +1,344 @@
+﻿@model Latest_Staff_Portal.ViewModel.ImprestMemoList
+
+@{
+    ViewBag.Title = "NewImprestMemoRequest2";
+}
+
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Date", htmlAttributes: new { @class = "control-label col-md-2" })
+            <input type="datetime" class="form-control" placeholder="dd/mm/yyyy" id="Date" onkeydown="return false;" autocomplete="off" disabled />
+            @* @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control", @id = "Date" } })*@
+            @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Subject", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Subject, new { htmlAttributes = new { @class = "form-control", @id = "Subject" } })
+            @Html.ValidationMessageFor(model => model.Subject, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Objective", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Objective, new { htmlAttributes = new { @class = "form-control", @id = "Objective" } })
+            @Html.ValidationMessageFor(model => model.Objective, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Trip Naration", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Imprest_Naration, new { htmlAttributes = new { @class = "form-control", @id = "Imprest_Naration" } })
+            @Html.ValidationMessageFor(model => model.Imprest_Naration, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Travel Date", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            <input type="datetime" class="form-control" placeholder="dd/mm/yyyy" id="Start_Date" onkeydown="return false;" autocomplete="off" />
+            <div class="a"></div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("No Of Days", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.No_of_days, new { htmlAttributes = new { @class = "form-control", @id = "No_of_days" } })
+            @Html.ValidationMessageFor(model => model.No_of_days, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+   @* <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Return Date", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Return_Date, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #f2f2f2", @id = "Return_Date" } })
+            @Html.ValidationMessageFor(model => model.Return_Date, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Due Date", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Due_Date, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #f2f2f2", @id = "Due_Date" } })
+            @Html.ValidationMessageFor(model => model.Due_Date, "", new { @class = "text-danger" })
+        </div>
+    </div>*@
+
+    <div class="col-md-6" hidden>
+        <div class="form-group">
+            @Html.Label("Region ", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.DropDownListFor(model => model.Global_Dimension_1_Code,
+              Model.ListOfDim1,
+              "Select Option",
+              new { @class = "form-control", @id = "Global_Dimension_1_Code", })
+
+          
+        </div>
+    </div>
+    <div class="col-md-6" hidden>
+        <div class="form-group">
+            @Html.Label("Department", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.DropDownListFor(model => model.Global_Dimension_2_Code,
+            Model.ListOfDim2,
+            "Select Option",
+            new { @class = "form-control", @id = "Global_Dimension_2_Code", @onchange = "GetWorkplans(this.value)" })
+          
+        </div>
+    </div>
+
+    <div class="col-md-6" hidden>
+        <div class="form-group">
+            @Html.Label("Strategic Plan", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.DropDownListFor(model => model.Strategic_Plan,
+             Model.ListOfStratPlans,
+
+             new { @class = "form-control", @id = "Strategic_Plan" })
+            @Html.ValidationMessageFor(model => model.Strategic_Plan, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6" hidden>
+        <div class="form-group">
+            @Html.Label("Reporting Year", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.DropDownListFor(model => model.Reporting_Year_Code,
+             Model.ListOfImplementationYears,
+
+             new { @class = "form-control", @id = "Reporting_Year_Code" })
+
+            @Html.ValidationMessageFor(model => model.Reporting_Year_Code, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Workplan", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            <select class="form-control" id="workplanDropdown" onchange="GetWorkplansActivities(this.value)">
+                <option value="">Select Option</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Activity", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            <select class="form-control" id="workplanDropdown2">
+                <option value="">Select Option</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Expenditure Requisition", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.DropDownListFor(model => model.Expenditure_Requisition_Code,
+              Model.ListOfExpenseRequisitions,
+              "Select Option",
+              new { @class = "form-control", @id = "Expenditure_Requisition_Code" })
+            @Html.ValidationMessageFor(model => model.Expenditure_Requisition_Code, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+</div>
+<div align="center">
+    <input type="button" class="btn btn-primary action-buttons" value="Create Document" onclick="SubmitImprestMemoRequisition();" />
+</div>
+
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        GetWorkplans(userDim2);
+
+
+
+        $('#Date').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-0:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy',
+            minDate: 0
+        }).datepicker('setDate', new Date());
+
+        $('#Start_Date').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-0:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy',
+            minDate: 0
+        });
+        $(window).resize(function () {
+            $('#dtPicker').datepicker('hide');
+            $('#dtPicker').blur();
+            $('#Start_Date').datepicker('hide');
+            $('#Start_Date').blur();
+
+        });
+        $("#ddlDim1,#ddlDim2,#ddlDim3,#ddlDim4,#ddlDim5,#ddlRespC,#ddlImprestDueType").select2({
+            width: '100%'
+        });
+        $("#DdlEmployee").select2();
+        $("#TxtFrom").select2();
+        //  $("#ddlImprestDueType").val('IMPREST');
+        document.getElementById("ddlDim1").disabled = true;
+        document.getElementById("ddlDim2").disabled = true;
+        //  document.getElementById("ddlImprestDueType").disabled = true;
+        var userDim2 = $('#Global_Dimension_2_Code').val()
+        
+    });
+    var FilterDimension2 = function () {
+        var Dim1 = $("#ddlDim1").children("option:selected").val();
+
+        if (Dim1 == "") {
+            $("#ddlDim2 option").remove();
+            $('#ddlDim2').empty().append('<option selected="selected" value="">--Select Project--</option>');
+        }
+        else {
+            ShowProgress();
+            $("#ddlDim2 option").remove();
+            $('#ddlDim2').empty().append('<option selected="selected" value="">--Select Project---</option>');
+
+            $.getJSON("/Common/FilterDimension2", { Dim1: Dim1 },
+                function (data) {
+                    $('#ddlDim2').empty().append('<option selected="selected" value="">--Select Project--</option>');
+                    $.each(data.ListOfDim2, function () {
+                        $("#ddlDim2").append($("<option></option>").val(this['Value']).html(this['Text']));
+                    });
+                    HideProgress();
+                });
+        }
+    }
+    var FilterDimension3 = function () {
+        var Dim1 = $("#ddlDim1").children("option:selected").val();
+        var Dim2 = $("#ddlDim2").children("option:selected").val();
+        if (Dim1 == "") {
+            $("#ddlDim3 option").remove();
+            $('#ddlDim3').empty().append('<option selected="selected" value="">--Select Project--</option>');
+        }
+        else {
+            ShowProgress();
+            $("#ddlDim3 option").remove();
+            $('#ddlDim3').empty().append('<option selected="selected" value="">--Select Programme Area---</option>');
+
+            $.getJSON("/Common/FilterDimension3", { Dim1: Dim1, Dim2: Dim2 },
+                function (data) {
+                    $('#ddlDim3').empty().append('<option selected="selected" value="">--Select Programme Area--</option>');
+                    $.each(data.ListOfDim3, function () {
+                        $("#ddlDim3").append($("<option></option>").val(this['Value']).html(this['Text']));
+                    });
+                    HideProgress();
+                });
+        }
+    }
+    var FilterDimension4 = function () {
+        var Dim1 = $("#ddlDim1").children("option:selected").val();
+        var Dim2 = $("#ddlDim2").children("option:selected").val();
+        var Dim3 = $("#ddlDim3").children("option:selected").val();
+        if (Dim1 == "") {
+            $("#ddlDim4 option").remove();
+            $('#ddlDim4').empty().append('<option selected="selected" value="">--Select Activity--</option>');
+        }
+        else {
+            ShowProgress();
+            $("#ddlDim4 option").remove();
+            $('#ddlDim4').empty().append('<option selected="selected" value="">--Select Activity---</option>');
+
+            $.getJSON("/Common/FilterDimension4", { Dim1: Dim1, Dim2: Dim2, Dim3: Dim3 },
+                function (data) {
+                    $('#ddlDim4').empty().append('<option selected="selected" value="">--Select Activity--</option>');
+                    $.each(data.ListOfDim4, function () {
+                        $("#ddlDim4").append($("<option></option>").val(this['Value']).html(this['Text']));
+                    });
+                    HideProgress();
+                });
+        }
+    }
+
+    var GetWorkplans = function (selectedValue) {
+        var Global_Dimension_1_Code = $('#Global_Dimension_1_Code').val();
+        var Global_Dimension_2_Code = $('#Global_Dimension_2_Code').val()
+        var Strategic_Plan = $('#Strategic_Plan').val()
+        var Reporting_Year_Code = $('#Reporting_Year_Code').val()
+
+        if (!Global_Dimension_1_Code) {
+            return
+        }
+        if (!Global_Dimension_2_Code) {
+            return
+        }
+
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: "json",
+            url: "/ImprestMemo/WorkplansJson",
+            data: {
+                Global_Dimension_1_Code: Global_Dimension_1_Code,
+                Global_Dimension_2_Code: Global_Dimension_2_Code,
+                Strategic_Plan: Strategic_Plan,
+                Reporting_Year_Code: Reporting_Year_Code
+            },
+            success: function (data) {
+                var dropdown = $("#workplanDropdown");
+                dropdown.empty();
+                dropdown.append('<option value="">-- Select Option --</option>');
+
+                if (data && data.length > 0) {
+                    $.each(data, function (index, item) {
+                        dropdown.append('<option value="' + item.Code + '">' + item.Descriptions + ' (' + item.Code + ')' + '</option>');
+                    });
+                }
+            },
+            error: function () {
+                Swal.fire("There is some problem processing your request. Please try again later.");
+            }
+        });
+    };
+
+
+    var GetWorkplansActivities = function (selectedValue) {
+
+
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: "json",
+            url: "/ImprestMemo/WorkplanActivitiesJson",
+            data: {
+                WorkPlanCode: selectedValue
+            },
+            success: function (data) {
+                var dropdown = $("#workplanDropdown2");
+                dropdown.empty();
+                dropdown.append('<option value="">-- Select Option --</option>');
+
+                if (data && data.length > 0) {
+                    $.each(data, function (index, item) {
+                        dropdown.append('<option value="' + item.Code + '">' + item.Descriptions + ' (' + item.Code + ')' + '</option>');
+                    });
+                }
+            },
+            error: function () {
+                Swal.fire("There is some problem processing your request. Please try again later.");
+            }
+        });
+    };
+</script>

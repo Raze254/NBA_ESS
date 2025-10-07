@@ -1,0 +1,178 @@
+﻿@using Latest_Staff_Portal.Models
+@{
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+    string imgSrc = "", gender = "", Name = "";
+    var IsICT = false;
+    if (Session["Username"] == null)
+    {
+        Html.Action("Login", "Login");
+    }
+    else
+    {
+        if (Session["ImgProfile"] == null)
+        {
+            var base64 = CommonClass.ProfilePicture(Session["Username"].ToString());
+            if (base64 != "")
+            {
+                imgSrc = string.Format("data:image/gif;base64,{0}", base64);
+                Session["ImgProfile"] = imgSrc;
+            }
+        }
+        else
+        {
+            imgSrc = Session["ImgProfile"].ToString();
+        }
+
+        if (Session["StaffDetails"] == null)
+        {
+            var s = CommonClass.GetStaffDetails(Session["Username"].ToString());
+            gender = s[0];
+            Name = s[1];
+
+            Session["StaffDetails"] = s;
+        }
+        else
+        {
+            var s = (string[])Session["StaffDetails"];
+            gender = s[0];
+            Name = s[1];
+        }
+
+        IsICT = CommonClass.IsICTStaff(Session["Username"].ToString());
+    }
+}
+
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script src="~/SiteJS/SideBarLink.js"></script>
+
+<script>
+    function toggleWidget(widgetId) {
+        var widgets = document.querySelectorAll('.widget-content');
+        widgets.forEach(function (widget) {
+            if (widget.id === widgetId) {
+                if (widget.style.display === "none") {
+                    widget.style.display = "block";
+                } else {
+                    widget.style.display = "none";
+                }
+            } else {
+                widget.style.display = "none";
+            }
+        });
+    }
+</script>
+
+<div class="tab-container">
+    <div class="page-header">
+        <div class="row">
+            <div class="col-sm-12">
+                <h2 class="page-title mb-3">
+                    <b>NUPEA Employees Portal</b>
+                </h2>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="Dashboard/Dashboard">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-item active">Human Resource</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /Page Header -->
+
+    <div class="row pt-3 pb-3 pl-1 pr-1" style="background-color: rgb(255, 255, 255); border-radius: 10px;">
+        <div class="row pt-3 pb-3 pl-1 pr-1" style="background-color: rgb(255, 255, 255); border-radius: 10px;">
+
+            <div class="col-md-4" style="border-right: 12px solid white;">
+                <br/>
+                <div class="row">
+                    <div class="card-body" style="background-color: #162f25; color: #fff; border-top-left-radius: 10px; border-top-right-radius: 10px; height: auto;" onclick="toggleWidget('ictWidget');">
+                        <a href="#">
+                            <div class="dash-widget-header">
+                                <h3 style="color:whitesmoke">ICT</h3>
+                                <div class="dash-count">
+                                    <h3 class="menu-item-count" style="color:#fff;"></h3>
+                                </div>
+                            </div>
+                        </a>
+
+                    </div>
+                    <div id="ictWidget" class="col-md-12 pt-3 pb-3 widget-content" style="border: 1px solid #b8a603; border-top: 0px; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; display: none;">
+                        <ul class="widget-list">
+                            <li>
+                                <a href="#" onclick="ICTRequisitionlink();"><i class="fas fa-headset"></i> User Support Request</a>
+                            </li>
+                            <li>
+                                <a href="#" onclick="ICTAssetRequisitionlink();"><i class="fas fa-desktop"></i> ICT Asset Requisition</a>
+                            </li>
+                            @if (IsICT)
+                            {
+                                <li>
+                                    <a href="#" style="color: #fcb900" onclick="ICTAssignmentlink();">Assigned ICT Requests</a>
+                                </li>
+                                <li>
+                                    <a href="#" style="color: #fcb900" onclick="ICTAssetServicing_Maintancelink();">Service/Maintenance</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    function updateMenuItemCount() {
+        var widgetContents = document.querySelectorAll('.widget-content');
+
+        widgetContents.forEach(function (widgetContent) {
+            var ulElement = widgetContent.querySelector('ul.widget-list');
+            var menuItemCount = ulElement.getElementsByTagName('li').length;
+            var parentElement = widgetContent.previousElementSibling;
+            var countElement = parentElement.querySelector('.dash-count .menu-item-count');
+            if (!countElement) {
+                var dashCount = parentElement.querySelector('.dash-count');
+                if (dashCount) {
+                    countElement = document.createElement('h5');
+                    countElement.classList.add('menu-item-count');
+                    countElement.style.color = '#fff';
+                    dashCount.appendChild(countElement);
+                }
+            }
+
+            // Update the count text
+            if (countElement) {
+                countElement.textContent = menuItemCount;
+            }
+        });
+    }
+
+    //function updateMenuItemCount() {
+    //    // Get all the widget-content elements
+    //    var widgetContents = document.querySelectorAll('.widget-content');
+
+    //    // Iterate through each widget-content
+    //    widgetContents.forEach(function (widgetContent) {
+    //        // Get the submenu's ul element
+    //        var ulElement = widgetContent.querySelector('ul.widget-list');
+
+    //        // Get the count of menu items
+    //        var menuItemCount = ulElement.getElementsByTagName('li').length;
+
+    //        // Update the text content of the menuItemCount element
+    //        var menuItemCountElement = document.getElementById('menuItemCount');
+    //        if (menuItemCountElement) {
+    //            menuItemCountElement.textContent = menuItemCount;
+    //        }
+    //    });
+    //}
+
+
+    // Add an event listener for window load
+    window.addEventListener('load', function () {
+        // Call the updateMenuItemCount function when the window is loaded
+        updateMenuItemCount();
+    });
+</script>

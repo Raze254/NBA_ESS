@@ -1,0 +1,63 @@
+﻿@model Latest_Staff_Portal.ViewModel.Passengers
+<style>
+    .ui-front {
+        z-index: 2000 !important;
+    }
+
+    .ui-autocomplete {
+        /* these sets the height and width */
+        max-height: 200px;
+        max-width: 236px;
+        /* these make it scroll for anything outside */
+        overflow-x: scroll;
+        overflow-y: scroll;
+    }
+</style>
+<div class="bg-soft-dark" style="color:black">
+    <div class="row">
+        <div class="col-md-6" runat="server">
+            <span style="font-weight: bold">Passenger Name</span>
+            @Html.DropDownListFor(m => m.No, new SelectList(Model.ListOfEmployee, "Value", "Text", Model.No), "--Select Employee--", new { id = "ddlPassenger", @class = "form-control", multiple = "multiple" })
+        </div>
+        <div class="form-group">
+            @Html.Label("Date of Trip", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="text" class="form-control" placeholder="dd/mm/yyyy" id="txtDate" onkeydown="return false;" autocomplete="off"/>
+                <div class="a"></div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            @Html.Label("No of Days", new { @class = "control-label col-md-12" })
+            <input type="text" class="form-control" id="txtNoOfDays"/>
+        </div>
+    </div>
+    <hr/>
+    <div align="center">
+        <input type="button" class="btn btn-primary waves-effect waves-light" value="Add Travelling Staff" onclick="SubmitPassengerLine();"/>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#txtDate').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-1:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy'
+        });
+        $("#txtDate").focus(function () {
+            $("#ui-datepicker-div").position({
+                my: "left top",
+                at: "left bottom",
+                of: $(this)
+            });
+        });
+        $("#ddlPassenger").select2({
+            width: '100%'
+        });
+       
+    });
+</script>

@@ -1,0 +1,251 @@
+﻿@{
+    ViewBag.Title = "MyProbationList";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+<!--
+<link href="~/assets/css/Loader.css" rel="stylesheet" />
+<div class="loading" align="center" id="divLoader">
+    <br />
+    <img src="~/assets/images/ajax-loader.gif" alt="" />
+</div>
+-->
+<div class="card pre-scrollable">
+    <div class="card-title">My ANUPEAisal List</div>
+    <div class="card-body">
+        <a href="#" onclick="NewANUPEAisalDoc();" class="btn btn-primary BtnPadding">Create ANUPEAisal Document</a>
+        <a href="#" onclick="ViewANUPEAisalDoc();" class="btn btn-danger BtnPadding disabled" id="ViewDoc">View Document</a>
+        @*<a href="#" onclick="SendLeaveDocForApproval();" class="btn btn-primary BtnPadding disabled" id="SendDocAppr">Send Approval Request</a>
+            <a href="#" onclick="CancelLeaveDocForApproval();" class="btn btn-danger BtnPadding disabled" id="CancelDocAppr">Cancel Approval Request</a>
+            <a href="#" onclick="ViewLeaveApprovalTrail();" class="btn btn-primary BtnPadding disabled" id="AppTrail">Document Approval Status</a>*@
+        <hr/>
+        <div id="divANUPEAisalList"></div>
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <label id="labelF"></label>
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadANUPEAisalReqList();
+    });
+    var LoadANUPEAisalReqList = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: "/ANUPEAisal/ProbationRequisitionListPartialView",
+            success: function (data) {
+                HideProgress();
+                $("#divANUPEAisalList").html(data);
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+    var NewANUPEAisalDoc = function () {
+        $("#labelF").text("New Probation Document");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/ANUPEAisal/NewProbationRequisition',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var SubmitANUPEAisalRequisition = function () {
+        var ApprisalPeriod = $("#ddlApprPeriod").children("option:selected").val();
+        var SupNo = $("#ddlSup").children("option:selected").val();
+        if (ApprisalPeriod == "") {
+            Swal.fire('error', 'Select Apprisal Period', 'error');
+            return;
+        }
+        else if (SupNo == "") {
+            Swal.fire('error', 'Select Supervisor', 'error');
+            return;
+        }
+        else {
+            var NewANUPEAisalDocument = {};
+            NewANUPEAisalDocument.ApprisalPeriod = ApprisalPeriod;
+            NewANUPEAisalDocument.Sup_No = SupNo;
+            ShowProgress();
+            $.ajax({
+                type: "post",
+                url: "/ANUPEAisal/SubmitProbationDocument",
+                data: JSON.stringify({ NewApp: NewANUPEAisalDocument,Type:"1" }),
+                contentType: "application/json; charset = utf-8",
+                success: function (data) {
+                    if (data.success == true) {
+                        window.location = data.message;
+                    }
+                    else {
+                        HideProgress();
+                        $("#myModal").modal("hide");
+
+                        Swal.fire('error', data.message, 'error');
+                    }
+                },
+                error: function () {
+                    HideProgress();
+                    Swal.fire('error', data.message, 'error');
+                }
+            });
+        }
+    }
+    var SelectedRow = function () {
+        $('table tbody tr').click(function () {
+            $(this).addClass("selectedTableRow").siblings().removeClass("selectedTableRow");
+            var row = $('#tableScoreCard tr.selectedTableRow');
+            $("#ViewDoc").removeClass("disabled");            
+        });
+    }
+    var ViewANUPEAisalDoc = function () {
+        $("#labelF").text("Leave Details Document");
+        ShowProgress();
+        var row = $('#tableScoreCard tr.selectedTableRow');
+        var DocNo = row.find("td").eq(1).html().trim();
+        window.location = "/ANUPEAisal/ProbationScoreCard?AppDoc=" + DocNo;
+    }
+    var SendLeaveDocForApproval = function () {
+        $("#labelF").text("Leave Details Document");
+        var row = $('#datatable-buttons tr.selectedTableRow');
+        var DocNo = row.find("td").eq(1).html().trim();
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Leave/SendLeaveAppForApproval',
+            success: function (data) {
+                LoadLeaveReqList();
+                if (data.success == true) {
+                    Swal.fire('Success', data.message, 'success');
+                }
+                else {
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+        DiableButtons();
+        HideProgress();
+    }
+    var CancelLeaveDocForApproval = function () {
+        $("#labelF").text("Leave Details Document");
+        var row = $('#datatable-buttons tr.selectedTableRow');
+        var DocNo = row.find("td").eq(1).html().trim();
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Leave/CancelLeaveAppForApproval',
+            success: function (data) {
+                LoadLeaveReqList();
+                if (data.success == true) {
+                    DiableButtons();
+                    HideProgress();
+                    Swal.fire('Success', data.message, 'success');
+                }
+                else {
+                    DiableButtons();
+                    HideProgress();
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+
+    }
+    var ViewLeaveApprovalTrail = function () {
+        $("#labelF").text("Document Approval Status");
+        ShowProgress();
+        var row = $('#datatable-buttons tr.selectedTableRow');
+        var DocNo = row.find("td").eq(1).html().trim();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Leave/LeaveDocumentApprovalTrail',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var DiableButtons = function () {
+        $("#ViewDoc").addClass("disabled");
+        $("#SendDocAppr").addClass("disabled");
+        $("#CancelDocAppr").addClass("disabled");
+        $("#AppTrail").addClass("disabled");
+        $('table tbody tr').siblings().removeClass("selectedTableRow");
+    }
+</script>

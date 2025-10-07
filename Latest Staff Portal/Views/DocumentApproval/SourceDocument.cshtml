@@ -1,0 +1,314 @@
+﻿@model Latest_Staff_Portal.ViewModel.FullUtilization
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    hr {
+        margin: 4px;
+    }
+
+    .BtnPadding {
+        padding: 10px;
+        font-size: 12px;
+    }
+</style>
+
+<div class="card">
+<div class="card-body">
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.No, new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.EditorFor(model => model.No, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                @Html.ValidationMessageFor(model => model.No, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Deposit Receipt Number", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.EditorFor(model => model.DepositReceiptNo, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                @Html.ValidationMessageFor(model => model.DepositReceiptNo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Account Type", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.EditorFor(model => model.AccountType, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                @Html.ValidationMessageFor(model => model.AccountType, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Date, new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Case Number", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.EditorFor(model => model.CaseNo, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                @Html.ValidationMessageFor(model => model.CaseNo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Case Description", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.EditorFor(model => model.CaseDescription, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                @Html.ValidationMessageFor(model => model.CaseDescription, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Pay Mode", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.EditorFor(model => model.PayMode, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                @Html.ValidationMessageFor(model => model.PayMode, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Refund Policy", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.EditorFor(model => model.RefundPolicy, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                @Html.ValidationMessageFor(model => model.RefundPolicy, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Paying Bank Account", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.EditorFor(model => model.PayingBankAccount, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                @Html.ValidationMessageFor(model => model.PayingBankAccount, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Bank Name", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.EditorFor(model => model.BankName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                @Html.ValidationMessageFor(model => model.BankName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("PRN Number", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.EditorFor(model => model.PRNNo, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                @Html.ValidationMessageFor(model => model.PRNNo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Payee, new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.EditorFor(model => model.Payee, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                @Html.ValidationMessageFor(model => model.Payee, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("On Behalf Of", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.EditorFor(model => model.OnBehalfOf, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                @Html.ValidationMessageFor(model => model.OnBehalfOf, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Posting Date", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.EditorFor(model => model.PostingDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                @Html.ValidationMessageFor(model => model.PostingDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Payment Narration", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.EditorFor(model => model.PaymentNarration, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                @Html.ValidationMessageFor(model => model.PaymentNarration, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Funding Source", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.EditorFor(model => model.FundingSource, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                @Html.ValidationMessageFor(model => model.FundingSource, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Geographical Location Code", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.EditorFor(model => model.ShortcutDimension1Code, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                @Html.ValidationMessageFor(model => model.ShortcutDimension1Code, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Geographical Location", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.EditorFor(model => model.DepartmentName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                @Html.ValidationMessageFor(model => model.DepartmentName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Administrative Unit Code", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.EditorFor(model => model.ShortcutDimension2Code, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                @Html.ValidationMessageFor(model => model.ShortcutDimension2Code, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Administrative Unit", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.EditorFor(model => model.ProjectName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                @Html.ValidationMessageFor(model => model.ProjectName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Total Amount", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.EditorFor(model => model.TotalAmount, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                @Html.ValidationMessageFor(model => model.TotalAmount, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Total Net Amount", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.EditorFor(model => model.TotalNetAmount, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                @Html.ValidationMessageFor(model => model.TotalNetAmount, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Status, new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.EditorFor(model => model.Status, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+</div>
+<div id="divDepositLines">
+    <hr style="border:1px solid black"/>
+    <b>Deposit Funds Lines</b>
+    <hr/>
+    <div id="sourceLines"></div>
+</div>
+</div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        LoadDepositRefundlInes(`@Model.No`,`@Model.Status`);
+    });
+    var LoadDepositRefundlInes = function (DocNo, Status) {
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ documentNo: DocNo, Status: Status }),
+            url: "/Deposits/DepositRefundLine",
+            success: function (data) {
+                $("#sourceLines").html(data);
+            },
+            error: function () {
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    };
+    var GetUtilizationReport = function (docNo) {
+        ShowProgress();
+        $.ajax({
+            url: '/Deposits/GenerateVoucherReports',
+            datatype: "json",
+            type: "POST",
+            data: JSON.stringify({ documentNumber: docNo }),
+            contentType: "application/json; charset = utf-8",
+            success: function (data) {
+                if (data.success == true) {
+                    $('iframe').attr('src', "data:application/pdf;base64," + data.message);
+                    $("#myModalUnits").modal("show");
+                    HideProgress();
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+</script>

@@ -1,0 +1,129 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.ApprovedImprestSurrender>
+
+@{
+    ViewBag.Title = "ApprovedImprestSurrenderListPartialView";
+    var status = ViewBag.status;
+}
+<div class="text-center">
+    <h4>Imprest Surrender List (@status)</h4>
+</div>
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th>Action</th>
+                <th>No</th>
+                <th>Date</th>
+                <th>Posting Date</th>
+                <th>Imprest Deadline</th>
+                <th>Issue Doc No</th>
+                <th>Reference No</th>
+                <th>Account Type</th>
+                <th>Account No</th>
+                <th>Account Name</th>
+                <th>Payee</th>
+                <th>Created By</th>
+                <th>Status</th>
+                <th>Currency</th>
+                <th>Dept Code</th>
+                <th>Department</th>
+                <th>Project Code</th>
+                <th>Project Name</th>
+                <th>Imprest Amount</th>
+                <th>Spent</th>
+                <th>Spent (LCY)</th>
+                <th>Cash Receipt</th>
+                <th>Remaining</th>
+         
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <input type="button" onclick="ViewApprovedSurrDoc('@item.No');" class="btn btn-sm action-buttons2" value="Select" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Posting_Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Imprest_Deadline)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Imprest_Issue_Doc_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Reference_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Account_Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Account_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Account_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Payee)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Created_By)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Currency_Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Shortcut_Dimension_1_Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Department_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Shortcut_Dimension_2_Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Project_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Imprest_Amount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Actual_Amount_Spent)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Actual_Amount_Spent_LCY)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Cash_Receipt_Amount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Remaining_Amount)
+                    </td>
+          
+
+                </tr>
+            }
+        </tbody>
+
+    </table>
+</div>
+
+<script>
+    $("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [3, 10, 25, 50, 100]
+    });
+</script>

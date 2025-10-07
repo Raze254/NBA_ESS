@@ -1,0 +1,210 @@
+﻿@using System.Globalization
+@using Latest_Staff_Portal.ViewModel
+@model Latest_Staff_Portal.ViewModel.ImprestWarranties
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    hr {
+        margin: 4px;
+    }
+
+    .BtnPadding {
+        padding: 7px;
+        font-size: 20px;
+    }
+</style>
+<div class="card">
+
+    <div class="card-body">
+        <div class="alert alert-danger mt-3" style="font-size: 0.9em;">
+            <strong style="color: red;">*</strong> If Bank Validation Fails, click on <b>Update Details</b> in the top right tab.
+        </div>
+        <div>
+            @if (@Model.Status == "Open")
+            {
+                <button class="BtnPadding btn btn-success" onclick="SendDocForApproval('@Model.No')">
+                    <i class="fas fa-print" aria-hidden="true"></i> Accept
+                </button>
+                <button class="BtnPadding btn btn-danger" onclick="CancelDocApprovalRequest('@Model.ExpenditureRequisitionCode');">
+                    <i class="fa fa-print" aria-hidden="true"></i> Reject
+                </button>
+            }
+        </div>
+        <div class="text-center mt-5"><h4>Imprest Warrant Details (@Model.No)</h4></div><br/>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Payee", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Payee, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Payee Bank Account", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.PayeeBankAccount, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Payee Bank Name", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.PayeeBankName, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Payment Narration", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.PaymentNarration, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Start Date", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.TravelDate, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("End Date", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.ImprestDeadline, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Surrender Deadline", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.ImprestDeadline, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script src="~/assets/js/pdfobject.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#bankInfoModal').on('show.bs.modal', function () {
+            scrollTopPosition = $('#modalBodyUnits .modal-body').scrollTop();
+            $('#modalBodyUnits').css('opacity', '0');
+        });
+        $('#bankInfoModal').on('hidden.bs.modal', function () {
+            $('#modalBodyUnits').css('opacity', '1');
+            $('#modalBodyUnits .modal-body').scrollTop(scrollTopPosition);
+            if ($('.modal:v3isible').length) {
+                $('body').addClass('modal-open');
+            }
+        });
+    });
+    var SendDocForApproval = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            url: '/Imprest/SendImprestAppForApproval',
+            success: function (data) {
+                if (data.success == true) {
+                    HideProgress();
+                    $("#myModalUnits").modal("hide");
+                    Swal.fire('Success', data.message, 'success');
+                    window.location = "/Dashboard/Dashboard";
+                } else {
+                    HideProgress();
+                    showModal2(DocNo);
+                    $("#myModalUnits").modal("hide");
+                    $("#bankInfoModal").modal("show");
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    };
+
+    var UpdateBankRecordAndResendApproval = function () {
+        var DocNo = "@Model.No";
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset=utf-8",
+            url: '/Common/ValidateBankAccount',
+            success: function (updateData) {
+                if (updateData.success == true) {
+                    HideProgress();
+                    Swal.fire('Success', updateData.message, 'success');
+                    SendDocForApproval(DocNo);
+                    $("#bankInfoModal").modal("hide");
+                } else {
+                    HideProgress();
+                    $("#bankInfoModal").modal("hide");
+                    Swal.fire('Error', "Bank Account Name Does not match", 'error');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Error', err, 'error');
+            }
+        });
+    };
+
+
+    var CancelDocApprovalRequest = function (DocNo) {
+        ShowProgress();
+        Swal.fire('Success', "Imprest Warrant Rejected Successfully", 'success');
+        window.location = "/Dashboard/Dashboard";
+        HideProgress();
+    }
+    var ValidateBankAccount = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/ValidateBankAccount',
+            success: function (data) {
+                Swal.fire('Success', data.message, 'success');
+                HideProgress();
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var showModal2 = function (DocNo) {
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            url: '/Imprest/GetValidatedBankAccountName',
+            success: function (data) {
+                $("#ddlValidateBank").val(data);
+            },
+            error: function (err) {
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+
+</script>

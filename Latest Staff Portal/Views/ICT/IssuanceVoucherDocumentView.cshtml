@@ -1,0 +1,500 @@
+﻿@model Latest_Staff_Portal.ViewModel.IssuanceVoucher
+
+@{
+    ViewBag.Title = "IssuanceVoucherDocumentView";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/ICT/IssuanceVoucherList">Issuance Voucher List</a>
+                </li>
+                <li class="breadcrumb-item active">Issuance Voucher Document View (@Model.No)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<hr />
+<br />
+<div class="card">
+    <div class="card-header">
+        <h4>Issuance Voucher Document (@Model.No)</h4>
+        @* <div class="text-right">
+                <input type="button" class="btn btn-primary btn-sm action-buttons" value="Send For Approval" onclick="SendICTHelpDeskDocForApproval('@Model.No');" />
+            </div>*@
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.No, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.No, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.No, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Helpdesk No", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Helpdesk_No, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Helpdesk_No, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Issued To User ID", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Issued_To_User_ID, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Issued_To_User_ID, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Issued To No", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Issued_To_No, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Issued_To_No, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Type, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            @*
+
+                <div class="col-md-6">
+                        <div class="form-group">
+                    @Html.LabelFor(model => model.Internal_external, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                        @Html.EditorFor(model => model.Internal_external, new { htmlAttributes = new { @class = "form-control" , @readonly = "readonly", style = "background-color:#dedebd"} })
+                        @Html.ValidationMessageFor(model => model.Internal_external, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Issued Date", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Issued_Date, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Issued_Date, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            @* branch*@
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Branch", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Shortcut_Dimension_1_Code, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Shortcut_Dimension_1_Code, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Directorate, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Directorate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Directorate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Department, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Department, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Department, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Aproval Status", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Status, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Document Status", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Document_Status, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Document_Status, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Location Code", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Location_Code, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Location_Code, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Issued By", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Issued_By, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Issued_By, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+        </div>
+
+        <div id="DivIssuanceVoucher">
+            <hr style="border:1px solid black" />
+            <b>Issuance Voucher Lines</b>
+            <hr />
+            <div id="divIssuanceVoucherLines"></div>
+            <hr style="border:1px solid black" />
+
+        </div>
+    </div>
+</div>
+
+@*//////////////////////update Header modal////////////////////////////*@
+<div class="modal" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Update Document</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody2">
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-primary action-buttons" value="Submit" onclick="SubmitImprest();" />
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*//////////////////////New imprest line modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">New Line</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-primary action-buttons" value="Submit" onclick="SubmitImprestLine();" />
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*//////////////////////update imprest line modal////////////////////////////*@
+<div class="modal" id="updateLineModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Update Line</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="updateLineModalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadIssuanceVoucherLines(`@Model.No`,`@Model.Status`);
+        var status = `@Model.Status`;
+        var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+        if (Successmsg != "") {
+            Swal.fire('Success', Successmsg, 'success',true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+
+
+    });
+    var LoadIssuanceVoucherLines = function (DocNo, Status) {
+
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ Document_No: DocNo, Status: Status }),
+            url: "/ICT/IssuanceVoucherLinesPartialView",
+            success: function (data) {
+                $("#divIssuanceVoucherLines").html(data);
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    };
+
+    var UpdateImprestHeader = function () {
+          var Document_No = '@Model.No';
+        ShowProgress();
+
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: "html",
+            url: '/Imprest/UpdateImprestHeader',
+            data: {
+                Document_No, Document_No,
+            },
+            success: function (data) {
+                $("#modalBody2").html(data);
+                HideProgress();
+                $("#myModal2").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseText, 'warning');
+            }
+        });
+    }
+
+    var AddImprestLine = function () {
+        var Document_No = '@Model.No';
+        var Line_No = 0;
+
+        ShowProgress();
+
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: "html",
+            url: '/Imprest/NewImprestLine',
+            data: {
+                Document_No, Document_No,
+                Line_No: Line_No
+            },
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseText, 'warning');
+            }
+        });
+    }
+
+    function SubmitImprestLine() {
+        var isValid = true;
+
+        // Collect data from the form
+        var Document_No = $("#Document_No").val();
+        var Line_No = $("#LnNo").val();
+        var TransactionType = $("#TransType").val();
+        var AccountType = $("#AccountType").val();
+        var AccountNo = $("#AccountNo").val();
+        var Description = $("#Description").val();
+        var Quantity = $("#Quantity").val();
+        var UOM = $("#UOM").val();
+        var UnitPrice = $("#UnitPrice").val();
+        var Amount = $("#Amount").val();
+        var RequestedAmount = $("#RequestedAmount").val();
+        var ExpenseType = $("#ExpenseType").val();
+
+        // Validation checks
+        if (!TransactionType) {
+            Swal.fire('Warning', 'Select Transaction Type.', 'warning');
+        isValid = false;
+        }
+       /* if (!AccountNo) {
+            Swal.fire('Warning', 'Select Account No.', 'warning');
+        isValid = false;
+        }
+        if (!Description) {
+            Swal.fire('Warning', 'Enter Description.', 'warning');
+        isValid = false;
+        }*/
+        if (!Quantity) {
+            Swal.fire('Warning', 'Enter Quantity', 'warning');
+        isValid = false;
+        }
+        if (!UOM) {
+        Swal.fire('Warning', 'Select Unit Of Measure', 'warning');
+        isValid = false;
+        }
+        if (!UnitPrice) {
+            Swal.fire('Warning', 'Enter Unit Price', 'warning');
+        isValid = false;
+        }
+      /*  if (!RequestedAmount) {
+            Swal.fire('Warning', 'Enter Requested Amount', 'warning');
+        isValid = false;
+        }
+        if (!ExpenseType) {
+            Swal.fire('Warning', 'Select Expense Type', 'warning');
+        isValid = false;
+        }*/
+
+
+        // Exit if validation fails
+        if (!isValid) {
+        return;
+        }
+
+        // Prepare data object
+        var newImprestLine = {
+            Document_No: Document_No,
+            Line_No: Line_No,
+            TransactionType: TransactionType,
+            AccountType: AccountType,
+            Description: Description,
+            Quantity: Quantity,
+            UnitofMeasure: UOM,
+            UnitPrice: UnitPrice,
+            Amount: Amount,
+            RequestedAmount: RequestedAmount,
+            ExpenseType: ExpenseType
+        };
+
+        // Show progress indicator
+        ShowProgress();
+
+        // Send data via AJAX
+        $.ajax({
+        type: "POST",
+        url: "/Imprest/SubmitImprestLine", // Change this to your actual endpoint
+            data: JSON.stringify(newImprestLine),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (data) {
+        HideProgress();
+            if (data.success) {
+                console.log(data.succes)
+            /*ViewDoc(data.message);*/
+                Swal.fire('Success', 'Imprest line submitted successfully.', 'success');
+                window.location.reload();
+        } else {
+            Swal.fire('Warning', data.message, 'warning');
+        }
+        },
+        error: function (err) {
+        HideProgress();
+        Swal.fire('Error', 'An error occurred while submitting the request.', 'error');
+        }
+        });
+    }
+
+    var EditItem = function (No, Code, Description, Serial_No, StartDate, EndDate, FA_No, Reason_For_Movement, Comments, Return_Reason, Return_Condition) {
+
+        ShowProgress();
+
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: "html",
+            url: '/ICT/UpdateIssuanceVoucherLine',
+            data: {
+                No: No,
+                Code: Code,
+                Description: Description,
+                Serial_No: Serial_No,
+                Duration_of_Use_start_date: StartDate,
+                Duration_of_Use_end_date: EndDate,
+                FA_No: FA_No,
+                Reason_For_Movement: Reason_For_Movement,
+                Comments: Comments,
+                Return_Reason: Return_Reason,
+                Return_Condition: Return_Condition
+            },
+            success: function (data) {
+                $("#updateLineModalBody").html(data);
+                HideProgress();
+                $("#updateLineModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseText || 'An error occurred while processing your request.', 'warning');
+            }
+        });
+    };
+
+    var RemoveItem = function (DocNo, LineNo) {
+
+        ShowProgress();
+
+        $.ajax({
+            type: "POST",
+            url: '/Imprest/DeleteImprestLine',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify({
+                Document_No: DocNo,
+                Line_No: LineNo
+            }),
+            success: function (data) {
+                HideProgress(); // Ensure progress is hidden on success
+                if (data.success) {
+                    Swal.fire('Success', 'Imprest line deleted successfully.', 'success')
+                        .then(() => {
+                            window.location.reload(); // Reload the page after user acknowledges
+                        });
+                } else {
+                    Swal.fire('Error', data.message || 'Failed to delete Imprest line.', 'error');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseJSON?.message || 'An error occurred while processing your request.', 'warning');
+            }
+        });
+    };
+
+
+
+</script>
+

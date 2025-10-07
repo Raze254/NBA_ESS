@@ -1,0 +1,210 @@
+﻿@{
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 7px;
+        font-size: 12px;
+    }
+</style>
+
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#" onclick="DashboardLink();">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active">Performance Appraisal List</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-4 mb-2">
+                <select class="form-control" onchange="LoadPerformanceAppraisalList(this.value)">
+                    <option value="Target Setting">Target Setting List</option>
+                    <option value="Target Approval">Target Approval List</option>
+                    <option value="Appraisee Reviewed">End Year Evaluation List</option>
+                    <option value="Immediate Supervisor Reviewed">Supervisor Target Evaluation List</option>
+                    <option value="Appeal Stage">Target Evaluation List- Appeal Stage</option>
+                    <option value="Approved">Closed Appraisal List</option>
+                </select>
+            </div>
+            <div class="col-md-8 mb-2" style="text-align:right">
+                <button class="btn btn-primary action-buttons2" onclick="NewAppraisal();">
+                    <i class="fa fa-plus-circle" aria-hidden="true"></i> New
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+      
+       
+        <div id="divAppraisalList"></div>
+    </div>
+</div>
+
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">New HR Appraisal</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal Links////////////////////////////*@
+<div class="modal fade" id="myModalLinks" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Actions</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodyLinks">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#myModal').on('shown.bs.modal', function () {
+            setTimeout(function () {
+                $('.select2').select2({
+                    dropdownParent: $('#myModal')
+                });
+            }, 200);
+        });
+    });</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var Appraisal_Stage ="Target Setting"
+        LoadPerformanceAppraisalList(Appraisal_Stage);
+        var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+        if (Successmsg != "") {
+            Swal.fire('Success', Successmsg, 'success', true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+
+    });
+    var LoadPerformanceAppraisalList = function (selectedValue) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({ Appraisal_Stage: selectedValue }),
+            dataType: "html", 
+            url: "/PerformanceAppraisal/HRAppraisalsListPartialView",
+            success: function (data) {
+                $("#divAppraisalList").empty().html(data);
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+
+    var NewAppraisal = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: "/PerformanceAppraisal/NewHRAppraisal",
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+
+
+    function SubmitPerformanceAppraisal() {  
+        ShowProgress();
+        var Appraisal_Period= $("#Appraisal_Period2").val()
+  
+         // Send data via AJAX
+         $.ajax({
+             type: "POST",
+             url: "/PerformanceAppraisal/SubmitHRAppraisal",
+             data: JSON.stringify({ Appraisal_Period: Appraisal_Period }),
+             contentType: "application/json; charset=utf-8",
+             dataType: "json",
+             success: function (data) {
+                 HideProgress();
+                 if (data.success) {
+                    
+                     Swal.fire('Success', 'Appraisal Document successfully created.', 'success');
+                     ViewDoc(data.message);
+                 } else {
+                     Swal.fire('Warning', data.message, 'warning');
+                 }
+             },
+             error: function (err) {
+                 HideProgress();
+                 Swal.fire('Error', 'An error occurred while submitting the request.', 'error');
+             }
+         });
+    }
+
+
+    var ViewDoc = function (DocNo) {
+        ShowProgress();
+        var form = $('<form>', {
+            action: '/PerformanceAppraisal/HRAppraisalDocumentView',
+            method: 'POST'
+        }).append($('<input>', {
+            type: 'hidden',
+            name: 'DocNo',
+            value: DocNo
+        }));
+        form.appendTo('body').submit();
+    }
+
+
+
+
+</script>

@@ -1,0 +1,112 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.PMMULinesActivities>
+
+
+<!-- Change YourActionUrl to the appropriate action -->
+
+<div class="table-responsive">
+    <table id="activitiesTable" class="table table-bordered">
+        <thead style="background-color:black;color:white">
+            <tr>
+                @* <th style="width: 20%;">Contract No</th>*@
+                @* <th style="width: 20%;">Strategy Plan ID</th>*@
+                <th style="width: 25%;">Entry</th>
+                @* <th style="width: 25%;">Weight</th>*@
+                @*<th style="width: 25%;">Document_Stage</th>*@
+                @*<th style="width: 25%;">Strategy Output Code</th>
+                    <th style="width: 25%;">Entry No.</th>*@
+                <th style="width: 25%;">Activity</th>
+                <th style="width: 25%;">Sub Weight</th>
+                <th style="width: 25%;">Achieved Targets</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var activity in Model)
+            {
+                <tr>
+                    <td style="display:none;">
+                        <input type="text" name="Contract_No_@activity.Entry_No" value="@activity.Contract_No" class="form-control" readonly />
+                    </td>
+                    <td style="display:none;">
+                        <input type="text" name="Strategy_Plan_ID_@activity.Entry_No" value="@activity.Strategy_Plan_ID" class="form-control" readonly />
+                    </td>
+                    <td>
+                        <input type="text" name="Entry_@activity.Entry_No" value="@activity.Entry" class="form-control" readonly />
+                    </td>
+                    <td style="display:none;">
+                        <input type="text" name="Weight_@activity.Entry_No" value="@activity.Weight" class="form-control" readonly />
+                    </td>
+
+                    <td style="display:none;">
+                        <input type="text" name="Document_stage_@activity.Entry_No" value="@activity.Document_Stage" class="form-control" readonly />
+                    </td>
+                    <td style="display:none;">
+                        <input type="text" name="Strategy_Output_Code_@activity.Entry_No" value="@activity.Strategy_Output_Code" class="form-control" readonly />
+                    </td>
+                    <td style="display:none;">
+                        <input type="text" name="Entry_No" value="@activity.Entry_No" class="form-control" readonly />
+                    </td>
+                    <td>
+                        <input type="text" name="Activities_@activity.Entry_No" value="@activity.Activities" class="form-control" />
+                    </td>
+
+                    @if (@activity.Document_Stage == " " || @activity.Document_Stage == "Negotiation")
+                    {
+                        <td>
+                            <input type="number" id="subWeight_@activity.Entry_No" name="Sub_Weights_@activity.Entry_No" value="@activity.SubWeights" class="form-control" />
+                        </td>
+                        <td>
+                            <input type="number" name="AchievedTargets_@activity.Entry_No" value="@activity.AchievedTargets" class="form-control" readonly />
+                        </td>
+                    }
+
+                    @if (@activity.Document_Stage == "Evaluation")
+                    {
+                        <td>
+                            <input type="number" id="subWeight_@activity.Entry_No" name="Sub_Weights_@activity.Entry_No" value="@activity.SubWeights" class="form-control" readonly />
+                        </td>
+                        <td>
+                            <input type="number" name="AchievedTargets_@activity.Entry_No" value="@activity.AchievedTargets" class="form-control" />
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+    @{
+        bool showAddButton = false;
+        int entryNo = 0; // Store the entry number for the first activity that meets the condition
+        decimal Weight = 0;
+    }
+
+    @foreach (var activity in Model)
+    {
+        if (activity.Document_Stage != "Evaluation")
+        {
+            showAddButton = true;
+            entryNo = activity.Entry_No; // Capture the Entry_No for the first "Evaluation" stage activity
+            Weight = activity.Weight; // Capture the Entry_No for the first "Evaluation" stage activity
+            break; // Stop further iteration once the condition is met
+        }
+    }
+
+    @{
+        decimal SubWeightSum = 0;
+        foreach (var activity in Model)
+        {
+            if (activity.Document_Stage != "Evaluation")
+            {
+                decimal SubWeight = activity.SubWeights;  // No need for @ before activity.SubWeights
+                SubWeightSum += SubWeight;
+                showAddButton = true;
+            }
+        }
+    }
+
+    @if (showAddButton)
+    {
+        <button type="button" class="btn btn-secondary btn-sm" onclick="addActivities(@entryNo, @Weight, @SubWeightSum)">
+            <i class="fas fa-plus"></i> Add More Activities
+        </button>
+    }
+</div>
+

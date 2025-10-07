@@ -1,0 +1,716 @@
+﻿@model Latest_Staff_Portal.ViewModel.MaintenanceRequest2
+
+@{
+    ViewBag.Title = "MaintenanceRequisitionDocumentView";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 7px;
+        font-size: 12px;
+    }
+</style>
+
+
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#" onclick="FleetRequisitionListLink();">Maintenance Requisition List</a>
+                </li>
+                <li class="breadcrumb-item active">Maintenance Requisition Document (@Model.Requisition_No)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-header">
+        <h4>Maintenance Requisition Document(@Model.Requisition_No)</h4>
+        <div style="text-align: right">
+            @{
+
+                if (Model.Status == "Open")
+                {
+                    <button class="btn btn-primary action-buttons2" onclick="SendMaintenanceReqForApproval('@Model.Requisition_No');">
+                        <i class="fa fa-check" aria-hidden="true"></i> Send (@Model.Requisition_No) For Approval
+                    </button>
+
+
+                }
+                if (Model.Status == "Pending Approval")
+                {
+                    <button class="btn btn-danger btn-sm" onclick="CancelMaintenanceReqApproval('@Model.Requisition_No');">
+                        <i class="fa fa-times" aria-hidden="true"></i> Cancel Approval Request
+                    </button>
+                    <button class="btn btn-primary action-buttons2" onclick="ViewApprovalTrail('@Model.Requisition_No');">
+                        <i class="fa fa-history" aria-hidden="true"></i> Approval Trail
+                    </button>
+
+                }
+                <button class="btn btn-primary action-buttons2" onclick="ViewComments('@Model.Requisition_No');">
+                    <i class="fa fa-list" aria-hidden="true"></i> Approval / Rejection Comments
+                </button>
+            }
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Requisition No", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Requisition_No, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Requisition_No, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Vehicle Reg No", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Vehicle_Reg_No, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Vehicle_Reg_No, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            @* <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Cost_Center_Name, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                        @Html.EditorFor(model => model.Cost_Center_Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                        @Html.ValidationMessageFor(model => model.Cost_Center_Name, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Vehicle Location", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Vehicle_Location, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Vehicle_Location, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Odometer Reading", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Odometer_Reading, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Odometer_Reading, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Requested By", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Requested_By, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Requested_By, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Department Name", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Department_Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Department_Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            @*  <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Unit_Name, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                        @Html.EditorFor(model => model.Unit_Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                        @Html.ValidationMessageFor(model => model.Unit_Name, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Vendor_Dealer", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Vendor_Dealer, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Vendor_Dealer, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Vendor Name", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Vendor_Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Vendor_Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Responsible Employee", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Responsible_Employee, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Responsible_Employee, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Responsible Employee Name", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Responsible_Employee_Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Responsible_Employee_Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Request Date", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Request_Date, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Request_Date, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Service Code", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Service_Code, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Service_Code, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Service Name", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Service_Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Service_Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Status", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Status, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Make", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Make, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Make, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Model", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Model, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Model, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Driver", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Driver, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Driver, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Driver_Name", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Driver_Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Driver_Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            @* <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Prepared_By, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                        @Html.EditorFor(model => model.Prepared_By, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                        @Html.ValidationMessageFor(model => model.Prepared_By, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+            @*<div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Closed_By, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                        @Html.EditorFor(model => model.Closed_By, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                        @Html.ValidationMessageFor(model => model.Closed_By, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Date_Closed, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                        @Html.EditorFor(model => model.Date_Closed, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                        @Html.ValidationMessageFor(model => model.Date_Closed, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Vendor_Invoice_No, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                        @Html.EditorFor(model => model.Vendor_Invoice_No, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                        @Html.ValidationMessageFor(model => model.Vendor_Invoice_No, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Project_Number, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                        @Html.EditorFor(model => model.Project_Number, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                        @Html.ValidationMessageFor(model => model.Project_Number, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Task_Number, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                        @Html.EditorFor(model => model.Task_Number, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                        @Html.ValidationMessageFor(model => model.Task_Number, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Maintenance_Cost, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                        @Html.EditorFor(model => model.Maintenance_Cost, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                        @Html.ValidationMessageFor(model => model.Maintenance_Cost, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Comments_Remarks, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                        @Html.EditorFor(model => model.Comments_Remarks, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                        @Html.ValidationMessageFor(model => model.Comments_Remarks, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Parts_Changed, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                        @Html.EditorFor(model => model.Parts_Changed, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                        @Html.ValidationMessageFor(model => model.Parts_Changed, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Pre_Repair_Inspection, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                        @Html.EditorFor(model => model.Pre_Repair_Inspection, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                        @Html.ValidationMessageFor(model => model.Pre_Repair_Inspection, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Post_Repair_Inspection, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                        @Html.EditorFor(model => model.Post_Repair_Inspection, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                        @Html.ValidationMessageFor(model => model.Post_Repair_Inspection, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+        </div>
+
+        <hr style="border:1px solid black" />
+        <div>
+            <b>Attachments</b>
+            <div id="divAttachDocs"></div>
+        </div>
+        <hr style="border:1px solid black" />
+
+
+
+    </div>
+</div>
+
+@* //////////////////////////////Modal///////////////////////////////////////// *@
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myModalLabel">
+                    <label id="labelF"></label>
+                </h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*//////////////////////Modal////////////////////////////*@
+<div id="myModalApproval" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="labelF"></h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body p-4" id="modalBodyUnits">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*//////////////////////Modal View Doc////////////////////////////*@
+<div class="modal fade" id="myModalAttachment" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Attachment</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalAttachmentBody" style="width:100%;height:450px">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+
+     $(document).ready(function () {
+         GetDocumentAttachments();
+     });
+    function FleetRequisitionListLink() {
+        window.location.href = "/Fleet/MaintenanceRequisitionList"
+    }
+
+    function SendMaintenanceReqForApproval() {
+        var DocNo=`@Model.Requisition_No`
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Fleet/SendMaintenanceReqForApproval',
+            success: function (data) {
+                if (data.success == true) {
+                    HideProgress();
+                    Swal.fire('Success', data.message, 'success');
+                    window.location.reload();
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+
+
+    }
+
+
+    function CancelMaintenanceReqApproval() {
+        var DocNo=`@Model.Requisition_No`
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Fleet/CancelMaintenanceReqApproval',
+            success: function (data) {
+                if (data.success == true) {
+                    HideProgress();
+                    Swal.fire('Success', data.message, 'success');
+                    window.location.reload();
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+
+
+    }
+
+    var ViewApprovalTrail = function (DocNo) {
+        $("#labelF").text("Approval Trail");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/DocumentApprovalTrail',
+            success: function (data) {
+                $("#modalBodyUnits").html(data);
+                HideProgress();
+                $("#myModalApproval").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+
+
+
+    //attachments
+    var GetDocumentAttachments = function () {
+       var DocNo = `@Model.Requisition_No`;
+       var status = '@Model.Status';
+          $.ajax({
+               async: true,
+               type: "POST",
+               datatype: "json",
+               contentType: "application/json; charset = utf-8",
+               processData: false,
+                     data: JSON.stringify({ DocNo: DocNo, documentStatus: status }),
+                     url: "/Common/DocumentAttachments",
+               success: function (data) {
+                $("#divAttachDocs").html(data);
+               },
+               error: function () {
+                Swal.fire("There is some problem to process your request. Please try after some time");
+               }
+          });
+     };
+	var AddAttachment = function () {
+       $("#labelF").text("File Upload");
+       ShowProgress();
+       $.ajax({
+        async: true,
+        type: "GET",
+        datatype: "html",
+           url: '/Common/FileUploadForm',
+           success: function (data) {
+               $("#modalBody").html(data);
+               HideProgress();
+               $("#myModal").modal("show");
+           },
+           error: function (err) {
+               HideProgress();
+               Swal.fire('Warning', err, 'warning');
+           }
+       });
+   };
+    var SaveAttachmentFile = function (receiptNumber) {
+         var DocNo = `@Model.Requisition_No`;
+           var files = document.getElementById('AttachmentFile').files;
+           var filename; var base64String; var filetype;
+           if (files.length) {
+               var file = files[0];
+               if (file.size > 50000000) {
+                   Swal.fire('Warning', 'Please only files less than 50MB allowed. Thanks!!', 'warning');
+               }else
+               {
+                var blob = file.slice();
+                filetype = file.type;
+                filename = file.name;
+                var reader = new FileReader();
+                reader.onloadend = function (evt) {
+                 if (evt.target.readyState == FileReader.DONE) {
+                  var cont = evt.target.result
+                  base64String = getB64Str(cont);
+                  ShowProgress();
+                  $.ajax({
+                   type: "POST",
+                   url: "/Common/SaveAttachedFile",
+                      data: JSON.stringify({ DocNo: DocNo, base64Upload: base64String, fileName: filename, Extn: filetype, TableID: 59005, module: "BMA", documentType:"Imprest"}),
+                   contentType: "application/json; charset=utf-8",
+                   dataType: "json",
+                   success: function (data) {
+                    if (data.success) {
+	                    HideProgress();
+	                    $("#myModal").modal("hide");
+	                    Swal.fire('Success', data.message, 'success');
+                                             GetDocumentAttachments();
+                    }
+                    else {
+	                    Swal.fire('Warning', data.message, 'warning');
+	                    HideProgress();
+                    }
+                   },
+                   error: function (err) {
+                    HideProgress();
+                    Swal.fire('Warning', err, 'warning');
+                   }
+                  });
+                 }
+
+                   };
+                   reader.readAsArrayBuffer(blob);
+               }
+          }
+     };
+    var DeleteAttachment = function (DocNo, DocID) {
+         ShowProgress();
+         $.ajax({
+             async: true,
+             type: "POST",
+             dataType: "json",
+             data: JSON.stringify({
+                 DocNo: DocNo,
+                 tblID: 59005,
+                 DocID: DocID,
+                 lineNo: 0,
+             }),
+             contentType: "application/json; charset=utf-8",
+             processData: false,
+             url: '/Common/DeleteAttachedDocument',
+             success: function (data) {
+                 HideProgress();
+                 if (data.success === true) {
+                     Swal.fire('Success', data.message, 'success').then((result) => {
+                         if (result.isConfirmed) {
+                             GetDocumentAttachments(); // reload attachments after OK
+                         }
+                     });
+                 } else {
+                     Swal.fire('Error', data.message, 'error').then((result) => {
+                         if (result.isConfirmed) {
+                             GetDocumentAttachments(); // still reload if error acknowledged
+                         }
+                     });
+                 }
+             },
+             error: function (err) {
+                 HideProgress();
+                 Swal.fire('Warning', err.responseText, 'warning');
+             }
+         });
+     };
+    var ViewAttachment = function (docNo, docId) {
+         $.ajaxSetup({ cache: false });
+         ShowProgress();
+         var viewer = $("#modalAttachmentBody");
+         viewer.empty();
+
+         $.ajax({
+             url: '/Common/ViewAttachedDocument',
+             type: "GET",
+             datatype: "json",
+             cache: false,
+             contentType: "application/json; charset=utf-8",
+             data: {
+                 tableID: 59005,
+                 documentNo: docNo,
+                 documentType: "MAintenance Requisition",
+                 documentId: docId
+             },
+             success: function (data) {
+                 if (data.success) {
+                     if (data.base64) {
+                         var mimeType = data.mimeType || 'application/pdf';
+
+                         if (mimeType.startsWith('application/pdf')) {
+
+                             var byteCharacters = atob(data.base64);
+                             var byteNumbers = new Array(byteCharacters.length);
+                             for (var i = 0; i < byteCharacters.length; i++) {
+                                 byteNumbers[i] = byteCharacters.charCodeAt(i);
+                             }
+                             var byteArray = new Uint8Array(byteNumbers);
+                             var blob = new Blob([byteArray], { type: mimeType });
+                             var blobUrl = URL.createObjectURL(blob);
+
+
+                             viewer.html('<iframe src="' + blobUrl + '" style="width:100%; height:500px;" frameborder="0"></iframe>');
+                         } else if (mimeType.startsWith('image/')) {
+
+                             viewer.html('<img src="data:' + mimeType + ';base64,' + data.base64 + '" style="width:100%;"/>');
+                         } else {
+
+                             var blob = b64toBlob(data.base64, mimeType);
+                             var url = window.URL.createObjectURL(blob);
+                             window.open(url, '_blank');
+                         }
+                         $("#myModalAttachment").modal("show");
+                     } else {
+
+                         window.location = '/Common/AttachmentDownload?fileName=' + data.message;
+                         Swal.fire('Success', 'Document Downloaded successfully', 'success');
+                     }
+                 } else {
+                     Swal.fire('Warning', data.message, 'warning');
+                 }
+                 HideProgress();
+             },
+             error: function (err) {
+                 HideProgress();
+                 Swal.fire('Error', err.responseText || 'An error occurred', 'error');
+             }
+         });
+     };
+    function getB64Str(buffer) {
+         var binary = '';
+         var bytes = new Uint8Array(buffer);
+         var len = bytes.byteLength;
+         for (var i = 0; i < len; i++) {
+             binary += String.fromCharCode(bytes[i]);
+         }
+         return window.btoa(binary);
+     }
+    var ViewComments = function (DocNo) {
+
+        $('#myModalLabel').text("Document Comments");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            data: { DocNo: DocNo }, // no need to JSON.stringify for simple string
+            url: '/Common/DocumentApprovalComments',
+            success: function (data) {
+                $("#modalBody").html(data); // ✅ insert HTML
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (xhr, status, error) {
+                HideProgress();
+                Swal.fire('Warning', error || "An unexpected error occurred", 'warning');
+            }
+        });
+    };
+
+</script>

@@ -1,0 +1,104 @@
+﻿@model Latest_Staff_Portal.ViewModel.ImprestLines
+
+<div class="row">
+
+    <div class="col-md-6" hidden>
+        <div class="form-group">
+            @Html.Label("Document Number", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.Document_No, new { htmlAttributes = new { @class = "form-control", @id = "Document_No", @readonly = "readonly", @style = "backgroud-color: #ccc" } })
+            @Html.ValidationMessageFor(model => model.Document_No, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Transaction Type", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.DropDownListFor(m => m.TransactionType, Model.ListOfTransactionTypes, "Select Option--", new { @class = "form-control", @id = "TransType" })
+            @Html.ValidationMessageFor(model => model.TransactionType, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+
+    @*<div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Account Type", htmlAttributes: new { @class = "control-label col-md-2" })
+                <select class="form-control" id="AccountType">
+                    <option value="" selected hidden>Select Option</option>
+                    <option value="0">Customer</option>
+                    <option value="1">Vendor</option>
+                    <option value="2">Bank Account</option>
+                    <option value="3">Fixed Asset</option>
+                    <option value="4">IC Partner</option>
+                </select>
+            </div>
+        </div>*@
+    @* <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Account No", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.DropDownListFor(m => m.AccountNo, Model.ListOfAccountNo, "Select Option--", new { @class = "form-control", @id = "AccountNo" })
+                @Html.ValidationMessageFor(model => model.AccountNo, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+    @* <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @id= "Description" } })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Quantity", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control", @id = "Quantity" } })
+            @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Unit Of Measure", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.DropDownListFor(m => m.UnitofMeasure, Model.ListOfUOM, "Select Option--", new { @class = "form-control", @id = "UnitofMeasure" })
+            @Html.ValidationMessageFor(model => model.UnitofMeasure, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Unit Price", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.UnitPrice, new { htmlAttributes = new { @class = "form-control", @id = "UnitPrice" } })
+            @Html.ValidationMessageFor(model => model.UnitPrice, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    @*<div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Amount", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control", @id = "Amount" } })
+                @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+    @*<div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Requested Amount", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.EditorFor(model => model.RequestedAmount, new { htmlAttributes = new { @class = "form-control", @id = "RequestedAmount" } })
+                @Html.ValidationMessageFor(model => model.RequestedAmount, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+    @* <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Expense Type", htmlAttributes: new { @class = "control-label col-md-2" })
+                <select class="form-control" id="ExpenseType">
+                    <option value="" selected hidden>Select Option</option>
+                    <option value="0">Accountable Expenses</option>
+                    <option value="1">Non-Accountable Expenses</option>
+
+                </select>
+
+            </div>
+        </div>*@
+
+
+</div>
+
+<div class="text-center">
+    <input type="button" class="btn btn-info" style=" background: green; color: whitesmoke;" value="Submit" onclick="SubmitImprestLine();" />
+</div>

@@ -1,0 +1,209 @@
+﻿@model Latest_Staff_Portal.ViewModel.PerformanceTargetLines
+@{
+    var contractNo = ViewBag.contract_No;
+    var pasDocStage = ViewBag._Stage;
+    var isCapable = ViewBag.isCapable;
+    bool isReadOnly = ViewBag.populatedFrom == "Job Description";
+    bool isEvaluationStage = pasDocStage == "Evaluation";
+        bool shouldDisable = 
+            (Model.stage == "Awaiting Evaluation" && !isCapable) || 
+            (Model.stage == "Evaluated and Agreed" && isCapable);
+
+        string buttonAttributes = shouldDisable 
+            ? "disabled title='You can’t perform this action at this time'" 
+            : "";
+    
+
+}
+
+<div class="container mt-4">
+    <form id="performanceTargetForm">
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="initialActivity">Strategic Objective</label>
+                <textarea type="text" style="max-height: 80px;" class="form-control" id="initialActivity" readonly>@Model.Activity</textarea>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="pasActivity">Key Performance Indicator</label>
+                <input type="text" class="form-control" id="pasActivity" value="@Model.Performance_Indicator" readonly>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="individualTarget">Individual Target</label>
+                <input type="text" class="form-control" id="individualTarget" value="@Model.Individual_Target" @(isEvaluationStage ? "readonly" : "")>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="unitOfMeasure">Unit of Measure</label>
+                <select id="unitOfMeasure" name="Unit_of_Measure" class="form-control select2 col-md-11" @(isEvaluationStage ? "disabled" : "")>
+                    <option value="">-----Select Unit of Measure-----</option>
+                    @foreach (var unit in Model.ListUnitsOfMeasure)
+                    {
+                        <option value="@unit.Value" @(unit.Text.Equals(Model.Unit_of_Measure, StringComparison.OrdinalIgnoreCase) ? "selected" : "")>
+                            @unit.Text
+                        </option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="weight">Weight</label>
+                <input type="number" class="form-control" id="weight" value="@Model.Weight" @((isReadOnly || isEvaluationStage) ? "readonly" : "")>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="target">Target</label>
+                <input type="number" class="form-control" id="target" value="@Model.Target" @(isEvaluationStage ? "readonly" : "")>
+            </div>
+        </div>
+
+        @if (pasDocStage == "Evaluation")
+        {
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="selfAssessmentTarget">Self Assessment Target</label>
+                    <input type="number" class="form-control" id="selfAssessmentTarget" value="@Model.Self_Assessment_Target" @(isCapable || Model.stage=="Awaiting Evaluation" ? "readonly" : "")>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="jointAgreedTarget">Joint/Agreed Achievement</label>
+                    <input type="number" class="form-control" id="jointAgreedTarget" value="@Model.Joint_Agreed_Target" @(!isCapable || Model.stage == "Evaluated and Agreed" ? "readonly" : "")>
+                </div>
+            </div>
+        }
+
+        
+        <div class="form-group text-center py-3">
+            <button type="button" onclick="SaveTargetLine();" id="saveButton" class="btn btn-primary" @buttonAttributes>
+                Save
+            </button>
+        </div>
+
+
+
+        
+    </form>
+</div>
+
+<script src="~/assets/js/toolkit.js"></script>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script>
+$(document).ready(function () {
+    $('#activity').val('@Model.Activity');
+
+    $('#weight').on('change', function() {
+                var weight = $(this).val();
+
+                if (weight > 20) {
+                    Swal.fire({
+                    icon: 'error',
+                title: 'Weight Exceeds',
+                text: 'Weight can not be greater than 20!',
+            });
+
+            $(this).val('');
+                    return;
+                }
+            });
+
+    $('#populateFrom').change(function () {
+                var selectedValue = $(this).val();
+                var contractNo = '@ViewBag.contract_No';
+
+                ShowProgress();
+        $.ajax({
+                url: '/Pas/SetSource',
+            type: 'POST',
+            data: { activityFrom: selectedValue, contractNo: contractNo },
+            success: function (response) {
+                        HideProgress();
+                $.each(response, function (index, item) {
+                    $('#activity').append($('<option>').text(item.Text).attr('value', item.Value));
+                        });
+                    },
+            error: function () {
+                        HideProgress();
+                        alert('An error occurred while fetching the data.');
+                    }
+                });
+            });
+
+    $('#myModal').on('shown.bs.modal', function () {
+                setTimeout(function () {
+            $('.select2').select2({
+                    dropdownParent: $('#myModal'),
+            });
+                }, 200);
+            });
+
+        });
+
+function SaveTargetLine() {
+
+    var activity = $('#activity').val() || $('#initialActivity').val();
+    var Weight = $('#weight').val();
+    var Target = $('#target').val();
+
+
+
+
+    if (Weight<=0) {
+        Swal.fire('Invalid', 'Invalid Weight', 'error');
+        return;
+    }
+
+    if (Target <= 0) {
+        Swal.fire('Invalid', 'Invalid Target', 'error');
+        return;
+    }
+
+
+    if (!$('#pasActivity').val()) {
+        Swal.fire('Appraisee Duty is Empty', 'Please input appraisee duty', 'error');
+        return;
+    }
+
+
+
+    var data = {
+        DocNo: '@Model.DocNo',
+        Entry_No: '@Model.Entry_No',
+        Activity: activity,
+        Unit_of_Measure: $('#unitOfMeasure').val(),
+        Self_Assessment_Target: $('#selfAssessmentTarget').val(),
+        Joint_Agreed_Target: $('#jointAgreedTarget').val(),
+        Individual_Target: $('#individualTarget').val(),
+        Performance_Indicator: $('#performanceIndicator').val(),
+        PAS_Activity: $('#pasActivity').val(),
+        Weight,
+        Target,
+        Weighted_Score: $('#weightedScore').val(),
+        Source: $('#populateFrom').val(),
+        PMMU_No: '@Model.PMMU_No',
+    };
+
+    ShowProgress();
+    $.ajax({
+        url: '/Pas/SubmitUpdatedTargetLine',
+        type: 'POST',
+        data: JSON.stringify({ newTarget: data }),
+        contentType: "application/json; charset=utf-8",
+        success: function (response) {
+                Swal.fire("Success", "Performance Target Updated Successfully", "success");
+                $("#myModal").modal('hide');
+                HideProgress();
+            LoadPerformanceTargetlLines();
+        },
+        error: function () {
+            HideProgress();
+            Swal.fire('Error', 'An error occurred while saving the target line.', 'error');
+        }
+    });
+}
+
+
+</script>

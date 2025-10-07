@@ -1,0 +1,44 @@
+﻿@model List<Latest_Staff_Portal.ViewModel.TrainingHistory>
+
+<div class="table-responsive">
+    <table class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+        <tr>
+            <th>Training No</th>
+            <th>Line No</th>
+            <th>Employee No</th>
+            <th>Training</th>
+            <th>Institution</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Funding</th>
+        </tr>
+        </thead>
+        <tbody>
+        @if (Model.Count() > 0)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.TrainingNo</td>
+                    <td>@item.LineNo</td>
+                    <td>@item.EmployeeNo</td>
+                    <td>@item.Training</td>
+                    <td>@item.Institution</td>
+                    <td>@item.StartDate.ToString("yyyy-MM-dd")</td>
+                    <td>@item.EndDate.ToString("yyyy-MM-dd")</td>
+                    <td>@item.Funding</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="8" style="color:red">
+                    No Records Found
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

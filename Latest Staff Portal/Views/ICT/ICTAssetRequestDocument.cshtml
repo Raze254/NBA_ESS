@@ -1,0 +1,37 @@
+﻿@model Latest_Staff_Portal.ViewModel.ICTAssetRequest
+<div class="row">
+    <div class="col-md-6">
+        <b>Document No</b>
+        @Html.TextBoxFor(m => m.DocNo, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        <b>Date Raised</b>
+        @Html.TextBoxFor(m => m.Date_Requested, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Asset No</b>
+        @Html.TextBoxFor(m => m.Asset, new { @class = "form-control", @readonly = "readonly", rows = 5 })
+    </div>
+    <div class="col-md-6">
+        <b>Asset Description</b>
+        @Html.TextBoxFor(m => m.Description, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Date Moved</b>
+        @Html.TextBoxFor(m => m.Date_Moved, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        <b>Date Returned</b>
+        @Html.TextBoxFor(m => m.Date_Returned, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <b>Remarks</b>
+        @Html.TextBoxFor(m => m.Remarks, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>

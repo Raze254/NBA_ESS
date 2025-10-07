@@ -1,0 +1,447 @@
+﻿@{
+    ViewBag.Title = "ICTRequisitionList";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 8px;
+        font-size: 12px;
+    }
+</style>
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/Dashboard/Dashboard">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active">ICT Help Desk List</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<hr />
+<br />
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-6"><h4>ICT HelpDesk List</h4></div>
+            <div class="col-md-6" style="text-align:right">
+                <a href="#" onclick="NewICTHelpDesk();" class="btn action-buttons">New Issue</a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div id="divRegList"></div>
+    </div>
+
+</div>
+@*//////////////////////Bew ICT HelpDesk Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <label id="labelF">New ICT HelpDesk</label>
+                </h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-primary action-buttons" value="Submit" onclick="SubmitICTHElpDeskRequest();" />
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*//////////////////////Close ICT HelpDesk Modal////////////////////////////*@
+<div class="modal" id="closeHelpdeskModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <label id="closeHelpdeskLabel"></label>
+                </h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="closeHelpdeskModalBody">
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <label>Job Number</label>
+                        <input class="form-control" type="text" id="Job_No" readonly style="background: #f2f2f2"/>
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <label>Comments</label>
+                        <textarea class="form-control" type="text" name="name" id="Comments" rows="3"></textarea>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-primary action-buttons" value="Submit" onclick="CloseHelpDesk();" />
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadICTHelpdeskRequestList();
+        var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+        var Errormsg = '@Request.RequestContext.HttpContext.Session["ErrorMsg"]';
+        if (Successmsg != "") {
+            Swal.fire('Success', Successmsg, 'success',true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+        if (Errormsg != "") {
+            Swal.fire('Warning', Errormsg, 'warning',true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+    });
+    var LoadICTHelpdeskRequestList = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: "/ICT/ICTHelpDeskListPartialView",
+            success: function (data) {
+                $("#divRegList").html(data);
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+
+    var ViewDoc = function (No) {
+        ShowProgress();
+        var form = $('<form>', {
+            action: '/ICT/ICTHelpDeskDocumentView',
+            method: 'POST'
+        }).append($('<input>', {
+            type: 'hidden',
+            name: 'No',
+            value: No
+        }));
+        form.appendTo('body').submit();
+    };
+
+
+
+    var NewICTHelpDesk = function () {
+        $("#labelF").text("New ICT HelpDesk Request");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/ICT/NewICTHelpDeskRequest',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var SubmitICTHElpDeskRequest = function () {
+         var HelpDesk_Category = $("#HelpDesk_Category").val();
+         var HelpDesk_SubCategory = $("#Helpdesk_subcategory").val();
+         var ICT_Inventory = $("#ICT_Inventory").val();
+        var Issue_Description = $("#Issue_Description").val();
+
+         var isValid = true;
+
+         //validations
+         if (!HelpDesk_Category) {
+             Swal.fire('Warning', 'Select Helpdesk Category', 'warning');
+             var isValid = false;
+         }
+
+         if (!HelpDesk_SubCategory) {
+             Swal.fire('Warning', 'Select HelpDesk SubCategory', 'warning');
+             var isValid = false;
+         }
+
+        if (!Issue_Description) {
+             Swal.fire('Warning', 'Enter Issue Description', 'warning');
+             var isValid = false;
+         }
+
+         if (!isValid) {
+             return
+         }
+
+         var issueData = {
+             HelpDesk_Category: HelpDesk_Category,
+             Helpdesk_subcategory: HelpDesk_SubCategory,
+             ICT_Inventory: ICT_Inventory,
+             Description_of_the_issue: Issue_Description
+         };
+
+         ShowProgress();
+
+         $.ajax({
+             type: "POST",
+             url: "/ICT/SubmitHelpDeskRequest",
+             data: JSON.stringify(issueData),
+             contentType: "application/json; charset=utf-8",
+             dataType: "json",
+             success: function (data) {
+                 HideProgress();
+                 if (data.success) {
+                     ViewDoc(data.message);
+                     Swal.fire('Success', 'Record submitted successfully.', 'success');
+                 } else {
+                     Swal.fire('Warning', data.message, 'warning');
+                 }
+             },
+             error: function (err) {
+                 HideProgress();
+                 Swal.fire('Error', 'An error occurred while submitting the request.', 'error');
+             }
+         });
+    }
+
+    var CloseIssue = function (Job_No) {
+        $("#Job_No").val(Job_No);
+        $("#closeHelpdeskLabel").text("Close HelpDesk Issue");
+        $("#closeHelpdeskModal").modal("show");
+    };
+
+
+
+    var CloseHelpDesk = function (JobNo) {
+        var DocNo = $("#Job_No").val();
+        var Comments = $("#Comments").val();
+        if (!Comments) {
+            Swal.fire('Warning', 'Comments required', 'warning');
+            return;
+        }
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            data: JSON.stringify({ documentNumber: DocNo, Comments: Comments }),
+            url: "/ICT/CloseHelpDesk",
+            success: function (data) {
+                HideProgress();
+                if (data.success) {
+                    Swal.fire('Success', data.message, 'success').then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.reload();
+                        }
+                    });
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Error', 'An error occurred while submitting the request.', 'error');
+            }
+        });
+    }
+
+
+
+
+
+
+    function getB64Str(buffer) {
+        var binary = '';
+        var bytes = new Uint8Array(buffer);
+        var len = bytes.byteLength;
+        for (var i = 0; i < len; i++) {
+            binary += String.fromCharCode(bytes[i]);
+        }
+        return window.btoa(binary);
+    }
+    var CancelRequest = function (DocNo) {
+        $("#labelF").text("Cancel Remarks");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            data: JSON.stringify({ DocNo: DocNo }),
+            url: '/ICT/CancelICTRequestForm',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    };
+    var SubmitCancelrequestRequisition = function (DocNo) {
+        var Remarks = $("#txtCancelR").val();
+
+        if (Remarks == "") {
+            Swal.fire('error', 'Enter cancel remarks for this issue', 'error');
+            return;
+        }
+        else {
+            ShowProgress();
+            $.ajax({
+                type: "post",
+                url: "/ICT/CancelICTRequest",
+                data: JSON.stringify({ DocNo: DocNo, CancelR: Remarks }),
+                contentType: "application/json; charset = utf-8",
+                success: function (data) {
+                    if (data.success == true) {
+                        HideProgress();
+                        LoadICTReqList();
+                        $("#myModal").modal("hide");
+                        Swal.fire('Success', data.message, 'success');
+                    }
+                    else {
+                        HideProgress();
+                        Swal.fire('error', data.message, 'error');
+                    }
+                },
+                error: function () {
+                    HideProgress();
+                    Swal.fire('error', data.message, 'error');
+                }
+            });
+        }
+    }
+    var ConfirmRequest = function (DocNo) {
+        $("#labelF").text("Confirmation Remarks");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            data: JSON.stringify({ DocNo: DocNo }),
+            url: '/ICT/ConfirmICTRequestForm',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    };
+    var SubmitConfirmationrequest = function (DocNo) {
+        var Remarks = $("#txtConfirmR").val();
+        var Resolved = $("#ddlResolved").children("option:selected").val();
+        if (Resolved == "") {
+            Swal.fire('error', 'State whether issue resolved or escalated', 'error');
+            return;
+        }
+        if (Remarks == "") {
+            Swal.fire('error', 'Enter Remarks', 'error');
+            return;
+        }
+        else {
+            ShowProgress();
+            $.ajax({
+                type: "post",
+                url: "/ICT/ConfirmICTRequest",
+                data: JSON.stringify({ DocNo: DocNo, Resolved: Resolved, ConfirmR: Remarks }),
+                contentType: "application/json; charset = utf-8",
+                success: function (data) {
+                    if (data.success == true) {
+                        HideProgress();
+                        LoadICTReqList();
+                        $("#myModal").modal("hide");
+                        Swal.fire('Success', data.message, 'success');
+                    }
+                    else {
+                        HideProgress();
+                        Swal.fire('error', data.message, 'error');
+                    }
+                },
+                error: function () {
+                    HideProgress();
+                    Swal.fire('error', data.message, 'error');
+                }
+            });
+        }
+    }
+    var ICTResolveRequest = function (DocNo) {
+        var Remarks = $("#txtConfirmR").val();
+        var Resolved = $("#ddlResolved").children("option:selected").val();
+        if (Resolved == "") {
+            Swal.fire('error', 'State whether issue resolved or escalated', 'error');
+            return;
+        }
+        if (Remarks == "") {
+            Swal.fire('error', 'Enter Remarks', 'error');
+            return;
+        }
+        else {
+            ShowProgress();
+            $.ajax({
+                type: "post",
+                url: "/ICT/ResolveICTRequest",
+                data: JSON.stringify({ DocNo: DocNo, Resolved: Resolved, ConfirmR: Remarks }),
+                contentType: "application/json; charset = utf-8",
+                success: function (data) {
+                    if (data.success == true) {
+                        HideProgress();
+                        LoadICTReqList();
+                        $("#myModal").modal("hide");
+                        Swal.fire('Success', data.message, 'success');
+                    }
+                    else {
+                        HideProgress();
+                        Swal.fire('error', data.message, 'error');
+                    }
+                },
+                error: function () {
+                    HideProgress();
+                    Swal.fire('error', data.message, 'error');
+                }
+            });
+        }
+    }
+</script>

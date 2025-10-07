@@ -1,0 +1,206 @@
+﻿@{
+    ViewBag.Title = "Employee PAS Report";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+<style>
+    #reportFrame {
+        height: 100vh !important;
+    }
+</style>
+
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#" onclick="HumanResourceLink();">Dashboard</a></li>
+                <li class="breadcrumb-item active">General PAS Report</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="container card mt-4 col-md-12 px-4" style="min-height: 100vh">
+    <div class="row">
+        <div class="col text-left pt-4">
+            <h2 class="mb-4">Target Setting Report</h2>
+        </div>
+    </div>
+
+    <span class="text-muted">Select filter options for your report</span>
+    <div class="row">
+        <div class="dropDown col-md-6">
+            <label> Admin Unit</label>
+            @Html.DropDownList("Dimensions", ViewBag.DimensionDropdown as List<SelectListItem>, "Select Dimension", new { @class = "form-control select2", id = "dimensionDropdown" })
+        </div>
+        <div class="col-md-3">
+            <label for="docType" class="form-label">Document Stage</label>
+            <select id="docType" class="form-control" asp-for="DocType">
+                <option value="">-- Select a Stage --</option>
+                <option value="0">Drafts</option>
+                <option value="3">Waiting Negotiation</option>
+                <option value="4">Negotiated and Agreed</option>
+                <option value="6">Evaluation</option>
+            </select>
+            <span asp-validation-for="DocType" class="text-danger"></span>
+        </div>
+            
+            <div class="col-md-3 d-flex justify-content-between align-items-end">
+                <button class="btn py-2 px-3 btn-primary d-flex align-items-center justify-content-center" style="color: white !important;" id="getReportButton" data-toggle="tooltip" title="Download report as PDF">
+                    <img src="~/assets/images/pdf.png" class="w-25 mr-1" /> PDF
+                </button>
+                <button class="btn py-2 px-3 btn-primary d-flex align-items-center justify-content-center" style="color: white !important;" data-toggle="tooltip" title="Download report as Excel" onclick="ExportAsExcel();">
+                    <img src="~/assets/images/excel.svg" class="w-25 mr-1" /> Excel
+                </button>
+            </div>
+    </div>
+
+    <div class="row justify-content-center my-5">
+        <div class="col-md-12">
+            <div class="ratio ratio-16x9">
+                <iframe id="reportFrame" class="w-100 d-none" src="" frameborder="0"></iframe>
+                <div id="placeholder" class="d-flex flex-column align-items-center justify-content-center h-100" style="margin-top: 20vh">
+                    <i class="fas fa-binoculars fa-3x text-muted"></i>
+                    <p class="mt-2 text-muted">No report selected. Please choose a document type or Admin Unit</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    const reportFrame = $('#reportFrame');
+    const placeholder = $('#placeholder');
+    let filterByAdmin = false;
+    let filterByDoc = false;
+    let selectedDimension = '';
+    let selectedDocType = '';
+
+    $(document).ready(function () {
+        $('.select2').select2();
+        $('[data-toggle="tooltip"]').tooltip();
+
+        $('#getReportButton').on('click', function () {
+            selectedDimension = $('#dimensionDropdown').val();
+            selectedDocType = $('#docType').val();
+            checkSelectionsAndGenerateReport();
+        });
+
+
+    });
+
+    function checkSelectionsAndGenerateReport() {
+        if (!selectedDimension && !selectedDocType) {
+            Swal.fire('Error', 'Please select at least one filter option: Admin Unit or Document Type', 'error');
+            return;
+        }
+
+        filterByAdmin = Boolean(selectedDimension);
+        filterByDoc = Boolean(selectedDocType);
+
+        ShowProgress();
+
+        $.ajax({
+            async: true,
+            type: "POST",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            url: '/Pas/GenerateEmployeePASReport',
+            data: JSON.stringify({
+                AdminUnit: selectedDimension,
+                DocType: selectedDocType,
+                filterByAdmin: filterByAdmin,
+                filterByDoc: filterByDoc,
+                type: 0
+            }),
+            success: function (data) {
+                if (data.success) {
+                    $('#placeholder').removeClass('d-flex');
+                    $('#placeholder').hide();
+                    $('#reportFrame').removeClass('d-none');
+                    $('#reportFrame').attr('src', "data:application/pdf;base64," + data.message);
+                    HideProgress();
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                    $('#reportFrame').attr('src', '').addClass('d-none');
+                    $('#placeholder').removeClass('d-none');
+                    HideProgress();
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', 'An error occurred while generating the report.', 'warning');
+                $('#reportFrame').attr('src', '').addClass('d-none');
+                $('#placeholder').removeClass('d-none');
+            }
+        });
+    }
+
+    function ExportAsExcel() {
+        selectedDimension = $('#dimensionDropdown').val();
+        selectedDocType = $('#docType').val();
+
+        if (!selectedDimension && !selectedDocType) {
+            Swal.fire('Error', 'Please select at least one filter option: Admin Unit or Document Type', 'error');
+            return;
+        }
+
+        filterByAdmin = Boolean(selectedDimension);
+        filterByDoc = Boolean(selectedDocType);
+
+        ShowProgress();
+
+        $('#placeholder').removeClass('d-none').addClass('d-flex');
+        $('#placeholder i').removeClass('fa-binoculars').addClass('fa-file-excel');
+        $('#placeholder p').text('Generating Excel report...');
+
+        $.ajax({
+            async: true,
+            type: "POST",
+            url: '/Pas/GenerateEmployeePASReport',
+            data: JSON.stringify({
+                AdminUnit: selectedDimension,
+                DocType: selectedDocType,
+                filterByAdmin: filterByAdmin,
+                filterByDoc: filterByDoc,
+                type: 1
+            }),
+            contentType: "application/json; charset=utf-8",
+            xhrFields: {
+                responseType: 'blob'
+            },
+            success: function (data, status, xhr) {
+                let contentType = xhr.getResponseHeader("content-type");
+
+                if (contentType.includes("application/json")) {
+                    let reader = new FileReader();
+                    reader.onload = function () {
+                        let jsonResponse = JSON.parse(reader.result);
+                        Swal.fire('Error', jsonResponse.message, 'error');
+                    };
+                    reader.readAsText(data);
+                } else {
+                    const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'EmployeePASReport.xlsx';
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                }
+            },
+            error: function (xhr, status, error) {
+                Swal.fire('Error', 'Failed to generate Excel report', 'error');
+            },
+            complete: function () {
+                HideProgress();
+                $('#placeholder i').removeClass('fa-file-excel').addClass('fa-binoculars');
+                $('#placeholder p').text('No report selected. Please choose a document type or Admin Unit');
+            }
+        });
+    }
+
+</script>

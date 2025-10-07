@@ -1,0 +1,55 @@
+﻿@model Latest_Staff_Portal.ViewModel.LeavePlannerLinesList
+
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th>Reliever PJ No.</th>
+                <th>Reliever's Name</th>
+                <th>Days Applied</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Return Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.ListOfLeavePlannerLines.Any())
+            {
+                foreach (var item in Model.ListOfLeavePlannerLines)
+                {
+                    <tr>
+                        <td>@item.Reliever</td>
+                        <td>@item.Reliever_Name</td>
+                        <td>@item.Days_Applied</td>
+                        <td>@item.Start_Date</td>
+                        <td>@item.End_Date</td>
+                        <td>@item.Return_Date</td>
+                        @{
+                            <td>
+                                <button class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Add Imprest" onclick="EditLine('@item.Application_Code', @item.Line_No);">Edit</button>
+                            </td>
+                        }
+                    </tr>
+                }
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <div style="text-align:right">
+                    <button style="background: #162f25; color:whitesmoke; border-radius:10px" onclick="NewLeavePlannerLines();">
+                        <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Line
+                    </button>
+                </div>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+<script>
+    $("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100],
+        "bDestroy": true
+    });
+</script>

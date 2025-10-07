@@ -1,0 +1,282 @@
+﻿@model Latest_Staff_Portal.ViewModel.ClaimLine
+
+<div class="card-body">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Supplier:", htmlAttributes: new { @class = "control-label col-md-12" })
+                @Html.DropDownListFor(model => model.Supplier, Model.ListOfSupplier, "-- Select Vendor --", new { @class = "form-control select2", @id = "supplier", onchange = "GetContracts();" })
+                @Html.ValidationMessageFor(model => model.Supplier, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Contract Number", new { @class = "control-label col-md-12", @for = "ActivityCode" })
+                <select id="contractNumber" class="form-control" onchange="GetLpos();"></select>
+                @Html.ValidationMessageFor(model => model.ContractNo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Purchase Order Number", new { @class = "control-label col-md-12", @for = "ActivityCode" })
+                <select id="lpoNumber" class="form-control" onchange="GetItemToPay();"></select>
+                @Html.ValidationMessageFor(model => model.LpoNo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Item Line To Pay", new { @class = "control-label col-md-12", @for = "ActivityCode" })
+                <select id="itemLine" class="form-control"></select>
+                @Html.ValidationMessageFor(model => model.ItemToLinePay, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Supplier Invoice No:", htmlAttributes: new { @class = "control-label col-md-12" })
+                <textarea id="txtInvoice" class="form-control" maxlength="150"></textarea>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Supplier Invoice Date:", htmlAttributes: new { @class = "control-label col-md-12" })
+                <input type="text" class="form-control" placeholder="dd/mm/yyyy" id="txtFromDate" onkeydown="return false;" autocomplete="off" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Quantity:", htmlAttributes: new { @class = "control-label col-md-12" })
+                <input type="text" class="form-control" id="txtQuantity" onkeypress="return functionx(event)" />
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Rate:", htmlAttributes: new { @class = "control-label col-md-12" })
+                <input type="text" class="form-control" id="txtRate" onkeypress="return functionx(event)" />
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Expense Description:", htmlAttributes: new { @class = "control-label col-md-12" })
+                <textarea id="txtDescription" class="form-control" maxlength="150"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+<hr style="border:1px solid black" />
+
+<div align="center">
+    <input type="button" class="btn btn-primary waves-effect waves-light" value="Submit" onclick="SubmitContractPayment();" />
+</div>
+<script>
+    $(document).ready(function () {
+        $('#myModal').on('shown.bs.modal', function () {
+            setTimeout(function () {
+                $('#supplier').select2({
+                    dropdownParent: $('#myModal'),
+                    width: '100%'
+                });
+            }, 100);
+        });
+        $('#txtFromDate').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-1:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy'
+        });
+        $("#txtFromDate").focus(function () {
+            $("#ui-datepicker-div").position({
+                my: "left top",
+                at: "left bottom",
+                of: $(this)
+            });
+        });
+    });
+    function functionx(evt) {
+        if (evt.charCode > 31 && (evt.charCode < 48 || evt.charCode > 57)) {
+            Swal.fire("Error", "Please enter only numeric characters in the text box", "error");
+            return false;
+        }
+    }
+    function GetContracts() {
+        var vendorNumber = $("#supplier").children("option:selected").val();
+        var contractNo = document.getElementById('contractNumber');
+    ShowProgress();
+        if (vendorNumber) {
+        $.ajax({
+            url: '@Url.Action("GetVendorContracts", "ExpenseRequisition")',
+            type: 'GET',
+            data: { vendor: vendorNumber },
+            success: function(response) {
+                contractNo.innerHTML = '<option value="">-- Select Contract --</option>';
+                if (response.success && response.ListOfActivities.length > 0) {
+                    $.each(response.ListOfActivities, function(index, item) {
+                        var option = document.createElement('option');
+                        option.value = item.Value;
+                        option.text = item.Text;
+                        contractNo.add(option);
+                    });
+                } else {
+                    var option = document.createElement('option');
+                    option.text = 'No contracts found';
+                    option.disabled = true;
+                    contractNo.add(option);
+                }
+                HideProgress();
+            },
+            error: function(xhr, status, error) {
+                Swal.fire('Error', 'An error occurred while fetching contracts: ' + error, 'error');
+                HideProgress();
+            }
+        });
+    } else {
+            contractNo.innerHTML = '<option value="">-- Select Contract--</option>';
+        HideProgress();
+    }
+}
+    function GetLpos() {
+        var vendorNumber = $("#supplier").children("option:selected").val();
+        var contractNo = document.getElementById('lpoNumber');
+    ShowProgress();
+        if (vendorNumber) {
+        $.ajax({
+            url: '@Url.Action("GetVendorLpo", "ExpenseRequisition")',
+            type: 'GET',
+            data: { vendor: vendorNumber },
+            success: function(response) {
+                contractNo.innerHTML = '<option value="">-- Select Lpo --</option>';
+                if (response.success && response.ListOfActivities.length > 0) {
+                    $.each(response.ListOfActivities, function(index, item) {
+                        var option = document.createElement('option');
+                        option.value = item.Value;
+                        option.text = item.Text;
+                        contractNo.add(option);
+                    });
+                } else {
+                    var option = document.createElement('option');
+                    option.text = 'No LPO found';
+                    option.disabled = true;
+                    contractNo.add(option);
+                }
+                HideProgress();
+            },
+            error: function(xhr, status, error) {
+                Swal.fire('Error', 'An error occurred while fetching LPO: ' + error, 'error');
+                HideProgress();
+            }
+        });
+    } else {
+            contractNo.innerHTML = '<option value="">-- Select Contract--</option>';
+        HideProgress();
+    }
+}
+    function GetItemToPay() {
+        var vendor = $("#supplier").children("option:selected").val();
+        var contractNo = document.getElementById('itemLine');
+        var lpo = $("#lpoNumber").children("option:selected").val();
+    ShowProgress();
+        if (vendor) {
+        $.ajax({
+            url: '@Url.Action("GetVendorPurchaseLines", "ExpenseRequisition")',
+            type: 'GET',
+            data: { workplanNo: workplanNo, lpoNumber: lpo },
+            success: function(response) {
+                contractNo.innerHTML = '<option value="">-- Select Item --</option>';
+                if (response.success && response.ListOfActivities.length > 0) {
+                    $.each(response.ListOfActivities, function(index, item) {
+                        var option = document.createElement('option');
+                        option.value = item.Value;
+                        option.text = item.Text;
+                        contractNo.add(option);
+                    });
+                } else {
+                    var option = document.createElement('option');
+                    option.text = 'No LPO found';
+                    option.disabled = true;
+                    contractNo.add(option);
+                }
+                HideProgress();
+            },
+            error: function(xhr, status, error) {
+                Swal.fire('Error', 'An error occurred while fetching LPO: ' + error, 'error');
+                HideProgress();
+            }
+        });
+    } else {
+            contractNo.innerHTML = '<option value="">-- Select Contract--</option>';
+        HideProgress();
+    }
+}
+    function SubmitContractPayment() {
+    var isValid = true;
+    var glAccount = '@ViewBag.GLAccount';
+    var lineNo = '@ViewBag.LineNo';
+    var documentNumber = '@ViewBag.DocumentNumber';
+    var supplier = $("#supplier").children("option:selected").val();
+        var contract = $("#contractNumber").children("option:selected").val();
+        var lpo = $("#lpoNumber").children("option:selected").val();
+        var item = $("#itemLine").children("option:selected").val();
+    var description = $("#txtDescription").val();
+    var invoice = $("#txtInvoice").val();
+        var invoiceDate = $("#txtFromDate").val();
+    var quantity = $("#txtQuantity").val();
+    var rate = $("#txtRate").val();
+
+        if (!supplier) {
+        Swal.fire('Warning', 'Please select a Supplier.', 'a');
+        }
+
+        var imprestLine = {
+            Document_No: documentNumber,
+            G_L_Account: glAccount,
+            Line_No: lineNo,
+            ExpenseDescription: description,
+            Rate: rate,
+            SupplierInvoiceNo: invoice,
+            SupplierInvoiceDate: invoiceDate,
+            Quantity: quantity,
+            Supplier: supplier,
+            ContractNo: contract,
+            LpoNo: lpo,
+            ItemNo: item
+        };
+
+    ShowProgress();
+    $.ajax({
+        type: "POST",
+        url: "/ExpenseRequisition/SubmitContractLines",
+        data: JSON.stringify(imprestLine),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (data) {
+            HideProgress();
+            if (data.success) {
+                $("#myModal").modal("hide");
+                var form = $('<form>', {
+                    action: '/ExpenseRequisition/ExpenseRequisitionDocument',
+                    method: 'POST'
+                }).append($('<input>', {
+                    type: 'hidden',
+                    name: 'DocNo',
+                    value: imprestLine.Document_No
+                }));
+                form.appendTo('body').submit();
+                Swal.fire('Success', data.message, 'success');
+            } else {
+                Swal.fire('Warning', data.message, 'warning');
+            }
+        },
+        error: function (err) {
+            HideProgress();
+            Swal.fire('Warning', err.responseText, 'warning');
+        }
+    });
+}
+</script>

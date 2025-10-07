@@ -1,0 +1,350 @@
+﻿
+@model Latest_Staff_Portal.ViewModel.LeaveApplication
+
+@{
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    hr {
+        margin: 4px;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+<div class="page-header">
+
+    <div class="col-sm-12">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="#" onclick="LeaveApplicationListLink();">Leave Application List</a>
+            </li>
+            <li class="breadcrumb-item active">Leave Application Document (@Model.ApplicationCode)</li>
+        </ul>
+    </div>
+</div>
+<hr />
+<br />
+<div class="card">
+    <div class="card-body">
+
+        <div style="text-align:right">
+            <button style="background: #162f25; color: whitesmoke; border-radius: 10px" onclick="GenerateLeave ApplicationReport('@Model.ApplicationCode');">
+                <i class="fa fa-print" aria-hidden="true"></i> Print Report
+            </button>
+            @if (Model.Status == "Pending Approval")
+            {
+
+                <button style="background: #162f25; color:whitesmoke; border-radius:10px" onclick="CancelDocApprovalRequest('@Model.ApplicationCode');">
+                    <i class="fa fa-superpowers" aria-hidden="true"></i> Cancel Approval Request
+                </button>
+
+            }
+
+            @{
+                if (Model.Status == "Open")
+                {
+
+                    <button style="background: #162f25; color:whitesmoke; border-radius:10px" onclick="SendDocForApproval('@Model.ApplicationCode');">
+                        <i class="fa fa-check" aria-hidden="true"></i> Send For Approval
+                    </button>
+                }
+            }
+        </div>
+
+
+
+        <div class="row">
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Application Code", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.ApplicationCode, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.ApplicationCode, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Leave Type", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.LeaveType, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.LeaveType, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Annual Leave Type", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.AnnualLeaveType, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.AnnualLeaveType, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Employee No", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.EmployeeNo, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeNo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Emp Name", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.EmpName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.EmpName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Designation", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Designation, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Designation, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Shortcut Dimension 1 Code", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.ShortcutDimension1Code, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.ShortcutDimension1Code, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Department Name", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.DepartmentName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.DepartmentName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Directorate Code", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.DirectorateCode, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.DirectorateCode, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Supervisor", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Supervisor, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Supervisor, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Supervisor Name", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.SupervisorName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.SupervisorName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Approved Days", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.ApprovedDays, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.ApprovedDays, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Responsibility Center", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.ResponsibilityCenter, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.ResponsibilityCenter, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Days Applied", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.DaysApplied, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.DaysApplied, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Start Date", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("End Date", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Return Date", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.ReturnDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.ReturnDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Leave Balance BF", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.LeaveBalanceBF, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.LeaveBalanceBF, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Days Allocated", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.DaysAllocated, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.DaysAllocated, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Days Earned", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.DaysEarned, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.DaysEarned, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Days Taken", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.DaysTaken, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.DaysTaken, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Days Left", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.DaysLeft, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.DaysLeft, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Application Date", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.ApplicationDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.ApplicationDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Reliever", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Reliever, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Reliever, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Reliever Name", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.RelieverName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.RelieverName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Attachments", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Attachments, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Attachments, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Status", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Status, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Cell Phone Number", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.CellPhoneNumber, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.CellPhoneNumber, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Email Address", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.EmailAddress, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.EmailAddress, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Date Of Exam", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.DateOfExam, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.DateOfExam, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Details Of Examination", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.DetailsOfExamination, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.DetailsOfExamination, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Number Of Previous Attempts", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.NumberOfPreviousAttempts, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.NumberOfPreviousAttempts, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Childs Age", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.ChildsAge, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.ChildsAge, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-md-12 text-center">
+
+                <button style="background: #162f25; color: whitesmoke; border-radius: 10px" onclick="EditDocument();">
+                    <i class="fa fa-pencil" aria-hidden="true"></i> Edit Header
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function LeaveApplicationListLink() {
+        window.location = "LeaveApplication"
+    }
+</script>

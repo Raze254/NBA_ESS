@@ -1,0 +1,91 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.IssuanceVoucherLines>
+
+@{
+    ViewBag.Title = "IssuanceVoucherLinesPartialView";
+}
+
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th>No</th>
+               @* <th>Type</th>*@
+                <th>Code</th>
+                <th>Description</th>
+                <th>Serial No</th>
+                <th>Duration of Use Start Date</th>
+                <th>Duration of Use End Date</th>
+                <th>Duration of Use</th>
+                <th>FA No</th>
+                <th>Reason For Movement</th>
+                <th>Comments</th>
+                <th>Return Reason</th>
+                <th>Return Condition</th>
+                <th></th>
+            </tr>
+
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.No)
+                    </td>
+                  @*  <td>
+                        @Html.DisplayFor(modelItem => item.Type)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Serial_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Duration_of_Use_start_date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Duration_of_Use_end_date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Duration_of_Use)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FA_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Reason_For_Movement)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Comments)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Return_Reason)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Return_Condition)
+                    </td>
+                    <td>
+                       @* <button class="btn btn-success  btn-sm" data-toggle="tooltip" data-placement="top" title="Edit"
+                                onclick="EditItem('@item.No', '@item.Code' ,'@item.Description', '@item.Serial_No', '@item.Duration_of_Use_start_date', '@item.Duration_of_Use_end_date', '@item.FA_No', '@item.Reason_For_Movement', '@item.Comments', '@item.Return_Reason', '@item.Return_Condition');">
+                            Edit Line
+                        </button>
+
+                        <button class="btn btn-danger  btn-sm ml-3" data-toggle="tooltip" data-placement="top" title="Delete" onclick="RemoveItem('@item.No', '@item.Code');">Delete</button>*@
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#datatable").DataTable(), $("#datatable-buttons").DataTable({
+            lengthChange: !1
+        }).buttons().container().appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)")
+    });
+</script>

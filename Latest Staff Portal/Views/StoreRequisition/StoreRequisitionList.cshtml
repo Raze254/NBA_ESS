@@ -1,0 +1,228 @@
+﻿@using Latest_Staff_Portal.Models
+@{
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+
+<style>
+ 
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/Dashboard/Dashboard">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active">Store Requisition List</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<hr />
+<br />
+<div class="card">
+    <div class="card-header">
+        <div style="text-align:right">
+            <button class="btn btn-primary action-buttons2" onclick="NewStoreRequisition();">
+                <i class="fa fa-plus-circle" aria-hidden="true"></i> New Store Requisition
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+        <div id="divStoreRequisitionList"></div>
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">New Store Requisition</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+
+                <input type="button" class="btn btn-primary action-buttons" value="Submit" onclick="SubmitStoreRequisition();" />
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal Links////////////////////////////*@
+<div class="modal fade" id="myModalLinks" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Actions</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodyLinks">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadStoreRequisitionList();
+        var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+        if (Successmsg != "") {
+            Swal.fire('Success', Successmsg, 'success', true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+    });
+
+    var LoadStoreRequisitionList = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: "/StoreRequisition/StoreRequisitionListPartialView",
+            success: function (data) {
+                $("#divStoreRequisitionList").empty().html(data);
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+
+    var ViewDoc = function (No) {
+        ShowProgress();
+        var form = $('<form>', {
+            action: '/StoreRequisition/StoreRequisitionsDocumentView',
+            method: 'POST'
+        }).append($('<input>', {
+            type: 'hidden',
+            name: 'Document_No',
+            value: No
+        }));
+        form.appendTo('body').submit();
+    }; 
+
+
+    var ViewDoc2 = function (No) {
+        ShowProgress();
+        window.location = "/StoreRequisition/StoreRequisitionsDocumentView?Document_No=" + No;
+    }
+
+    var NewStoreRequisition = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            url: "/StoreRequisition/NewStoreRequisition",
+            dataType: "html",
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', 'An error occurred while loading the form. Please try again.', 'warning');
+            }
+        });
+    };
+
+    function SubmitStoreRequisition() {
+        var isValid = true;
+
+        var formDetails = {
+            Location_Code: $("#Location_Code").val(),
+            Order_Date: $("#Request_Date").val(), 
+            Shortcut_Dimension_1_Code: $("#Shortcut_Dimension_1_Code").val(),
+            Shortcut_Dimension_2_Code: $("#Shortcut_Dimension_2_Code").val(),
+            Description: $("#Description").val(),
+          
+        };
+        console.log(formDetails)
+
+        // Validation checks
+        //if (!formDetails.Location_Code) {
+        //    Swal.fire('Warning', 'Please select Location.', 'warning');
+        //    isValid = false;
+        //}
+
+        //if (!formDetails.Order_Date) {
+        //    Swal.fire('Warning', 'Please enter Request Date.', 'warning');
+        //    isValid = false;
+        //}
+ 
+        //if (!formDetails.Shortcut_Dimension_1_Code) {
+        //    Swal.fire('Warning', 'Please Select Programme.', 'warning');
+        //    isValid = false;
+        //}
+
+        //if (!formDetails.Shortcut_Dimension_2_Code) {
+        //    Swal.fire('Warning', 'Please Select Department.', 'warning');
+        //    isValid = false;
+        //}
+
+   /*     if (!formDetails.Description) {
+            Swal.fire('Warning', 'Please Enter Description.', 'warning');
+            isValid = false;
+        }*/
+
+    
+
+        if (!isValid) {
+            return;
+        }
+
+        var storeRequisition = formDetails;
+
+        ShowProgress();
+
+        $.ajax({
+            type: "POST",
+            url: "/StoreRequisition/SubmitStoreRequisition",
+            data: JSON.stringify(storeRequisition),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                HideProgress();
+                if (data.success) {
+                    Swal.fire('Success', 'Store Requisition created', 'success');
+                    ViewDoc(data.message);
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseText, 'warning');
+            }
+        });
+    }
+
+
+</script>

@@ -1,0 +1,363 @@
+﻿@{
+    ViewBag.Title = "StaffClaimRequisitionList";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+<style>
+	.selectedTableRow {
+		background-color: #74788d;
+		color: white;
+	}
+
+	.BtnPadding {
+		padding: 1px;
+		font-size: 12px;
+	}
+</style>
+
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#" onclick="HumanResourceLink();">Accounts</a>
+                </li>
+                <li class="breadcrumb-item active">Staff Claim</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="card-body">
+    <div id="divRegList"></div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">New Staff Claim Requisition</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal Links////////////////////////////*@
+<div class="modal fade" id="myModalLinks" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Actions</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodyLinks">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+	$(document).ready(function () {
+		LoadStaffClaimReqList();
+	});
+	var LoadStaffClaimReqList = function () {
+		ShowProgress();
+		$.ajax({
+			async: true,
+			type: "GET",
+			dataType: 'HTML',
+			contentType: false,
+			processData: false,
+			url: "/StaffClaim/StaffClaimRequisitionListPartialView",
+			success: function (data) {
+				$("#divRegList").html(data);
+				HideProgress();
+			},
+			error: function () {
+				HideProgress();
+				Swal.fire("There is some problem to process your request. Please try after some time");
+			}
+		});
+	}
+	var NewStaffClaimRequisition = function () {
+		ShowProgress();
+		$.ajax({
+			async: true,
+			type: "POST",
+			datatype: "json",
+			contentType: "application/json; charset = utf-8",
+			processData: false,
+			url: "/StaffClaim/NewStaffClaimRequest",
+			success: function (data) {
+				$("#modalBody").html(data);
+				HideProgress();
+				$("#myModal").modal("show");
+			},
+			error: function (err) {
+				HideProgress();
+				Swal.fire('Warning', err, 'warning');
+			}
+		});
+	}
+	var SubmitStaffClaimRequisition = function () {
+		var ClaimFrom = $("#ddlFrom").children("option:selected").val();
+		if (ClaimFrom == "") {
+			Swal.fire('Warning', "Select Claim from", 'warning');
+			return;
+		}
+		else if (ClaimFrom == "1") {
+			var RemarksImp = $("#txtImpRemarks").val().replace(/(\r\n|\n|\r)/gm, " ");
+			var ImpNo = $("#ddlImprest").children("option:selected").val();
+			ShowProgress();
+			//Send the JSON array to Controller using AJAX.
+			$.ajax({
+				type: "POST",
+				url: "/StaffClaim/SubmitStaffClaimFromImprest",
+				data: JSON.stringify({ ImprestNo: ImpNo, Remarks: RemarksImp }),
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+				success: function (data) {
+					if (data.success) {
+						window.location = data.message;
+					}
+					else {
+						Swal.fire('Warning', data.message, 'warning');
+						HideProgress();
+					}
+				},
+				error: function (err) {
+					HideProgress();
+					Swal.fire('Warning', err, 'warning');
+				}
+			});
+		}
+		else {
+			var Remarks = $("#txtRemarks").val().replace(/(\r\n|\n|\r)/gm, " ");
+			var Dim1 = $("#ddlDim1").children("option:selected").val();
+			var Dim2 = $("#ddlDim2").children("option:selected").val();
+			var Dim3 = $("#ddlDim3").children("option:selected").val();
+			var Dim4 = $("#ddlDim4").children("option:selected").val();
+			var Dim5 = $("#ddlDim5").children("option:selected").val();
+			var Dim6 = $("#ddlDim6").children("option:selected").val();
+			var RespC = $("#ddlRespC").children("option:selected").val();
+			if (Dim1 == "") {
+				Swal.fire('Warning', "Select Donor", 'warning');
+				return;
+			}
+			else if (Dim2 == "") {
+				Swal.fire('Warning', "Select Project", 'warning');
+				return;
+			}
+			else if (Remarks == "") {
+				Swal.fire('Warning', "Enter Reason for the purchase", 'warning');
+				return;
+			}
+			else if (Remarks.length > 250) {
+				Swal.fire('Warning', "Your Purpose should have a maximum of 250 characters", 'warning');
+				return;
+			}
+			else {
+				var StaffClaimHeader = {};
+				var DocD = {};
+				StaffClaimHeader.Remarks = Remarks;
+				StaffClaimHeader.Dim1 = Dim1;
+				StaffClaimHeader.Dim2 = Dim2;
+				StaffClaimHeader.Dim3 = Dim3;
+				StaffClaimHeader.Dim4 = Dim4;
+				StaffClaimHeader.Dim5 = Dim5;
+				StaffClaimHeader.Dim6 = Dim6;
+				StaffClaimHeader.RespC = RespC;
+				StaffClaimHeader.DocD = DocD;
+				ShowProgress();
+
+				//Send the JSON array to Controller using AJAX.
+				$.ajax({
+					type: "POST",
+					url: "/StaffClaim/SubmitStaffClaimRequisition",
+					data: JSON.stringify({ staffClaimHeader: StaffClaimHeader }),
+					contentType: "application/json; charset=utf-8",
+					dataType: "json",
+					success: function (data) {
+						if (data.success) {
+							window.location = data.message;
+						}
+						else {
+							Swal.fire('Warning', data.message, 'warning');
+							HideProgress();
+						}
+					},
+					error: function (err) {
+						HideProgress();
+						Swal.fire('Warning', err, 'warning');
+					}
+				});
+			}
+		}
+	};
+	var SelectedRow = function (DocNo, Status) {
+		ShowProgress();
+		$.ajax({
+			async: true,
+			type: "POST",
+			datatype: "json",
+			data: JSON.stringify({ DocNo: DocNo, Status: Status, DocType: 'CLM' }),
+			contentType: "application/json; charset = utf-8",
+			processData: false,
+			url: '/Common/CommonActions',
+			success: function (data) {
+				$("#modalBodyLinks").html(data);
+				HideProgress();
+				$("#myModalLinks").modal("show");
+			},
+			error: function (err) {
+				HideProgress();
+				Swal.fire('Warning', err, 'warning');
+			}
+		});
+	}
+	var ViewDoc = function (DocNo) {
+		ShowProgress();
+		window.location = "/StaffClaim/StaffClaimDocumentView?DocNo=" + DocNo;
+	}
+	var SendDocForApproval = function (DocNo) {
+		ShowProgress();
+		$.ajax({
+			async: true,
+			type: "POST",
+			datatype: "json",
+			data: JSON.stringify({ DocNo: DocNo }),
+			contentType: "application/json; charset = utf-8",
+			processData: false,
+			url: '/StaffClaim/SendStaffClaimAppForApproval',
+			success: function (data) {
+				if (data.success == true) {
+					HideProgress();
+					LoadStaffClaimReqList();
+					$("#myModalLinks").modal("hide");
+					Swal.fire('Success', data.message, 'success');
+				}
+				else {
+					HideProgress();
+					Swal.fire('Error', data.message, 'error');
+				}
+			},
+			error: function (err) {
+				HideProgress();
+				Swal.fire('Warning', err, 'warning');
+			}
+		});
+	}
+	var DelegateDocForApproval = function (DocNo) {
+		ShowProgress();
+		$.ajax({
+			async: true,
+			type: "POST",
+			datatype: "json",
+			data: JSON.stringify({ DocNo: DocNo }),
+			contentType: "application/json; charset = utf-8",
+			processData: false,
+			url: '/Common/DelegateApproval',
+			success: function (data) {
+				if (data.success == true) {
+					HideProgress();
+					LoadStaffClaimReqList();
+					$("#myModalLinks").modal("hide");
+					Swal.fire('Success', data.message, 'success');
+				}
+				else {
+					HideProgress();
+					Swal.fire('Error', data.message, 'error');
+				}
+			},
+			error: function (err) {
+				HideProgress();
+				Swal.fire('Warning', err, 'warning');
+			}
+		});
+	}
+	var CancelDocForApproval = function (DocNo) {
+		ShowProgress();
+		$.ajax({
+			async: true,
+			type: "POST",
+			datatype: "json",
+			data: JSON.stringify({ DocNo: DocNo }),
+			contentType: "application/json; charset = utf-8",
+			processData: false,
+			url: '/StaffClaim/CancelStaffClaimAppForApproval',
+			success: function (data) {
+				HideProgress();
+				LoadStaffClaimReqList();
+				if (data.success == true) {
+					$("#myModalLinks").modal("hide");
+					Swal.fire('Success', data.message, 'success');
+				}
+				else {
+					Swal.fire('Error', data.message, 'error');
+				}
+			},
+			error: function (err) {
+				HideProgress();
+				Swal.fire('Warning', err, 'warning');
+			}
+		});
+
+	}
+	var ViewApprovalTrail = function (DocNo) {
+		$("#labelF").text("Document Approval Trail");
+		ShowProgress();
+		$.ajax({
+			async: true,
+			type: "POST",
+			datatype: "json",
+			data: JSON.stringify({ DocNo: DocNo, RecID: "Staff Claims Header: " + DocNo }),
+			contentType: "application/json; charset = utf-8",
+			processData: false,
+			url: '/Common/DocumentApprovalTrail',
+			success: function (data) {
+				$("#modalBody").html(data);
+				HideProgress();
+				$("#myModalLinks").modal("hide");
+				$("#myModal").modal("show");
+			},
+			error: function (err) {
+				HideProgress();
+				Swal.fire('Warning', err, 'warning');
+			}
+		});
+	}
+	var ViewDocComments = function (documentNumber) {
+		$("#labelF").text("Document Comments");
+		ShowProgress();
+		var RecordID = "Staff Claims Header: " + DocNo;
+		$.ajax({
+			async: true,
+			type: "POST",
+			datatype: "json",
+			data: JSON.stringify({ docNo: documentNumber }),
+			contentType: "application/json; charset = utf-8",
+			processData: false,
+			url: '/Common/DocumentApprovalComments',
+			success: function (data) {
+				$("#modalBody").html(data);
+				HideProgress();
+				$("#myModalLinks").modal("hide");
+				$("#myModal").modal("show");
+			},
+			error: function (err) {
+				HideProgress();
+				Swal.fire('Warning', err, 'warning');
+			}
+		});
+	}
+</script>

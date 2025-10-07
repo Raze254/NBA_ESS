@@ -1,0 +1,63 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.Aie>
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th>Action</th>
+                <th>
+                    No.
+                </th>
+                <th>
+                    Administrative Unit
+                </th>
+                <th>
+                    Reporting Period
+                </th>
+
+                <th>
+                    Quarter
+                </th>
+                <th>
+                    Amount Authorized
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <input type="button" onclick="ReportType('@item.No');" style="background: #162f25; color: whitesmoke; border-radius: 10px;" value="Print Report" />
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.No)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AdminUnit)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ReportingPeriod)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Quarter)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AmountToAuthorize)
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    $("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100]
+    });
+</script>

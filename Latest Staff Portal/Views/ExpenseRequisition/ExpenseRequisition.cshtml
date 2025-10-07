@@ -1,0 +1,359 @@
+﻿@{
+	ViewBag.Title = "ResourceRequirements";
+	Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+
+<style>
+	thead {
+		background-color: black;
+		color: white;
+	}
+
+	.selectedTableRow {
+		background-color: #74788d;
+		color: white;
+	}
+
+	.BtnPadding {
+		padding: 7px;
+		font-size: 12px;
+	}
+</style>
+<div class="page-header">
+	<div class="row">
+		<div class="col-sm-12">
+			<ul class="breadcrumb">
+				<li class="breadcrumb-item">
+					<a href="#" onclick="FinanceLink();">Finance</a>
+				</li>
+				<li class="breadcrumb-item active">Expense Requisition</li>
+			</ul>
+		</div>
+	</div>
+</div>
+<div class="card">
+	<div class="card-body">
+		<div style="text-align:right">
+			<button class="btn btn-primary action-buttons2" onclick="NewExpenseRequisition();">
+				<i class="fa fa-plus-circle" aria-hidden="true"></i> New Expense Requisition
+			</button>
+		</div>
+		<hr />
+		<div id="divResourceRequirements"></div>
+	</div>
+</div>
+
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content bg-white">
+			<div class="modal-header">
+				<h4 class="modal-title">New Expenditure Requisition</h4>
+				<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body" id="modalBody">
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+@*//////////////////////Modal Links////////////////////////////*@
+<div class="modal fade" id="myModalLinks" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-sm" role="document">
+		<div class="modal-content bg-white">
+			<div class="modal-header">
+				<h4 class="modal-title">Actions</h4>
+				<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body" id="modalBodyLinks">
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+
+<script>
+	$(document).ready(function () {
+		$('#myModal').on('shown.bs.modal', function () {
+			setTimeout(function () {
+				$('.select2').select2({
+					dropdownParent: $('#myModal')
+				});
+			}, 200);
+		});
+	});
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+		LoadExpenseRequisitionList();
+        var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+        if (Successmsg != "") {
+            Swal.fire('Success', Successmsg, 'success', true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+    });
+	var LoadExpenseRequisitionList = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+			url: "/ExpenseRequisition/ExpenseRequisitionList",
+            success: function (data) {
+                $("#divResourceRequirements").empty().html(data);
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+
+
+
+    var NewExpenseRequisition = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+			url: "/ExpenseRequisition/NewExpenseRequisition",
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+
+
+    var ViewDoc = function (DocNo) {
+        ShowProgress();
+        var form = $('<form>', {
+            action: '/ExpenseRequisition/ExpenseRequisitionDocument',
+            method: 'POST'
+        }).append($('<input>', {
+            type: 'hidden',
+            name: 'DocNo',
+            value: DocNo
+        }));
+        form.appendTo('body').submit();
+    }
+
+    function SubmitExpenseRequest() {
+        var isValid = true;
+
+        var requestedBy = $("#CreatedBy").val();
+        if (!requestedBy) {
+            Swal.fire('Warning', 'Requested By field is required.', 'warning');
+            isValid = false;
+        }
+
+        var date = $("#date").val();
+        if (!date) {
+            Swal.fire('Warning', 'Please select a Date.', 'warning');
+            isValid = false;
+        } else {
+            date = formatDate(date);
+        }
+
+        var workplan = $("#Workplan").val();
+        if (!workplan) {
+            Swal.fire('Warning', 'Please select a Workplan.', 'warning');
+            isValid = false;
+        }
+        var aie = $("#aie").val();
+        var globalcode = $("#GlobalDimension2Code").val();
+        var selectedGlobal2 = $("#ddlDim2").val();
+        if (selectedGlobal2 != "") {
+            globalcode = selectedGlobal2;
+        }
+        if (!globalcode) {
+            Swal.fire('Warning', 'Please select an Administrative Unit Code.', 'warning');
+            isValid = false;
+        }
+        var description = $("#Description").val();
+        if (!description) {
+            Swal.fire('Warning', 'Description field is required.', 'warning');
+            isValid = false;
+        }
+
+        var requiresImprest = $("#RequiresImprest").is(":checked");
+        var imprestType = null, startDate = null, numberOfDays = null, subject = null, objective = null;
+
+        if (requiresImprest) {
+            imprestType = $("#ddlPrnType").val();
+            if (!imprestType) {
+                Swal.fire('Warning', 'Please select an Imprest Type.', 'warning');
+                isValid = false;
+            }
+
+            startDate = $("#txtDate").val();
+            if (!startDate) {
+                Swal.fire('Warning', 'Please enter the Start Date for Imprest.', 'warning');
+                isValid = false;
+            } else {
+                startDate = formatDate(startDate);
+            }
+
+            numberOfDays = $("#NumberOfDays").val();
+            if (!numberOfDays) {
+                Swal.fire('Warning', 'Please enter the Number of Days for Imprest.', 'warning');
+                isValid = false;
+            }
+
+            subject = $("#Subject").val();
+            if (!subject) {
+                Swal.fire('Warning', 'Please enter a Subject for Imprest.', 'warning');
+                isValid = false;
+            }
+
+            objective = $("#Objective").val();
+            if (!objective) {
+                Swal.fire('Warning', 'Please enter an Objective for Imprest.', 'warning');
+                isValid = false;
+            }
+        }
+
+        var requiresDirectPayment = $("#RequiresDirectPayment").is(":checked");
+        var requiresPRN = $("#RequiresPRN").is(":checked");
+        var ddldirectPayment = null;
+
+        if (requiresDirectPayment) {
+            ddldirectPayment = $("#ddldirectPayment").val();
+            if (!ddldirectPayment) {
+                Swal.fire('Warning', 'Please select Direct Payment Type.', 'warning');
+                isValid = false;
+            }
+
+        }
+        var procurementPlanID = null, prnType = null, locationCode = null, productRequisitionGroup = null, procurementPlanCategory = null;
+
+        if (requiresPRN) {
+            procurementPlanID = $("#ProcurementPlanID").val();
+            if (!procurementPlanID) {
+                Swal.fire('Warning', 'Please select a Procurement Plan ID.', 'warning');
+                isValid = false;
+            }
+
+            prnType = $("#PRNType").val();
+            
+           /* $("#PRNType").change(function () {
+                var prnType = $(this).val();
+                
+            });*/
+            if (!prnType) {
+                Swal.fire('Warning', 'Please select a PRN Type.', 'warning');
+                isValid = false;
+            }
+
+            locationCode = $("#LocationCode").val();
+            if (!locationCode) {
+                Swal.fire('Warning', 'Please select a Location Code.', 'warning');
+                isValid = false;
+            }
+
+            productRequisitionGroup = $("#ProductRequisitionGroup").val();
+
+           /* $("#ProductRequisitionGroup").change(function () {
+                var productRequisitionGroup = $(this).val();
+            });*/
+            if (!productRequisitionGroup) {
+
+                Swal.fire('Warning', 'Please select a Product Requisition Group.', 'warning');
+                isValid = false;
+            }
+
+            procurementPlanCategory = $("#ProcurementPlanCategory").val();
+            if (!procurementPlanCategory) {
+                Swal.fire('Warning', 'Please select a Procurement Plan Category.', 'warning');
+                isValid = false;
+            }
+        }
+
+        if (!isValid) {
+            return;
+        }
+
+        var expenseRequisition = {
+            CreatedBy: requestedBy,
+            Date: date,
+            Workplan: workplan,
+            GlobalDimension2Code: globalcode,
+            Description: description,
+            RequiresImprest: requiresImprest,
+            ImpType: imprestType,
+            StartDate: startDate,
+            NoOfDays: numberOfDays,
+            Subject: subject,
+            Objective: objective,
+            RequiresDirectPayment: requiresDirectPayment,
+            RequiresPRN: requiresPRN,
+            ProcurementPlanID: procurementPlanID,
+            PRNType: prnType,
+            LocationCode: locationCode,
+            RequisitionProductGroup: productRequisitionGroup,
+            PPPlanCategory: procurementPlanCategory,
+            DirectPay: ddldirectPayment,
+            Aie: aie,
+        };
+
+        ShowProgress();
+
+        $.ajax({
+            type: "POST",
+            url: "/ExpenseRequisition/SubmitExpenseRequisition",
+            data: JSON.stringify(expenseRequisition),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                HideProgress();
+                if (data.success) {
+                    var form = $('<form>', {
+                        action: '/ExpenseRequisition/ExpenseRequisitionDocument',
+                        method: 'POST'
+                    }).append($('<input>', {
+                        type: 'hidden',
+                        name: 'DocNo',
+                        value: data.message
+                    }));
+                    form.appendTo('body').submit();
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseText, 'warning');
+            }
+        });
+    }
+
+    function formatDate(date) {
+        var parts = date.split('/');
+        return `${parts[2]}-${parts[1]}-${parts[0]}`;
+    }
+
+</script>

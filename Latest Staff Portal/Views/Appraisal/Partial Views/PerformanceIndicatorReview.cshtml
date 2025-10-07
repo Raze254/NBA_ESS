@@ -1,0 +1,108 @@
+﻿@model Latest_Staff_Portal.ViewModel.SectionDetails
+@{
+    decimal TotalWeight = 0;
+}
+<style>
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+<div class="pre-scrollable">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead>
+        <tr>
+            <th width="20%">Objective</th>
+            <th width="20%">KRA</th>
+            <th width="20%">KPI</th>
+            <th width="5%">Target</th>
+            <th width="5%">Weight</th>
+            @if (Model.AllowEvaluation)
+            {
+                <th width="5%">ANUPEAisee</th>
+                <th width="5%">Supervisor</th>
+                <th width="5%">Agreed</th>
+                <th width="20%">ANUPEAisee Comments</th>
+                <th width="20%">Supervisor Comments</th>
+                <th style="text-align:right" width="5%">Action</th>
+            }
+        </tr>
+        </thead>
+        <tbody>
+        @{
+            if (Model.KPIList != null)
+            {
+                if (Model.KPIList.Count() > 0)
+                {
+                    foreach (var item in Model.KPIList)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Objective)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.KRA)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.KPI)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Target)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Weight)
+                            </td>
+                            @if (Model.AllowEvaluation)
+                            {
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Self_Score)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Supervisors_Score)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Agreed_Score)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ANUPEAisee_Comments)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Supervisor_Comments)
+                                </td>
+                                <td style="text-align:right">
+                                    <a href="javascript:void(0);" class="text-success" onclick="EvalKPIItem('@item.ANUPEAisal_No','@item.Line_No','@Model.Level');">Evaluate</a>
+                                </td>
+                            }
+                        </tr>
+                        TotalWeight = TotalWeight + Convert.ToDecimal(item.Weight);
+                    }
+                }
+            }
+        }
+        </tbody>
+    </table>
+</div>
+<div class="bg-soft-secondary" style="border-top:2px solid black">
+    <b>Total Weight :</b> <span class="badge badge-info">@TotalWeight</span>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#datatable").DataTable(), $("#datatable-buttons").DataTable({
+            lengthChange: !1,
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    title: 'Recruits List',
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+                {
+                    extend: 'pdfHtml5',
+                    title: 'Recruits List',
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                }
+            ]
+        }).buttons().container().appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)")
+    });
+</script>

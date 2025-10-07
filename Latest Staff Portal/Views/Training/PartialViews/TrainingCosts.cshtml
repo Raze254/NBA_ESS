@@ -1,0 +1,70 @@
+﻿@model List<Latest_Staff_Portal.ViewModel.TrainingCost>
+
+@{ 
+    var activeCode = ViewBag.activeCode;
+    var activeCourse = ViewBag.activeCourse;
+}
+
+
+<div class="text-right">
+    <button class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Add Cost Line" onclick="AddTrainingCostLine(@activeCourse)">Add Cost Line</button>
+</div>
+
+<div class="table-responsive">
+    <table class="datatable table table-stripped" id="datatable-lines2">
+        <thead>
+            <tr>
+                @*<th>Entry No</th>
+                    <th>Course ID</th>*@
+                <th>Cost Category</th>
+                <th>Cost Item</th>
+                @*    <th>Item Category</th>
+                    <th>Service Item Code</th>
+                    <th>Item Description</th>
+                    <th>Unit of Measure</th>*@
+                <th>Unit Cost</th>
+                <th>Quantity</th>
+                <th>Line Amount</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        @*<td>@item.Entry_No</td>
+                            <td>@item.Course_ID</td>*@
+                        <td>
+                            <span class="badge @(item.Cost_Category == "Procurable" ? "badge-success" : "badge-info")">
+                                @item.Cost_Category
+                            </span>
+                        </td>
+                        <td>@item.Cost_Item</td>
+                        @*     <td>@item.Item_Category</td>
+                            <td>@item.Service_Item_Code</td>
+                            <td>@item.Item_Description</td>
+                            <td>@item.Unit_of_Measure</td>*@
+                        <td style="text-align:right">@item.Unit_Cost_LCY.ToString("N0")</td>
+                        <td style="text-align:center">@item.Quantity</td>
+                        <td style="text-align:right; font-weight:bold; color:#162f25;">@item.Line_Amount.ToString("N0")</td>
+                        <td style="text-align:right">
+                            <button class="btn btn-danger btn-sm ml-1" data-toggle="tooltip" data-placement="top" title="Delete" onclick="DeleteTrainingCost('@item.Course_ID', @item.Entry_No,  `@activeCode`, `@activeCourse`);">
+                                <i class="fa fa-trash"></i> Delete
+                            </button>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $("#datatable-lines2").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100],
+        "bDestroy": true
+    });
+</script>

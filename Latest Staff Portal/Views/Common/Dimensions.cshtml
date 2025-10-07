@@ -1,0 +1,46 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.DimensionSetValues>
+
+<div class="table-responsive">
+    <table id="dimensions" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead>
+        <tr style="background-color:#000;">
+            <th>
+                Dimension Code
+            </th>
+            <th>
+                Dimension Value Code
+            </th>
+            <th>
+                Dimension Value Name
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        @{
+            if (Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DimensionCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DimensionValueCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DimensionValueName)
+                        </td>
+                    </tr>
+                }
+            }
+        }
+        </tbody>
+    </table>
+</div>
+<script>
+    $("#dimensions").DataTable({
+        lengthChange: true,
+        lengthMenu: [10, 25, 50, 100]
+    });
+</script>

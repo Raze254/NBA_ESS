@@ -1,0 +1,201 @@
+﻿@{
+    ViewBag.Title = "AssignedAssetList";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+<style>
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+
+    thead {
+        background-color: black;
+        color: white;
+    }
+</style>
+<div class="card pre-scrollable">
+    <div class="card-title">Assigned Asset List</div>
+    <div class="card-body">
+        <hr/>
+        <div id="divAssignedList"></div>
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Asset Transfer Form</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadAssignedAssetList();
+        var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+        var Errormsg = '@Request.RequestContext.HttpContext.Session["ErrorMsg"]';
+        if (Successmsg != "") {
+            Swal.fire('Success', Successmsg, 'success', true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+        if (Errormsg != "") {
+            Swal.fire('Warning', Errormsg, 'warning', true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+    });
+    var LoadAssignedAssetList = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: "/Asset/AssignedAssetPartialView",
+            success: function (data) {
+                $("#divAssignedList").html(data);
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                alert("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+    var AssignedAssetTransfer = function (AssetNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Asset/NewAssetTransferRequest',
+            data: JSON.stringify({ AssetNo: AssetNo }),
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    } 
+    var SubmitTransfer = function (AssetNo) {
+        alert(AssetNo);
+        var Comments = $("#txtComments").val().replace(/(\r\n|\n|\r)/gm, " ");
+        var TransType = $("#ddlTransferType").children("option:selected").val();
+        var FLocation = $("#ddlFromLocation").children("option:selected").val();
+        var Tlocation = $("#txtToLocation").val().replace(/(\r\n|\n|\r)/gm, " ");
+        var DepartmentFrom = $("#ddlFromDepartment").children("option:selected").val();
+        var DepartmentTo = $("#ddlToDepartment").children("option:selected").val();
+        var DivitionFrom = $("#ddlFromDivision").children("option:selected").val();
+        var DivitionTo = $("#ddlToDivision").children("option:selected").val();
+        var EmployeeTo = $("#ddlToEmployee").children("option:selected").val();
+
+        if (Comments == "") {
+            Swal.fire('Warning', "Enter Reason for the Transfer", 'warning');
+            return;
+        }
+        else if (Comments.length > 50) {
+            Swal.fire('Warning', "Your Reason should have a maximum of 50 characters", 'warning');
+            return;
+        }
+        else if (TransType == "") {
+            Swal.fire('Warning', "Select Transfer Type", 'warning');
+            return;
+        }
+        else if (FLocation == "") {
+            Swal.fire('Warning', "Select From Location", 'warning');
+            return;
+        }
+        else if (Tlocation == "") {
+            Swal.fire('Warning', "Enter Location To", 'warning');
+            return;
+        }
+        else if (Tlocation == "") {
+            Swal.fire('Warning', "Enter Location To", 'warning');
+            return;
+        }
+        else if (DepartmentFrom == "") {
+            Swal.fire('Warning', "Select Department From", 'warning');
+            return;
+        }
+        else if (DepartmentTo == "") {
+            Swal.fire('Warning', "Select Department To", 'warning');
+            return;
+        }
+        else if (DivitionFrom == "") {
+            Swal.fire('Warning', "Select Division from", 'warning');
+            return;
+        }
+        else if (DivitionTo == "") {
+            Swal.fire('Warning', "Select Division To", 'warning');
+            return;
+        }
+        else if (EmployeeTo == "") {
+            Swal.fire('Warning', "Select Responsible Employee To", 'warning');
+            return;
+        }
+        else {
+            var AssetTransfer = {};
+            AssetTransfer.TransferType = TransType;
+            AssetTransfer.AssettoTransfer = AssetNo;
+            AssetTransfer.Comments = Comments;
+            AssetTransfer.FromLocation = FLocation;
+            AssetTransfer.ToLocation = Tlocation;
+            AssetTransfer.FromDimension1Code = DepartmentFrom;
+            AssetTransfer.FromDimension2Code = DivitionFrom;
+            AssetTransfer.ToDimension1Code = DepartmentTo;
+            AssetTransfer.ToDimension2Code = DivitionTo;
+            AssetTransfer.ToResponsibleEmployee = EmployeeTo;
+            ShowProgress();
+            $.ajax({
+                async: true,
+                type: "POST",
+                datatype: "json",
+                contentType: "application/json; charset = utf-8",
+                processData: false,
+                url: '/Asset/SubmitAssetTrasnferData',
+                data: JSON.stringify({ AssTrans: AssetTransfer }),
+                success: function (data) {
+                    if (data.success == true) {
+                        window.location = data.message;
+                    }
+                    else {
+                        $("#myModal").modal("hide");
+                        HideProgress();
+                        Swal.fire('error', data.message, 'error');
+                    }
+                },
+                error: function (err) {
+                    HideProgress();
+                    Swal.fire('Warning', err, 'warning');
+                }
+            });
+        }
+    } 
+</script>

@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.SpecialImprest>
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table  table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th>Action</th>
+                <th>No</th>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Pay Mode</th>
+                <th>Payee</th>
+                <th>Total Amount</th>
+                <th>Status</th>
+                <th>Posted</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <input type="button" onclick="ViewDoc('@item.No');" class="btn btn-info" style="background: #162f25; color: whitesmoke;" value="Select" />
+                        </td>
+                        <td>@item.No</td>
+                        <td>@item.Date</td>
+                        <td>@item.PaymentNarration</td>
+                        <td>@item.PayMode</td>
+                        <td>@item.Payee</td>
+                        <td>@item.TotalAmount</td>
+                        <td>@item.Status</td>
+                        <td>@item.Posted</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    $("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100]
+    });
+</script>

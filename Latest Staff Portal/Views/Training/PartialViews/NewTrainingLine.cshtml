@@ -1,0 +1,163 @@
+﻿@model Latest_Staff_Portal.ViewModel.TrainingLineViewModel
+
+<style>
+    .select2-container.custom-select .select2-selection {
+        background-color: white !important;
+        border: 1px solid #ccc;
+    }
+
+    .select2-container.custom-select .select2-selection--single {
+        background-color: white !important;
+    }
+</style>
+
+
+<div class="row">
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Course", htmlAttributes: new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.CourseID, new { @class = "form-control", id = "CourseID", @placeholder = "Enter Course" })
+            @*@Html.DropDownListFor(m => m.CourseID, Model.ListOfCourses, "--Select Course--", new { @id = "CourseID", @class = "form-control select2 custom-select" })*@
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Course Description", htmlAttributes: new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.CourseDescription, new { @class = "form-control", id = "CourseDescription", @placeholder = "Enter Course Description" })
+            @*@Html.DropDownListFor(m => m.CourseID, Model.ListOfCourses, "--Select Course--", new { @id = "CourseID", @class = "form-control select2 custom-select" })*@
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Domain", htmlAttributes: new { @class = "control-label col-md-12" })
+            @Html.DropDownListFor(m => m.DomainId, Model.ListOfDomains, "--Select Domain--", new { @id = "DomainId", @class = "form-control select2 custom-select", @onchange = "GetCoursesByDomain();" })
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Course Provider", htmlAttributes: new { @class = "control-label col-md-12" })
+            @*@Html.TextBoxFor(m => m.CourseProvider, new { @class = "form-control", id = "CourseProvider", @placeholder = "Enter Course Provider" })*@
+            @Html.DropDownListFor(m => m.CourseProvider, Model.ListOfProviders, "--Select Course Provider--", new { @id = "CourseProvider", @class = "form-control select2 custom-select" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Start Date", htmlAttributes: new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.StartDate, new { @class = "form-control datepicker", id = "StartDate", @placeholder = "dd/mm/yyyy" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("End Date", htmlAttributes: new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.EndDate, new { @class = "form-control datepicker", id = "EndDate", @placeholder = "dd/mm/yyyy" })
+        </div>
+    </div>
+
+
+</div>
+
+<div align="center">
+    <input type="button" class="btn btn-primary action-buttons" value="Submit Training Line" onclick="SubmitTrainingLine();" />
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.select2').select2({
+            dropdownParent: $('#myModal')
+        });
+
+        $('.datepicker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-0:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy',
+            minDate: 0
+        });
+    });
+
+    $(document).ready(function () {
+        // Function to toggle CPD points field
+        function toggleCPDPointsField() {
+            var selectedDomain = $('#DomainId option:selected').text();
+            var selectedValue = $('#DomainId').val();
+
+            // Check if CPD COURSES is selected (either by text or value)
+            if (selectedDomain === 'CPD COURSES' || selectedValue === 'CPD') {
+                // Show CPD points field if it exists, otherwise create it
+                if ($('#cpdPointsRow').length === 0) {
+                    createCPDPointsField();
+                }
+                $('#cpdPointsRow').show();
+            } else {
+                // Hide CPD points field
+                $('#cpdPointsRow').hide();
+            }
+        }
+
+        // Function to create CPD points input field
+        function createCPDPointsField() {
+            var cpdPointsHtml = `
+            <div class="row" id="cpdPointsRow" style="display: none;">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label col-md-12">CPD Points</label>
+                        <input type="number" 
+                               id="CPDPoints" 
+                               name="CPDPoints" 
+                               class="form-control" 
+                               placeholder="Enter CPD Points" 
+                               min="0" 
+                               step="0.5" />
+                    </div>
+                </div>
+            </div>
+        `;
+
+            // Insert the CPD points field after the Course Provider row
+            $('.row:last').after(cpdPointsHtml);
+        }
+
+        // Event handler for domain dropdown change
+        $('#DomainId').on('change', function () {
+            toggleCPDPointsField();
+        });
+
+        // Check on page load in case domain is pre-selected
+        toggleCPDPointsField();
+    });
+
+    var GetCoursesByDomain = function () {
+        var domainId = $("#DomainId").val();
+        if (domainId) {
+            ShowProgress();
+            $.ajax({
+                url: '/Training/GetCoursesByDomain',
+                type: 'GET',
+                data: { domainId: domainId },
+                success: function (data) {
+                    HideProgress();
+                    if (data.success) {
+                        $('#CourseID').empty().append('<option value="">--Select Course--</option>');
+                        $.each(data.courses, function (index, course) {
+                            $('#CourseID').append('<option value="' + course.Value + '">' + course.Text + '</option>');
+                        });
+                        $('#CourseID').trigger('change');
+                    } else {
+                        Swal.fire('Error', 'Failed to load courses', 'error');
+                    }
+                },
+                error: function () {
+                    HideProgress();
+                    Swal.fire('Error', 'Failed to load courses', 'error');
+                }
+            });
+        } else {
+            $('#CourseID').empty().append('<option value="">--Select Course--</option>');
+        }
+    }
+</script>

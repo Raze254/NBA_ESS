@@ -1,0 +1,126 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.PMMUCard>
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead  style="background-color:black;color:white">
+            <tr>
+                <th>Action</th>
+                <th>No</th>
+               @* <th>Responsible Employee No</th>*@
+                <th>Employee Name</th>
+                <th>Description</th>
+                <th>Strategy Plan ID</th>
+               
+                <th>Contract Year</th>
+             
+                <th>Target Setting Committee</th>
+                <th>Evaluation Committee</th>
+                <th>Approval Status</th>
+                
+                <th>Date Approved</th>
+                <th>Change Status</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+               @* <th>Designation</th>
+                <th>Grade</th>*@
+                <th>Admin Unit</th>
+            
+               
+                <th>Created By</th>
+                <th>Created On</th>
+
+               
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <input type="button" onclick="ViewDoc('@item.No', @item.Target_Setting_Commitee);" style="background: #162f25; color: whitesmoke; outline: none; border-radius: 10px;" value="Select" />
+                            <input type="button" onclick="createCopy('@item.No', @item.Target_Setting_Commitee);" style="background: #b8a603; border:none; color: #fff; border-radius: 10px;" value="Create Copies" />
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.No)
+                        </td>
+                       @* <td>
+                            @Html.DisplayFor(modelItem => item.Responsible_Employee_No)
+                        </td>*@
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Employee_Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Strategy_Plan_ID)
+                        </td>
+                      
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Contract_Year)
+                        </td>
+                        
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Evaluation_Committee)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Evaluation_Committee)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Approval_Status)
+                        </td>
+                       
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Date_Approved)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Change_Status)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Start_Date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.End_Date)
+                        </td>
+                       @* <td>
+                            @Html.DisplayFor(modelItem => item.Designation)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Grade)
+                        </td>*@
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Admin_Unit)
+                        </td>
+                      
+                       
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Created_By)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Created_On)
+                        </td>
+ 
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="22" style="color: red;">
+                        No Records Found
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100] // Same options for the second table
+    });
+</script>

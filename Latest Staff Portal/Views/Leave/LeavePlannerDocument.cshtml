@@ -1,0 +1,415 @@
+﻿@model Latest_Staff_Portal.ViewModel.LeavePlannerList
+
+
+@{
+    ViewBag.Title = "LeavePlannerDocument";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    hr {
+        margin: 4px;
+    }
+
+    .BtnPadding {
+        padding: 7px;
+        font-size: 12px;
+    }
+</style>
+
+
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#" onclick="LeavePlanner();">Leave Planner</a>
+                </li>
+                <li class="breadcrumb-item active">Leave Planner Card(@Model.Application_Code)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <hr/>
+    <div class="text-right">
+        <a href="#" onclick="@(Model.Status == "New" ? $"SendDocForApproval('{Model.Application_Code}');" : $"CancelDocForApproval('{Model.Application_Code}');")" class="btn btn-primary BtnPadding">
+            @(Model.Status == "New" ? "Forward to Supervisor" : "Cancel Approval Request")
+        </a>
+    </div>
+    <hr/>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <b>Application Code</b>
+                @Html.TextBoxFor(m => m.Application_Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+            <div class="col-md-6">
+                <b>Admin Unit</b>
+                @Html.TextBoxFor(m => m.Names, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-md-6">
+                <b>Leave Calendar</b>
+                @Html.DropDownListFor(m => m.Leave_Calendar, new SelectList(Model.ListOfLeave_Calendar, "Value", "Text", Model.Leave_Calendar), "--Select Leave Calendar--", new { id = "ddlAuthorizedBy", @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+            <div class="col-md-6">
+                <b>Implementing Unit Name</b>
+                @Html.TextBoxFor(m => m.Job_Tittle, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <b>Status</b>
+                @Html.TextBoxFor(m => m.Status, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+
+        </div>
+
+
+        <hr style="border:1px solid black"/>
+        <b>Leave Planner Lines </b>
+
+
+        <div id="divLeavePlannerLines"></div>
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" ke aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">New Leave Planner Line</h4>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script src="~/assets/js/pdfobject.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadLeavePlannerLines('@Model.Application_Code', '@Model.Status');
+        HideHeaderEditInput('@Model.Status');
+
+        var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+        if (Successmsg !== "") {
+            Swal.fire('Success', Successmsg, 'success', true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+    });
+
+    var LoadLeavePlannerLines = function (DocNo, Status) {
+        ShowProgress();
+        $.ajax({
+            type: "POST",
+            dataType: "html", // Assuming the response is HTML
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({ DocNo: DocNo, Status: Status }),
+            url: "/Leave/LeavePlannerLines",
+            success: function (data) {
+                $("#divLeavePlannerLines").html(data);
+                HideProgress();
+                GetDocumentAttachments();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem processing your request. Please try after some time");
+            }
+        });
+    };
+
+    var GetDocumentAttachments = function () {
+        ShowProgress();
+        var DocNo = '@Model.Application_Code';
+        var Status = '@Model.Status';
+        $.ajax({
+            type: "POST",
+            dataType: "html", // Assuming the response is HTML
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({ DocNo: DocNo, TableID: 69220, Status: Status }),
+            url: "/Common/DocumentAttachments",
+            success: function (data) {
+                HideProgress();
+                $("#divAttachDocs").html(data);
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem processing your request. Please try after some time");
+            }
+        });
+    };
+
+
+   var NewLeavePlannerLines = function () {
+    var appCode = '@Model.Application_Code';
+    ShowProgress();
+    $.ajax({
+        async: true,
+        type: "POST",
+        datatype: "json",
+        contentType: "application/json; charset=utf-8",
+        processData: false,
+        url: "/Leave/NewLeavePlannerLines?applicationCode=" + appCode,
+        success: function (data) {
+            $("#modalBody").html(data);
+            HideProgress();
+            $("#myModal").modal("show");
+        },
+        error: function (err) {
+            HideProgress();
+            Swal.fire('Warning', err, 'warning');
+        }
+    });
+}
+
+    var DeleteLine = function (reqNo) {
+   // var docNo = @Model.Application_Code;
+
+    $.ajaxSetup({ cache: false });
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.value) {
+            ShowProgress();
+
+            $.ajax({
+                cache: false,
+                url: '/Leave/DeleteLeavePlannerLines',
+                datatype: "json",
+                type: "POST",
+                data: JSON.stringify({ docNo: docNo, transportRequisitionNo: reqNo, entryNo: Id }),
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    if (data.success == true) {
+                        HideProgress();
+                        GetDocumentAttachments();
+                        Swal.fire('Success', 'File Deleted Successfully', 'success');
+                    } else {
+                        // If the deletion is not successful, hide the progress indicator and show a warning message
+                        HideProgress();
+                        Swal.fire('Warning', data.message, 'warning');
+                    }
+                },
+                error: function (err) {
+                    // If there is an error during the AJAX request, hide the progress indicator and show a warning message
+                    HideProgress();
+                    Swal.fire('Warning', err, 'warning');
+                }
+            });
+        } else {
+            // If the user cancels the deletion, show a cancellation message
+            Swal.fire('Cancelled', 'Attachment File has not been deleted', 'error');
+        }
+    });
+    };
+
+    var EditLine = function (appCode, lineNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: "html",
+            contentType: "application/json; charset=utf-8",
+            url: "/Leave/EditLeavePlannerLine?applicationCode=" + appCode + "&lineNo=" + lineNo,
+            success: function (data) {
+                HideProgress();
+                // Display the partial view content in a modal
+                $('#myModal').modal('show');
+                $('#modalBody').html(data);
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    };
+    var InsertLeavePlannerHeader = function () {
+        var applicationCode = $("#txtApplicationCode").val();
+        var date = $("#txtDate").val();
+        var daysApplied = $("#txtDaysApplied").val();
+        var leaveType = $("#ddlLeaveType").val();
+
+        if (daysApplied == "") {
+            Swal.fire('Warning', "Input Number Of Days Applied", 'warning');
+            return;
+        } else if (leaveType == "") {
+            Swal.fire('Warning', "Select Leave Type", 'warning');
+            return;
+        } else if (date == "") {
+            Swal.fire('Warning', "Input Date", 'warning');
+            return;
+        } else {
+            var EditLeavePlannerLineObj = {
+                DocNo: applicationCode,
+                LeaveType: leaveType,
+                StartDate: date,
+                DaysApplied: daysApplied
+            };
+
+            ShowProgress();
+            $.ajax({
+                type: "POST",
+                url: "/Leave/InsertLeavePlannerLines",
+                data: JSON.stringify({ editLeave: EditLeavePlannerLineObj }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    if (data.success) {
+                        window.location = data.message;
+                    } else {
+                        Swal.fire('Warning', data.message, 'warning');
+                        HideProgress();
+                    }
+                },
+                error: function (err) {
+                    HideProgress();
+                    Swal.fire('Warning', err, 'warning');
+                }
+            });
+        }
+    };
+    var ModifyLeavePlannerLines = function () {
+        var applicationCode = $("#txtApplicationCode").val();
+        var lineNo = $("#txtLineNo").val();
+        var date = $("#txtDate").val();
+        var daysApplied = $("#txtDaysApplied").val();
+        var leaveType = $("#ddlLeaveType").val();
+
+        if (daysApplied == "") {
+            Swal.fire('Warning', "Input Number Of Days Applied", 'warning');
+            return;
+        } else if (leaveType == "") {
+            Swal.fire('Warning', "Select Leave Type", 'warning');
+            return;
+        } else if (date == "") {
+            Swal.fire('Warning', "Input Date", 'warning');
+            return;
+        } else {
+            var EditLeavePlannerLineObj = {
+                DocNo: applicationCode,
+                LineNo: lineNo,
+                LeaveType: leaveType,
+                StartDate: date,
+                DaysApplied: daysApplied
+            };
+
+            ShowProgress();
+            $.ajax({
+                type: "POST",
+                url: "/Leave/ModifyLeavePlannerLines",
+                data: JSON.stringify({ editLeave: EditLeavePlannerLineObj }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    if (data.success) {
+                        window.location = data.message;
+                    } else {
+                        Swal.fire('Warning', data.message, 'warning');
+                        HideProgress();
+                    }
+                },
+                error: function (err) {
+                    HideProgress();
+                    Swal.fire('Warning', err, 'warning');
+                }
+            });
+        }
+    };
+    var SendDocForApproval = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo, Redirect: "N" }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Leave/SendLeavePlannerApproval',
+            success: function (data) {
+                if (data.LogOut == true) {
+                    window.location = data.message;
+                }
+                else {
+                    if (data.success == true) {
+                        HideProgress();
+                        LoadImprestReqList();
+                        $("#myModalLinks").modal("hide");
+                        Swal.fire('Success', data.message, 'success');
+                    }
+                    else {
+                        HideProgress();
+                        Swal.fire('Error', data.message, 'error');
+                    }
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var CancelDocForApproval = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Leave/CancelLeavePlannerHeader',
+            success: function (data) {
+                if (data.LogOut == false) {
+                    window.location = data.message;
+                }
+                else {
+                    if (data.success == true) {
+                        HideProgress();
+                        LoadImprestReqList();
+                        $("#myModalLinks").modal("hide");
+                        Swal.fire('Success', data.message, 'success');
+                    }
+                    else {
+                        HideProgress();
+                        Swal.fire('Error', data.message, 'error');
+                    }
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    };
+
+
+
+</script>

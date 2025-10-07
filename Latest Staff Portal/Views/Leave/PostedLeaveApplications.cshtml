@@ -1,0 +1,531 @@
+﻿@{
+    ViewBag.Title = "EmployeesApprovedLeaveList";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+<style>
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+
+    thead {
+        background-color: black;
+        color: white;
+    }
+</style>
+<div class="card">
+    <div class="card-header">
+        <div class="card-title"><h4>Employees Approved Leave List</h4> </div>
+        @*<a href="#" onclick="NewLeaveRequisition();" class="btn btn-primary BtnPadding">New Leave</a>*@
+    </div>
+
+    <div class="card-body">
+     
+        <div id="divLeaveRegList"></div>
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <label id="labelF"></label>
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal Links////////////////////////////*@
+<div class="modal fade" id="myModalLinks" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Actions</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodyLinks">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadLeaveReqList();
+    });
+    var LoadLeaveReqList = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: "/Leave/PostedLeaveApplicationsList",
+            success: function (data) {
+                $("#divLeaveRegList").html(data);
+                HideProgress();
+            },
+            error: function () {
+                Swal.fire("There is some problem to process your request. Please try after some time");
+                HideProgress();
+            }
+        });
+    }
+    var NewLeaveRequisition = function () {
+        $("#labelF").text("New Leave Application");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Leave/NewLeaveApplication',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var SubmitLeaveRequisition = function () {
+        var StartDate = $('#dtPicker').val();
+        var EndDate = $('#EndDate').html();
+        var ReturntDate = $('#ReturnDate').html();
+        var days = $("#ddlNoDays").children("option:selected").val();
+        var LvType = $("#ddlLeaveType").children("option:selected").val();
+        var Reliever = $("#ddlReliever").children("option:selected").val();
+        var Remarks = $("#txtRemarks").val();
+
+        if (LvType == "") {
+            Swal.fire('error', 'Select Leave Type', 'error');
+            return;
+        }
+        else if (days == "") {
+            Swal.fire('error', 'Select Number of days you want to apply for leave', 'error');
+            return;
+        }
+        else if (Reliever == "") {
+            Swal.fire('error', 'Select Reliever', 'error');
+            return;
+        }
+        else if (StartDate == "") {
+            Swal.fire('error', 'Select Start Date', 'error');
+            return;
+        }
+        else if (EndDate == "dd/mm/yyyy") {
+            Swal.fire('error', 'End Date cannot be empty', 'error');
+            return;
+        }
+        else if (ReturntDate == "dd/mm/yyyy") {
+            Swal.fire('error', 'Return Date cannot be empty', 'error');
+            return;
+        }
+        else if (Remarks == "") {
+            Swal.fire('error', 'Enter Remarks', 'error');
+            return;
+        }
+
+        else {
+
+            var LeaveReqList = {};
+            LeaveReqList.Leave_Type = LvType;
+            LeaveReqList.Applied_Days = days;
+            LeaveReqList.Starting_Date = StartDate;
+            LeaveReqList.End_Date = EndDate;
+            LeaveReqList.Return_Date = ReturntDate;
+            LeaveReqList.Remarks = Remarks;
+            LeaveReqList.Reliever = Reliever;
+            LeaveReqList.Responsibility = "";
+
+
+            var filename; var base64string; var filetype;
+            var files = document.getElementById('LeavefileAttachment').files;
+
+            if (files.length) {
+                var file = files[0];
+
+                if (file.size > 2000000) {
+                    Swal.fire('Warning', 'Please only files less than 2MB allowed. Thanks!!', 'warning');
+                }
+                else {
+                    var blob = file.slice();
+                    filetype = file.type;
+                    filename = file.name;
+                    var reader = new FileReader();
+                    reader.onloadend = function (evt) {
+                        if (evt.target.readyState == FileReader.DONE) { // DONE == 2
+                            var cont = evt.target.result
+                            base64String = getB64Str(cont);
+                        }
+                        ShowProgress();
+                        $.ajax({
+                            type: "post",
+                            url: "/Leave/SubmitLeaveApplication",
+                            data: JSON.stringify({ NewApp: LeaveReqList, base64Upload: base64String, fileName: filename, Extn: filetype }),
+                            contentType: "application/json; charset = utf-8",
+                            success: function (data) {
+                                if (data.success == true) {
+                                    HideProgress();
+                                    LoadLeaveReqList();
+                                    Swal.fire('Success', data.message, 'success');
+                                }
+                                else {
+                                    HideProgress();
+                                    Swal.fire('error', data.message, 'error');
+                                }
+                                HideProgress();
+                                $("#myModal").modal("hide");
+                            },
+                            error: function () {
+                                HideProgress();
+                                Swal.fire('error', data.message, 'error');
+                            }
+                        });
+                    };
+                    reader.readAsArrayBuffer(blob);
+                }
+            }
+            else {
+
+                //if ($('#LeavefileAttachment').get(0).files[0].size == 0) {
+                //    Swal.fire('error', 'Attach handover report', 'error');
+                //    return;
+                //}
+                ShowProgress();
+                $.ajax({
+                    type: "post",
+                    url: "/Leave/SubmitLeaveApplication",
+                    data: JSON.stringify({ NewApp: LeaveReqList, base64Upload: "", fileName: "", Extn: "" }),
+                    contentType: "application/json; charset = utf-8",
+                    success: function (data) {
+                        if (data.success == true) {
+                            HideProgress();
+                            LoadLeaveReqList();
+                            Swal.fire('Success', data.message, 'success');
+                        }
+                        else {
+                            HideProgress();
+                            Swal.fire('error', data.message, 'error');
+                        }
+                        HideProgress();
+                        $("#myModal").modal("hide");
+                    },
+                    error: function () {
+                        HideProgress();
+                        Swal.fire('error', data.message, 'error');
+                    }
+                });
+            }
+        }
+    }
+    function getB64Str(buffer) {
+        var binary = '';
+        var bytes = new Uint8Array(buffer);
+        var len = bytes.byteLength;
+        for (var i = 0; i < len; i++) {
+            binary += String.fromCharCode(bytes[i]);
+        }
+        return window.btoa(binary);
+    }
+    var UpdateLeaveDocument = function (DocNo) {
+        var StartDate = $('#txtstartDate').val();
+        var EndDate = $('#EndDate').val();
+        var ReturntDate = $('#ReturnDate').val();
+        var days = $("#ddlNoDays").children("option:selected").val();
+        var LvType = $('#txtLeaveType').val();
+        var Reliever = $("#ddlReliever").children("option:selected").val();
+        var RespC = $("#ddlRespC").children("option:selected").val();
+        var Remarks = $("#txtRemarks").val();
+        if (LvType == "") {
+            Swal.fire('error', 'Select Leave Type', 'error');
+            return;
+        }
+        else if (days == "") {
+            Swal.fire('error', 'Select Number of days you want to apply for leave', 'error');
+            return;
+        }
+        else if (Reliever == "") {
+            Swal.fire('error', 'Select Reliever', 'error');
+            return;
+        }
+        else if (StartDate == "") {
+            Swal.fire('error', 'Select Start Date', 'error');
+            return;
+        }
+        else if (EndDate == "dd/mm/yyyy") {
+            Swal.fire('error', 'End Date cannot be empty', 'error');
+            return;
+        }
+        else if (ReturntDate == "dd/mm/yyyy") {
+            Swal.fire('error', 'Return Date cannot be empty', 'error');
+            return;
+        }
+        else if (RespC == "") {
+            Swal.fire('error', 'Select Responsibility Center', 'error');
+            return;
+        }
+        else {
+            var LeaveReqList = {};
+            LeaveReqList.No = DocNo;
+            LeaveReqList.Leave_Type = LvType;
+            LeaveReqList.Applied_Days = days;
+            LeaveReqList.Starting_Date = StartDate;
+            LeaveReqList.End_Date = EndDate;
+            LeaveReqList.Return_Date = ReturntDate;
+            LeaveReqList.Remarks = Remarks;
+            LeaveReqList.Reliever = Reliever;
+            LeaveReqList.Responsibility = RespC;
+            ShowProgress();
+            $.ajax({
+                type: "post",
+                url: "/Leave/UpdateLeaveApplication",
+                data: JSON.stringify({ NewApp: LeaveReqList }),
+                contentType: "application/json; charset = utf-8",
+                success: function (data) {
+                    if (data.success == true) {
+                        HideProgress();
+                        LoadLeaveReqList();
+                        Swal.fire('Success', data.message, 'success');
+                    }
+                    else {
+                        HideProgress();
+                        LoadLeaveReqList();
+                        Swal.fire('error', data.message, 'error');
+                    }
+                    $("#myModal").modal("hide");
+                },
+                error: function () {
+                    HideProgress();
+                    Swal.fire('error', data.message, 'error');
+                }
+            });
+        }
+    }
+    //var SelectedRow = function (DocNo, Status) {
+    //    ShowProgress();
+    //    $.ajax({
+    //        async: true,
+    //        type: "POST",
+    //        datatype: "json",
+    //        data: JSON.stringify({ DocNo: DocNo, Status: Status, DocType: 'LV' }),
+    //        contentType: "application/json; charset = utf-8",
+    //        processData: false,
+    //        url: '/Common/CommonActions',
+    //        success: function (data) {
+    //            $("#modalBodyLinks").html(data);
+    //            HideProgress();
+    //            $("#myModalLinks").modal("show");
+    //        },
+    //        error: function (err) {
+    //            HideProgress();
+    //            Swal.fire('Warning', err, 'warning');
+    //        }
+    //    });
+    //}
+
+
+    var ViewDoc = function (DocNo) {
+        $("#labelF").text("Leave Details Document");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Leave/LeaveDocumentViewView',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModalLinks").modal("hide");
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var SendDocForApproval = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Leave/SendLeaveAppForApproval',
+            success: function (data) {
+                if (data.success == true) {
+                    HideProgress();
+                    LoadLeaveReqList();
+                    $("#myModalLinks").modal("hide");
+                    Swal.fire('Success', data.message, 'success');
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+
+    }
+    var RecallDocForApproval = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Leave/RecallLeaveAppForApproval',
+            success: function (data) {
+                if (data.success == true) {
+                    HideProgress();
+                    LoadLeaveReqList();
+                    $("#myModalLinks").modal("hide");
+                    Swal.fire('Success', data.message, 'success');
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var CancelDocForApproval = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Leave/CancelLeaveAppForApproval',
+            success: function (data) {
+                if (data.success == true) {
+                    HideProgress();
+                    LoadLeaveReqList();
+                    $("#myModalLinks").modal("hide");
+                    Swal.fire('Success', data.message, 'success');
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+
+    }
+    var ViewApprovalTrail = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo, RecID: "HR Leave Application: " + DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/DocumentApprovalTrail',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModalLinks").modal("hide");
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var ViewDocComments = function (documentNumber) {
+        $("#labelF").text("Document Comments");
+        ShowProgress();
+        var RecordID = "HR Leave Application: " + DocNo;
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ docNo: documentNumber }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/DocumentApprovalComments',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModalLinks").modal("hide");
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var Recall = function (DocNo) {
+        $("#labelF").text("Leave Recall Document");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Leave/NewLeaveRecall',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModalLinks").modal("hide");
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+</script>

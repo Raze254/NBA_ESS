@@ -1,0 +1,106 @@
+﻿@model Latest_Staff_Portal.ViewModel.ImprestLine
+<div class="card-body">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                @Html.Label("Employee:", htmlAttributes: new { @class = "control-label col-md-12" })
+                @Html.DropDownListFor(model => model.EmployeeNo, Model.ListOfEmployees, "-- Select Employee Name --", new { @class = "form-control select2", @id = "staffList" })
+                @Html.ValidationMessageFor(model => model.EmployeeNo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                @Html.Label("Amount:", htmlAttributes: new { @class = "control-label col-md-12" })
+                <input type="text" class="form-control" id="txtAmount" onkeypress="return functionl(event)" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr style="border:1px solid black" />
+
+<div align="center">
+    <input type="button" class="btn btn-primary waves-effect waves-light" value="Submit" onclick="SubmitStaffClaimLine();" />
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#myModal').on('shown.bs.modal', function () {
+            setTimeout(function () {
+                $('#staffList').select2({
+                    dropdownParent: $('#myModal'),
+                    width: '100%'
+                });
+            }, 100);
+        });
+    });
+                    	function SubmitStaffClaimLine() {
+    var isValid = true;
+    var glAccount = '@ViewBag.GLAccount';
+    var lineNo = '@ViewBag.LineNo';
+    var documentNumber = '@ViewBag.DocumentNumber';
+        var employeeNo = $("#staffList").children("option:selected").val();
+	var amount = $("#txtAmount").val();
+    var isclaim = true;
+
+    if (!employeeNo) {
+        Swal.fire('Warning', 'Please select an Employee No.', 'warning');
+        isValid = false;
+    }
+    if (!amount) {
+        Swal.fire('Warning', 'Amount field is required.', 'warning');
+        isValid = false;
+    }
+    if (!isValid) {
+        return;
+    }
+
+    var imprestLine = {
+        DocumentNo: documentNumber,
+        GLAccount: glAccount,
+        LineNo: lineNo,
+        EmployeeNo: employeeNo,
+        Rate: amount,
+		isclaim:isclaim
+    };
+
+    ShowProgress();
+
+    $.ajax({
+        type: "POST",
+        url: "/Imprest/SubmitImprestLine",
+        data: JSON.stringify(imprestLine),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (data) {
+            HideProgress();
+            if (data.success) {
+                Swal.fire('Success', 'Staff Claim  line submitted successfully.', 'success');
+                var form = $('<form>', {
+                    action: '/ExpenseRequisition/ExpenseRequisitionDocument',
+                    method: 'POST'
+                }).append($('<input>', {
+                    type: 'hidden',
+                    name: 'DocNo',
+                    value: imprestLine.DocumentNo
+                }));
+                form.appendTo('body').submit();
+            } else {
+                Swal.fire('Warning', data.message, 'warning');
+            }
+        },
+        error: function (err) {
+            HideProgress();
+            Swal.fire('Warning', err.responseText, 'warning');
+        }
+    });
+}
+    function functionl(evt) {
+        if (evt.charCode > 31 && (evt.charCode < 48 || evt.charCode > 57)) {
+            Swal.fire("Error", "Please enter only numeric characters in the text box", "error");
+            return false;
+        }
+    }
+</script>

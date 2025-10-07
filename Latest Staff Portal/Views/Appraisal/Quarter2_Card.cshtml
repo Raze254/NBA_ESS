@@ -1,0 +1,609 @@
+﻿@model Latest_Staff_Portal.ViewModel.ANUPEAisalCardList
+@{
+    ViewBag.Title = "Quarter2_Card";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+</style>
+<!--
+<link href="~/assets/css/Loader.css" rel="stylesheet" />
+<div class="loading" align="center" id="divLoader">
+    <br />
+    <img src="~/assets/images/ajax-loader.gif" alt="" />
+</div>
+-->
+<div style="background-color: black;">
+    <a href="#" onclick="AppRequisitionLink();" style="color:yellow"><<< Back To ANUPEAisal Document</a>
+</div>
+<div class="card">
+    <div class="card-title">Quarter 2 ANUPEAisal(Document No : @Request.QueryString["AppDoc"])</div>
+    <div class="card-body">
+        @if (Model.AllowTargetSetting && Model.Open_To == "ANUPEAisee" && !Model.Supervisor_ANUPEAised_Q2)
+        {
+            <div align="left">
+                <input type="button" value="Add Objective" class="btn btn-success BtnPadding" onclick="AddAKPI();"/>
+            </div>
+        }
+        <hr/>
+        <div id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="card mb-1 shadow-none">
+                <div class="card-header" id="headingOne" aria-controls="collapseOne" aria-expanded="true" data-toggle="collapse" href="#collapseOne">
+                    <h6 class="m-0">
+                        <span class="fa fa-arrow-up"></span>Targets
+                    </h6>
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+                        <div id="divPerfTarget"></div>
+                        <hr/>
+                        @if (Model.AllowTargetSetting && Model.Open_To == "ANUPEAisee" && !Model.Supervisor_ANUPEAised_Q2)
+                        {
+                            <div align="left">
+                                <input type="button" value="Add Objective" class="btn btn-success BtnPadding" onclick="AddAKPI();"/>
+                            </div>
+                            <hr/>
+                        }
+                        <div class="row">
+                            <div class="col-md-12">
+                                <b>Supervisor Comments</b>
+                                @Html.TextAreaFor(m => m.Supervisor_Comment, new { @class = "form-control", rows = "3", @readonly = "readonly", style = "background-color:#dedebd" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @if (Model.AllowEvaluation)
+            {
+                <div class="card mb-1 shadow-none">
+                    <div class="card-header" id="headingThree" aria-expanded="false" aria-controls="collapseThree" data-toggle="collapse" href="#collapseThree">
+                        <h6 class="m-0">
+                            <span class="fa fa-arrow-down"></span> CHS Behaviours
+                        </h6>
+                    </div>
+                    <div id="collapseThree" class="collapse"
+                         aria-labelledby="headingThree" data-parent="#accordion">
+                        <div class="card-body">
+                            <div id="divValuesCompe"></div>
+                        </div>
+                    </div>
+                </div>
+            }
+            @if ((Model.Open_To == "ANUPEAisee" || Model.Open_To == "HR") && !Model.Supervisor_ANUPEAised_Q2)
+            {
+                <hr/>
+                <div align="right">
+                    <input type="button" value="Send To Supervisor >>>" class="btn btn-primary" id="btnApp" onclick="SendDocTo();"/>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <label id="labelF"></label>
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal Small Modal////////////////////////////*@
+<div class="modal fade" id="myModalSmall" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <label id="labelF1"></label>
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodySmall">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.shadow-none').on('shown.bs.collapse', function () {
+            $(this).find('.fa-arrow-down').removeClass('fa-arrow-down').addClass('fa-arrow-up');
+        }).on('hidden.bs.collapse', function () {
+            $(this).find('.fa-arrow-up').removeClass('fa-arrow-up').addClass('fa-arrow-down');
+        });
+        LoadSectionData();
+    });
+    var LoadSectionData = function () {
+        ShowProgress();
+        var DocNo = `@Model.ApprisalCode`;
+        LoadPerformanceIndicator(DocNo);
+        LoadCompetenceValues(DocNo);
+        HideProgress();
+    };
+    var LoadPerformanceIndicator = function (DocNo) {
+        $.ajax({
+            async: true,
+            type: "post",
+            contentType: "application/json; charset = utf-8",
+             data: JSON.stringify({ AppDoc: DocNo, From: "A", Level: "Q2", Sup_ANUPEAised: `@Model.Supervisor_ANUPEAised_Q2`, OpenTo:`@Model.Open_To` }),
+            url: "LoadPerformanceIndicator",
+            success: function (data) {
+                $("#divPerfTarget").html(data);
+            },
+            error: function () {
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+    var LoadCompetenceValues = function (DocNo) {
+        $.ajax({
+            async: true,
+            type: "post",
+            contentType: "application/json; charset = utf-8",
+            data: JSON.stringify({ AppDoc: DocNo, From: "A", Level: "Q2", Sup_ANUPEAised: `@Model.Supervisor_ANUPEAised_Q2`, OpenTo:`@Model.Open_To` }),
+            url: "LoadCompetenceValues",
+            success: function (data) {
+                $("#divValuesCompe").html(data);
+            },
+            error: function () {
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+    var AddAKPI = function () {
+        $("#labelF").text("KPI Form");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: 'KPIForm',
+            data: JSON.stringify({ DocNo: "", LnNo: "", Update: false, Qt: "Q2" }),
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var SaveKPIRecord = function () {
+        var DocNo = `@Model.ApprisalCode`;
+        var Objective = $("#txtObj").val();
+        var KRA = $("#txtKRA").val();
+        var KPI = $("#txtKPI").val();
+        var Target = $("#txtTarget").val();
+        var weight = $("#txtWeight").val();
+        var TWeight = $("#hideenTotalWeight").val();
+        var TW = parseFloat(weight) + parseFloat(TWeight);
+        if (DocNo == "") {
+            Swal.fire('Error', 'ANUPEAisal Doc No cannot be empty', 'error');
+            return;
+        }
+        else if (Objective == "") {
+            Swal.fire('Error', 'Enter Objective', 'error');
+            return;
+        }
+        else if (KRA == "") {
+            Swal.fire('Error', 'Enter KRA', 'error');
+            return;
+        }
+        else if (KPI == "") {
+            Swal.fire('Error', 'Enter KPI', 'error');
+            return;
+        }
+        else if (Target == "") {
+            Swal.fire('Error', 'Enter Target', 'error');
+            return;
+        }
+        else if (weight == "") {
+            Swal.fire('Error', 'Enter Weight', 'error');
+            return;
+        }
+        else if (TW > 100) {
+            Swal.fire('Error', 'Total weight cannot exceed 100%', 'error');
+            return;
+        }
+        else {
+            var PerformanceIndicator = {};
+            PerformanceIndicator.ANUPEAisal_No = DocNo;
+            PerformanceIndicator.Objective = Objective;
+            PerformanceIndicator.KRA = KRA;
+            PerformanceIndicator.KPI = KPI;
+            PerformanceIndicator.Target = Target;
+            PerformanceIndicator.Weight = weight;
+            ShowProgress();
+            $.ajax({
+                type: "post",
+                url: "SubmitKPIs",
+                data: JSON.stringify({ kpi: PerformanceIndicator, Qt:"2" }),
+                contentType: "application/json; charset = utf-8",
+                success: function (data) {
+                    if (data.success == true) {
+                        Swal.fire('Success', data.message, 'success');
+                        LoadPerformanceIndicator(DocNo);
+                        $("#myModal").modal("hide");
+                        HideProgress();
+                    }
+                    else {
+                        HideProgress();
+                        Swal.fire('error', data.message, 'error');
+                    }
+                },
+                error: function () {
+                    HideProgress();
+                    Swal.fire('error', data.message, 'error');
+                }
+            });
+        }
+    }
+    var EditKPIRecord = function (DocNo, LnNo, Amount) {
+        $("#labelF").text("Update KPI Form");
+        var TWeight = $("#hideenTotalWeight").val();
+        var TW = parseFloat(TWeight) - parseFloat(Amount);
+        $("#hidenNewWeight").val(TW);
+        if (DocNo == "") {
+            Swal.fire('error', 'ANUPEAisal Document No cannot be empty', 'error');
+            return;
+        }
+        else if (LnNo == "") {
+            Swal.fire('error', 'Record Line Number cannot be Empty', 'error');
+            return;
+        }
+        else {
+            ShowProgress();
+            $.ajax({
+                type: "post",
+                url: "KPIForm",
+                data: JSON.stringify({ DocNo: DocNo, LnNo: LnNo, Update: true, Qt:"Q2" }),
+                contentType: "application/json; charset = utf-8",
+                success: function (data) {
+                    $("#modalBody").html(data);
+                    HideProgress();
+                    $("#myModal").modal("show");
+                },
+                error: function () {
+                    HideProgress();
+                    Swal.fire('error', data.message, 'error');
+                }
+            });
+        }
+    }
+    var UpdateKPIRecord = function (LnNo) {
+        var DocNo = `@Model.ApprisalCode`;
+        var Objective = $("#txtObj").val();
+        var KRA = $("#txtKRA").val();
+        var KPI = $("#txtKPI").val();
+        var Target = $("#txtTarget").val();
+        var weight = $("#txtWeight").val();
+        var TWeight = $("#hidenNewWeight").val();
+        var TW = parseFloat(weight) + parseFloat(TWeight);
+        if (DocNo == "") {
+            Swal.fire('Error', 'ANUPEAisal Doc No cannot be empty', 'error');
+            return;
+        }
+        else if (Objective == "") {
+            Swal.fire('Error', 'Enter Objective', 'error');
+            return;
+        }
+        else if (KRA == "") {
+            Swal.fire('Error', 'Enter KRA', 'error');
+            return;
+        }
+        else if (KPI == "") {
+            Swal.fire('Error', 'Enter KPI', 'error');
+            return;
+        }
+        else if (Target == "") {
+            Swal.fire('Error', 'Enter Target', 'error');
+            return;
+        }
+        else if (weight == "") {
+            Swal.fire('Error', 'Enter Weight', 'error');
+            return;
+        }
+        else if (TW > 100) {
+            Swal.fire('Error', 'Total weight cannot exceed 100%', 'error');
+            return;
+        }
+        else {
+            var PerformanceIndicator = {};
+            PerformanceIndicator.ANUPEAisal_No = DocNo;
+            PerformanceIndicator.Objective = Objective;
+            PerformanceIndicator.KRA = KRA;
+            PerformanceIndicator.KPI = KPI;
+            PerformanceIndicator.Target = Target;
+            PerformanceIndicator.Weight = weight;
+            PerformanceIndicator.Line_No = LnNo;
+            ShowProgress();
+            $.ajax({
+                type: "post",
+                url: "UpdateKPIs",
+                data: JSON.stringify({ kpi: PerformanceIndicator,Qt:"2" }),
+                contentType: "application/json; charset = utf-8",
+                success: function (data) {
+                    if (data.success == true) {
+                        Swal.fire('Success', data.message, 'success');
+                        LoadPerformanceIndicator(DocNo);
+                        $("#myModal").modal("hide");
+                        HideProgress();
+                    }
+                    else {
+                        HideProgress();
+                        Swal.fire('error', data.message, 'error');
+                    }
+                },
+                error: function () {
+                    HideProgress();
+                    Swal.fire('error', data.message, 'error');
+                }
+            });
+        }
+    }
+    var DropKPIRecord = function (DocNo, LnNo) {
+        if (DocNo == "") {
+            Swal.fire('error', 'ANUPEAisal Document No cannot be empty', 'error');
+            return;
+        }
+        else if (LnNo == "") {
+            Swal.fire('error', 'Record Line Number cannot be Empty', 'error');
+            return;
+        }
+        else {
+            ShowProgress();
+            $.ajax({
+                type: "post",
+                url: "/ANUPEAisal/DropKPIs",
+                data: JSON.stringify({ DocNo: DocNo, LnNo: LnNo, Qt: "2" }),
+                contentType: "application/json; charset = utf-8",
+                success: function (data) {
+                    if (data.success == true) {
+                        Swal.fire('Success', data.message, 'success');
+                        LoadPerformanceIndicator(DocNo);
+                        $("#myModal").modal("hide");
+                        HideProgress();
+                    }
+                    else {
+                        HideProgress();
+                        Swal.fire('error', data.message, 'error');
+                    }
+                },
+                error: function () {
+                    HideProgress();
+                    Swal.fire('error', data.message, 'error');
+                }
+            });
+        }
+    }
+    var EvalKPIItem = function (DocNo, LnNo, Level) {
+        $("#labelF").text("KPI Evaluation Form");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ DocNo: DocNo, LnNo: LnNo, Level: Level,Qt:"Q2" }),
+            url: '/ANUPEAisal/KPIEvaluationForm',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var SaveKPIReviewRecord = function (DocNo, LnNo) {
+        var Score = $("#ddlSelfScore").children("option:selected").val();
+        var remarks = $("#txtAppComments").val();
+        if (DocNo == "") {
+            Swal.fire('error', 'ANUPEAisal Doc No cannot be empty', 'error');
+            return;
+        }
+        else if (LnNo == "") {
+            Swal.fire('error', 'ANUPEAisal Record Line Number Cannot be empty', 'error');
+            return;
+        }
+        else if (Score == "") {
+            Swal.fire('error', 'Enter your self score', 'error');
+            return;
+        }
+        else {
+            var PerformanceIndicator = {};
+            PerformanceIndicator.ANUPEAisal_No = DocNo;
+            PerformanceIndicator.Line_No = LnNo;
+            PerformanceIndicator.Self_Score = Score;
+            PerformanceIndicator.ANUPEAisee_Comments = remarks;
+
+            ShowProgress();
+            $.ajax({
+                type: "post",
+                url: "SubmitKPIsEvaluation",
+                data: JSON.stringify({ kpi: PerformanceIndicator,Qt:"2" }),
+                contentType: "application/json; charset = utf-8",
+                success: function (data) {
+                    if (data.success == true) {
+                        Swal.fire('Success', data.message, 'success');
+                        LoadPerformanceIndicator(DocNo);
+                        $("#myModal").modal("hide");
+                        HideProgress();
+                    }
+                    else {
+                        HideProgress();
+                        Swal.fire('error', data.message, 'error');
+                    }
+                },
+                error: function () {
+                    HideProgress();
+                    Swal.fire('error', data.message, 'error');
+                }
+            });
+        }
+    }
+    var UploadStaffCompetenceValues = function () {
+        var DocNo = `@Model.ApprisalCode`;
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ DocNo: DocNo, Cat: "1" }),
+            url: 'SubmitStaffCompetenceValues',
+            success: function (data) {
+                if (data.success == true) {
+                    Swal.fire('Success', data.message, 'success');
+                    LoadCompetenceValues(DocNo);
+                    $("#myModal").modal("hide");
+                    HideProgress();
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var EvalCompValueItem = function (DocNo, Code, LnNo, Level) {
+        $("#labelF1").text("CHS Behaviour Evaluation Form");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ DocNo: DocNo, Code: Code, LnNo: LnNo, Qt: "Q2", From:"A" }),
+            url: 'CompValueEvaluationForm',
+            success: function (data) {
+                $("#modalBodySmall").html(data);
+                HideProgress();
+                $("#myModalSmall").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var SaveCompValueReviewRecord = function (DocNo, Code, LnNo, Level) {
+        var SelfAssessment = $("#ddlScore").children("option:selected").val();
+
+        if (DocNo == "") {
+            Swal.fire('error', 'ANUPEAisal Doc No cannot be empty', 'error');
+            return;
+        }
+        if (LnNo == "") {
+            Swal.fire('error', 'ANUPEAisal Record Line Number Cannot be empty', 'error');
+            return;
+        }
+        else if (SelfAssessment == "") {
+            Swal.fire('error', 'Choose your assessment', 'error');
+            return;
+        }
+        else {
+            var CompetenceValues = {};
+            CompetenceValues.ANUPEAisal_No = DocNo;
+            CompetenceValues.Code = Code;
+            CompetenceValues.Line_No = LnNo;
+            CompetenceValues.Category = Level;
+            CompetenceValues.ANUPEAisal_Assesment = "";
+            CompetenceValues.Score = SelfAssessment;
+
+            ShowProgress();
+            $.ajax({
+                type: "post",
+                url: "SubmitCompValueEvaluation",
+                data: JSON.stringify({ CValues: CompetenceValues }),
+                contentType: "application/json; charset = utf-8",
+                success: function (data) {
+                    if (data.success == true) {
+                        Swal.fire('Success', data.message, 'success');
+                        LoadCompetenceValues(DocNo);
+                        $("#myModalSmall").modal("hide");
+                        HideProgress();
+                    }
+                    else {
+                        HideProgress();
+                        Swal.fire('error', data.message, 'error');
+                    }
+                },
+                error: function () {
+                    HideProgress();
+                    Swal.fire('error', data.message, 'error');
+                }
+            });
+        }
+    }
+    var SendDocTo = function () {
+        var DocNo = `@Model.ApprisalCode`;
+        var TWeight = $("#hideenTotalWeight").val();
+        if (parseFloat(TWeight) != 100) {
+            Swal.fire('Error', 'Your total weight should be 100%.', 'error');
+            return;
+        }
+        else {
+            ShowProgress();
+            $.ajax({
+                async: true,
+                type: "POST",
+                datatype: "json",
+                data: JSON.stringify({ DocNo: DocNo, SendTo: "1", Qt: "2", Comment: "" }),
+                contentType: "application/json; charset = utf-8",
+                processData: false,
+                url: 'SendDocumentTo',
+                success: function (data) {
+                    if (data.success == true) {
+                        ShowProgress();
+                        window.location = "MyANUPEAisalList";
+                    }
+                    else {
+                        HideProgress();
+                        Swal.fire('Error', data.message, 'error');
+                    }
+                },
+                error: function (err) {
+                    Swal.fire('Warning', err, 'warning');
+                }
+            });
+        }
+    }
+    var AppRequisitionLink = function () {
+        ShowProgress();
+        var DocNo = `@Model.ApprisalCode`;
+        window.location = "ANUPEAisalScoreCard?AppDoc=" + DocNo;
+    };
+</script>

@@ -1,0 +1,207 @@
+﻿
+@model Latest_Staff_Portal.ViewModel.LabSampleManagement
+@{
+    ViewBag.Title = "LabSampleManagementList";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/Dashboard/Dashboard">Dashboard</a></li>
+                <li class="breadcrumb-item active">Lab Sample Management List</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<hr /><br />
+<div class="card">
+    <div class="card-body">
+    
+            <div style="text-align:right">
+                <button class="action-buttons" onclick="NewLabSample();">
+                    <i class="fa fa-plus-circle" aria-hidden="true"></i> Create New 
+                </button>
+            </div>
+
+        <hr />
+        <div id="divLabSampleManagementList"></div>
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">New Lab Sample</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal Links////////////////////////////*@
+<div class="modal fade" id="myModalLinks" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Actions</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodyLinks">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/assets/js/ShowProgression.js"></script>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadLabSampleManagementList();
+        var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+        if (Successmsg != "") {
+            Swal.fire('Success', Successmsg, 'success', true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+    });
+    var LoadLabSampleManagementList = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: "/Technical/LabSampleManagementListPartialView",
+            success: function (data) {
+                $("#divLabSampleManagementList").empty().html(data);
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+
+
+    var ViewDoc = function (Sample_ID) {
+        ShowProgress();
+        var form = $('<form>', {
+            action: '/Technical/LabSampleManagementDocumentView',
+            method: 'POST'
+        }).append($('<input>', {
+            type: 'hidden',
+            name: 'Sample_ID',
+            value: Sample_ID
+        }));
+        form.appendTo('body').submit();
+    };
+
+
+
+ 
+  
+    var NewLabSample = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET", 
+            url: "/Technical/NewLabSampleManagement",
+            dataType: "html", 
+            success: function (data) {
+                $("#modalBody").html(data); 
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', 'An error occurred while loading the PMMU form. Please try again.', 'warning');
+            }
+        });
+    };
+
+
+    function SubmitLabSample() {
+      
+
+        var Description = $("#Description").val();
+        var Received_At = $("#Received_At").val();
+        var Analysed_At = $("#Analysed_At").val();
+        var Exported_At = $("#Exported_At").val();
+
+       
+        if (!Description) {
+            Swal.fire('Warning', 'Description is required', 'warning');
+            isValid = false;
+        }
+
+     
+        var Data = {
+            Description: Description,    
+            Received_At: Received_At,
+            Analysed_At: Analysed_At,
+            Exported_At: Exported_At
+        };
+
+        ShowProgress();
+
+        $.ajax({
+            type: "POST",
+            url: "/Technical/SubmitLabSampleManagement",
+            data: JSON.stringify(Data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                HideProgress();
+                if (data.success) {
+                    Swal.fire('Success', 'Document successfully created', 'success');
+                    ViewDoc(data.message);
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseText, 'warning');
+            }
+        });
+    }
+</script>
+
+

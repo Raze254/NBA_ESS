@@ -1,0 +1,88 @@
+﻿@model Latest_Staff_Portal.ViewModel.ImprestMemoItemsList
+<div class="table-responsive">
+    <table class="table table-centered table-nowrap" id="ImpLines">
+        <thead>
+        <tr>
+
+            <th>Item No</th>
+            <th>Item Name</th>
+            <th>Unit of Measure</th>
+            <th>Description</th>
+            <th style="text-align:center">Quantity</th>
+            <th style="text-align:center">Unit Cost</th>
+            <th style="text-align:center">Total Amount</th>
+            <th class="tdAction">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        @{
+            if (Model.ListOfImprestMemoLines != null && Model.ListOfImprestMemoLines.Count() > 0)
+            {
+                foreach (var item in Model.ListOfImprestMemoLines)
+                {
+                    <tr>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Item)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ItemDesc)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UoN)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ItemDesc2)
+                        </td>
+                        <td style="text-align:center">
+                            @Html.DisplayFor(modelItem => item.Quantity)
+                        </td>
+                        <td style="text-align:center">
+                            @Html.DisplayFor(modelItem => item.UnitAmount)
+                        </td>
+                        <td style="text-align:center">
+                            @Html.DisplayFor(modelItem => item.Amount)
+                        </td>
+                        <td style="text-align:right" class="tdAction">
+                            <a href="javascript:void(0);" class="mr-3 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" onclick="EditItem('@item.DocNo','@item.LnNo');">
+                                <i class="mdi mdi-pencil font-size-16"></i>
+                            </a>
+                            <a href="javascript:void(0);" class="text-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" onclick="RemoveItem('@item.DocNo','@item.LnNo');">
+                                <i class="mdi mdi-close font-size-16"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="8" style="color:red">
+                        No Records Found
+                    </td>
+                </tr>
+            }
+        }
+        </tbody>
+        <tfoot>
+        <tr class="HideLineButton">
+            <td class="text-right" colspan="8">
+                <input type="button" value="Add Item Line" class="btn btn-danger BtnPadding" onclick="AddImprestMemoItems();"/>
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var status = '@Model.Status';
+        if (status == "Pending") {
+            $(".tdAction").show();
+            $(".HideLineButton").show();
+        }
+        else {
+            $(".tdAction").hide();
+            $(".HideLineButton").hide();
+        }
+    });
+</script>

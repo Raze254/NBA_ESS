@@ -1,0 +1,61 @@
+﻿<div class="bg-soft-dark" style="color:black">
+    <div class="row">
+        <div class="col-md-6">
+            <span style="font-weight: bold">Title of Training</span>
+            <textarea class="form-control" id="CourseName"></textarea>
+        </div>
+        <div class="col-md-6">
+            <span style="font-weight: bold">Training Objective</span>
+            <textarea class="form-control" id="txtTRObj"></textarea>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <span style="font-weight: bold">Reasons why it is Required</span>
+            <textarea class="form-control" id="txtReason"></textarea>
+        </div>
+        <div class="col-md-6">
+            <span style="font-weight: bold">Development Actions to be Taken</span>
+            <textarea class="form-control" id="txtAction"></textarea>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <span style="font-weight: bold">Results Achieved Against Development Action Plan</span>
+            <textarea class="form-control" id="txtResults"></textarea>
+        </div>
+        <div class="col-md-6">
+            <span style="font-weight: bold">
+                Remarks ANUPEAisee
+            </span>
+            <textarea class="form-control" id="txtAppRemarks"></textarea>
+        </div>
+    </div>
+    <hr/>
+    <div align="center">
+        <input type="button" class="btn btn-primary" value="Save Record" onclick="SaveTrainingDevRecord();"/>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#txtStartDate').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-0:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy',
+            minDate: 0
+        });
+        $(window).resize(function () {
+            $('#txtStartDate').datepicker('hide');
+            $('#txtStartDate').blur();
+        });
+    });
+    function functionx(evt) {
+        if (evt.charCode > 31 && (evt.charCode < 48 || evt.charCode > 57)) {
+            Swal.fire("Error", "Please enter only numeric characters in the text box", "error");
+            return false;
+        }
+    }
+</script>

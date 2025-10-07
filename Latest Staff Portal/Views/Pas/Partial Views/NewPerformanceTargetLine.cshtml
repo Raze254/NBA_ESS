@@ -1,0 +1,317 @@
+﻿@model Latest_Staff_Portal.ViewModel.PerformanceTargetLines
+@{
+    var PopulateActivitiesFrom = ViewBag.PopulateActivitiesFrom;
+    var shouldHide = ViewBag.Trigger == 1;
+    var documentStage = ViewBag.pasDocStage;
+    bool isReadOnly = documentStage != "Evaluation";
+    bool isDirector = ViewBag.isDirector;
+    var attributes = new Dictionary<string, object>
+{
+        { "id", "weight" },
+        { "class", "form-control" },
+        { "type", "number" },
+        { "min", "0" },
+        { "max", "4" },
+        { "step", "1" }
+    };
+
+    //if (ViewBag.PopulateActivitiesFrom == "Job Description")
+    //{
+    //    attributes.Add("readonly", "readonly");
+    //}
+
+    var contractNo = ViewBag.contract_No;
+    var EntryNo = ViewBag.EntryNo;
+    var StrategyOutputCode = ViewBag.Strategy_Output_Code;
+    var ContractNo = ViewBag.ContractNo;
+}
+
+<div class="form-horizontal p-2">
+
+    <!-- Strategic Objective -->
+    <div class="form-group">
+            <label class="control-label">Strategic Objective</label>
+            <select id="dropDownActivity" class="form-control select2" onchange="getIndicator(this.value)">
+                <option value="" selected disabled>--- Select Strategic Objective ---</option>
+            </select>
+        </div>
+    
+        @*<div class="form-group">
+            <label class="control-label">Strategic Objectives<span class="text-danger">*</span></label>
+            @Html.Action("PositionTargetList", "Performance")
+        </div>*@
+
+    <!-- Key Performance Indicator -->
+    <div class="form-group">
+        <label class="control-label">Key Performance Indicator</label>
+        <input class="form-control" type="text" id="pas_indicator" readonly />
+    </div>
+
+    @if (!ViewBag.isDirector)
+    {
+        <div class="form-group" id="activitiesAccordion" style="display: none;">
+            <div class="card">
+                <div class="card-header" id="headingActivities">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseActivities" aria-expanded="false" aria-controls="collapseActivities">
+                            View Available Activities
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseActivities" class="collapse" aria-labelledby="headingActivities" data-parent="#activitiesAccordion">
+                    <div class="card-body p-2">
+                        <ol id="activitiesList" class="pl-3 mb-0">
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+
+    <div class="form-group">
+        <label class="control-label">Appraisee Objective</label>
+        <div id="divActivityDropdown">
+            <select id="activityDropdown" class="form-control select2"></select>
+        </div>
+        <div id="divTypeActivity" style="display: none;">
+            <input class="form-control" type="text" id="typeActivity" />
+        </div>
+
+        <div hidden>
+            @Html.EditorFor(model => model.Individual_Target, new { htmlAttributes = new { @id = "individual_target", @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Individual_Target, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Unit of Measure</label>
+        <select id="unitOfMeasure" name="Unit_of_Measure" class="form-control">
+            <option value="">-----Select Unit of Measure-----</option>
+            @foreach (var unit in Model.ListUnitsOfMeasure)
+            {
+                <option value="@unit.Text" @(unit.Value == Model.Unit_of_Measure ? "selected" : "")>
+                    @unit.Text
+                </option>
+            }
+        </select>
+    </div>
+
+    <!-- Weight and Target -->
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label class="control-label">Weight</label>
+            @Html.EditorFor(model => model.Weight, new { htmlAttributes = attributes })
+            @Html.ValidationMessageFor(model => model.Weight, "", new { @id = "weight", @class = "text-danger" })
+        </div>
+
+        <div class="form-group col-md-6">
+            <label class="control-label">Target</label>
+            @Html.EditorFor(model => model.Target, new { htmlAttributes = new { @id = "target", @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Target, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="text-center mt-4">
+        <input type="submit" value="Create" onclick="SumbitTargetLine()" class="action-buttons" />
+    </div>
+</div>
+
+<script src="~/assets/js/toolkit.js"></script>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        ActivityAction();
+
+        var isDirector = `@ViewBag.isDirector`;
+
+
+        $('#myModal').on('shown.bs.modal', function () {
+            setTimeout(function () {
+                $('#dropDownActivity').select2({
+                    dropdownParent: $('#myModal'),
+                });
+            }, 200);
+        });
+
+        $('#dropDownActivity').on('change', handleActivityChange);
+
+        $('#weight').on('input', function () {
+            let weight = $(this).val();
+            if (weight > 20) {
+                Swal.fire('Warning', 'Weight cannot be greater than 20!', 'warning');
+                $('#submit-button').prop('disabled', true);
+            } else {
+                $('#submit-button').prop('disabled', false);
+            }
+        });
+    });
+
+    function ActivityAction() {
+        var selectedValue = '@ViewBag.PopulateActivitiesFrom';
+        var contractNo = '@ViewBag.contract_No';
+        var responsibleEmployee = '@Model.responsibleEmployee';
+        console.log(selectedValue);
+        ShowProgress();
+        $.ajax({
+            url: '/Pas/SetSource',
+            type: 'POST',
+            data: { activityFrom: selectedValue, contractNo: contractNo, responsibleEmployee: responsibleEmployee },
+            success: function (response) {
+                HideProgress();
+                $.each(response, function (index, item) {
+                    $('#dropDownActivity').append($('<option>').text(item.Text).attr('value', item.Value));
+                });
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire('Error', 'Unkown Error Occured. Please tty again', 'error');
+            }
+        });
+    }
+
+    function handleActivityChange() {
+        var selectedValue = $('#dropDownActivity').val();
+        var sourceValue = '@ViewBag.PopulateActivitiesFrom';
+
+        if (sourceValue === "Job Description") {
+            ShowProgress();
+
+            $.ajax({
+                async: true,
+                type: "POST",
+                datatype: "json",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({ activityId: selectedValue, source: sourceValue }),
+                processData: false,
+                url: '/Pas/ActivityResponse',
+                success: function (data) {
+                    HideProgress();
+
+                    if (data && !data.Error) {
+                        $("#pas_activity").val(data.Value);
+                        $("#weight").val(data.Text);
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: data.Error || 'Unexpected error occurred.'
+                        });
+                    }
+                },
+                error: function (err) {
+                    HideProgress();
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Warning',
+                        html: `An error occurred while processing your request. Status: ${err.status} - ${err.statusText}`
+                    });
+                }
+            });
+        }
+    }
+
+    function SumbitTargetLine() {
+        var source = '@ViewBag.PopulateActivitiesFrom';
+        var weight = $('#weight').val();
+        if (weight > 20) {
+            Swal.fire('Warning', 'Weight cannot be greater than 20', 'warning');
+            return;
+        }
+
+        SumbitNewTargetLine(source);
+    }
+
+    function getIndicator(selectedValue) {
+        var contractNo = `@contractNo`;
+        var PopulateActivitiesFrom =`@PopulateActivitiesFrom`;
+        var isDirector = "@ViewBag.isDirector" === "True";
+
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({
+                PopulateActivitiesFrom: PopulateActivitiesFrom,
+                Entry_No: selectedValue,
+                contractNo: contractNo
+            }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Pas/GetIndicator',
+            success: function (data) {
+                HideProgress();
+                descriptionArr = data.description;
+                $('#pas_indicator').val(descriptionArr.indicator);
+
+                if (PopulateActivitiesFrom == "PMMU") {
+                    getActivities(contractNo, selectedValue, descriptionArr.EntryNo, descriptionArr.StrategyOutputCode);
+                }
+                else {
+                    $("#divActivityDropdown").hide(); // Hide if no activities
+                    $("#divTypeActivity").show();
+                    $("#activitiesAccordion").hide();
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+
+    function getActivities(contractNo, selectedValue, EntryNo, StrategyOutputCode) {
+        var PopulateActivitiesFrom = `@PopulateActivitiesFrom`;
+        var isDirector = "@ViewBag.isDirector" === "True";
+
+        $.ajax({
+            url: '/Pas/GetActivities',
+            type: 'POST',
+            data: { PopulateActivitiesFrom: PopulateActivitiesFrom, contractNo: contractNo, selectedValue: selectedValue, EntryNo: EntryNo, StrategyOutputCode: StrategyOutputCode },
+            success: function (response) {
+                var dropdown = $('#activityDropdown');
+                var activitiesList = $('#activitiesList');
+                activitiesList.empty();
+
+                if (response && response.length > 0) {
+                    // Handle dropdown
+                    dropdown.empty().append('<option value="">Select an Activity</option>');
+                    $.each(response, function (index, item) {
+                        dropdown.append($('<option>', {
+                            value: item.value,
+                            text: item.Text
+                        }));
+
+                        activitiesList.append($('<li>' + item.Text + '</li>'));
+                    });
+
+                    // Show/hide elements based on isDirector
+                    if (isDirector) {
+                        $("#divActivityDropdown").show();
+                        $("#divTypeActivity").hide();
+                        $("#activitiesAccordion").hide();
+                    } else {
+                        $("#divActivityDropdown").hide();
+                        $("#divTypeActivity").show();
+                        $("#activitiesAccordion").show();
+                    }
+                } else {
+                    $("#divActivityDropdown").hide();
+                    $("#divTypeActivity").show();
+                    $("#activitiesAccordion").hide();
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error loading activities:", error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Failed to load activities. Please try again.'
+                });
+            }
+        });
+    }
+
+</script>

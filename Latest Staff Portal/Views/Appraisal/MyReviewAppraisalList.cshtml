@@ -1,0 +1,164 @@
+﻿@model Latest_Staff_Portal.ViewModel.ANUPEAisalCardList
+@{
+    ViewBag.Title = "MyReviewANUPEAisalList";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+<!--
+<link href="~/assets/css/Loader.css" rel="stylesheet" />
+<div class="loading" align="center" id="divLoader">
+    <br />
+    <img src="~/assets/images/ajax-loader.gif" alt="" />
+</div>
+-->
+<div class="card pre-scrollable">
+    <div class="card-title">My ANUPEAisal Review List</div>
+    <hr/>
+    <div class="card-body">
+        <div id="divANUPEAisalList"></div>
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <label id="labelF"></label>
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script src="~/assets/js/pdfobject.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var level = GetParameterValues('Level');
+        if (level == "S") {
+            $("#SendToSup").hide();
+        }
+        if (level == "P") {
+            $("#SendToANUPEAisee").hide();
+            $("#SendToPeer").hide();
+            $("#SendToHR").hide();
+        }
+        function GetParameterValues(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+        LoadANUPEAisalReviewList(level);
+    });
+    var LoadANUPEAisalReviewList = function (level) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ Level: level }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: "/ANUPEAisal/ANUPEAisalReviewListPartialView",
+            success: function (data) {
+                HideProgress();
+                $("#divANUPEAisalList").html(data);
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+    var SelectedRow = function () {
+        $('table tbody tr').click(function () { 
+            $(this).addClass("selectedTableRow").siblings().removeClass("selectedTableRow");
+            $("#ViewDoc").removeClass("disabled");
+            $("#SendToANUPEAisee").removeClass("disabled");
+            $("#SendToPeer").removeClass("disabled");
+            $("#SendToSup").removeClass("disabled");   
+            $("#SendToHR").removeClass("disabled");   
+        });
+    }
+    var ViewANUPEAisalDoc = function (DocNo) {
+        $("#labelF").text("Leave Details Document");
+        ShowProgress();
+
+        var level = GetParameterValues('Level');
+        function GetParameterValues(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+        window.location = "/ANUPEAisal/ANUPEAisalReviewScoreCard?AppDoc=" + DocNo;
+    }
+    var SendDocTo = function (SendTo) {   
+        var level = GetParameterValues('Level');        
+        function GetParameterValues(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+        var row = $('#tableScoreCard tr.selectedTableRow');
+        var DocNo = row.find("td").eq(1).html().trim();
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo, SendTo: SendTo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/ANUPEAisal/SendDocumentTo',
+            success: function (data) {
+                if (data.success == true) {
+                    HideProgress();
+                    LoadANUPEAisalReviewList(level);
+                    DiableButtons();
+                    Swal.fire('Success', data.message, 'success');
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var DiableButtons = function () {
+        $("#ViewDoc").addClass("disabled");
+        $("#SendToANUPEAisee").addClass("disabled");
+        $("#SendToPeer").addClass("disabled");
+        $("#SendToSup").addClass("disabled");
+        $("#SendToHR").addClass("disabled");
+        $('table tbody tr').siblings().removeClass("selectedTableRow");
+    }
+</script>

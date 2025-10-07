@@ -1,0 +1,323 @@
+﻿@model Latest_Staff_Portal.ViewModel.FuelRequisitionCard
+
+@{
+    ViewBag.Title = "FuelRequisitionDocumentView";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+
+
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 7px;
+        font-size: 12px;
+    }
+</style>
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#" onclick="FuelRequisitionListLink();">Fuel Requisition List</a>
+                </li>
+                <li class="breadcrumb-item active">Fuel Requisition Document (@Model.Requisition_No)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-header">
+        <h4>Fuel Requisition Document(@Model.Requisition_No)</h4>
+        <div style="text-align: right">
+            @{
+
+                if (Model.Status == "Open")
+                {
+                    <button class="btn btn-primary action-buttons2" onclick="SendFuelReqDocForApproval('@Model.Requisition_No');">
+                        <i class="fa fa-check" aria-hidden="true"></i> Send (@Model.Requisition_No) For Approval
+                    </button>
+
+
+                }
+                if (Model.Status == "Pending Approval")
+                {
+                    <button class="btn btn-danger btn-sm" onclick="CancelFuelReqDocApproval('@Model.Requisition_No');">
+                        <i class="fa fa-times" aria-hidden="true"></i> Cancel Approval Request
+                    </button>
+                    <button class="btn btn-primary action-buttons2" onclick="ViewApprovalTrail('@Model.Requisition_No');">
+                        <i class="fa fa-history" aria-hidden="true"></i> Approval Trail
+                    </button>
+
+                }
+
+                <button class="btn btn-primary action-buttons2" onclick="ViewComments('@Model.Requisition_No');">
+                    <i class="fa fa-list" aria-hidden="true"></i> Approval / Rejection Comments
+                </button>
+            }
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Requisition_No, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Requisition_No, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Requisition_No, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Total_Price_of_Fuel, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Total_Price_of_Fuel, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Total_Price_of_Fuel, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Transport_Requisition_No, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Transport_Requisition_No, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Transport_Requisition_No, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Route_Code, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Route_Code, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Route_Code, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Route_Description, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Route_Description, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Route_Description, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Request_Date, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Request_Date, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Request_Date, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Status, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Prepared_By, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Prepared_By, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Prepared_By, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            @* <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Posted_Invoice_No, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                        @Html.EditorFor(model => model.Posted_Invoice_No, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                        @Html.ValidationMessageFor(model => model.Posted_Invoice_No, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Job_No, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                        @Html.EditorFor(model => model.Job_No, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                        @Html.ValidationMessageFor(model => model.Job_No, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Job_Task, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                        @Html.EditorFor(model => model.Job_Task, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                        @Html.ValidationMessageFor(model => model.Job_Task, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Job_Name, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                        @Html.EditorFor(model => model.Job_Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                        @Html.ValidationMessageFor(model => model.Job_Name, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Job_Task_Name, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                        @Html.EditorFor(model => model.Job_Task_Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                        @Html.ValidationMessageFor(model => model.Job_Task_Name, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+        </div>
+    </div>
+</div>
+
+
+@*//////////////////////Modal////////////////////////////*@
+<div id="myModalApproval" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="labelF"></h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body p-4" id="modalBodyUnits">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@* //////////////////////////////Modal///////////////////////////////////////// *@
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myModalLabel">
+                    <label id="labelF"></label>
+                </h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+    function FuelRequisitionListLink() {
+        window.location.href = "/Fleet/FuelRequisitionList"
+    }
+
+    function SendFuelReqDocForApproval(Requisition_No) {
+        RequisitionNo = `@Model.Requisition_No`;
+        ShowProgress();
+        $.ajax({
+            type: "POST",
+            url: "/Fleet/SendFuelReqForApproval",
+            data: JSON.stringify({ Requisition_No: RequisitionNo }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                HideProgress();
+                if (data.success) {
+                    Swal.fire('Success', 'Document successfully sent for approval.', 'success');
+                    window.location.reload();
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Error', 'An error occurred while submitting the request.', 'error');
+            }
+        });
+    }
+
+
+    function CancelFuelReqDocApproval(Requisition_No) {
+        RequisitionNo = `@Model.Requisition_No`;
+        ShowProgress();
+        $.ajax({
+            type: "POST",
+            url: "/Fleet/CancelFuelReqDocApproval",
+            data: JSON.stringify({ Requisition_No: RequisitionNo }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                HideProgress();
+                if (data.success) {
+                    Swal.fire('Success', 'Document approval cancelled successfully.', 'success');
+                    window.location.reload();
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Error', 'An error occurred while submitting the request.', 'error');
+            }
+        });
+    }
+    var ViewApprovalTrail = function (DocNo) {
+        $("#labelF").text("Approval Trail");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/DocumentApprovalTrail',
+            success: function (data) {
+                $("#modalBodyUnits").html(data);
+                HideProgress();
+                $("#myModalApproval").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+
+    var ViewComments = function (DocNo) {
+
+        $('#myModalLabel').text("Document Comments");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            data: { DocNo: DocNo }, // no need to JSON.stringify for simple string
+            url: '/Common/DocumentApprovalComments',
+            success: function (data) {
+                $("#modalBody").html(data); // ✅ insert HTML
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (xhr, status, error) {
+                HideProgress();
+                Swal.fire('Warning', error || "An unexpected error occurred", 'warning');
+            }
+        });
+    };
+
+</script>

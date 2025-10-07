@@ -1,0 +1,49 @@
+﻿@model List<Latest_Staff_Portal.ViewModel.TrainingEvaluation>
+
+<div class="table-responsive">
+    <table class="datatable table table-stripped" id="datatable-buttons">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th>Action</th>
+                <th>No</th>
+                <th>Course Title</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Venue</th>
+                <th>Hod Remarks</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td style="text-align:right">
+                            <button class="btn btn-primary action-buttons2" onclick="ViewTrainingEvaluationDoc('@item.No');">
+                                <i class="fa fa-eye"></i> View
+                            </button>
+                        </td>
+                        <td>@item.No</td>
+                        <td>@item.Course_Title</td>
+                        <td>@item.Start_DateTime</td>
+                        <td>@item.End_DateTime</td>
+                        <td>@item.Venue</td>
+                        <td>@item.HOD_Remarks</td>
+                        <td>@item.Status</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<script>
+    $("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100],
+        "bDestroy": true
+    });
+</script>

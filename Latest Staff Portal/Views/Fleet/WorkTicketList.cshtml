@@ -1,0 +1,260 @@
+﻿@{
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 7px;
+        font-size: 12px;
+    }
+</style>
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#" onclick="DashboardLink();">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active">Work Ticket List</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+       @* <div style="text-align:right">
+            <button class="btn btn-primary action-buttons2" onclick="NewWorkTicket();">
+                <i class="fa fa-plus-circle" aria-hidden="true"></i> New Work Ticket
+            </button>
+        </div>*@
+        <hr />
+        <div id="divResourceRequirements"></div>
+    </div>
+</div>
+
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">New Work Ticket</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal Links////////////////////////////*@
+<div class="modal fade" id="myModalLinks" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Actions</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodyLinks">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+
+<script>$(document).ready(function () {
+		$('#myModal').on('shown.bs.modal', function () {
+			setTimeout(function () {
+				$('.select2').select2({
+					dropdownParent: $('#myModal')
+				});
+			}, 200);
+		});
+	});</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadWorkTicketList();
+        var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+        if (Successmsg != "") {
+            Swal.fire('Success', Successmsg, 'success', true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+    });
+    var LoadWorkTicketList = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: "/Fleet/WorkTicketListPartialView",
+            success: function (data) {
+                $("#divResourceRequirements").empty().html(data);
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+
+    var NewWorkTicket = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: "/Fleet/NewWorkTicket",
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+
+
+    function SubmitWorkTicket() {
+
+        var isValid = true;
+
+      /*  var Requested_By = $("#Requested_By").val();*/
+        var Month_Date = $("#Month_Date2").val();
+        var Ticket_No = $("#Ticket_No2").val();
+        var Previous_Work_Ticket_No = $("#Previous_Work_Ticket_No2").val();
+        var Vehicle_Registration_No = $("#Vehicle_Registration_No2").val();
+        var Global_Dimension_1_Code = $("#Global_Dimension_1_Code2").val();
+        var Total_Kms_Covered = $("#Total_Kms_Covered2").val();
+        var Authorized_By = $("#Authorized_By2").val();
+        var Defect = $("#Defect2").val();
+        var Defect_Date = $("#Defect_Date2").val();
+        var Action_Taken_Reported = $("#Action_Taken_Reported2").val();
+
+
+
+        if (!Month_Date) {
+            Swal.fire('Warning', 'Month Date is required.', 'warning');
+             isValid = false;
+        }
+        if (!Ticket_No) {
+            Swal.fire('Warning', 'Ticket No is required.', 'warning');
+             isValid = false;
+        }
+        if (!Previous_Work_Ticket_No) {
+            Swal.fire('Warning', 'Previous Work Ticket No is required.', 'warning');
+            isValid = false;
+        }
+        if (!Vehicle_Registration_No) {
+            Swal.fire('Warning', 'Vehicle Registration No required', 'warning');
+            isValid = false;
+        }
+        if (!Global_Dimension_1_Code) {
+            Swal.fire('Warning', 'Region is required.', 'warning');
+            isValid = false;
+        }
+        if (!Total_Kms_Covered) {
+            Swal.fire('Warning', 'Total Kms Covered is required.', 'warning');
+            isValid = false;
+        }
+        
+
+         // Exit if validation fails
+         if (!isValid) {
+             return;
+         }
+
+         // Prepare data object
+         var data = {
+             Month_Date: Month_Date,
+             Ticket_No: Ticket_No,
+             Previous_Work_Ticket_No: Previous_Work_Ticket_No,
+             Vehicle_Registration_No: Vehicle_Registration_No,
+             Global_Dimension_1_Code: Global_Dimension_1_Code,
+             Authorized_By: Authorized_By,
+             Total_Kms_Covered: Total_Kms_Covered, 
+             Defect: Defect,
+             Defect_Date: Defect_Date, 
+             Action_Taken_Reported: Action_Taken_Reported
+
+         };
+         // Show progress indicator
+         ShowProgress();
+
+         // Send data via AJAX
+         $.ajax({
+             type: "POST",
+             url: "/Fleet/SubmitWorkTicket",
+             data: JSON.stringify(data),
+             contentType: "application/json; charset=utf-8",
+             dataType: "json",
+             success: function (data) {
+                 HideProgress();
+                 if (data.success) {
+                     var form = $('<form>', {
+                         action: '/Fleet/WorkTicketDocumentView',
+                         method: 'POST'
+                     }).append($('<input>', {
+                         type: 'hidden',
+                         name: 'DocNo',
+                         value: data.message
+                     }));
+                     form.appendTo('body').submit();
+                     Swal.fire('Success', 'Work Ticket successfully created.', 'success');
+                 } else {
+                     Swal.fire('Warning', data.message, 'warning');
+                 }
+             },
+             error: function (err) {
+                 HideProgress();
+                 Swal.fire('Error', 'An error occurred while submitting the request.', 'error');
+             }
+         });
+    }
+
+
+    var ViewDoc = function (DocNo) {
+        ShowProgress();
+        var form = $('<form>', {
+            action: '/Fleet/WorkTicketDocumentView',
+            method: 'POST'
+        }).append($('<input>', {
+            type: 'hidden',
+            name: 'DocNo',
+            value: DocNo
+        }));
+        form.appendTo('body').submit();
+    }
+
+
+
+
+</script>

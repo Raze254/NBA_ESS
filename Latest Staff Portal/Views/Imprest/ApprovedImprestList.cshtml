@@ -1,0 +1,18 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.ImprestMemo>
+@{
+    Layout = null;
+}
+<select class="form-control select2" id="approvedImprest" name="approvedImprest" data-live-search="false">
+
+    <option value="">-- Approved imprest  --</option>
+
+
+    <optgroup label="Your Approved imprest">
+        @foreach (var item in Model)
+        {
+
+            <option value="@item.No">@item.No</option>
+
+        }
+    </optgroup>
+</select>

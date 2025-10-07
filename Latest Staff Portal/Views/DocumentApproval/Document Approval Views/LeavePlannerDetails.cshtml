@@ -1,0 +1,129 @@
+﻿@model Latest_Staff_Portal.ViewModel.LeavePlannerDocument
+
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    hr {
+        margin: 4px;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+
+<!-- Page Header -->
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#" onclick="LeavePlanner();">Leave Planner</a>
+                </li>
+                <li class="breadcrumb-item active">Leave Planner Card(@Model.DocHeader.Application_Code)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- /Page Header -->
+
+<div class="row" id="content">
+    <p>
+        <br/>
+    </p>
+    <div class="col-xl-12 col-sm-12 col-12">
+
+        <div class="card">
+            <hr/>
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <b>Application Code</b>
+                        @Html.TextBoxFor(m => m.DocHeader.Application_Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                    </div>
+                    <div class="col-md-6">
+                        <b>Admin Unit</b>
+                        @Html.TextBoxFor(m => m.DocHeader.Names, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <b>Leave Calendar</b>
+                        @Html.TextBoxFor(m => m.DocHeader.Leave_Calendar, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                    </div>
+                    <div class="col-md-6">
+                        <b>Implementing Unit Name</b>
+                        @Html.TextBoxFor(m => m.DocHeader.Job_Tittle, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <b>Status</b>
+                        @Html.TextBoxFor(m => m.DocHeader.Status, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                    </div>
+
+                </div>
+
+                <hr style="border:1px solid black"/>
+                <b>Leave Planner Lines </b>
+
+                <div class="table-responsive">
+                    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <thead style="background-color:black;color:white">
+                        <tr>
+
+                            @*<th>Application Code</th>*@
+                            <th>PJ No</th>
+                            <th>Employee Name</th>
+                            <th>Type</th>
+                            <th>Days</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Return Date</th>
+                            <th>Action</th>
+
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @if (Model.ListOfLeavePlannerLines.Count() > 0)
+                        {
+                            foreach (var item in Model.ListOfLeavePlannerLines)
+                            {
+                                <tr>
+
+                                    @*<td>@item.Application_Code</td>*@
+                                    <td>@item.Reliever</td>
+                                    <td>@item.Reliever_Name</td>
+                                    <td>@item.Leave_Type</td>
+                                    <td>@item.Days_Applied</td>
+                                    <td>@item.Start_Date.ToShortDateString()</td>
+                                    <td>@item.End_Date.ToShortDateString()</td>
+                                    <td>@item.Return_Date.ToShortDateString()</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" style="color:red">
+                                    No Records Found
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>

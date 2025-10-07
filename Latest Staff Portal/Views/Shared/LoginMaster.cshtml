@@ -1,0 +1,99 @@
+﻿@{
+    Layout = null;
+    var Greetings = "";
+    if (DateTime.Now.Hour >= 0 && DateTime.Now.Hour < 12)
+    {
+        Greetings = "Good Morning";
+    }
+    else if (DateTime.Now.Hour >= 12 && DateTime.Now.Hour < 17)
+    {
+        Greetings = "Good Afternoon";
+    }
+    else
+    {
+        Greetings = "Good Evening";
+    }
+}
+
+<!DOCTYPE html>
+<style>
+
+    /*.body {
+        background-image: url('../Login/Bckground.jpg');
+        background-repeat:no-repeat;
+        background-size:cover;
+       opacity:0.8;
+        margin: 0;
+    }*/
+</style>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>NUPEA | ESS Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="NUPEA ESS Portal" name="description"/>
+    <meta content="Themesbrand" name="author"/>
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="~/assets/images/favicon-32x32.png">
+
+    <link href="~/assets/css/sweetalert2.min.css" rel="stylesheet"/>
+    <!-- Bootstrap Css -->
+    <link href="~/assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css"/>
+    <!-- Icons Css -->
+    <link href="~/assets/css/icons.min.css" rel="stylesheet" type="text/css"/>
+    <!-- App Css-->
+    <link href="~/assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css"/>
+
+    <script src="~/assets/js/jquery2.0.3.min.js"></script>
+</head>
+<body id="body">
+<link href="~/assets/css/Loader.css" rel="stylesheet"/>
+<div class="loading" align="center" id="divLoader">
+    <br/>
+    <img src="~/assets/images/ajax-loader.gif" alt="" width="150" height="150"/>
+</div>
+@*<script src="~/assets/js/ObfuscateSite.js"></script>*@
+<div class="account-pages my-5 pt-sm-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6 col-xl-5">
+                <div class="card overflow-hidden">
+                    <div class="bg-soft-primary">
+                        <div class="row">
+                            <div class="col-7">
+                                <div class="text-primary p-4">
+                                    <h5 class="text-primary textAnimation" style="color:antiquewhite" id="h5">@Greetings !</h5>
+                                    <p>Login to continue to The NUPEA ESS Portal.</p>
+                                </div>
+                            </div>
+                            <div class="col-5 align-self-end">
+                                <img src="~/assets/images/logo.png" alt="" class="img-fluid">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body pt-0">
+                        <div>
+                            <a href="#">
+                                <div class="avatar-md profile-user-wid mb-4">
+                                    <span class="avatar-title rounded-circle bg-light">
+                                        <img src="~/assets/images/logo.png" alt="" class="rounded-circle" height="60">
+                                    </span>
+                                </div>
+                            </a>
+                        </div>
+                        @RenderBody()
+                    </div>
+                </div>
+                <div class="mt-5 text-center">
+                    <p>@DateTime.Now.Year. <i class="mdi mdi-heart text-danger"></i> </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Sweet Alerts js -->
+<script src="~/assets/js/sweetalert2.min.js"></script>
+<script src="~/assets/js/ShowProgression.js"></script>
+
+</body>
+</html>

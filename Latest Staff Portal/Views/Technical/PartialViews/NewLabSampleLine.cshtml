@@ -1,0 +1,65 @@
+﻿@model Latest_Staff_Portal.ViewModel.LabSampleMgtLines
+
+@{
+    ViewBag.Title = "NewLabSampleLine";
+    var Sample_ID= ViewBag.Sample_ID;
+}
+
+
+<div class="row">
+
+
+    @*<div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Sample_ID", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Sample_ID, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @id = "Sample_ID" } })
+            @Html.ValidationMessageFor(model => model.Sample_ID, "", new { @class = "text-danger" })
+        </div>
+    </div>*@
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Sample_Type", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Sample_Type, new { htmlAttributes = new { @class = "form-control", @id = "Sample_Type" } })
+            @Html.ValidationMessageFor(model => model.Sample_Type, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Source", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Source, new { htmlAttributes = new { @class = "form-control", @id = "Source" } })
+            @Html.ValidationMessageFor(model => model.Source, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Quantity (Ml)", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Quantity_ml, new { htmlAttributes = new { @class = "form-control", @id = "Quantity_ml" } })
+            @Html.ValidationMessageFor(model => model.Quantity_ml, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Storage Location", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Storage_Location, new { htmlAttributes = new { @class = "form-control", @id = "Storage_Location" } })
+            @Html.ValidationMessageFor(model => model.Storage_Location, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Notes", htmlAttributes: new { @class = "control-label col-md-2" })
+            <textarea class="form-control" rows="3" id= "Notes"></textarea>
+            @*@Html.EditorFor(model => model.Notes, new { htmlAttributes = new { @class = "form-control", @id= "Notes" } })
+            @Html.ValidationMessageFor(model => model.Notes, "", new { @class = "text-danger" })*@
+        </div>
+    </div>
+</div>
+
+<div class="text-center">
+    <button class="btn btn-primary action-buttons" onclick="SubmitLabSampleLine();"> Submit </button>
+</div>

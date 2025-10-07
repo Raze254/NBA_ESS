@@ -1,0 +1,67 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.DocumentComments>
+
+@{
+    ViewBag.Title = "DocumentApprovalComments";
+}
+
+
+<div class="table-responsive">
+    <table id="datatable-Comments" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead>
+            <tr>
+                @*<th>Entry No</th>*@
+                <th>Rejection Reason</th>
+                <th>Conditions for Approval</th>
+                <th>Comment</th>
+                <th>User ID</th>
+                <th>Date and Time</th>
+                @*<th>Table ID</th>
+                <th>Record ID to Approve</th>*@
+
+            </tr>
+        </thead>
+        <tbody>
+
+
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    @*<td>
+                        @Html.DisplayFor(modelItem => item.Entry_No)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Rejection_Reason)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Conditions_for_Approval)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Comment)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.User_ID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date_and_Time)
+                    </td>
+                    @*<td>
+                        @Html.DisplayFor(modelItem => item.Table_ID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Record_ID_to_Approve)
+                    </td>*@
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<script>
+    $("#datatable-Comments").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100] // Same options for the second table
+    });
+</script>

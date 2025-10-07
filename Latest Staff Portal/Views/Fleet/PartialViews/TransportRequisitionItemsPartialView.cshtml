@@ -1,0 +1,91 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.FleetRequestItems>
+
+@{
+    ViewBag.Title = "FleetRequisitionItemsPartialView";
+    var DocNo = ViewBag.DocNo;
+    var Status = ViewBag.Status;
+}
+
+<div class="table-responsive">
+    <table id="datatable-buttons2" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead>
+            <tr>
+                <th>Ticket No</th>
+                <th>Requisition Number</th>
+                <th>Item Type</th>
+                <th>Description</th>
+                <th>Serial Number</th>
+                <th>Quantity</th>
+                <th>Purpose</th>
+                <th>Returnable</th>
+                <th>Item Return Date</th>
+                <th>Remarks Comments</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Ticket_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Requisition_Number)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Item_Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Serial_Number)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Quantity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Purpose)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Returnable)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Item_Return_Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Remarks_Comments)
+                    </td>
+                    <td>
+                        @if (Status == "Open")
+                        {
+                            <button class="btn btn-danger btn-sm" onclick="DeleteTransportRequisitionItem('@DocNo', '@item.Ticket_No' );">
+                                <i class="fa fa-plus-circle" aria-hidden="true"></i> Delete
+                            </button>
+                        }
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div style="text-align:right">
+    @if (Status == "Open")
+    {
+        <button class="btn btn-primary btn-sm action-buttons2" onclick="AddTransportRequisitionItem('@DocNo' );">
+            <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Line
+        </button>
+    }
+
+</div>
+
+<script>
+    $("#datatable-buttons2").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100] // Same options for the second table
+    });</script>

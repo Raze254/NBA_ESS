@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.ImprestSurrender>
+
+@{
+    ViewBag.Title = "ImprestSurrenderListPartialView";
+}
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th>Action</th>
+                <th>No </th>
+                <th>Surrender Date </th>
+                <th>Employee Name </th>
+                <th>Status </th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <input type="button" onclick="ViewDoc('@item.No');" class="btn btn-info" style=" background: green; color: whitesmoke;" value="Select" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SurrenderDate)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EmployeeName)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#datatable").DataTable(), $("#datatable-buttons").DataTable({
+            lengthChange: !1
+        }).buttons().container().appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)")
+    });
+</script>

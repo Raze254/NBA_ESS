@@ -1,0 +1,86 @@
+﻿@model Latest_Staff_Portal.ViewModel.ImprestLinesList
+
+<div class="table-responsive">
+    <table class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color: black; color: white;">
+        <tr>
+            <th>Document No</th>
+            <th>Line No</th>
+            <th>Payee</th>
+            <th>Employee No</th>
+            <th>Employee Name</th>
+            <th>Job Group</th>
+            <th>G/L Account</th>
+            <th>Destination</th>
+            <th>Vote Item</th>
+            <th>Quantity</th>
+            <th>Rate</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Recalled By</th>
+            <th>Recalled On</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        @if (Model.ListOfImprestLines != null && Model.ListOfImprestLines.Any())
+        {
+            foreach (var item in Model.ListOfImprestLines)
+            {
+                <tr>
+                    <td>@item.DocumentNo</td>
+                    <td>@item.LineNo</td>
+                    <td>@item.Payee</td>
+                    <td>@item.EmployeeNo</td>
+                    <td>@item.EmployeeName</td>
+                    <td>@item.JobGroup</td>
+                    <td>@item.GLAccount</td>
+                    <td>@item.Destination</td>
+                    <td>@item.VoteItem</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.Rate</td>
+                    <td>@item.Total</td>
+                    <td>@item.Status</td>
+                    <td>@item.RecalledBy</td>
+                    <td>@item.RecalledOn</td>
+                    <td class="tdAction" style="text-align:right">
+                        <a href="javascript:void(0);" class="text-success" data-toggle="tooltip" data-placement="top" title="Edit" onclick="EditItem('@item.GLAccount', @item.LineNo);">Edit</a>
+                        <a href="javascript:void(0);" class="text-danger ml-3" data-toggle="tooltip" data-placement="top" title="Delete" onclick="RemoveItem('@item.GLAccount', @item.LineNo);">Delete</a>
+                        <a href="javascript:void(0);" class="text-info ml-3" data-toggle="tooltip" data-placement="top" title="View" onclick="ViewItem('@item.GLAccount', @item.LineNo);">View</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="15" style="color: red;">No Records Found</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+@if (Model.Status == "Open")
+{
+    <div style="text-align:right">
+        <button style="background: #162f25; color: whitesmoke; border-radius: 10px;" onclick="AddImprestLine();">
+            <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Line
+        </button>
+    </div>
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var status = '@Model.Status';
+        if (status === "Open") {
+            $(".tdAction").show();
+            $(".addAction").show();
+            $(".viewAction").show();
+        } else {
+            $(".tdAction").hide();
+            $(".addAction").hide();
+            $(".viewAction").hide();
+        }
+    });
+</script>

@@ -1,0 +1,144 @@
+﻿@{
+    ViewBag.Title = "ImprestMemo";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+<style>
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+</style>
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#" onclick="DashboardLink();">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active">Imprest Requests </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<hr />
+<br />
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-6">
+            </div>
+            <div class="col-md-12" style="text-align:left">
+               @* <button class="btn action-buttons" onclick="ApprovedSafariImprestWarrantLink();">
+                    Approved Imprest Requests
+                </button>*@
+                <h4> Imprest Requests</h4>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div id="divRegList"></div>
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+@*<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content bg-white">
+                <div class="modal-header">
+                    <h4 class="text-black">New Safari Imprest Memo</h4>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modalBody">
+                </div>
+                <div class="modal-footer">
+                    <div class="text-center">
+                        <button type="button" class="btn action-buttons" data-dismiss="modal" value="Submit" onclick="SubmitImprestMemo();">Submit</button>
+                    </div>
+                    <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>*@
+@*//////////////////////Modal Links////////////////////////////*@
+<div class="modal fade" id="myModalLinks" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Actions</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodyLinks">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var urlParams = new URLSearchParams(window.location.search);
+        var status = urlParams.get('status') || "New";
+
+        //LoadImprestReqList();
+        LoadSafariImprestList(status);
+        calculateTripEndDate();
+    });
+
+    function filterSafariImprest(selectedStatus) {
+        LoadSafariImprestList(selectedStatus);
+    }
+
+    var LoadSafariImprestList = function (selectedStatus) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            dataType: 'HTML',
+            data: JSON.stringify({ status: selectedStatus }),
+            contentType: "application/json",
+            url: "/Imprest/SafariImprestWarrantList",
+            success: function (data) {
+                $("#divRegList").empty().html(data);
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+
+    var ViewDoc = function (DocNo) {
+        ShowProgress();
+        var form = $('<form>', {
+            action: '/Imprest/SafariImprestDocument',
+            method: 'POST'
+        }).append($('<input>', {
+            type: 'hidden',
+            name: 'DocNo',
+            value: DocNo
+        }));
+        form.appendTo('body').submit();
+    };
+
+</script>

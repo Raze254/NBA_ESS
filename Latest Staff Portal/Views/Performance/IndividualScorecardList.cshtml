@@ -1,0 +1,320 @@
+﻿
+@{
+    ViewBag.Title = "IndividualScorecardList";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+<!--
+<link href="~/assets/css/Loader.css" rel="stylesheet" />
+<div class="loading" align="center" id="divLoader">
+    <br />
+    <img src="~/assets/images/ajax-loader.gif" alt="" />
+</div>
+    -->
+<div class="card pre-scrollable">
+    <div class="card-body">
+        <div class="card-header">
+            <h5>Performance Appraisal System List</h5>
+        </div>
+        <a href="#" onclick="NewAppraisalDoc();" class="btn py-2 px-3 btn-primary " stye="color: white !Important;">New</a>
+        <hr/>
+        <div id="divAppraisalList"></div>
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title"><label id="labelF"></label></h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadAppraisalReqList();
+    });
+    var LoadAppraisalReqList = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: "/Performance/IndividualScorecardListPartialView",
+            success: function (data) {
+                HideProgress();
+                $("#divAppraisalList").html(data);
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+    var NewAppraisalDoc = function () {
+        $("#labelF").text("Performance Appraisal System");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Performance/NewIndividualScorecard',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var SubmitPMMUInitiative = function () {
+        var Department = $('#ddlDim2').val();
+        var Strategy_Plan_ID = $('#ddlPMMU').val();
+        var FromDate = $('#dtFrom').val();
+        var ToDate = $('#dtTo').val();
+        alert("Clicked");
+
+        if (!Department) {
+            Swal.fire('Warning', 'Please select a Directorate/Department.', 'warning');
+            return;
+        }
+
+        if (!Strategy_Plan_ID) {
+            Swal.fire('Warning', 'Please select a PMMU.', 'warning');
+            return;
+        }
+
+        if (!FromDate) {
+            Swal.fire('Warning', 'Please select a From Date.', 'warning');
+            return;
+        }
+
+        if (!ToDate) {
+            Swal.fire('Warning', 'Please select a To Date.', 'warning');
+            return;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/Performance/SubmitIndividualScorecard",
+            data: { Department: Department, Strategy_Plan_ID: Strategy_Plan_ID, FromDate: FromDate, ToDate: ToDate },
+            success: function (response) {
+                if (response.success) {
+                    Swal.fire('Success', response.message, 'success');
+                } else {
+                    Swal.fire('Error', response.message, 'error');
+                }
+            },
+            error: function (xhr, status, error) {
+                Swal.fire('Error', 'Failed to submit data. Please try again.', 'error');
+            }
+        });
+    }
+
+ var SubmitAppraisalRequisition = function () {
+       
+     var Department = $('#ddlDim2').val();
+     var Strategy_Plan_ID = $('#ddlPMMU').val();
+     var FromDate = $('#dtFrom').val();
+     var ToDate = $('#dtTo').val();
+
+     // Client-side validation for each field
+     if (!Department) {
+         Swal.fire('Warning', 'Please select a Directorate/Department.', 'warning');
+         return;
+     }
+
+     if (!Strategy_Plan_ID) {
+         Swal.fire('Warning', 'Please select a PMMU.', 'warning');
+         return;
+     }
+
+     if (!FromDate) {
+         Swal.fire('Warning', 'Please select a From Date.', 'warning');
+         return;
+     }
+
+     if (!ToDate) {
+         Swal.fire('Warning', 'Please select a To Date.', 'warning');
+         return;
+     }
+
+     // AJAX request to submit data
+     $.ajax({
+         type: "POST",
+         url: "/YourController/YourAction",
+         data: { Department: Department, Strategy_Plan_ID: Strategy_Plan_ID, FromDate: FromDate, ToDate: ToDate },
+         success: function (response) {
+             if (response.success) {
+                 Swal.fire('Success', response.message, 'success');
+             } else {
+                 Swal.fire('Error', response.message, 'error');
+             }
+         },
+         error: function (xhr, status, error) {
+             Swal.fire('Error', 'Failed to submit data. Please try again.', 'error');
+         }
+     });
+    }
+    var SelectedRow = function () {
+        $('table tbody tr').click(function () {
+            $(this).addClass("selectedTableRow").siblings().removeClass("selectedTableRow");
+            var row = $('#tableScoreCard tr.selectedTableRow');
+            //var Status = row.find("td").eq(5).html().trim();
+            //AssignSessions();
+            $("#ViewDoc").removeClass("disabled");
+            //if (Status == "New") {
+            //    $("#SendDocAppr").removeClass("disabled");
+            //    $("#CancelDocAppr").addClass("disabled");
+            //    $("#AppTrail").addClass("disabled");
+            //}
+            //else if (Status == "Pending Approval") {
+            //    $("#SendDocAppr").addClass("disabled");
+            //    $("#CancelDocAppr").removeClass("disabled");
+            //    $("#AppTrail").removeClass("disabled");
+            //}
+            //else if (Status == "Approved") {
+            //    $("#SendDocAppr").addClass("disabled");
+            //    $("#CancelDocAppr").addClass("disabled");
+            //    $("#AppTrail").addClass("disabled");
+            //}
+            //else {
+            //    $("#SendDocAppr").addClass("disabled");
+            //    $("#CancelDocAppr").addClass("disabled");
+            //    $("#AppTrail").addClass("disabled");
+            //}
+        });
+    }
+    var ViewAppraisalDoc = function (DocNo) {
+        $("#labelF").text("Leave Details Document");
+        ShowProgress();
+        window.location = "/Appraisal/IndividualScoreCard?AppDoc=" + DocNo;
+    }
+    var SendLeaveDocForApproval = function () {
+        $("#labelF").text("Leave Details Document");
+        var row = $('#datatable-buttons tr.selectedTableRow');
+        var DocNo = row.find("td").eq(1).html().trim();
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Leave/SendLeaveAppForApproval',
+            success: function (data) {
+                LoadLeaveReqList();
+                if (data.success == true) {
+                    Swal.fire('Success', data.message, 'success');
+                }
+                else {
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+        DiableButtons();
+        HideProgress();
+    }
+    var CancelLeaveDocForApproval = function () {
+        $("#labelF").text("Leave Details Document");
+        var row = $('#datatable-buttons tr.selectedTableRow');
+        var DocNo = row.find("td").eq(1).html().trim();
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Leave/CancelLeaveAppForApproval',
+            success: function (data) {
+                LoadLeaveReqList();
+                if (data.success == true) {
+                    DiableButtons();
+                    HideProgress();
+                    Swal.fire('Success', data.message, 'success');
+                }
+                else {
+                    DiableButtons();
+                    HideProgress();
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+
+    }
+    var ViewLeaveApprovalTrail = function () {
+        $("#labelF").text("Document Approval Status");
+        ShowProgress();
+        var row = $('#datatable-buttons tr.selectedTableRow');
+        var DocNo = row.find("td").eq(1).html().trim();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Leave/LeaveDocumentApprovalTrail',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var DiableButtons = function () {
+        $("#ViewDoc").addClass("disabled");
+        $("#SendDocAppr").addClass("disabled");
+        $("#CancelDocAppr").addClass("disabled");
+        $("#AppTrail").addClass("disabled");
+        $('table tbody tr').siblings().removeClass("selectedTableRow");
+    }
+</script>
+
+

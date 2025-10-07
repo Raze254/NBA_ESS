@@ -1,0 +1,96 @@
+﻿@model Latest_Staff_Portal.ViewModel.CommonDropDownList
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Bank Code:", new { @class = "control-label col-md-12" })
+            @Html.DropDownListFor(model => model.BankCode, Model.ListOfBankCodes, "-- Select Bank Account --", new { @class = "form-control select2", id = "ddlBankNumber", onchange = "GetBankBranches();" })
+        </div>
+    </div>
+    <div class="col-md-12">
+        <label id="labelSearch">Bank Branch</label>
+        <select class="form-control select2" id="ddlSearchItem" name="ddlSearchItem"></select>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        Bank Account Number
+        <div class="form-group">
+            <input type="text" class="form-control" id="txtBankAccount" onkeypress="return functionx(event)" />
+        </div>
+    </div>
+</div>
+<hr />
+<div align="center">
+    <input type="button" class="btn btn-primary waves-effect waves-light" value="Submit" onclick="SubmitBankDetails();" />
+</div>
+<script>
+    $(document).ready(function () {
+        $('#myModal').on('shown.bs.modal', function () {
+            setTimeout(function () {
+                $('.select2').select2({
+                    dropdownParent: $('#myModal')
+                });
+            }, 200);
+        });
+    });
+</script>
+<script type="text/javascript">
+    function functionx(evt) {
+        if (evt.charCode > 31 && (evt.charCode < 48 || evt.charCode > 57)) {
+            Swal.fire("Error", "Please enter only numeric characters in the text box", "error");
+            return false;
+        }
+    }
+    var GetBankBranches = function () {
+        var bankNumber = $("#ddlBankNumber").children("option:selected").val();
+        ShowProgress();
+        $("#ddlSearchItem option").remove();
+        $('#ddlSearchItem').empty().append('<option selected="selected" value="">----</option>');
+        var url = '/Common/GetBankBranches?bankCode=' + bankNumber;
+        $.getJSON(url,
+            function (data) {
+                if (data.success == true) {
+                    HideProgress();
+                    $('#ddlSearchItem').empty().append('<option selected="selected" value="">----</option>');
+                    $.each(data.DropDownData.ListOfddlData, function () {
+                        $("#ddlSearchItem").append($("<option></option>").val(this['Value']).html(this['Text']));
+                    });
+                } else {
+                    HideProgress();
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            });
+    };
+    function SubmitBankDetails() {
+                ShowProgress();
+var resource = {
+    BankCode: $("#ddlBankNumber").children("option:selected").val(),
+    BankBranch: $("#ddlSearchItem").children("option:selected").val(),
+    BankAccount: $("#txtBankAccount").val(),
+};
+
+$.ajax({
+    url: '@Url.Action("UpdateSecondaryBankDetails", "Common")',
+    type: 'POST',
+    contentType: 'application/json; charset=utf-8',
+    dataType: 'json',
+    data: JSON.stringify(resource),
+    success: function (response) {
+        if (response.success) {
+            HideProgress();
+            $("#myModal").modal("hide");
+            Swal.fire('Success', response.message, 'success');
+            window.location = '/Dashboard/PersonalProfile';
+        } else {
+            HideProgress();
+            Swal.fire('Error', response.message, 'error');
+        }
+    },
+    error: function (xhr, status, error) {
+        HideProgress();
+
+        Swal.fire('Error', error, 'error');
+    }
+});
+}
+</script>

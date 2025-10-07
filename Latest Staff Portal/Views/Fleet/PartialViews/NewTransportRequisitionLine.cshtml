@@ -1,0 +1,21 @@
+﻿@model Latest_Staff_Portal.ViewModel.FleetRequestLines
+
+@{
+    ViewBag.Title = "NewFleetRequisitionLine";
+}
+
+<div class="row">
+
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Employee_No, htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.DropDownListFor(model => model.Employee_No, Model.ListOfEmployees, "Select Option", new { @class = "form-control", @id= "Employee_No" })
+            @Html.ValidationMessageFor(model => model.Employee_No, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+</div>
+<div align="center">
+    <input type="button" class="btn btn-primary action-buttons" value="Submit Record" onclick="SubmitTransportRequisitionLine();" />
+</div>

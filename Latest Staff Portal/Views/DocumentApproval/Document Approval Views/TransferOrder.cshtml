@@ -1,0 +1,103 @@
+﻿@model Latest_Staff_Portal.ViewModel.TransferOrderDocument
+<div class="row">
+    <div class="col-md-6">
+        <b>Document No</b>
+        @Html.TextBoxFor(m => m.DocHeader.No, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        <b>Transfer From</b>
+        @Html.TextBoxFor(m => m.DocHeader.TransferFrom, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Transfer No</b>
+        @Html.TextBoxFor(m => m.DocHeader.TransferTo, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        <b>Posting Date</b>
+        @Html.TextBoxFor(m => m.DocHeader.Posting_Date, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Shipment Date</b>
+        @Html.TextBoxFor(m => m.DocHeader.Shipment_Date, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        <b>Receipt Date</b>
+        @Html.TextBoxFor(m => m.DocHeader.Receipt_Date, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Station</b>
+        @Html.TextBoxFor(m => m.DocHeader.CampusName, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        <b>Department</b>
+        @Html.TextBoxFor(m => m.DocHeader.Department, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Assigned User</b>
+        @Html.TextBoxFor(m => m.DocHeader.AssignedUser, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        <b>Assigned User Name</b>
+        @Html.TextBoxFor(m => m.DocHeader.AssignedUserName, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<hr/>
+<hr style="border:1px solid black"/>
+<b>Purchase Lines</b>
+<hr/>
+<div class="pre-scrollable">
+    <table class="table table-hover" id="PurchaseRequisitionLine">
+        <thead>
+        <tr>
+            <th>Item</th>
+            <th>Description</th>
+            <th class="text-center">Quantity</th>
+            <th>Unit Measure</th>
+            <th class="text-center">Qty to Ship</th>
+        </tr>
+        </thead>
+        <tbody>
+        @{
+            if (Model.ListOfTransferOrderLines != null && Model.ListOfTransferOrderLines.Count() > 0)
+            {
+                foreach (var item in Model.ListOfTransferOrderLines)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Item)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ItemDesc)
+                        </td>
+                        <td class="text-center">
+                            @Html.DisplayFor(modelItem => item.Qnty)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UoM)
+                        </td>
+                        <td class="text-center">
+                            @Html.DisplayFor(modelItem => item.Qty_to_Ship)
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5" style="color:red">
+                        No Records Found
+                    </td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>

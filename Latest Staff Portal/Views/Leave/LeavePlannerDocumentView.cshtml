@@ -1,0 +1,532 @@
+﻿@model Latest_Staff_Portal.ViewModel.LeavePlanner
+
+@{
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    hr {
+        margin: 4px;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+<div class="page-header">
+
+    <div class="col-sm-12">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="#" onclick="LeavePlannerListLink();">Leave Planner List</a>
+            </li>
+            <li class="breadcrumb-item active">Leave Planner Document (@Model.Application_Code)</li>
+        </ul>
+    </div>
+</div>
+<hr />
+<br />
+
+
+<div class="card">
+    <div class="card-body">
+
+        <div style="text-align:right">
+            <button style="background: #162f25; color: whitesmoke; border-radius: 10px" onclick="GenerateLeave ApplicationReport('@Model.Application_Code');">
+                <i class="fa fa-print" aria-hidden="true"></i> Print Report
+            </button>
+            @if (Model.Status == "Pending Approval")
+            {
+
+                <button style="background: #162f25; color:whitesmoke; border-radius:10px" onclick="CancelDocApprovalRequest('@Model.Application_Code');">
+                    <i class="fa fa-superpowers" aria-hidden="true"></i> Cancel Approval Request
+                </button>
+
+            }
+
+            @{
+                if (Model.Status == "New")
+                {
+
+                    <button style="background: #162f25; color:whitesmoke; border-radius:10px" onclick="SendDocForApproval('@Model.Application_Code');">
+                        <i class="fa fa-check" aria-hidden="true"></i> Send For Approval
+                    </button>
+                }
+            }
+        </div>
+
+
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Application Code", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Application_Code, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Application_Code, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Responsibility Center", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Responsibility_Center, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Responsibility_Center, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Leave Calendar", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Leave_Calendar, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Leave_Calendar, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Implementing Unit Name", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Implementing_Unit_Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Implementing_Unit_Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Global Dimension 1 Code", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Global_Dimension_1_Code, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Global_Dimension_1_Code, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Employee_No", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Employee_No, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Employee_No, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Names", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Names, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Names, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Title", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Job_Title, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Job_Title, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Status, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-md-12 text-center">
+
+                <button style="background: #162f25; color: whitesmoke; border-radius: 10px" onclick="EditDocument();">
+                    <i class="fa fa-pencil" aria-hidden="true"></i> Edit Header
+                </button>
+            </div>
+        </div>
+
+
+
+        <hr style="border:1px solid black" />
+        <b>Leave Planner Lines </b>
+
+
+        <div id="divLeavePlannerLines"></div>
+
+    </div>
+</div>
+
+@*//////////////////////Modal////////////////////////////*@
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" ke aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">New Leave Planner Line</h4>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script src="~/assets/js/pdfobject.min.js"></script>
+
+<script>
+     $(document).ready(function () {
+        LoadLeavePlannerLines('@Model.Application_Code');
+
+        var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+        if (Successmsg !== "") {
+            Swal.fire('Success', Successmsg, 'success', true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+    });
+
+    var LoadLeavePlannerLines = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            dataType: "html", // Assuming the response is HTML
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            data: JSON.stringify({ Application_Code: DocNo}),
+            url: "/Leave/LeavePlannerLines",
+            success: function (data) {
+                console.log(data)
+                $("#divLeavePlannerLines").html(data);
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem processing your request. Please try after some time");
+            }
+        });
+    };
+
+   
+
+   var NewLeavePlannerLines = function () {
+    var appCode = '@Model.Application_Code';
+    ShowProgress();
+    $.ajax({
+        async: true,
+        type: "POST",
+        datatype: "json",
+        contentType: "application/json; charset=utf-8",
+        processData: false,
+        url: "/Leave/NewLeavePlannerLines",
+        success: function (data) {
+            $("#modalBody").html(data);
+            HideProgress();
+            $("#myModal").modal("show");
+        },
+        error: function (err) {
+            HideProgress();
+            Swal.fire('Error fetching form', err, 'warning');
+        }
+    });
+}
+    var SubmitLeavePlannerLine = function () {
+        var Leave_Type = $('#Leave_Type').val();
+        var Days_Applied = $('#Days_Applied').val();
+        var Start_Date = $('#Start_Date').val();
+        var Reliever = $('#Reliever').val();
+
+        if (Leave_Type == "") {
+            Swal.fire('error', 'Select Leave Type', 'error');
+            return;
+        }
+        else if (Days_Applied <= 0) {
+            Swal.fire('error', 'Enter Days Applied', 'error');
+            return;
+        }
+        else if (Start_Date == "") {
+            Swal.fire('error', 'Select Start Date', 'error');
+            return;
+        }
+    
+        else if (Reliever == "") {
+            Swal.fire('error', 'Select Reliever', 'error');
+            return;
+        }
+        else {
+            ShowProgress();
+            $.ajax({
+                type: "post",
+                url: "/Leave/SubmitLeavePlannerLine",
+                data: JSON.stringify({ Leave_Type: Leave_Type, Days_Applied: Days_Applied, Start_Date: Start_Date, Reliever: Reliever }),
+                contentType: "application/json; charset = utf-8",
+                success: function (data) {
+                    if (data.success == true) {
+                        HideProgress();
+                        LoadLeaveReqList();
+                        Swal.fire('Success', data.message, 'success');
+                    }
+                    else {
+                        HideProgress();
+                        Swal.fire('error', data.message, 'error');
+                    }
+                    HideProgress();
+                    $("#myModal").modal("hide");
+                },
+                error: function () {
+                    HideProgress();
+                    Swal.fire('error', data.message, 'error');
+                }
+            });
+
+        }
+    }
+    var DeleteLine = function (reqNo) {
+   // var docNo = @Model.Application_Code;
+
+    $.ajaxSetup({ cache: false });
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.value) {
+            ShowProgress();
+
+            $.ajax({
+                cache: false,
+                url: '/Leave/DeleteLeavePlannerLines',
+                datatype: "json",
+                type: "POST",
+                data: JSON.stringify({ docNo: docNo, transportRequisitionNo: reqNo, entryNo: Id }),
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    if (data.success == true) {
+                        HideProgress();
+                        GetDocumentAttachments();
+                        Swal.fire('Success', 'File Deleted Successfully', 'success');
+                    } else {
+                        // If the deletion is not successful, hide the progress indicator and show a warning message
+                        HideProgress();
+                        Swal.fire('Warning', data.message, 'warning');
+                    }
+                },
+                error: function (err) {
+                    // If there is an error during the AJAX request, hide the progress indicator and show a warning message
+                    HideProgress();
+                    Swal.fire('Warning', err, 'warning');
+                }
+            });
+        } else {
+            // If the user cancels the deletion, show a cancellation message
+            Swal.fire('Cancelled', 'Attachment File has not been deleted', 'error');
+        }
+    });
+    };
+
+    var EditLine = function (appCode, lineNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: "html",
+            contentType: "application/json; charset=utf-8",
+            url: "/Leave/EditLeavePlannerLine?applicationCode=" + appCode + "&lineNo=" + lineNo,
+            success: function (data) {
+                HideProgress();
+                // Display the partial view content in a modal
+                $('#myModal').modal('show');
+                $('#modalBody').html(data);
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    };
+    var InsertLeavePlannerHeader = function () {
+        var applicationCode = $("#txtApplicationCode").val();
+        var date = $("#txtDate").val();
+        var daysApplied = $("#txtDaysApplied").val();
+        var leaveType = $("#ddlLeaveType").val();
+
+        if (daysApplied == "") {
+            Swal.fire('Warning', "Input Number Of Days Applied", 'warning');
+            return;
+        } else if (leaveType == "") {
+            Swal.fire('Warning', "Select Leave Type", 'warning');
+            return;
+        } else if (date == "") {
+            Swal.fire('Warning', "Input Date", 'warning');
+            return;
+        } else {
+            var EditLeavePlannerLineObj = {
+                DocNo: applicationCode,
+                LeaveType: leaveType,
+                StartDate: date,
+                DaysApplied: daysApplied
+            };
+
+            ShowProgress();
+            $.ajax({
+                type: "POST",
+                url: "/Leave/InsertLeavePlannerLines",
+                data: JSON.stringify({ editLeave: EditLeavePlannerLineObj }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    if (data.success) {
+                        window.location = data.message;
+                    } else {
+                        Swal.fire('Warning', data.message, 'warning');
+                        HideProgress();
+                    }
+                },
+                error: function (err) {
+                    HideProgress();
+                    Swal.fire('Warning', err, 'warning');
+                }
+            });
+        }
+    };
+    var ModifyLeavePlannerLines = function () {
+        var applicationCode = $("#txtApplicationCode").val();
+        var lineNo = $("#txtLineNo").val();
+        var date = $("#txtDate").val();
+        var daysApplied = $("#txtDaysApplied").val();
+        var leaveType = $("#ddlLeaveType").val();
+
+        if (daysApplied == "") {
+            Swal.fire('Warning', "Input Number Of Days Applied", 'warning');
+            return;
+        } else if (leaveType == "") {
+            Swal.fire('Warning', "Select Leave Type", 'warning');
+            return;
+        } else if (date == "") {
+            Swal.fire('Warning', "Input Date", 'warning');
+            return;
+        } else {
+            var EditLeavePlannerLineObj = {
+                DocNo: applicationCode,
+                LineNo: lineNo,
+                LeaveType: leaveType,
+                StartDate: date,
+                DaysApplied: daysApplied
+            };
+
+            ShowProgress();
+            $.ajax({
+                type: "POST",
+                url: "/Leave/ModifyLeavePlannerLines",
+                data: JSON.stringify({ editLeave: EditLeavePlannerLineObj }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    if (data.success) {
+                        window.location = data.message;
+                    } else {
+                        Swal.fire('Warning', data.message, 'warning');
+                        HideProgress();
+                    }
+                },
+                error: function (err) {
+                    HideProgress();
+                    Swal.fire('Warning', err, 'warning');
+                }
+            });
+        }
+    };
+    var SendDocForApproval = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo, Redirect: "N" }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Leave/SendLeavePlannerApproval',
+            success: function (data) {
+                if (data.LogOut == true) {
+                    window.location = data.message;
+                }
+                else {
+                    if (data.success == true) {
+                        HideProgress();
+                        LoadImprestReqList();
+                        $("#myModalLinks").modal("hide");
+                        Swal.fire('Success', data.message, 'success');
+                    }
+                    else {
+                        Swal.fire({
+                            title: 'Error',
+                            text: data.message,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.reload();
+                            }
+                        });
+                    }
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var CancelDocForApproval = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Leave/CancelLeavePlannerHeader',
+            success: function (data) {
+                if (data.LogOut == false) {
+                    window.location = data.message;
+                }
+                else {
+                    if (data.success == true) {
+                        HideProgress();
+                        LoadImprestReqList();
+                        $("#myModalLinks").modal("hide");
+                        Swal.fire('Success', data.message, 'success');
+                    }
+                    else {
+                        HideProgress();
+                        Swal.fire('Error', data.message, 'error');
+                    }
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }; 
+    function LeavePlannerListLink() {
+        window.location = "LeavePlanner"
+    }
+</script>

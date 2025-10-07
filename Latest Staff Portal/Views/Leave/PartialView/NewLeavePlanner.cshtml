@@ -1,0 +1,37 @@
+﻿@model Latest_Staff_Portal.ViewModel.LeavePlannerList
+
+
+<div class="col-md-6">
+    <b>Leave Calendar</b>
+    @Html.DropDownListFor(m => m.Leave_Calendar, new SelectList(Model.ListOfLeave_Calendar, "Value", "Text", Model.Leave_Calendar), "--Select Leave Calendar--", new { id = "ddlLeaveCallender", @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+</div>
+<hr/>
+
+<div align="center">
+    <input type="button" class="btn btn-primary waves-effect waves-light" value="Submit Request" onclick="InsertLeavePlannerHeader();"/>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#txtDate').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-1:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy'
+        });
+        $("#txtDate").focus(function () {
+            $("#ui-datepicker-div").position({
+                my: "left top",
+                at: "left bottom",
+                of: $(this)
+            });
+        });
+        $("#ddlDim1,#ddlVehicles,#ddlAuthorizedBy,#ddlCostCentre").select2({
+            width: '100%'
+        });
+        //document.getElementById("ddlDim2").disabled = true;
+        //document.getElementById("ddlDim1").disabled = true;
+        //document.getElementById("ddlDim3").disabled = true;
+    });
+</script>

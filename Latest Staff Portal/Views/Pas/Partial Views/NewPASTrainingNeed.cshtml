@@ -1,0 +1,87 @@
+﻿@model Latest_Staff_Portal.ViewModel.PASTrainingNeedsLine
+    @{
+        var isCapable = ViewBag.capable;
+    }
+
+<div class="form-horizontal">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+    <div class="form-group">
+        <div class="col-md-12">
+            @Html.Label("Training Need", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.TextBoxFor(model => model.Training_Need, new { @class = "form-control", id = "trainingNeed" })
+            @Html.ValidationMessageFor(model => model.Training_Need, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    @if (isCapable)
+    {
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                @Html.Label("Supervisors Remarks", htmlAttributes: new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    @Html.TextAreaFor(model => model.Supervisors_Remarks, new { @class = "form-control", rows = 4, @id = "Supervisors_Remarks" })
+                    @Html.ValidationMessageFor(model => model.Supervisors_Remarks, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    }
+
+
+    <div class="text-center my-3">
+        <input type="submit" value="Suggest Training" class="btn btn-primary waves-effect waves-light" onclick="SubmitTrainingNeed()" />
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script>
+    function SubmitTrainingNeed() {
+    var trainingNeed = $('#trainingNeed').val();
+    var supervisorRemark = $('#supervisorRemark').val();
+    var DocNo = '@Model.DocNo';
+
+    if (!trainingNeed) {
+        Swal.fire('Incomplete Fields', 'Please fill in all required fields.', 'warning');
+        return;
+        }
+
+    var trainingNeedData = {
+        Training_Need: trainingNeed,
+        Supervisors_Remarks: supervisorRemark,
+        DocNo: DocNo
+    };
+        ShowProgress();
+        $.ajax({
+            type: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            url: "SubmitTrainingNeed",
+            data: JSON.stringify({ data: trainingNeedData }),
+            success: function (response) {
+                if (response.success) {
+                    HideProgress();
+                    $("#myModal").modal('hide');
+                    Swal.fire({
+                        title: 'Success',
+                        text: 'Training Need Added Successfully',
+                        icon: 'success',
+                        timer: 2000,
+                        timerProgressBar: true,
+                        willClose: () => {
+                            location.reload();
+                        }
+                    });
+
+                } else {
+                    Swal.fire('Error', response.message, 'error');
+                    $("#myModal").modal('hide');
+
+                }
+            },
+            error: function (xhr, status, error) {
+                HideProgress();
+                Swal.fire('Error', 'Failed to submit data. Please try again.', 'error');
+            }
+        });
+
+}
+
+</script>

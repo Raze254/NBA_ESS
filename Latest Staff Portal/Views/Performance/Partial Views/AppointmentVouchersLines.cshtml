@@ -1,0 +1,75 @@
+﻿@*@model IEnumerable < Latest_Staff_Portal.ViewModel.CommitteeAppointmentLinesList*@
+@model Latest_Staff_Portal.ViewModel.CommitteeAppointmentLinesList
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color: black; color: white;">
+            <tr>
+                <th>Document No</th>
+                <th>Line No</th>
+                <th>Member No</th>
+                <th>Role</th>
+                <th>Member Name</th>
+                <th>Member Email</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (Model.ListOfCommitteeAppointmentLines != null && Model.ListOfCommitteeAppointmentLines.Any())
+            {
+                foreach (var item in Model.ListOfCommitteeAppointmentLines)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Document_No)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Line_No)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Member_No)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Role)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Member_Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Member_Email)
+                        </td>
+
+                        <td style="text-align:right" class="tdAction">
+                            <button class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Edit"
+                                    onclick="EditItem('@item.Document_No', '@item.Line_No','@item.Member_No','@item.ListOfMembers', '@item.Role');">
+                                Edit
+                            </button>
+                            <button class="btn btn-danger ml-3" data-toggle="tooltip" data-placement="top" title="Delete" onclick="RemoveItem('@item.Document_No');">Delete</button>
+                        </td>
+
+                    </tr>
+                }
+            }
+           
+        </tbody>
+    </table>
+</div>
+@*@{
+    if (Model.Status == "Open")
+    {*@
+<div style="text-align:right">
+    <button class="action-buttons" onclick="AddAppointmentCommitteeLine();">
+        <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Line
+    </button>
+</div>
+@*    }
+    }
+*@
+
+<script>
+    $("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100] // Same options for the second table
+    });
+</script>

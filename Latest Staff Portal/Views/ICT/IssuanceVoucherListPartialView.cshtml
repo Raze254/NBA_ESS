@@ -1,0 +1,66 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.IssuanceVoucher>
+
+@{
+    ViewBag.Title = "IssuanceVoucherListPartialView";
+}
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th>Action</th>
+                <th>No</th>
+                <th>Issued To</th>
+                <th>Issued Date</th>
+                <th>Description</th>
+
+            </tr>
+
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <input type="button" onclick="ViewDoc('@item.No');" class="btn btn-primary btn-sm action-buttons" value="Select" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.No)
+                    </td>
+                    @* <td>
+            @Html.DisplayFor(modelItem => item.Type)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Helpdesk_No)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Issued_To_User_ID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Issued_To_No)
+        </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Issued_Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#datatable").DataTable(), $("#datatable-buttons").DataTable({
+            lengthChange: !1
+        }).buttons().container().appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)")
+    });
+</script>

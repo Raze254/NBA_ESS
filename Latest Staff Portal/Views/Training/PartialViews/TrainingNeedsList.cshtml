@@ -1,0 +1,51 @@
+﻿@model List<Latest_Staff_Portal.ViewModel.TrainingNeedRequests>
+
+<div class="table-responsive">
+    <table class="datatable table table-stripped" id="datatable-buttons">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th>Action</th>
+                <th>Code</th>
+                <th>Financial Year</th>
+                <th>Employee No</th>
+                <th>Employee Name</th>
+                <th>Department</th>
+                <th>Job Title</th>
+                <th>Status</th>
+                <th>Estimate Cost</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td style="text-align:right">
+                            <button class="btn btn-primary action-buttons2" onclick="ViewTrainingNeedDoc('@item.Code');">
+                                <i class="fa fa-eye"></i> View
+                            </button>
+                        </td>
+                        <td>@item.Code</td>
+                        <td>@item.Financial_Year</td>
+                        <td>@item.Employee_No</td>
+                        <td>@item.Employee_Name</td>
+                        <td>@item.Department</td>
+                        <td>@item.Job_Title</td>
+                        <td>@item.Submitted</td>
+                        <td>@item.Estimate_Cost.ToString("N0")</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<script>
+    $("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100],
+        "bDestroy": true
+    });
+</script>

@@ -1,0 +1,217 @@
+﻿@{
+    ViewBag.Title = "IncidenceReportingView";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+<!--
+<link href="~/assets/css/Loader.css" rel="stylesheet" />
+<div class="loading" align="center" id="divLoader">
+    <br />
+    <img src="~/assets/images/ajax-loader.gif" alt="" />
+</div>
+-->
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/Dashboard/HumanResource" onclick="TransportRequisitionLink();">Human Resource</a>
+                </li>
+                <li class="breadcrumb-item active">Incident Reporting</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="card-body">
+    <div style="text-align:right" id="HideEditButton">
+        <input type="button" style="background: #162f25; color:whitesmoke; border-radius:10px" value="Report New Incident" onclick="ReportNewIncident();"/>
+    </div>
+    <hr/>
+    <div id="divIncidenceListList"></div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">New Incident</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal Links////////////////////////////*@
+<div class="modal fade" id="myModalLinks" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Actions</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodyLinks">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadIncidenceList ();
+        var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+        if (Successmsg != "") {
+            Swal.fire('Success', Successmsg, 'success', true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+    });
+    var LoadIncidenceList = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: "/WelfareManagement/HrWelfareIncidenceList",
+            success: function (data) {
+                $("#divIncidenceListList").empty().html(data);
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+    var ReportNewIncident = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: "/WelfareManagement/NewIncident",
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    //var viewCard = function (DocNo) {
+    //    ShowProgress();
+    //    window.location = "/WelfareManagement/MedicalCardReplacementDocument?documentNo=" + DocNo;
+    //}
+    var SubmitIncident = function () {
+        var affectedEmployee = $('#txtAffectedEmployee').val();
+        var employeeName = $('#txtEmployeeName').val();
+        var incidenceDate = $('#txtIncidenceDate').val();
+        var incidenceTime = $('#txtIncidenceTime').val();
+        var incidence = $('#ddlIncidence').val();
+        var dutyStation = $('#ddlDutyStation').val();
+        var actionTaken = $('#txtActionTaken').val();
+
+        if (!affectedEmployee) {
+            Swal.fire('Warning', 'Please enter the affected employee.', 'warning');
+            return;
+        }
+
+        if (!employeeName) {
+            Swal.fire('Warning', 'Please enter the employee name.', 'warning');
+            return;
+        }
+
+        if (!incidenceDate) {
+            Swal.fire('Warning', 'Please select the incidence date.', 'warning');
+            return;
+        }
+
+        if (!incidenceTime) {
+            Swal.fire('Warning', 'Please enter the incidence time.', 'warning');
+            return;
+        }
+
+        if (!incidence) {
+            Swal.fire('Warning', 'Please select the incidence type.', 'warning');
+            return;
+        }
+
+        if (!dutyStation) {
+            Swal.fire('Warning', 'Please select the duty station.', 'warning');
+            return;
+        }
+
+        if (!actionTaken) {
+            Swal.fire('Warning', 'Please enter the action taken.', 'warning');
+            return;
+        }
+
+        var data = {
+            AffectedEmployee: affectedEmployee,
+            EmployeeName: employeeName,
+            Incidence_Date: incidenceDate,
+            Incidence_Time: incidenceTime,
+            Incidence: incidence,
+            Duty_Station: dutyStation,
+            Action_Taken: actionTaken
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/WelfareManagement/SubmitIncident",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.success) {
+                    Swal.fire('Success', response.message, 'success').then(() => {
+                        window.location.href = response.message;
+                    });
+                } else {
+                    Swal.fire('Error', response.message, 'error');
+                }
+            },
+            error: function (xhr, status, error) {
+                Swal.fire('Error', 'Failed to submit data. Please try again.', 'error');
+            }
+        });
+    }
+
+</script>

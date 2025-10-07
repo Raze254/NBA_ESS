@@ -1,0 +1,91 @@
+﻿@model Latest_Staff_Portal.ViewModel.NewICTRequisition
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Station", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(model => model.Directorate, Model.ListOfDirectorate, "--Select Donor--", new { @class = "form-control", id = "ddlDirectorate", @readonly = "readonly", style = "background-color:#dedebd" })
+                @Html.ValidationMessageFor(model => model.Directorate, "", new { @class = "text-danger" })
+            </div>
+            
+
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Project", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(model => model.Department, Model.ListOfDepartment, "--Select Project--", new { @class = "form-control", id = "ddlDim2", @readonly = "readonly", style = "background-color:#dedebd" })
+                @Html.ValidationMessageFor(model => model.Department, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Asset", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(model => model.Code, Model.ListOfICTAsset, "--select Asset--", new { @class = "form-control", id = "ddlAsset" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Service Date", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="datetime" class="form-control" placeholder="dd/mm/yyyy" id="dtPicker" onkeydown="return false;" autocomplete="off"/>
+                @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Category", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <select class="form-control" id="ddlCat">
+                    <option value="">--</option>
+                    <option value="1">Asset</option>
+                    <option value="2">Application</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Service Description", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <textarea id="txtRemarks" rows="3" class="form-control"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+<hr/>
+<div align="center">
+    <input type="button" class="btn btn-primary waves-effect waves-light" value="Submit Request" onclick="SubmitRequisition();"/>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#dtPicker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-0:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy',
+            minDate: 0
+        });
+        $(window).resize(function () {
+            $('#dtPicker').datepicker('hide');
+            $('#dtPicker').blur();
+        });
+    });
+    document.getElementById("ddlDirectorate").disabled = true;
+    document.getElementById("ddlDim2").disabled = true;
+</script>

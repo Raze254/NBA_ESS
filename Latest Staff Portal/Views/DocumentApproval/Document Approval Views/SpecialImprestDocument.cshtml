@@ -1,0 +1,339 @@
+﻿@using Latest_Staff_Portal.ViewModel
+@model Latest_Staff_Portal.ViewModel.SpecialImprest
+
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    hr {
+        margin: 4px;
+    }
+
+    .BtnPadding {
+        padding: 7px;
+        font-size: 12px;
+    }
+
+    .scrollable-modal-body {
+        max-height: 500px;
+        overflow-y: auto;
+    }
+</style>
+
+<div class="card">
+    <div class="card-body">
+
+        <div style="text-align:right">
+            <button style="background: #162f25; color: whitesmoke; border-radius: 10px;" class="BtnPadding" onclick="GenerateWarrantReport('@Model.No')">
+                <i class="fas fa-print" aria-hidden="true"></i> Preview F.O.24
+            </button>
+            <button style="background: #162f25; color: whitesmoke; border-radius: 10px" class="BtnPadding" onclick="GenerateExpenseRequisitionReport('@Model.ExpenditureRequisitionCode');">
+                <i class="fa fa-print" aria-hidden="true"></i> Print Memo Report
+            </button>
+        </div>
+        <hr />
+        <div class="text-center mt-5"><h4>Special Imprest Warrant Document (@Model.No)</h4></div><br />
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.No, htmlAttributes: new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.No, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                        @Html.ValidationMessageFor(model => model.No, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                        @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PostingDate, htmlAttributes: new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.PostingDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                        @Html.ValidationMessageFor(model => model.PostingDate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Payee, htmlAttributes: new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.Payee, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                        @Html.ValidationMessageFor(model => model.Payee, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ChequeDate, htmlAttributes: new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.ChequeDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                        @Html.ValidationMessageFor(model => model.ChequeDate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PayingBankAccount, htmlAttributes: new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.PayingBankAccount, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                        @Html.ValidationMessageFor(model => model.PayingBankAccount, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.BankName, htmlAttributes: new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.BankName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                        @Html.ValidationMessageFor(model => model.BankName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PaymentNarration, htmlAttributes: new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.PaymentNarration, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                        @Html.ValidationMessageFor(model => model.PaymentNarration, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TotalAmount, htmlAttributes: new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.TotalAmount, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                        @Html.ValidationMessageFor(model => model.TotalAmount, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ExpenditureRequisitionCode, htmlAttributes: new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.ExpenditureRequisitionCode, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                        @Html.ValidationMessageFor(model => model.ExpenditureRequisitionCode, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ShortcutDimension1Code, htmlAttributes: new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.ShortcutDimension1Code, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                        @Html.ValidationMessageFor(model => model.ShortcutDimension1Code, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ShortcutDimension2Code, htmlAttributes: new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.ShortcutDimension2Code, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                        @Html.ValidationMessageFor(model => model.ShortcutDimension2Code, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.StrategicPlan, htmlAttributes: new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.StrategicPlan, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                        @Html.ValidationMessageFor(model => model.StrategicPlan, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ReportingYearCode, htmlAttributes: new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.ReportingYearCode, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                        @Html.ValidationMessageFor(model => model.ReportingYearCode, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.WorkplanCode, htmlAttributes: new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.WorkplanCode, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                        @Html.ValidationMessageFor(model => model.WorkplanCode, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ActivityCode, htmlAttributes: new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.ActivityCode, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                        @Html.ValidationMessageFor(model => model.ActivityCode, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.Status, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                        @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr style="border:1px solid black" />
+        <b>Standing Imprest Lines</b>
+        <div id="divLines"></div>
+    </div>
+</div>
+@* /////////////////////////////////////////////Modal/////////////////////////////////// *@
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        Add the 'modal-lg' class for a larger modal
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myModalLabel">
+                    <label id="labelF"></label>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@* //////////////////////////Modal///////////////////// *@
+<div id="myModalUnits" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Expense Requisition</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <iframe src="" frameborder="0" width="100%" height="600px"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script src="~/assets/js/pdfobject.min.js"></script>
+<script type="text/javascript">
+	$(document).ready(function () {
+		LoadStandingImprestLines(`@Model.No`);
+	});
+	var LoadStandingImprestLines = function (DocNo) {
+		ShowProgress();
+		var status = `@Model.Status`;
+		$.ajax({
+			async: true,
+			type: "POST",
+			dataType: "html",
+			contentType: "application/json; charset=utf-8",
+			data: JSON.stringify({ docNo: DocNo, status:status }),
+			url: "/Imprest/StandingImprestLine",
+			success: function (data) {
+
+				$("#divLines").html(data);
+
+				HideProgress();
+
+				GetDocumentAttachments();
+			},
+			error: function () {
+
+				HideProgress();
+
+				Swal.fire("There is some problem to process your request. Please try after some time");
+			}
+		});
+	};
+
+    var GenerateExpenseRequisitionReport = function (docNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ documentNumber: docNo }),
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            url: '/ExpenseRequisition/GenerateExpenseRequisitionReport',
+            success: function (data) {
+                if (data.success) {
+                    $('iframe').attr('src', "data:application/pdf;base64," + data.message);
+                    $("#myModalUnits").modal("show");
+                    HideProgress();
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                    HideProgress();
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var GenerateWarrantReport = function (docNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ documentNumber: docNo }),
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            url: '/ExpenseRequisition/GenerateWarrantReport',
+            success: function (data) {
+                if (data.success) {
+                    $('iframe').attr('src', "data:application/pdf;base64," + data.message);
+                    $("#myModalUnits").modal("show");
+                    HideProgress();
+
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                    HideProgress();
+
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+</script>

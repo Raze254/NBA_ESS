@@ -1,0 +1,169 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.IndividualScoreCard>
+
+<style>
+    .btn:hover {
+        color: white !Important;
+    }
+
+    .card-body:hover .btn {
+        color: white !important;
+    }
+</style>
+
+<div class="row" id="">
+    @if (ViewBag.HasMultipleScorecards)
+    {
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>Notice:</strong> Kindly ensure you have only one PAS document for this financial year. If you have more than one PAS document, delete all others and retain only one to be able to proceed.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+    <div class="col-xl-12 col-sm-12 col-12">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="table-responsive">
+                    <table class="datatable table table-stripped" id="datatable-buttons">
+                        <thead style="background-color: black; color: white">
+                            <tr>
+                                <th>Action</th>
+                                <th>Doc No</th>
+                                <th>Strategy Plan ID</th>
+                                <th>Document Stage</th>
+                                <th>Appraisal Period</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                @* <th>Status</th> *@
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                if (Model != null)
+                                {
+                                    if (Model.Any())
+                                    {
+                                        foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @if (!ViewBag.HasMultipleScorecards)
+                                                    {
+                                                        <a href="#" onclick="ViewDoc('@item.DocNo');" class="btn  btn-primary action-buttons3" style="color: white !Important;" id="ViewDoc">Select</a>
+                                                    }
+
+                                                    <a href="#" onclick="DeleteDocument('@item.DocNo');" class="btn  btn-danger btn-sm" style="color: white !important;" id="DeleteDoc">Delete</a>
+
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.DocNo)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Strategy_Plan_ID)
+                                                </td>
+                                                <td>
+                                                    @if (item.Document_Stage == "No Action Taken")
+                                                    {
+                                                        <span class="badge badge-danger p-1">Draft..</span>
+                                                    }
+                                                    else if (item.Document_Stage == "Mid-Year Review")
+                                                    {
+                                                        <span class="badge badge-warning p-1">@Html.DisplayFor(modelItem => item.Document_Stage)</span>
+                                                    }
+                                                    else if (item.Document_Stage == "Completed Mid-Year Review")
+                                                    {
+                                                        <span class="badge badge-success p-1">@Html.DisplayFor(modelItem => item.Document_Stage)</span>
+                                                    }
+                                                    else if (item.Document_Stage == "Sent To Supervisor")
+                                                    {
+                                                        <span class="badge badge-primary p-1">Awaiting Negotiation</span>
+                                                    }
+                                                    else if (item.Document_Stage == "Returned To Employee")
+                                                    {
+                                                        <span class="badge badge-success p-1">Negotiated & Agreed</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="badge badge-success p-1">@Html.DisplayFor(modelItem => item.Document_Stage)</span>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Contract_Year)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Start_Date)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.End_Date)
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#datatable-buttons").DataTable({
+        lengthChange: true,
+        order: [[1, 'desc']],
+        lengthMenu: [5, 10, 25, 50, 100],
+        "bDestroy": true
+    });
+
+    function ViewDoc(DocNo) {
+        ShowProgress();
+        var form = $('<form>', {
+            action: '/Pas/ViewIndividualScorecard',
+            method: 'POST'
+        }).append($('<input>', {
+            type: 'hidden',
+            name: 'DocNo',
+            value: DocNo
+        }));
+        form.appendTo('body').submit();
+    }
+
+    function DeleteDocument(DocNo) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You are about to delete this document.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/Pas/DeleteIndividualScorecard',
+                    data: { DocNo: DocNo },
+                    success: function (response) {
+                        if (response.success) {
+                            Swal.fire({
+                                title: 'Deleted!',
+                                text: 'The document has been deleted.',
+                                icon: 'success',
+                                timer: 2000,
+                                showConfirmButton: false
+                            }).then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire('Error', 'There was an issue deleting the document.', 'error');
+                        }
+                    },
+                    error: function () {
+                        Swal.fire('Error', 'There was an issue deleting the document.', 'error');
+                    }
+                });
+            }
+        });
+    }
+</script>

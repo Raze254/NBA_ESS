@@ -1,0 +1,100 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.TrainingParticipantsList>
+
+@{
+    ViewBag.Title = "TrainingRequisitionLinesPartialView";
+    var DocNo= ViewBag.DocNo ;
+    var TrainingVenue = ViewBag.TrainingVenue;
+    var status= ViewBag.status;
+}
+
+<div class="table-responsive">
+    <table id="TrainingReq" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead>
+            <tr>
+                <th>Employee Code</th>
+
+                <th>Employee Name</th>
+                <th>Type Of Expense</th>
+                <th>Destination</th>
+                <th>No. of Days</th>
+                <th>Total Amount</th>
+                <th>Responsibility</th>
+                <th>Employee Region</th>
+                <th>Witness</th>
+                <th>Witness Name</th>
+                <th>Charge Levy</th>
+                <th>Requestor</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Employee_Code)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Employee_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Destination)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.No_of_Days)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Total_Amount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Training_Responsibility)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Global_Dimension_1_Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Witness)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Witness_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Charge_Levy)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Requestor)
+                    </td>
+                    <td>
+                        @* <button class="btn btn-success  btn-sm" data-toggle="tooltip" data-placement="top" title="Edit"
+                                    onclick="EditItem('@item.Training_Code', , '@item.Line_No');">
+                                Edit Line
+                            </button>*@
+
+                        <button class="btn btn-danger  btn-sm ml-3" data-toggle="tooltip" data-placement="top" title="Delete" onclick="RemoveItem('@item.Training_Code', '@item.Line_No');">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div style="text-align:right; margin-top: 20px">
+    <button class="btn btn-primary action-buttons2" onclick="AddTrainingRequisitionLine(`@TrainingVenue`);">
+        <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Line
+    </button>
+</div>
+
+
+<script>
+    $("#TrainingReq").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100] // Same options for the second table
+    });
+</script>
+

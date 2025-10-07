@@ -1,0 +1,433 @@
+﻿@using Latest_Staff_Portal.Models
+@{
+    Layout = null;
+    string imgSrc = "", gender = "", Name = "";
+    var IsICT = false;
+    if (Session["Username"] == null)
+    {
+        Html.Action("Login", "Login");
+    }
+    else
+    {
+        if (Session["ImgProfile"] == null)
+        {
+            var base64 = CommonClass.ProfilePicture(Session["Username"].ToString());
+            if (base64 != "")
+            {
+                imgSrc = string.Format("data:image/gif;base64,{0}", base64);
+                Session["ImgProfile"] = imgSrc;
+            }
+        }
+        else
+        {
+            imgSrc = Session["ImgProfile"].ToString();
+        }
+
+        if (Session["StaffDetails"] == null)
+        {
+            var s = CommonClass.GetStaffDetails(Session["Username"].ToString());
+            gender = s[0];
+            Name = s[1];
+
+            Session["StaffDetails"] = s;
+        }
+        else
+        {
+            var s = (string[])Session["StaffDetails"];
+            gender = s[0];
+            Name = s[1];
+        }
+
+        IsICT = CommonClass.IsICTStaff(Session["Username"].ToString());
+    }
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+
+    <title>Judiciary Self Service Portal</title>
+
+    <script src="//unpkg.com/alpinejs" defer></script>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="~/assets/assets/img/default.png">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="~/assets/assets/css/bootstrap.min.css">
+
+    <!-- Fontawesome CSS -->
+    <link rel="stylesheet" href="~/assets/assets/css/font-awesome.min.css">
+
+    <!-- Feathericon CSS -->
+    <link rel="stylesheet" href="~/assets/assets/css/feathericon.min.css">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="~/assets/assets/css/style.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="~/assets/assets/css/custom.css">
+
+    <!-- js-->
+    <script src="~/assets/assets/js/js/jquery-1.11.1.min.js"></script>
+    <script src="~/assets/assets/js/js/modernizr.custom.js"></script>
+
+    <!-- Data table CSS -->
+    <link href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
+    <link href="//cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css"/>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+
+<body id="body">
+
+<!-- Main Wrapper -->
+<div class="main-wrapper">
+
+<!-- Header -->
+<div class="header" id="header">
+
+    <!-- Logo -->
+    <div class="header-left" style="margin-top: -10px">
+        <a href="#" class="logo" onclick="DashBoardLink();">
+            <img src="~/assets/assets/img/default.png" atl="Logo">
+            <h6 style="margin-top: -5px;">Admin</h6>
+        </a>
+        <a href="#" class="logo logo-small" onclick="DashBoardLink();">
+            <img src="~/assets/assets/img/default.png" atl="Logo-Mini">
+            <h6 style="margin-top: -2px;">Admin</h6>
+        </a>
+    </div>
+    <!-- /Logo -->
+
+    <a href="javascript:void(0);" id="toggle_btn">
+        <i class="fe fe-text-align-left" id="collapsebtn"></i>
+    </a>
+
+    <div class="top-nav-search">
+        <form>
+            <input type="text" class="form-control" placeholder="Search here">
+            <button class="btn" type="submit">
+                <i class="fa fa-search" id="searchbtn"></i>
+            </button>
+        </form>
+    </div>
+
+    <!-- Mobile Menu Toggle -->
+    <a class="mobile_btn" id="mobile_btn">
+        <i class="fa fa-bars"></i>
+    </a>
+    <!-- /Mobile Menu Toggle -->
+    <!-- Header Right Menu -->
+    <ul class="nav user-menu">
+
+        <!-- Notifications -->
+        <li class="nav-item dropdown noti-dropdown">
+            <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" id="notificationdropdown">
+                <i class="fe fe-bell"></i>
+                <span class="badge badge-pill">
+                    01
+                </span>
+            </a>
+            <div class="dropdown-menu notifications">
+                <div class="topnav-dropdown-header">
+                    <span class="notification-title">Notifications</span>
+                </div>
+                <div class="noti-content">
+                    <ul class="notification-list">
+                        <li class="notification-message">
+                            <div class="media">
+                                <div class="media-body">
+                                    <p class="noti-details">
+                                        <span class="noti-title">
+                                            <center style="color: red"><i class="fa fa-warning"></i> No Unread notifications </center>
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="notification-message">
+                            <a href="single-notification.html">
+                                <div class="media">
+                                    <div class="media-body">
+                                        <p class="noti-details">
+                                            <span class="noti-title">
+                                                <b> Notification Title </b>
+                                            </span><br/>
+                                            <span class="noti-title"> Notification body</span>
+                                        </p>
+                                        <p class="noti-time">
+                                            <span class="notification-time">
+                                                Notification time
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </a>
+
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="topnav-dropdown-footer">
+                    <a href="/view-all.html">View all Notifications</a>
+                </div>
+
+            </div>
+        </li>
+
+        <!-- /Notifications -->
+        <!-- User Menu -->
+        <li class="nav-item dropdown has-arrow">
+            <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" id="notificationdropdown">
+                <!-- php
+                $fname = substr(auth()->user()->firstname, 0, 1);
+                $sname = substr(auth()->user()->surname, 0, 1);
+                $fsname = $fname.$sname;
+                php -->
+
+                <span class="user-img">
+                    <span class="rounded-circle" id="avatar"> EN</span>
+                    <img class="rounded-circle" src="~/assets/assets/img/white.jpg" width="41" title="Erick Nyakundi" alt="Erick Nyakundi">
+                </span>
+            </a>
+            <div class="dropdown-menu">
+                <div class="user-header">
+                    <div class="avatar avatar-sm">
+                        <span class="rounded-circle" id="avatar"> EN</span>
+                        <img src="~/assets/assets/img/white.jpg" title="Erick Nyakundi" alt="Erick Nyakundi" class="avatar-img rounded-circle" width="41">
+                    </div>
+                    <div class="user-text">
+                        <h6>Erick Nyakundi</h6>
+                        <p class="text-muted mb-0">
+                            Softiware Engineer
+                        </p>
+                    </div>
+                </div>
+                <a class="dropdown-item" href="#" onclick="PersonalProfile();"><i class="fa fa-user" style="margin-right: 5px; font-size:14px;"></i>My Profile</a>
+                <a class="dropdown-item" href="#"><i class="fa fa-lock" style="margin-right: 5px; font-size:14px;"></i> Change Password</a>
+                <a class="dropdown-item" href="@Url.Action("Login", "Login")">
+                    <i class="fa fa-sign-out" style="margin-right: 5px; font-size:14px;"></i> Logout
+                </a>
+            </div>
+        </li>
+        <!-- /User Menu -->
+
+    </ul>
+    <!-- /Header Right Menu -->
+
+</div>
+<!-- /Header -->
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+
+    <div class="sidebar-inner slimscroll">
+        <div id="sidebar-menu" class="sidebar-menu">
+            <ul>
+
+                <li class="@(Request.Url.AbsolutePath.Equals("/Dashboard/Dashboard", StringComparison.OrdinalIgnoreCase) ? "active" : "")">
+                    <a href="#" onclick="DashBoardLink();" class="active">
+                        <i class="fe fe-home"></i> <span>Dashboard</span>
+                    </a>
+                </li>
+
+                <li class="submenu">
+                    <a href="#" onclick="toggleSubMenu(event, 'profileSubMenu')">
+                        <i class="fe fe-user" style="font-size: 18px;"></i>
+                        <span>My Profile</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul id="profileSubMenu" class="submenu-content" style="display: none; padding-left: 20px;">
+                        <li class="@(Request.Url.AbsolutePath.Equals("/Dashboard/PersonalProfile", StringComparison.OrdinalIgnoreCase) ? "active" : "")">
+                            <a href="#" onclick="PersonalProfile();">
+                                Profile
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="ChangePasswordLink();" class="waves-effect">
+                                Change Password
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="submenu">
+                    <a href="#" onclick="toggleSubMenu(event, 'departmentsSubMenu')">
+                        <i class="fe fe-document"></i>
+                        <span>Departments</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul id="departmentsSubMenu" class="submenu-content" style="display: none; padding-left: 20px;">
+                        <li>
+                            <a href="#" onclick="HumanResourceLink()">
+                                Human Resource
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="DASSLink()">
+                                DASS
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="FinanceLink()">
+                                Finance
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="ProcurementLink()">
+                                Procurement
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="submenu">
+                    <a href="#" onclick="toggleSubMenu(event, 'approvalsSubmenu')">
+                        <i class="fe fe-check-circle-o"></i>
+                        <span>Approvals</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul id="approvalsSubmenu" class="submenu-content" style="display: none; padding-left: 20px;">
+                        <li>
+                            <a href="#" onclick="DocumentApprovalSummeryLink('Open');">
+                                Pending my Approval
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="ApprovedDocLink('Approved');">
+                                My Approved Documents
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="RejectedDocLink('Rejected');">
+                                My Rejected Documents
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="submenu">
+                    <a href="#" onclick="PCALink();">
+                        <i class="fa fa-dollar" style="font-size: 18px;"></i>
+                        <span>Pay Change Advice</span>
+                    </a>
+                </li>
+                <li class="submenu">
+                    <a href="#">
+                        <i class="fa fa-sign-out" style="font-size: 18px;"></i>
+                        <span>Staff Exit</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+
+                    <ul class="submenu-content" style="display: none; padding-left: 20px;">
+                        <li>
+                            <a href="#" onclick="StaffClearancelink();">
+                                Staff Clearance
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="submenu">
+                    <a href="#">
+                        <i class="fa fa-question-circle" style="font-size: 18px;"></i>
+                        <span>Help and Support</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul class="submenu-content" style="display: none; padding-left: 20px;">
+                        <li>
+                            <a href="/Common/HRInformation">
+                                HR Information
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                Help Desk
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/Common/FAQsView">
+                                FAQs
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                @*<li class="submenu">
+            <a href="javascript:void(0);"><i class="fa fa-cogs" style="font-size: 18px;"></i> <span>Settings</span> <span class="menu-arrow"></span></a>
+            <ul style="display: none;">
+                <li class="active"><a href="{{ route('roles.html') }}" class="active"><span>Roles</span></a></li>
+
+                <li class="{{ request()->routeIs('settings.html') ? 'active' : '' }}"><a href="{{ route('settings.html') }}" class="{{ request()->routeIs('settings.html') ? 'active' : '' }}"><span>Settings</span></a></li>
+            </ul>
+        </li>*@
+
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- /Sidebar -->
+<!-- Page Wrapper -->
+<div class="page-wrapper">
+    <div class="content container-fluid">
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="row">
+                <div class="col-sm-12">
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="#" onclick="DashBoardLink();">Dashboard </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- /Page Header -->
+
+        <div class="row" id="content">
+            <p>
+                <br/>
+            </p>
+            <div class="col-xl-12 col-sm-12 col-12">
+                @RenderBody()
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- /Page Wrapper -->
+
+<div class="row">
+    <div class="col-sm-12" id="footer">
+        <img src="~/assets/assets/img/default.png" height="60"/><br/>
+        <a href="#" onclick="DashBoardLink();">Judiciary Self Service</a>
+    </div>
+</div>
+
+</div>
+<!-- /Main Wrapper -->
+<!-- jQuery -->
+<script src="~/assets/assets/js/jquery-3.2.1.min.js"></script>
+
+<!-- Bootstrap Core JS -->
+<script src="~/assets/assets/js/popper.min.js"></script>
+<script src="~/assets/assets/js/bootstrap.min.js"></script>
+
+<!-- Slimscroll JS -->
+<script src="~/assets/assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+<!-- Custom JS -->
+<script src="~/assets/assets/js/script.js"></script>
+
+<!-- Data table JS -->
+<!-- <script src="{{ asset('//cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js') }}"> </script> -->
+<script src="//code.jquery.com/jquery-3.7.0.js"></script>
+<script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="//cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="//cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+<script src="//cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+
+</body>
+</html>

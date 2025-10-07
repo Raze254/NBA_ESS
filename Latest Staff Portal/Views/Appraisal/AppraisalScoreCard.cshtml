@@ -1,0 +1,682 @@
+﻿@model Latest_Staff_Portal.ViewModel.ANUPEAisalCardList
+@{
+    ViewBag.Title = "ANUPEAisalScoreCard";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+</style>
+<!--
+<link href="~/assets/css/Loader.css" rel="stylesheet" />
+<div class="loading" align="center" id="divLoader">
+    <br />
+    <img src="~/assets/images/ajax-loader.gif" alt="" />
+</div>
+-->
+<div style="background-color: black;">
+    <a href="#" onclick="AppRequisitionLink();" style="color:yellow"><<< Back To ANUPEAisal List</a>
+</div>
+<hr/>
+<div class="card">
+    <div class="card-title">ANUPEAisal Document(Document No : @Request.QueryString["AppDoc"])</div>
+    <div class="card-body">
+        <div id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="card mb-1 shadow-none">
+                <div class="card-header" id="headingOne" aria-controls="collapseOne" aria-expanded="true" data-toggle="collapse" href="#collapseOne">
+                    <h6 class="m-0">
+                        <span class="fa fa-arrow-up"></span>Section 1 : EMPLOYEE IDENTIFICATION INFORMATION
+                    </h6>
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+                        <div class="row" style="padding: 2px">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label style="font-size: 12px; font-weight: bold">ANUPEAisal Code</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <span class="label label-warning" id="DocNo">@Model.ApprisalCode</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label style="font-size: 12px; font-weight: bold">ANUPEAisal Date</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <span class="label label-warning">@Model.ANUPEAisalDate</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="padding: 2px">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label style="font-size: 12px; font-weight: bold">Staff Number</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <span class="label label-warning">@Model.StaffNo</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label style="font-size: 12px; font-weight: bold">Staff Name</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <span class="label label-warning">@Model.StaffName</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="padding: 2px">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label style="font-size: 12px; font-weight: bold">Job Group</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <span class="label label-warning" id="AppPeriod">@Model.Job_Group</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label style="font-size: 12px; font-weight: bold">Job Title</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <span class="label label-warning">@Model.Job_Title</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" style="padding: 2px">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label style="font-size: 12px; font-weight: bold">Implementing unit</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <span class="label label-warning" id="AppPeriod">@Model.RespCenter</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label style="font-size: 12px; font-weight: bold">ANUPEAisal Period</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <span class="label label-warning">@Model.ApprisalPeriod</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="padding: 2px">
+                            @*<div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label style="font-size: 12px; font-weight: bold">ANUPEAisal Stage</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <span class="label label-warning" id="AppPeriod">@Model.ANUPEAisalStage</span>
+                                </div>
+                            </div>
+                        </div>*@
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label style="font-size: 12px; font-weight: bold">Supervisor</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <span class="label label-warning" id="AppPeriod">@Model.Supervisor_Name</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label style="font-size: 12px; font-weight: bold">Corporate Strategic Plan</label>
+                                    <div class="col-md-12">
+                                        @Html.DropDownListFor(model => model.CSP, Model.ListOfCSP, "--select CSP--", new { @class = "form-control", id = "ddlCSP", @readonly = "readonly", style = "background-color:#dedebd" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label style="font-size: 12px; font-weight: bold">Performance Management Plan</label>
+
+                                    <div class="col-md-12">
+                                        @Html.DropDownListFor(model => model.PMMP, Model.ListOfPMMU, "--select Performance Management Plan--", new { @class = "form-control", id = "ddlPMMP", @readonly = "readonly", style = "background-color:#dedebd" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label style="font-size: 12px; font-weight: bold">Performance Task</label>
+
+                                    <div class="col-md-12">
+                                        @Html.DropDownListFor(model => model.PerformanceTas, Model.ListOfPerformanceTask, "--select Performance Task--", new { @class = "form-control", id = "ddlPerformanceTask", @readonly = "readonly", style = "background-color:#dedebd" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label style="font-size: 12px; font-weight: bold">Performance Contract</label>
+
+                                    <div class="col-md-12">
+                                        @Html.DropDownListFor(model => model.PerformanceContract, Model.ListOfPerformanceContract, "--select Performance Contract--", new { @class = "form-control", id = "ddlPerformanceContract", @readonly = "readonly", style = "background-color:#dedebd" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label style="font-size: 12px; font-weight: bold">Performance Score Card</label>
+
+                                    <div class="col-md-12">
+                                        @Html.DropDownListFor(model => model.ScoreCard, Model.ListOfScoreCard, "--select Score Card--", new { @class = "form-control", id = "ddlScoreCard", @readonly = "readonly", style = "background-color:#dedebd" })
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            @*<div class="row">
+            <div class="col-md-3">
+                <input type="button" value="Quarter 1 >>>" class="btn btn-primary form-control" id="btnAppQ1" onclick="Q1ANUPEAisal();" />
+                <hr />
+            </div>
+            <div class="col-md-3">
+                <input type="button" value="Quarter 2 >>>" class="btn btn-danger form-control" id="btnAppQ2" onclick="Q2ANUPEAisal();" />
+                <hr />
+            </div>
+            <div class="col-md-3">
+                <input type="button" value="Quarter 3 >>>" class="btn btn-primary form-control" id="btnAppQ3" onclick="Q3ANUPEAisal();" />
+                <hr />
+            </div>
+            <div class="col-md-3">
+                <input type="button" value="Quarter 4 >>>" class="btn btn-danger form-control" id="btnAppQ4" onclick="Q4ANUPEAisal();" />
+                <hr />
+            </div>
+        </div>*@
+
+            <hr style="border:1px solid black"/>
+            <b>
+                Performance Targets and Assessment
+            </b>
+            <hr/>
+            <div id="divPerformanceTargets"></div>
+            <hr style="border:1px solid black"/>
+
+            <b>
+                Values
+            </b>
+            <hr/>
+            <div id="divValues"></div>
+            <hr style="border:1px solid black"/>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <label id="labelF"></label>
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal Small Modal////////////////////////////*@
+.
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.shadow-none').on('shown.bs.collapse', function () {
+            $(this).find('.fa-arrow-down').removeClass('fa-arrow-down').addClass('fa-arrow-up');
+        }).on('hidden.bs.collapse', function () {
+            $(this).find('.fa-arrow-up').removeClass('fa-arrow-up').addClass('fa-arrow-down');
+        });
+        //LoadSectionData();
+        LoadPerformanceEvalution(`@Model.ApprisalCode`, `@Model.Status`);
+        $("#DivApprov").hide();
+        @*if (`@Model.Qt_Setup.Q1` == "False") {
+            $('#btnAppQ1').prop('disabled', true);
+        }
+        if (`@Model.Qt_Setup.Q2` == "False") {
+            $('#btnAppQ2').prop('disabled', true);
+        }
+        if (`@Model.Qt_Setup.Q3` == "False") {
+            $('#btnAppQ3').prop('disabled', true);
+        }
+        if (`@Model.Qt_Setup.Q4` == "False") {
+            $('#btnAppQ4').prop('disabled', true);
+        }*@
+    });
+    var Q1ANUPEAisal = function () {
+        var DocNo = $("#DocNo").html();
+        ShowProgress();
+        window.location = `@Url.Action("Quarter1_Card", "ANUPEAisal")?AppDoc=`+ DocNo;
+    };
+    var Q2ANUPEAisal = function () {
+        var DocNo = $("#DocNo").html();
+        ShowProgress();
+        window.location = `@Url.Action("Quarter2_Card", "ANUPEAisal")?AppDoc=`+ DocNo;
+    };
+    var Q3ANUPEAisal = function () {
+        var DocNo = $("#DocNo").html();
+        ShowProgress();
+        window.location = `@Url.Action("Quarter3_Card", "ANUPEAisal")?AppDoc=`+ DocNo;
+    };
+    var Q4ANUPEAisal = function () {
+        var DocNo = $("#DocNo").html();
+        ShowProgress();
+        window.location = `@Url.Action("Quarter4_Card", "ANUPEAisal")?AppDoc=`+ DocNo;
+    };
+    var ShowApprovalDiv = function () {
+        var StatementT = $("#ddlStatement").children("option:selected").val();
+        if (StatementT == "1") {
+            $("#DivApprov").show();
+            $("#divReason").hide();
+        }
+        else if (StatementT == "2") {
+            $("#DivApprov").show();
+            $("#divReason").show();
+        }
+        else {
+            $("#DivApprov").hide();
+        }
+    }
+    var LoadPerformanceEvalution = function (DocNo, Status) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ DocNo: DocNo, Status: Status }),
+            url: "/ANUPEAisal/PerfomanceTargets",
+            success: function (data) {
+                $("#divPerformanceTargets").html(data);
+                HideProgress();
+
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    };
+    var LoadSectionData = function () {
+        ShowProgress();
+        var DocNo = $("#DocNo").html();
+        LoadPerformanceIndicator(DocNo);
+        HideProgress();
+    };
+    var AddAKPI = function () {
+        $("#labelF").text("KPI Form");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/ANUPEAisal/KPIForm',
+            data: JSON.stringify({ DocNo: "", LnNo: "", Update:false }),
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var SaveKPIRecord = function () {
+        var DocNo = $("#DocNo").html();
+        var AggreedKPI = $("#txtAgrredKPI").val();
+        var KPIIndicator = $("#txtKPIIndicator").val();
+        var weight = $("#txtWeight").val();
+        var ddlUnit = $("#ddlUnit").children("option:selected").val();
+        var ddlQs = $("#ddlQs").children("option:selected").val();
+        var remarks = $("#txtComments").val();
+
+        if (DocNo == "") {
+            Swal.fire('Error', 'ANUPEAisal Doc No cannot be empty', 'error');
+            return;
+        }
+        else if (AggreedKPI == "") {
+            Swal.fire('Error', 'Enter KIP', 'error');
+            return;
+        }
+        else if (KPIIndicator == "") {
+            Swal.fire('Error', 'Enter KPI Indicator', 'error');
+            return;
+        }
+        else if (weight == "") {
+            Swal.fire('Error', 'Enter Weight', 'error');
+            return;
+        }
+        else if (ddlUnit == "") {
+            Swal.fire('Error', 'Choose Unit', 'error');
+            return;
+        }
+        else if (ddlQs == "") {
+            Swal.fire('Error', 'Choose the quarter to achieve', 'error');
+            return;
+        }
+        else {
+            var PerformanceIndicator = {};
+            PerformanceIndicator.ANUPEAisal_No = DocNo;
+            PerformanceIndicator.Agreed_Performance_Targets = AggreedKPI;
+            PerformanceIndicator.Key_Performance_Indicator = KPIIndicator;
+            PerformanceIndicator.Weight = weight;
+            PerformanceIndicator.Unit = ddlUnit;
+            PerformanceIndicator.TimeFrame = ddlQs;
+            PerformanceIndicator.ANUPEAisee_Comments = remarks;
+            ShowProgress();
+            $.ajax({
+                type: "post",
+                url: "/ANUPEAisal/SubmitKPIs",
+                data: JSON.stringify({ kpi: PerformanceIndicator }),
+                contentType: "application/json; charset = utf-8",
+                success: function (data) {
+                    if (data.success == true) {
+                        Swal.fire('Success', data.message, 'success');
+                        LoadPerformanceIndicator(DocNo);
+                        $("#myModal").modal("hide");
+                        HideProgress();
+                    }
+                    else {
+                        HideProgress();
+                        Swal.fire('error', data.message, 'error');
+                    }
+                },
+                error: function () {
+                    HideProgress();
+                    Swal.fire('error', data.message, 'error');
+                }
+            });
+        }
+    }
+    var EditKPIRecord = function (DocNo, LnNo) {
+        $("#labelF").text("Update KPI Form");
+        if (DocNo == "") {
+            Swal.fire('error', 'ANUPEAisal Document No cannot be empty', 'error');
+            return;
+        }
+        else if (LnNo == "") {
+            Swal.fire('error', 'Record Line Number cannot be Empty', 'error');
+            return;
+        }
+        else {
+            ShowProgress();
+            $.ajax({
+                type: "post",
+                url: `@Url.Action("KPIForm", "ANUPEAisal")`,
+                data: JSON.stringify({ DocNo: DocNo, LnNo: LnNo, Update: true }),
+                contentType: "application/json; charset = utf-8",
+                success: function (data) {
+                    $("#modalBody").html(data);
+                    HideProgress();
+                    $("#myModal").modal("show");
+                },
+                error: function () {
+                    HideProgress();
+                    Swal.fire('error', data.message, 'error');
+                }
+            });
+        }
+    }
+    var UpdateKPIRecord = function (LnNo) {
+        var DocNo = $("#DocNo").html();
+        var AggreedKPI = $("#txtAgrredKPI").val();
+        var KPIIndicator = $("#txtKPIIndicator").val();
+        var weight = $("#txtWeight").val();
+        var ddlUnit = $("#ddlUnit").children("option:selected").val();
+        var ddlQs = $("#ddlQs").children("option:selected").val();
+        var remarks = $("#txtComments").val();
+
+        if (DocNo == "") {
+            Swal.fire('Error', 'ANUPEAisal Doc No cannot be empty', 'error');
+            return;
+        }
+        else if (AggreedKPI == "") {
+            Swal.fire('Error', 'Enter KIP', 'error');
+            return;
+        }
+        else if (KPIIndicator == "") {
+            Swal.fire('Error', 'Enter KPI Indicator', 'error');
+            return;
+        }
+        else if (weight == "") {
+            Swal.fire('Error', 'Enter Weight', 'error');
+            return;
+        }
+        else if (ddlUnit == "") {
+            Swal.fire('Error', 'Choose Unit', 'error');
+            return;
+        }
+        else if (ddlQs == "") {
+            Swal.fire('Error', 'Choose the quarter to achieve', 'error');
+            return;
+        }
+        else {
+            var PerformanceIndicator = {};
+            PerformanceIndicator.ANUPEAisal_No = DocNo;
+            PerformanceIndicator.Agreed_Performance_Targets = AggreedKPI;
+            PerformanceIndicator.Key_Performance_Indicator = KPIIndicator;
+            PerformanceIndicator.Weight = weight;
+            PerformanceIndicator.Unit = ddlUnit;
+            PerformanceIndicator.TimeFrame = ddlQs;
+            PerformanceIndicator.ANUPEAisee_Comments = remarks;
+            PerformanceIndicator.Line_No = LnNo;
+            ShowProgress();
+            $.ajax({
+                type: "post",
+                url: `@Url.Action("UpdateKPIs", "ANUPEAisal")`,
+                data: JSON.stringify({ kpi: PerformanceIndicator }),
+                contentType: "application/json; charset = utf-8",
+                success: function (data) {
+                    if (data.success == true) {
+                        Swal.fire('Success', data.message, 'success');
+                        LoadPerformanceIndicator(DocNo);
+                        $("#myModal").modal("hide");
+                        HideProgress();
+                    }
+                    else {
+                        HideProgress();
+                        Swal.fire('error', data.message, 'error');
+                    }
+                },
+                error: function () {
+                    HideProgress();
+                    Swal.fire('error', data.message, 'error');
+                }
+            });
+        }
+    }
+    var DropKPIRecord = function (DocNo, LnNo) {
+        if (DocNo == "") {
+            Swal.fire('error', 'ANUPEAisal Document No cannot be empty', 'error');
+            return;
+        }
+        else if (LnNo == "") {
+            Swal.fire('error', 'Record Line Number cannot be Empty', 'error');
+            return;
+        }
+        else {
+            ShowProgress();
+            $.ajax({
+                type: "post",
+                url: `@Url.Action("DropKPIs", "ANUPEAisal")`,
+                data: JSON.stringify({ DocNo: DocNo, LnNo: LnNo }),
+                contentType: "application/json; charset = utf-8",
+                success: function (data) {
+                    if (data.success == true) {
+                        Swal.fire('Success', data.message, 'success');
+                        LoadPerformanceIndicator(DocNo);
+                        $("#myModal").modal("hide");
+                        HideProgress();
+                    }
+                    else {
+                        HideProgress();
+                        Swal.fire('error', data.message, 'error');
+                    }
+                },
+                error: function () {
+                    HideProgress();
+                    Swal.fire('error', data.message, 'error');
+                }
+            });
+        }
+    }
+    var LoadPerformanceIndicator = function (DocNo) {
+        $.ajax({
+            async: true,
+            type: "post",
+            contentType: "application/json; charset = utf-8",
+            data: JSON.stringify({ AppDoc: DocNo, Type: "S", Level: "A", EvalT: "" }),
+            url: `@Url.Action("LoadPerformanceIndicator", "ANUPEAisal")`,
+            success: function (data) {
+                $("#divPerfTarget").html(data);
+            },
+            error: function () {
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+    var MidYearReview = function () {
+        var DocNo = $("#DocNo").html();
+        ShowProgress();
+        window.location = `@Url.Action("MidYearEvaluationCard", "ANUPEAisal")?AppDoc=` + DocNo;
+    }
+    var EndYearReview = function () {
+        var DocNo = $("#DocNo").html();
+        ShowProgress();
+        window.location = `@Url.Action("EndYearEvaluationCard", "ANUPEAisal")?AppDoc=` + DocNo;
+    }
+    var AppRequisitionLink = function () {
+        ShowProgress();
+        window.location = `@Url.Action("MyANUPEAisalList", "ANUPEAisal")`;
+    };
+    var SendDocTo = function () {
+        var DocNo = $("#DocNo").html();
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo, SendTo: "1",Qt:"1" }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: `@Url.Action("SendDocumentTo", "ANUPEAisal")`,
+            success: function (data) {
+                if (data.success == true) {
+                    ShowProgress();
+                    window.location = `@Url.Action("MyANUPEAisalList", "ANUPEAisal")`;
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var SendForApproval = function () {
+        $.ajaxSetup({ cache: false });
+        Swal.fire({
+            title: 'Confirmation?',
+            text: "Are you sure you want to send this document for approval? Make sure that your supervisor has evaluated. If not. Send to supervisor first",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Send!'
+        }).then((result) => {
+            if (result.value) {
+                var DocNo = $("#DocNo").html();
+                var StatementT = $("#ddlStatement").children("option:selected").val();
+                var Reason = $("#txtReason").val();
+                if (StatementT == "") {
+                    Swal.fire('Warning', 'Choose whether you agree or disagree with the report', 'warning');
+                    return;
+                }
+                else if (StatementT == "2" && Reason == "") {
+                    Swal.fire('Warning', 'Give reason for Not agreeing with the report', 'warning');
+                    return;
+                }
+                else {
+                    ShowProgress();
+                    var period;
+                     if (`@Model.AllowMidYearReview` == true) {
+                        period = "1";
+                    }
+                    if (`@Model.AllowEndYearReview` == true) {
+                        period = "2";
+                    }
+                    $.ajax({
+                        async: true,
+                        type: "POST",
+                        datatype: "json",
+                        data: JSON.stringify({ DocNo: DocNo, Redirect: "Y", Agree: StatementT, Reason: Reason, period: period }),
+                        contentType: "application/json; charset = utf-8",
+                        processData: false,
+                        url: `@Url.Action("SendANUPEAisalAppForApproval", "ANUPEAisal")`,
+                        success: function (data) {
+                            if (data.success == true) {
+                                HideProgress();
+                                window.location = `@Url.Action("MyANUPEAisalList", "ANUPEAisal")`;
+                            }
+                            else {
+                                HideProgress();
+                                Swal.fire('Error', data.message, 'error');
+                            }
+                        },
+                        error: function (err) {
+                            HideProgress();
+                            Swal.fire('Warning', err, 'warning');
+                        }
+                    });
+                }
+            }
+            else {
+                Swal.fire('Cancelled', 'Document not send for approval', 'error');
+            }
+        });
+    };
+</script>

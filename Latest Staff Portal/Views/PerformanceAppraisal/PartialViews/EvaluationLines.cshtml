@@ -1,0 +1,128 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.StaffAttributesEvaluation>
+
+@{
+    ViewBag.Title = "EvaluationLines";
+    var Appraisal_Stage = (ViewBag.Appraisal_Stage as string ?? "").Trim();
+    var Status = (ViewBag.Status as string ?? "").Trim();
+
+    var LoggedInUserID = ViewBag.LoggedInUserID;
+    var SupervisorID = ViewBag.SupervisorID;
+
+}
+
+
+
+<div class="table-responsive">
+    <table id="datatable-buttons5" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead>
+            <tr>
+                <th>Performance Goals and Targets</th>
+                <th>Supervisor Rating</th>
+                <th>Supervisor Comments</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ var TotalSupervisorRating = 0; }
+
+            @foreach (var item in Model)
+            {
+                switch (item.Supervisor_Rating)
+                {
+                    case "Unacceptable":
+                        TotalSupervisorRating += 1;
+                        break;
+                    case "Improvement Needed":
+                        TotalSupervisorRating += 2;
+                        break;
+                    case "Meets Expectations":
+                        TotalSupervisorRating += 3;
+                        break;
+                    case "Exceeds Expectations":
+                        TotalSupervisorRating += 4;
+                        break;
+                    case "Outstanding":
+                        TotalSupervisorRating += 5;
+                        break;
+                    default:
+                        // Optional: handle unexpected ratings
+                        break;
+                }
+
+                <tr>
+                    @if (Appraisal_Stage == "End Year Evalauation" && Status == "Immediate Supervisor Reviewed" && LoggedInUserID == SupervisorID)
+                    {
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Perfomance_Goals_and_Targets)
+                        </td>
+
+                        <td>
+                            <select class="form-control" id="Supervisor_Rating2_@item.Line_No">
+                                <option value="" @(item.Supervisor_Rating == null ? "selected" : "") hidden>Select Option</option>
+                                <option value="1" @(item.Supervisor_Rating == "Unacceptable" ? "selected" : "")>Unacceptable (1)</option>
+                                <option value="2" @(item.Supervisor_Rating == "Improvement Needed" ? "selected" : "")>Improvement Needed (2)</option>
+                                <option value="3" @(item.Supervisor_Rating == "Meets Expectations" ? "selected" : "")>Meets Expectations (3)</option>
+                                <option value="4" @(item.Supervisor_Rating == "Exceeds Expectations" ? "selected" : "")>Exceeds Expectations (4)</option>
+                                <option value="5" @(item.Supervisor_Rating == "Outstanding" ? "selected" : "")>Outstanding (5)</option>
+                            </select>
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(modelItem => item.Supervisor_Comments, new { @class = "form-control", @id = "Supervisor_Comments2_" + item.Line_No })
+                        </td>
+                        <td class="mt-2">
+                            <button class="btn btn-primary action-buttons2" onclick="UpdateEvaluationLine(`@item.Appraisal_No`,`@item.Line_No`);">
+                                <i class="fas fa-pen" aria-hidden="true"></i> Update
+                            </button>
+                        </td>
+
+                    }
+                    else
+                    {
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Perfomance_Goals_and_Targets)
+                        </td>
+
+                        <td>
+                            @Html.TextBoxFor(modelItem => item.Supervisor_Rating, new { @class = "form-control", @id = "Supervisor_Rating2_" + item.Line_No, @readonly = "readonly" })
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(modelItem => item.Supervisor_Comments, new { @class = "form-control", @id = "Supervisor_Comments2_" + item.Line_No, @readonly = "readonly" })
+                        </td>
+                        <td class="mt-2">
+
+                            <button class="btn btn-secondary btn-sm" onclick="UpdateEvaluationLine(`@item.Appraisal_No`,`@item.Line_No`);" disabled>
+                                <i class="fas fa-pen" aria-hidden="true"></i> Update
+                            </button>
+
+                        </td>
+                    }
+
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr style="font-weight: bold; font-size: 18px;">
+                <td>Totals</td>
+                <td>@TotalSupervisorRating</td>
+                <td>N/A</td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+@*<div style="text-align:right; margin-top: 20px">
+        @if (Appraisal_Stage == "End Year Evalauation" && Status == "")
+        {
+            <button class="btn btn-primary action-buttons2" onclick="AddEvaluationLine();">
+                <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Line
+            </button>
+        }
+    </div>*@
+
+<script>
+    $("#datatable-buttons5").DataTable({
+        lengthChange: true,
+        lengthMenu: [10, 20, 25, 50, 100] // Same options for the second table
+    });
+</script>

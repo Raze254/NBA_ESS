@@ -1,0 +1,436 @@
+﻿@using Latest_Staff_Portal.ViewModel
+@model Latest_Staff_Portal.ViewModel.ImprestMemo
+
+@{
+    ViewBag.Title = "ImprestDocumentView";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    hr {
+        margin: 4px;
+    }
+
+    .BtnPadding {
+        padding: 7px;
+        font-size: 12px;
+    }
+</style>
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#" onclick="ImprestMemoLink();">Imprest Memos</a>
+                </li>
+                <li class="breadcrumb-item active">Imprest Memo Document Details(@Model.No)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<hr />
+<br />
+<div class="card">
+    <div class="card-body">
+        <div style="text-align:right; margin-bottom: 20px">
+
+            @{
+                var essRole = Session["ESSRoleSetup"] as ESSRoleSetup;
+
+                if (essRole.HQ_Accountant || essRole.Station_Accountant)
+                {
+                    <button style="background: #162f25; color:whitesmoke; border-radius:10px" class="BtnPadding" onclick="CreateImprestWarranties('@Model.No');">
+                        <i class="fa fa-plus-circle" aria-hidden="true"></i> Create Imprest Warrant(s)
+                    </button>
+                }
+            }
+            <button style="background: #162f25; color: whitesmoke; border-radius: 10px" class="BtnPadding" onclick="GenerateExpenseRequisitionReport('@Model.ExpenditureRequisitionCode');">
+                <i class="fa fa-print" aria-hidden="true"></i> Print Report
+            </button>
+            <button style="background: #315b7c; color: whitesmoke; border-radius: 10px;" class="BtnPadding" onclick="ViewDimensions()">
+                <i class="fas fa-project-diagram" aria-hidden="true"></i> Dimensions
+            </button>
+        </div>
+
+        <hr />
+
+        <div class="text-center mt-5"><h4>Imprest Memo Document (@Model.No)</h4></div>
+        <br />
+
+        <div class="row">
+            <div class="col-md-6 form-group">
+
+                @Html.Label("Document No", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.No, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+            </div>
+            <div class="col-md-6 form-group">
+                @Html.Label("Date Needed", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.Date, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 form-group">
+                @Html.Label("Warrant Voucher Type", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.WarrantVoucherType, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+            <div class="col-md-6 form-group">
+                @Html.Label("Warrant No", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.WarrantNo, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 form-group">
+                @Html.Label("Subject", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.Subject, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+            <div class="col-md-6 form-group">
+                @Html.Label("Memo Narration", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.Objective, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 form-group">
+                @Html.Label("Requestor", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.Requestor, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+            <div class="col-md-6 form-group">
+                @Html.Label("Requestor Name", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.RequestorName, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-6 form-group">
+                @Html.Label("Geographical Location", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.DepartmentName, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+            <div class="col-md-6 form-group">
+                @Html.Label("Administrative Unit", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.ProjectName, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-6 form-group">
+                @Html.Label("Workplan Code", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.WorkplanCode, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+            <div class="col-md-6 form-group">
+                @Html.Label("Activity Code", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.ActivityCode, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 form-group">
+                @Html.Label("Expenditure Requisition Code", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.ExpenditureRequisitionCode, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+            <div class="col-md-6">
+                <b>Status</b>
+                @Html.TextBoxFor(m => m.Status, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+            </div>
+        </div>
+
+
+        <div id="DivImpLines">
+            <hr style="border:1px solid black" />
+            <b>Imprest Memo Lines</b>
+            <hr />
+            <div id="divImpLines"></div>
+            <hr style="border:1px solid black" />
+            <div class="row">
+                <div class="col-md-12">
+                    <b>Attachments</b>
+                    <div id="divAttachDocs"></div>
+                </div>
+            </div>
+            <hr />
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Dimensions</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modal">
+                <iframe id="iframe" style="width:100%;height:450px"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal View Doc////////////////////////////*@
+<div class="modal fade" id="myModalAttachment" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Attachment</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalAttachmentBody" style="width:100%;height:450px">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@* //////////////////////////Modal///////////////////// *@
+<div id="myModalUnits" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Expense Requisition</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <iframe src="" frameborder="0" width="100%" height="600px"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script src="~/assets/js/pdfobject.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadSafariTeam(`@Model.No`,`@Model.Status`);
+        var status = `@Model.Status`;
+        var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+        if (Successmsg != "") {
+            Swal.fire('Success', Successmsg, 'success',true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+
+
+    });
+    var LoadSafariTeam = function (DocNo,Status) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ DocNo: DocNo, Status: Status }),
+            url: "/Imprest/SafariTeam",
+            success: function (data) {
+                $("#divImpLines").html(data);
+                HideProgress();
+                GetDocumentAttachments();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    };
+        	        	        	               var GetDocumentAttachments = function () {
+	var DocNo = `@Model.ExpenditureRequisitionCode`;
+	$.ajax({
+		async: true,
+		type: "POST",
+		datatype: "json",
+		contentType: "application/json; charset = utf-8",
+		processData: false,
+        data: JSON.stringify({ DocNo: DocNo}),
+        url: "/Common/EdmsDocumentAttachmentList",
+		success: function (data) {
+			$("#divAttachDocs").html(data);
+		},
+		error: function () {
+			Swal.fire("There is some problem to process your request. Please try after some time");
+		}
+	});
+};
+
+var CreateImprestWarranties = function (docNo) {
+    ShowProgress();
+
+    $.ajax({
+        async: true,
+        type: "POST",
+        dataType: "json",
+        data: JSON.stringify({ DocNo: docNo }),
+        contentType: "application/json; charset=utf-8",
+        processData: false,
+        url: '/Imprest/CreateWarranties',
+        success: function (data) {
+            HideProgress();
+            if (data.success === true) {
+                Swal.fire({
+                    title: 'Success',
+                    text: "Imprest Warranty created",
+                    icon: 'success'
+                }).then(function () {
+                    window.location = "/Imprest/ImprestMemo";
+                });
+
+            } else {
+                Swal.fire('Error', data.message, 'error');
+                HideProgress();
+            }
+        },
+
+        error: function (err) {
+            HideProgress();
+            let errorMessage = err.responseText;
+            try {
+                const errorData = JSON.parse(err.responseText);
+                errorMessage = errorData.message || errorMessage;
+            } catch (e) {
+            }
+            Swal.fire('Warning', errorMessage, 'warning');
+        }
+    });
+};
+    var ViewApprovalTrail = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/DocumentApprovalTrail',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var GenerateExpenseRequisitionReport = function (docNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ documentNumber: docNo }),
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            url: '/ExpenseRequisition/GenerateExpenseRequisitionReport',
+            success: function (data) {
+                if (data.success) {
+                    $('iframe').attr('src', "data:application/pdf;base64," + data.message);
+                    $("#myModalUnits").modal("show");
+                    HideProgress();
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                    HideProgress();
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+            var ViewDimensions = function () {
+    var dimension = '@Model.DimensionSetId';
+    $.ajaxSetup({ cache: false });
+    ShowProgress();
+    $.ajax({
+        cache: false,
+        url: '/Common/Dimensions',
+        type: "POST",
+        datatype: "json",
+        cache: false,
+        data: JSON.stringify({ dimensionSetId: dimension }),
+        contentType: "application/json; charset = utf-8",
+        processData: false,
+        success: function (data) {
+            if (data) {
+                $('#modal').html(data);
+                $("#myModal").modal("show");
+                HideProgress();
+            }
+            else {
+                HideProgress();
+                Swal.fire('Warning', data.message, 'warning');
+            }
+        },
+        error: function (err) {
+            HideProgress();
+            Swal.fire('Warning', err, 'warning');
+        }
+    });
+};
+    var ViewAttachment = function (moduleCheck, docNo, docId) {
+        $.ajaxSetup({ cache: false });
+        ShowProgress();
+
+        var viewer = $("#modalAttachmentBody");
+        viewer.empty();
+
+        $.ajax({
+            url: '/Common/GetEdmsDocuments',
+            type: "GET",
+            datatype: "json",
+            cache: false,
+            contentType: "application/json; charset=utf-8",
+            data: {
+                module: moduleCheck,
+                documentNo: docNo,
+                documentType: "Expenditure Requisition",
+                documentId: docId
+            },
+            success: function (data) {
+                if (data.success) {
+                    if (data.base64) {
+                        var mimeType = data.mimeType || 'application/pdf';
+
+                        if (mimeType.startsWith('application/pdf')) {
+                            viewer.html('<iframe src="data:' + mimeType + ';base64,' + data.base64 + '" style="width:100%; height:500px;" frameborder="0"></iframe>');
+                        } else if (mimeType.startsWith('image/')) {
+                            viewer.html('<img src="data:' + mimeType + ';base64,' + data.base64 + '" style="width:100%;"/>');
+                        } else {
+                            var blob = b64toBlob(data.base64, mimeType);
+                            var url = window.URL.createObjectURL(blob);
+                            window.open(url, '_blank');
+                        }
+                        $("#myModalAttachment").modal("show");
+                    } else {
+                        window.location = '/Common/AttachmentDownload?fileName=' + data.message;
+                        Swal.fire('Success', 'Document Downloaded successfully', 'success');
+                    }
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+                HideProgress();
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Error', err.responseText || 'An error occurred', 'error');
+            }
+        });
+    };
+</script>

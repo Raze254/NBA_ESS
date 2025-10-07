@@ -1,0 +1,98 @@
+﻿@model Latest_Staff_Portal.ViewModel.PurchaseRequisitions
+
+@{
+    ViewBag.Title = "NewPurchaseRequisition";
+}
+
+
+
+<div class="row">
+
+
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Purchase Requisition Type", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.PRN_Type, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.PRN_Type, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    @* <div class="form-group">
+            @Html.LabelFor(model => model.Document_Date, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Document_Date, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Document_Date, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Location Code", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Location_Code, new { htmlAttributes = new { @class = "form-control", @id= "Location_Code" } })
+            @Html.ValidationMessageFor(model => model.Location_Code, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Requisition Product Group", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Requisition_Product_Group, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Requisition_Product_Group, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Region", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Shortcut_Dimension_1_Code, new { htmlAttributes = new { @class = "form-control", @id= "Shortcut_Dimension_1_Code" } })
+            @Html.ValidationMessageFor(model => model.Shortcut_Dimension_1_Code, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Department", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Shortcut_Dimension_2_Code, new { htmlAttributes = new { @class = "form-control", @id= "Shortcut_Dimension_2_Code" } })
+            @Html.ValidationMessageFor(model => model.Shortcut_Dimension_2_Code, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Procurement_Plan_ID, htmlAttributes: new { @class = "control-label col-md-2" })
+            <input class="form-control" type="text"  id="Procurement_Plan_ID" />
+
+        </div>
+    </div>
+
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.PP_Planning_Category, htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.DropDownListFor(model => model.PP_Planning_Category, Model.ListOfPP_Planning_Category, "Select option", new { @class = "form-control", @id = "PP_Planning_Category" })
+            @Html.ValidationMessageFor(model => model.PP_Planning_Category, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Budget", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.DropDownListFor(model => model.Job, Model.ListOfBudgets, "Select Option", new { @class = "form-control", @id="Job" })
+            @Html.ValidationMessageFor(model => model.Job, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+</div>
+
+<hr style="border:1px solid black" />
+<div align="center">
+    <input type="button" class="btn btn-primary action-buttons" value="Create" onclick="SubmitPurchaseRequisition();" />
+</div>
+

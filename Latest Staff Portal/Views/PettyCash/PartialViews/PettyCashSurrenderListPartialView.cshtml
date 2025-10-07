@@ -1,0 +1,90 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.PettyCashSurrenders>
+
+@{
+    ViewBag.Title = "PettyCashSurrenderListPartialView";
+}
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th>Action</th>
+                <th>No</th>
+                <th>Date</th>
+                @*  <th>Pay Mode</th>
+        <th>Cheque No</th>
+        <th>Cheque Date</th>*@
+                <th>Paying Bank Account</th>
+                <th>Payee</th>
+                <th>Total Amount LCY</th>
+                @* <th>Amount Spent</th>
+                 <th>Remaining Petty Cash Amount</th>
+        <th>Currency Code</th>*@
+                @*  <th>Created By</th>*@
+                <th>Status</th>
+
+            </tr>
+        </thead>
+        <tbody>
+
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <input type="button" onclick="ViewDoc('@item.No');" class="btn btn-primary btn-sm action-buttons3" value="Select" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    @* <td>
+            @Html.DisplayFor(modelItem => item.Pay_Mode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Cheque_No)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Cheque_Date)
+        </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Paying_Bank_Account)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Payee)
+                    </td>
+                    <td class="text-center">
+                        @Html.DisplayFor(modelItem => item.Total_Amount_LCY)
+                    </td>
+                    @* <td>
+                        @Html.DisplayFor(modelItem => item.Actual_Petty_Cash_Amount_Spent)
+                    </td>
+                     <td>
+            @Html.DisplayFor(modelItem => item.Remaining_Petty_Cash_Amount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Currency_Code)
+        </td>*@
+                    @* <td>
+            @Html.DisplayFor(modelItem => item.Created_By)
+        </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#datatable").DataTable(), $("#datatable-buttons").DataTable({
+            lengthChange: !1
+        }).buttons().container().appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)")
+    });
+</script>
+

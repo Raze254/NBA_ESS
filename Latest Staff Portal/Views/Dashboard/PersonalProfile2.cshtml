@@ -1,0 +1,798 @@
+﻿@using Latest_Staff_Portal.Models
+@model Latest_Staff_Portal.ViewModel.EmployeeView
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+    var imgSrc = "";
+    var CustBal = "";
+    if (Session["Username"] == null)
+    {
+        Html.Action("Login", "Login");
+    }
+    else
+    {
+        
+        if (Session["ImgProfile"] == null)
+        {
+            
+        }
+        else
+        {
+            imgSrc = Session["ImgProfile"].ToString();
+        }
+    }
+}
+<style>
+    .mb-1, .card-header {
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        border-bottom-left-radius: 0px;
+        border-bottom-right-radius: 0px;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+
+    .content-label {
+        display: inline-block;
+        margin-left: 5px;
+        min-width: 100px;
+    }
+
+        .content-label label {
+            font-size: 12px;
+            font-weight: bold
+        }
+
+    .content-data {
+        display: inline-block;
+    }
+
+        .content-data span {
+            font-size: 12px;
+        }
+</style>
+<!-- ============================================================== -->
+<!-- Start right Content here -->
+<!-- ============================================================== -->
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <h3 class="page-title mb-3">
+                <b>My Profile</b>
+            </h3>
+            <hr/>
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="Dashboard/Dashboard">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active">Profile</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="row" style="margin: 2px;outline: solid 1px #ccc;border-radius: 10px; padding: 10px">
+<div class="col-md-4 mb-3 mt-1">
+    <div class="row">
+        <div class="col-md-12" style="text-align: center; padding-top: 30px">
+            <a data-toggle="modal" data-target="#myModalProfile" title="Update Profile Pic" href="#">
+                <div id="divProfPic"></div>
+            </a>
+
+        </div>
+        <div class="col-md-12">
+            <div style="padding: 5px;">
+                <hr/>
+                <div class="mb-3; p-3">
+                    <b>Staff No :</b> @Model.No<br/>
+                </div>
+                <div class="p-3">
+                    <b>Name : </b> @Model.FullName
+                </div>
+                <hr/>
+                <div class="text-center;">
+                    <button class="btn btn-info btn-sm w-100" onclick="ChangePasswordLink()">Change Password</button>
+                    <button class="btn btn-warning btn-sm w-100" data-toggle="modal" data-target="#myModalProfile" title="Update Profile Pic">Update Profile Pic</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-8" style=" background: none">
+<div class="">
+<div id="accordion" role="tablist" aria-multiselectable="true">
+<div class="card mb-1 shadow-none">
+    <div class="card-header" id="headingOne" aria-controls="collapseOne" aria-expanded="true" data-toggle="collapse" href="#collapseOne">
+        <h6 class="m-0">
+            <span class="fa fa-arrow-up" style="color: #162f25"> Personal Information</span>
+
+        </h6>
+    </div>
+    <div id="collapseOne" class="panel-collapse collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+        <div class="card-body">
+            <div class="row" style="padding: 10px">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="content-label">
+                            <label>ID Number :</label>
+                        </div>
+                        <div class="content-data">
+                            <span class="label label-warning">@Model.IDNumber</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="content-label">
+                            <label>Gender :</label>
+                        </div>
+                        <div class="content-data">
+                            <span class="label label-warning">@Model.Gender</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="content-label">
+                            <label>Marital Status :</label>
+                        </div>
+                        <div class="content-data">
+                            <span class="label label-warning">@Model.MaritalStatus</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="content-label">
+                            <label>Nationality :</label>
+                        </div>
+                        <div class="content-data">
+                            <span class="label label-warning">@Model.CountryRegionCode</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="content-label">
+                            <label>County :</label>
+                        </div>
+                        <div class="content-data">
+                            <span class="label label-warning">@Model.CountyofOriginName</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="content-label">
+                            <label>DOB :</label>
+                        </div>
+                        <div class="content-data">
+                            <span class="label label-warning">@Model.DateOfBirth</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card mb-1 shadow-none">
+    <div class="card-header" id="headingTwo" aria-expanded="false" aria-controls="collapseTwo" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+        <h6 class="m-0">
+            <span class="fa fa-arrow-down" style="color: #162f25"> Contact Details</span>
+        </h6>
+    </div>
+    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+         data-parent="#accordion">
+        <div class="card-body">
+            <div class="row" style="padding: 2px">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="content-label">
+                            <label>Address 1 :</label>
+                        </div>
+                        <div class="content-data">
+                            <span class="label label-warning">@Model.Address</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="content-label">
+                            <label>Address 2 :</label>
+                        </div>
+                        <div class="content-data">
+                            <span class="label label-warning">@Model.Address2</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="content-label">
+                            <label>Postal Code :</label>
+                        </div>
+                        <div class="content-data">
+                            <span class="label label-warning">@Model.PostCode</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="content-label">
+                            <label>Nationality :</label>
+                        </div>
+                        <div class="content-data">
+                            <span class="label label-warning">@Model.CountryRegionCode</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="content-label">
+                            <label>Home Telephone :</label>
+                        </div>
+                        <div class="content-data">
+                            <span class="label label-warning">@Model.PhoneNo</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="content-label">
+                            <label>Mobile No. :</label>
+                        </div>
+                        <div class="content-data">
+                            <span class="label label-warning">@Model.PhoneNo</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="content-label">
+                            <label>Work Tel. :</label>
+                        </div>
+                        <div class="content-data">
+                            <span class="label label-warning">@Model.MobilePhoneNo</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="content-label">
+                            <label>Company Email :</label>
+                        </div>
+                        <div class="content-data">
+                            <span class="label label-warning">@Model.CompanyEmail</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="content-label">
+                            <label>Personal Email :</label>
+                        </div>
+                        <div class="content-data">
+                            <span class="label label-warning">@Model.Email</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card mb-1 shadow-none">
+    <div class="card-header" id="headingThree" aria-expanded="false" aria-controls="collapseJobDetails" data-toggle="collapse" href="#collapseJobDetails">
+        <h6 class="m-0">
+            <span class="fa fa-arrow-down" style="color: #162f25"> Job Details</span>
+        </h6>
+    </div>
+    <div id="collapseJobDetails" class="collapse"
+         aria-labelledby="headingThree" data-parent="#accordion">
+        <div class="card-body">
+            <div class="row" style="padding: 2px">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="content-label">
+                            <label>Joined Date :</label>
+                        </div>
+                        <div class="content-data">
+                            <span class="label label-warning">@Model.EmploymentDate</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="content-label">
+                            <label>Probation Date :</label>
+                        </div>
+                        <div class="content-data">
+                            <span class="label label-warning">@Model.EndOfProbationDate</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="content-label">
+                            <label>Job Title :</label>
+                        </div>
+                        <div class="content-data">
+                            <span class="label label-warning">@Model.JobTitle2</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="content-label">
+                            <label>Empl. Status :</label>
+                        </div>
+                        <div class="content-data">
+                            <span class="label label-warning">@Model.Status</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="content-label">
+                            <label>Department :</label>
+                        </div>
+                        <div class="content-data">
+                            <span class="label label-warning">@Model.DepartmentName</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="content-label">
+                            <label>Station :</label>
+                        </div>
+                        <div class="content-data">
+                            <span class="label label-warning">@Model.DirectorateCode</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-1 shadow-none">
+    <div class="card-header" id="dependants" aria-expanded="false" aria-controls="collapseDependants" data-toggle="collapse" href="#collapseDependants">
+        <h6 class="m-0">
+            <span class="fa fa-arrow-down" style="color: #162f25"> Dependants</span>
+        </h6>
+    </div>
+    <div id="collapseDependants" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+        <div class="card-body">
+            @foreach (var dependant in Model.EmployeeDependants)
+            {
+                <div class="row" style="padding: 2px">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="content-label">
+                                <label>Name: </label>
+                            </div>
+                            <div class="content-data">
+                                <span class="label label-warning">@dependant.SurName @dependant.OtherNames</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="content-label">
+                                <label>Relationship :</label>
+                            </div>
+                            <div class="content-data">
+                                <span class="label label-warning">@dependant.Relationship</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="content-label">
+                                <label>LineNo :</label>
+                            </div>
+                            <div class="content-data">
+                                <span class="label label-warning">@dependant.LineNo</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="content-label">
+                                <label>Gender :</label>
+                            </div>
+                            <div class="content-data">
+                                <span class="label label-warning">@dependant.Gender</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="content-label">
+                                <label>MemberID :</label>
+                            </div>
+                            <div class="content-data">
+                                <span class="label label-warning">@dependant.MemberID</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="content-label">
+                                <label>DOB :</label>
+                            </div>
+                            <div class="content-data">
+                                <span class="label label-warning">@dependant.DateOfBirth</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="content-label">
+                                <label>Card No :</label>
+                            </div>
+                            <div class="content-data">
+                                <span class="label label-warning">@dependant.CardNo</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="card mb-1 shadow-none">
+    <div class="card-header" id="Qualifications" aria-expanded="false" aria-controls="collapseQualifications" data-toggle="collapse" href="#collapseQualifications">
+        <h6 class="m-0">
+            <span class="fa fa-arrow-down" style="color: #162f25"> Qualifications</span>
+        </h6>
+    </div>
+    <div id="collapseQualifications" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+        <div class="card-body">
+            @foreach (var qualification in Model.EmployeeQualifications)
+            {
+                <div class="row" style="padding: 2px">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="content-label">
+                                <label>Qualification Category: </label>
+                            </div>
+                            <div class="content-data">
+                                <span class="label label-warning">@qualification.QualificationCategory </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="content-label">
+                                <label>Description :</label>
+                            </div>
+                            <div class="content-data">
+                                <span class="label label-warning">@qualification.Description</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="content-label">
+                                <label>Institution Company :</label>
+                            </div>
+                            <div class="content-data">
+                                <span class="label label-warning">@qualification.InstitutionCompany</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="content-label">
+                                <label>Specialization :</label>
+                            </div>
+                            <div class="content-data">
+                                <span class="label label-warning">@qualification.Specialization</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="content-label">
+                                <label>Course_Grade :</label>
+                            </div>
+                            <div class="content-data">
+                                <span class="label label-warning">@qualification.CourseGrade</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="content-label">
+                                <label>From Date :</label>
+                            </div>
+                            <div class="content-data">
+                                @if (qualification.FromDate != Convert.ToDateTime("01/01/0001 00:00:00"))
+                                {
+                                    <span class="label label-warning">@qualification.FromDate</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="content-label">
+                                <label>To Date :</label>
+                            </div>
+                            <div class="content-data">
+                                @if (qualification.ToDate != Convert.ToDateTime("01/01/0001 00:00:00"))
+                                {
+                                    <span class="label label-warning">@qualification.ToDate</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="card mb-1 shadow-none">
+    <div class="card-header" id="headingFour" aria-expanded="false" aria-controls="collapseFour" data-toggle="collapse" href="#collapseFour">
+        <h6 class="m-0">
+            <span class="fa fa-arrow-down" style="color: #162f25"> Payroll Details</span>
+        </h6>
+    </div>
+    <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
+        <div class="card-body">
+            <div class="row" style="padding: 2px">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="content-label">
+                            <label>Bank Name :</label>
+                        </div>
+                        <div class="content-data">
+                            <span class="label label-warning">@Model.BankName</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="content-label">
+                            <label>Branch :</label>
+                        </div>
+                        <div class="content-data">
+                            <span class="label label-warning">@Model.BankBranchName</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="content-label">
+                            <label>Acc. Number :</label>
+                        </div>
+                        <div class="content-data">
+                            <span class="label label-warning">@Model.BankAccountNumber</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="content-label">
+                            <label>PIN Number :</label>
+                        </div>
+                        <div class="content-data">
+                            <span class="label label-warning">@Model.PIN</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="content-label">
+                            <label>NSSF Number :</label>
+                        </div>
+                        <div class="content-data">
+                            <span class="label label-warning">@Model.SocialSecurityNo</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="content-label">
+                            <label>NHIF Number :</label>
+                        </div>
+                        <div class="content-data">
+                            <span class="label label-warning">@Model.NHIFNo</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="content-label">
+                            <label>Imprest Balance :</label>
+                        </div>
+                        <div class="content-data">
+                            <span class="label label-warning">@CustBal</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- container-fluid -->
+<!-- end main content-->
+<div class="modal fade" id="myModalProfile" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Profile Picture</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="file" class="form-control-file" id="fileAttachment"/>
+                <hr/>
+                <input type="button" class="btn btn-primary BtnPadding" value="Upload Profile Picture" onclick="UploadProfilePic();"/>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*Change password modal*@
+<div class="modal fade" id="changePwdModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title">Change Password</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="password" class="lblClass">New Password</label>
+                            <input type="password" class="form-control" id="NewPassword" placeholder="Password" required="" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="col-md-12"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="userpassword" class="lblClass">Confirm Password</label>
+                            <input type="password" class="form-control" id="confirmPass" placeholder="Confirm password" required="" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="col-md-6"></div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/SiteJS/DashboardJS.js"></script>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadProfilePic();
+    });
+    function LoadProfilePic() {
+        ShowProgress();
+        $.ajax({
+            url: "/Dashboard/ProfilePicture",
+            type: "POST",
+            datatype: "json",
+            cache: false,
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ gender:`@Model.Gender` }),
+
+            async: true,
+            type: "GET",
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+
+            success: function (data) {
+                $("#divProfPic").html(data);
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire('Warning', 'There is some problem to process your request. Please try after some time', 'warning');
+            }
+        });
+    }
+    var UploadProfilePic = function () {
+        ShowProgress();
+        var filename; var base64String; var filetype;
+        var files = document.getElementById('fileAttachment').files;
+        if (files.length) {
+            var file = files[0];
+            var blob = file.slice();
+            filetype = file.type;
+            filename = file.name;
+            var reader = new FileReader();
+            reader.onloadend = function (evt) {
+                if (evt.target.readyState == FileReader.DONE) { // DONE == 2
+                    var cont = evt.target.result
+                    base64String = getB64Str(cont);
+                    //Send the JSON array to Controller using AJAX.
+                    $.ajax({
+                        type: "POST",
+                        url: "/Dashboard/SubmitProfilePicAttachment",
+                        //data: data,
+                        data: JSON.stringify({ base64Upload: base64String, fileName: filename, Extn: filetype }),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.success) {
+                                HideProgress();
+                                LoadProfilePic();
+                                $("#myModalProfile").modal("hide");
+                            }
+                            else {
+                                Swal.fire('Warning', data.message, 'warning');
+                                HideProgress();
+                            }
+                        },
+                        error: function (err) {
+                            HideProgress();
+                            Swal.fire('Warning', err, 'warning');
+                        }
+                    });
+                }
+            };
+            reader.readAsArrayBuffer(blob);
+        }
+    };
+    function getB64Str(buffer) {
+        var binary = '';
+        var bytes = new Uint8Array(buffer);
+        var len = bytes.byteLength;
+        for (var i = 0; i < len; i++) {
+            binary += String.fromCharCode(bytes[i]);
+        }
+        return window.btoa(binary);
+    }
+</script>

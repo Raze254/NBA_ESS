@@ -1,0 +1,74 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.OtherDuties>
+
+@{
+    ViewBag.Title = "OtherDutiesLines";
+
+    var Appraisal_Stage = (ViewBag.Appraisal_Stage as string ?? "").Trim();
+    var Status = (ViewBag.Status as string ?? "").Trim();
+
+    var LoggedInUserID = ViewBag.LoggedInUserID;
+    var SupervisorID = ViewBag.SupervisorID;
+}
+
+
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead>
+            <tr>
+                @*<th>Appraisal No</th>
+                <th>Appraisal Period</th>
+                <th>Employee No</th>
+                <th>Line No</th>*@
+                <th>Duties </th>
+                <th>Action</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    @*<td>
+                        @Html.DisplayFor(modelItem => item.Appraisal_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Appraisal_Period)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Employee_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Line_No)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Duties)
+                    </td>
+                    <td style="text-end">
+                        <button class="btn btn-danger btn-sm" onclick="DeleteOtherDuty(`@item.Appraisal_No`, `@item.Line_No`)">
+                            <i class="fa fa-plus-circle" aria-hidden="true"></i> Delete
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<div style="text-align:right; margin-top: 20px">
+    @if (Appraisal_Stage == "Target Setting")
+    {
+        <button class="btn btn-primary action-buttons2" onclick="AddOtherDuty();">
+            <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Line
+        </button>
+    }
+
+</div>
+
+<script>
+    $("#datatable-buttons3").DataTable({
+        lengthChange: true,
+        lengthMenu: [10, 15, 20, 25, 50, 100] // Same options for the second table
+    });
+</script>

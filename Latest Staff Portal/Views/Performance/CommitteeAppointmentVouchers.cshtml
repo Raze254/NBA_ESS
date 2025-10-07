@@ -1,0 +1,259 @@
+﻿
+@{
+    ViewBag.Title = "CommitteeAppointmentVouchers";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#" onclick="DSPOPLink();">DSPOP</a></li>
+                <li class="breadcrumb-item active">Committee Appointment Vouchers</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <div style="text-align:right">
+            <button class="action-buttons" onclick="NewAppointmentVoucher();">
+                <i class="fa fa-plus-circle" aria-hidden="true"></i> New Appointment Voucher
+            </button>
+        </div>
+        <hr />
+        <div id="divCommitteeAppointmentVouchersList"></div>
+    </div>
+</div>
+
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">New Committee Appointment Voucher</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*//////////////////////Modal links////////////////////////////*@
+<div class="modal fade" id="myModalLinks" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Actions</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodyLinks">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadCommitteeAppointmentVouchers();
+        var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+        if (Successmsg != "") {
+            Swal.fire('Success', Successmsg, 'success', true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+
+
+
+        $('#myModal').on('shown.bs.modal', function () {
+            setTimeout(function () {
+                $('.select2').select2({
+                    dropdownParent: $('#myModal'),
+
+                });
+            }, 200);
+        });
+
+
+       
+
+
+
+
+    });
+    var LoadCommitteeAppointmentVouchers = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: "/Performance/CommitteeAppointmentVouchersList",
+            success: function (data) {
+                $("#divCommitteeAppointmentVouchersList").empty().html(data);
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+                console.error("AJAX error:", textStatus, errorThrown);
+            }
+        });
+    }
+
+
+    var ViewDoc = function (Document_No) {
+        ShowProgress();
+        var form = $('<form>', {
+            action: '/Performance/CommitteeAppointmentVouchersDocumentView',
+            method: 'POST'
+        }).append($('<input>', {
+            type: 'hidden',
+            name: 'Document_No',
+            value: Document_No
+        }));
+        form.appendTo('body').submit();
+    };
+
+
+
+
+    var NewAppointmentVoucher = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET", // Use GET as you're not sending data to the server
+            url: "/Performance/NewAppointmentVoucher", // Ensure the correct URL
+            dataType: "html", // Expecting an HTML response
+            success: function (data) {
+                $("#modalBody").html(data); // Inject the returned partial view into the modal body
+                HideProgress();
+                $("#myModal").modal("show"); // Show the modal
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', 'An error occurred while loading the PMMU form. Please try again.', 'warning');
+            }
+        });
+    };
+
+    function SubmitCommitteeAppointmentVouchers() {
+        var isValid = true;
+
+        var Additional_Brief = $("#Additional_Brief").val();
+        if (!Additional_Brief) {
+            Swal.fire('Warning', 'Enter Additional Brief', 'warning');
+            isValid = false;
+        }
+
+        var Venue = $("#Venue").val();
+        if (!Venue) {
+            Swal.fire('Warning', 'Enter Venue', 'warning');
+            isValid = false;
+        }
+
+        var Tenure_End_Date = $("#Tenure_End_Date").val();
+        if (!Tenure_End_Date) {
+            Swal.fire('Warning', 'Select Tenure End Date', 'warning');
+            isValid = false;
+        }
+
+        var Appointment_Effective_Date = $("#Appointment_Effective_Date").val();
+        if (!Appointment_Effective_Date) {
+            Swal.fire('Warning', 'Select Appointment Effective Date.', 'warning');
+            isValid = false;
+        }
+
+        var Description = $("#Description").val();
+        if (!Description) {
+            Swal.fire('Warning', 'Enter Description', 'warning');
+            isValid = false;
+        }
+
+        var Document_Date = $("#Document_Date").val();
+        if (!Document_Date) {
+            Swal.fire('Warning', 'Select  Document Date.', 'warning');
+            isValid = false;
+        }
+
+        var Document_Type = $("#Document_Type").val();
+        if (!Document_Type) {
+            Swal.fire('Warning', 'Select Document Type.', 'warning');
+            isValid = false;
+        }
+
+        if (!isValid) {
+            return;
+        }
+
+        var committeeAppointmentVouchers = {
+            Document_Type: Document_Type,
+            Document_Date: Document_Date,
+            Description: Description,
+            Appointment_Effective_Date: Appointment_Effective_Date,
+            Tenure_End_Date: Tenure_End_Date,
+            Venue: Venue,
+            Additional_Brief: Additional_Brief
+        };
+
+        ShowProgress();
+
+        $.ajax({
+            type: "POST",
+            url: "/Performance/SubmitCommitteeAppointmentVouchers",
+            data: JSON.stringify(committeeAppointmentVouchers),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                HideProgress();
+                if (data.success) {
+                    ViewDoc(data.message);
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseText, 'warning');
+            }
+        });
+    }
+
+
+
+</script>
+
+
+

@@ -1,0 +1,650 @@
+﻿@model Latest_Staff_Portal.ViewModel.CommitteeAppointmentVouchers
+
+@{
+    ViewBag.Title = "";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    hr {
+        margin: 4px;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#" onclick="AppointmentVouchersLink();">Committee Appointment Vouchers</a></li>
+                <li class="breadcrumb-item active">Committee Appointment Vouchers Document (@Model.Document_No)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<hr />
+<br />
+
+
+
+<div class="card">
+   
+    <div class="card-body">
+
+
+        <div style="text-align:right; margin-bottom: 20px">
+            <button style="background: #162f25; color: whitesmoke; border-radius: 10px" onclick="GenerateAppointmentCommitteeReport('@Model.Document_No');">
+                <i class="fa fa-print" aria-hidden="true"></i> Print Report
+            </button>
+
+
+            <button style="background: #162f25; color: whitesmoke; border-radius: 10px" onclick="SendForApproval('@Model.Document_No');">
+                <i class="fa fa-history" aria-hidden="true"></i> Send For Approval
+            </button>
+
+        </div>  
+        <hr />
+        <div class="text-center mt-5"><h4>Committee Appointment Vouchers Document (@Model.Document_No)</h4></div>
+        <br />  
+
+
+        <div class="row">
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Document_No", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Document_No, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.Document_No, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Document_Type", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Document_Type, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;", @Id = "Document_Type11" } })
+                    @Html.ValidationMessageFor(model => model.Document_Type, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Document_Date", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Document_Date, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.Document_Date, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Appointment_Effective_Date", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Appointment_Effective_Date, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.Appointment_Effective_Date, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Tenure_End_Date", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Tenure_End_Date, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.Tenure_End_Date, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Appointing_Authority", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Appointing_Authority, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.Appointing_Authority, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Raised_By", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Raised_By, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.Raised_By, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Staff_ID", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Staff_ID, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.Staff_ID, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Name", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Additional_Brief", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Additional_Brief, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.Additional_Brief, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Venue", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Venue, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.Venue, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Approval_Status", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Approval_Status, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.Approval_Status, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <hr />
+    <div align="center" id="DivUpdateButton">
+        <input type="button" class="btn btn-primary waves-effect waves-light" value="Update Header" onclick="UpdateCommitteeHeader();" />
+    </div>
+    <div id="DivPurchaseRegLines" style=" margin: 10px 20px">
+        <hr style="border:1px solid black" />
+        <b>Appointment Committee Lines</b>
+        <hr />
+        <div id="divAppointmentVouchersLines"></div>
+        <hr style="border:1px solid black" />
+    </div>
+</div>
+
+@*//////////////////////Update Appointment committee header Modal////////////////////////////*@
+<div class="modal fade" id="updateCommitteeHeader" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Update Committee Document</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody3">
+                <!-- Content injected here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="SubmitUpdatedCommitteeHeader();">Update</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">New Appointment Committee Line</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal View Doc////////////////////////////*@
+<div class="modal fade" id="myModalAttachment" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Attachment</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalAttachmentBody" style="width:100%;height:450px">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Document Rejection Modal////////////////////////////*@
+<div class="modal fade" id="myModalComments" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Rejection Comments</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalCommentBody">
+                <div id="divDocComments"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*//////////////////////Update line Modal////////////////////////////*@
+<div class="modal fade" id="updateLineNo" tabindex="-1" role="dialog">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Update Appointment Committee Line</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="docNo">Document No:</label>
+                        <input type="text" id="docNo" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="lineNo">Line No:</label>
+                        <input type="text" id="lineNo" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="Member_No">Member No:</label>
+                        <input type="text" id="MemberNo" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="Role">Role:</label>
+                        <input type="text" id="Role" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="UpdateAppointmentLine();">Update Line</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script src="~/assets/js/pdfobject.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        LoadAppointmentVouchersLines(`@Model.Document_No`);
+
+        var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+        if (Successmsg != "") {
+            Swal.fire('Success', Successmsg, 'success', true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+    });
+
+
+
+    var ViewDoc = function (Document_No) {
+        ShowProgress();
+        var form = $('<form>', {
+            action: '/Performance/CommitteeAppointmentVouchersDocumentView',
+            method: 'POST'
+        }).append($('<input>', {
+            type: 'hidden',
+            name: 'Document_No',
+            value: Document_No
+        }));
+        form.appendTo('body').submit();
+    };
+
+
+
+
+    var LoadAppointmentVouchersLines = function (Document_No) {
+
+        var status = '@Model.Approval_Status';
+
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "html",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ Document_No: Document_No, status: status }),
+            url: "/Performance/AppointmentVouchersLines",
+            success: function (data) {
+                $("#divAppointmentVouchersLines").html(data);
+                HideProgress();
+                GetDocumentAttachments();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    };
+
+
+    function UpdateCommitteeHeader() {
+        ShowProgress();
+        var Document_No = '@Model.Document_No';
+        var Document_Type = '@Model.Document_Type';
+        var Document_Date = '@Model.Document_Date';
+        var Description = '@Model.Description';
+        var Appointment_Effective_Date = '@Model.Appointment_Effective_Date';
+        var Tenure_End_Date = '@Model.Tenure_End_Date';
+        var Venue = '@Model.Venue';
+        var Additional_Brief = '@Model.Additional_Brief';
+
+
+        //alert(Document_Type);
+
+        $.ajax({
+            async: true,
+            type: "POST",
+            url: "/Performance/UpdateCommitteeHeader",
+            data: {
+                Document_Type:Document_Type,
+                Document_No: Document_No,
+                Document_Date: Document_Date,
+                Description : Description,
+                Appointment_Effective_Date: Appointment_Effective_Date,
+                Tenure_End_Date: Tenure_End_Date,
+                Venue: Venue,
+                Additional_Brief: Additional_Brief
+            },
+            dataType: "html", // Expecting an HTML response
+            success: function (data) {
+                $("#modalBody3").html(data);
+               HideProgress();
+               $("#updateCommitteeHeader").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', 'An error occurred while loading the Appointment Committee update form. Please try again.', 'warning');
+            }
+       });
+    }
+
+
+    function SubmitUpdatedCommitteeHeader() {
+        var isValid = true;
+
+        //get form details
+        var Document_No = $("#Document_No10").val();
+        var Document_Type = $("#Document_Type10").val();
+        var Document_Date = $("#Document_Date10").val();
+        var Description = $("#Description10").val();
+        var Appointment_Effective_Date= $("#Appointment_Effective_Date10").val();
+        var Tenure_End_Date=$("#Tenure_End_Date10").val();
+        var Venue=$("#Venue10").val();
+        var Additional_Brief= $("#Additional_Brief10").val();
+
+        //alert(Document_Type);
+
+        if (!Description) {
+            Swal.fire('Warning', 'Enter Description.', 'warning');
+            isValid = false;
+        }
+
+        if (!isValid) {
+            return;
+        }
+
+        var UpdatedAppointmentCommittee = {
+            Document_No: Document_No,
+            Document_Type: Document_Type,
+            Document_Date : Document_Date,
+            Description : Description,
+            Appointment_Effective_Date: Appointment_Effective_Date,
+            Tenure_End_Date: Tenure_End_Date,
+            Venue: Venue,
+            Additional_Brief: Additional_Brief
+        };
+        ShowProgress();
+    $.ajax({
+        type: "POST",
+        url: "/Performance/SubmitUpdatedCommitteeHeader",
+        data: JSON.stringify(UpdatedAppointmentCommittee),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (data) {
+            HideProgress();
+            if (data.success) {
+                ViewDoc(data.message);
+            } else {
+                Swal.fire('Warning', data.message, 'warning');
+            }
+        },
+        error: function (err) {
+            HideProgress();
+            Swal.fire('Warning', err.responseText, 'warning');
+        }
+    });
+}
+
+    var AppointmentVouchersLink = function () {
+        ShowProgress();
+        window.location = "/Performance/CommitteeAppointmentVouchers";
+    }
+
+    var AddAppointmentCommitteeLine = function () {
+        var docNo = '@Model.Document_No';
+        var docType = $("#Document_Type11").val();
+
+        //alert(docType)
+       /* $("#labelF").text("New Expense Requisition Line");*/
+        ShowProgress();
+
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: "html",
+            url: '/Performance/NewAppointmentCommitteeLine',
+            data: {
+                docNo: docNo,
+                docType: docType,
+            },
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseText, 'warning');
+            }
+        });
+    };
+
+    function EditItem(Contract_No, lineNo, MemberNo,ListOfMembers, Role) {
+        document.getElementById('docNo').value = Contract_No;
+        document.getElementById('lineNo').value = lineNo;
+        document.getElementById('MemberNo').value = MemberNo;
+        document.getElementById('Role').value = Role;
+
+
+
+        // Parse the JSON string to get the list of members
+        var listOfMembers = JSON.parse(ListOfMembersJson);
+
+        // Get the dropdown element
+        var memberDropdown = document.getElementById('Member_No');
+
+        // Clear existing options
+        memberDropdown.innerHTML = "";
+
+        // Add a default option
+        var defaultOption = document.createElement('option');
+        defaultOption.value = "";
+        defaultOption.text = "--Select Option--";
+        memberDropdown.appendChild(defaultOption);
+
+        // Add the options from the list of members
+        listOfMembers.forEach(function(member) {
+            var option = document.createElement('option');
+            option.value = member.Value; // Assuming `Value` is the value of the option
+            option.text = member.Text;   // Assuming `Text` is the text to display
+            memberDropdown.appendChild(option);
+        });
+
+        // Set the selected value
+        memberDropdown.value = MemberNo;
+        $('#updateLineNo').modal('show');
+    }
+
+
+    var UpdateAppointmentLine = function () {
+	    var docNo = $('#docNo').val();
+	    var lineNo = $('#lineNo').val();
+	    var MemberNo = $('#MemberNo').val();
+	    var Role = $('#Role').val();
+	    ShowProgress();
+
+	    $.ajax({
+		    async: true,
+		    type: "POST",
+		    dataType: "json",
+		    data: JSON.stringify({
+			    docNo: docNo,
+			    lineNo: lineNo,
+			    MemberNo: MemberNo,
+			    Role: Role
+		    }),
+		    contentType: "application/json; charset=utf-8",
+		    processData: false,
+		    url: '/Performance/UpdateAppointmentLine',
+		    success: function (data) {
+			    HideProgress();
+			    if (data.success === true) {
+				    ViewDoc(docNo);
+			    } else {
+				    Swal.fire('Error', data.message, 'error');
+			    }
+		    },
+		    error: function (err) {
+			    HideProgress();
+			    Swal.fire('Warning', err.responseText, 'warning');
+		    }
+	    });
+    };
+
+
+    function SubmitAppointmentCommitteeLine() {
+        var isValid = true;
+
+        // Collect data from the form
+        var Document_No = $("#Document_No").val();
+        var Document_Type = $("#Document_Type").val();
+        var Member_No = $("#Member_No").val();
+        var Member_Name = $("#Member_Name").val();
+        var Member_Email = $("#Member_Email").val();
+        var Role = $("#Role").val();
+
+
+        // Validation checks
+        if (!Document_No) {
+            Swal.fire('Warning', 'Document Number is required.', 'warning');
+            isValid = false;
+        }
+        if (!Member_No) {
+            Swal.fire('Warning', 'Select a Member.', 'warning');
+            isValid = false;
+        }
+
+        if (!Member_No) {
+            Swal.fire('Warning', 'Select a Member.', 'warning');
+            isValid = false;
+        }
+
+        if (!Role) {
+            Swal.fire('Warning', 'Select Role.', 'warning');
+            isValid = false;
+        }
+
+
+        // Exit if validation fails
+        if (!isValid) {
+            return;
+        }
+
+        // Prepare data object
+        var CommitteeAppointmentLine = {
+
+            Document_No: Document_No,
+            Document_Type: Document_Type,
+            Member_No: Member_No,
+            Member_Name: Member_Name,
+            Member_Email: Member_Email,
+            Role: Role
+        };
+
+        // Show progress indicator
+        ShowProgress();
+
+        // Send data via AJAX
+        $.ajax({
+            type: "POST",
+            url: "/Performance/SubmitCommitteeAppointmentLine", // Change this to your actual endpoint
+            data: JSON.stringify(CommitteeAppointmentLine),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                HideProgress();
+                if (data.success) {
+                    //window.location = "/Performance/CommitteeAppointmentDocument?DocNo=" + docNo;
+                    ViewDoc(data.message);
+                    Swal.fire('Success', 'Record submitted successfully.', 'success');
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Error', 'An error occurred while submitting the request.', 'error');
+            }
+        });
+    }
+
+</script>
+
+
+
+
+
+
+

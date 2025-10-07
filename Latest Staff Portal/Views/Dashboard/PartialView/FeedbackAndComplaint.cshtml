@@ -1,0 +1,109 @@
+﻿@model Latest_Staff_Portal.ViewModel.Feedback
+
+
+<div class="row">
+    <div class="col-md-6">
+
+        <div class="form-group">
+            @Html.Label("PJ No", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.TextBoxFor(model => model.Employee_No, new { @class = "form-control", @readonly = "readonly", style = "background-color:#d5d3d3; color:black;" })
+
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+
+        <div class="form-group">
+            @Html.Label("Name", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.TextBoxFor(model => model.Employee_Name, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd; color:black;" })
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Implementing Unit", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.TextBoxFor(model => model.Implementing_Unit, new { @class = "form-control ", @readonly = "readonly", style = "background-color:#dedebd; color:black;" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+
+        <div class="form-group">
+            @Html.Label("Type", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(m => m.Type, new SelectList(new[]
+                {
+                    new SelectListItem { Text = "FeedBack", Value = "1" }, new SelectListItem { Text = "Complaint", Value = "2" }
+                }, "Value", "Text", Model.Type), "--Select Type--", new { id = "ddlType", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Descripton", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.TextAreaFor(model => model.Description, new { @class = "form-control", rows = "4" })
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<hr/>
+<div align="center">
+    <input type="button" class="btn btn-primary waves-effect waves-light" value="Submit Request" onclick="SubmitFeedback();"/>
+</div>
+
+<script>
+    var SubmitFeedback =function() {
+        var type = $('#ddlType').val();
+        var description = $('#Description').val();
+        if (!type) {
+            Swal.fire('Warning', 'Please select a Type.', 'warning');
+            return;
+        }
+        if (!description) {
+            Swal.fire('Warning', 'Description cannot be empty.', 'warning');
+            return;
+        }
+
+        var formData = {
+            Description: description,
+            Type: type
+        };
+
+        ShowProgress();
+
+        $.ajax({
+            url: '/Dashboard/SubmitFeedback', 
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function (response) {
+                HideProgress();
+
+                if (response.success) {
+                    window.location.href = response.message;
+                } else {
+                    Swal.fire('Warning', response.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+
+</script>

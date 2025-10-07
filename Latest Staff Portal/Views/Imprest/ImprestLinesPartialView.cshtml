@@ -1,0 +1,91 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.ImprestLines>
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th>Document No</th>
+               
+                <th>Transaction Type</th>
+                <th>Account Type</th>
+                <th>Account No</th>
+                <th>Description</th>
+                <th>Quantity</th>
+                <th>Unit of Measure</th>
+                <th>Unit Price</th>
+                <th>Amount</th>
+                @*<th>Requested Amount</th>
+               *@              
+                <th>Expense Type</th>             
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Document_No)
+                    </td>
+                  
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TransactionType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AccountType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AccountNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Quantity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UnitofMeasure)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UnitPrice)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Amount)
+                    </td>
+                  @*  <td>
+                        @Html.DisplayFor(modelItem => item.RequestedAmount)
+                    </td>
+                  
+                  *@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ExpenseType)
+                    </td>
+                 
+                    <td>
+                        <button class="btn btn-success  btn-sm" data-toggle="tooltip" data-placement="top" title="Edit"
+                                onclick="EditItem('@item.Document_No', '@item.Line_No' , '@item.TransactionType', '@item.UnitofMeasure', '@item.UnitPrice');">
+                            Edit Line
+                        </button>
+
+                        <button class="btn btn-danger  btn-sm ml-3" data-toggle="tooltip" data-placement="top" title="Delete" onclick="RemoveItem('@item.Document_No', '@item.Line_No');">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div style="text-align:right">
+    <button class="btn btn-primary action-buttons" onclick="AddImprestLine();">
+        <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Line
+    </button>
+</div>
+
+<script>
+    $("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100] // Same options for the second table
+    });
+</script>

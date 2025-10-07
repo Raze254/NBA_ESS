@@ -1,0 +1,213 @@
+﻿@model Latest_Staff_Portal.ViewModel.EmpTransferView
+<div class="pre-scrollable">
+    <table class="table table-bordered" style="width: 100%;font-size:12px; background-color:darkgrey">
+        <tr>
+            <td>
+                <span style="font-size: small; font-weight: bold;">Document No</span>
+            </td>
+            <td>
+                @Html.DisplayFor(m => m.Document_No, new { id = "txtDocNo" })
+            </td>
+            <td>
+                <span style="font-size: small; font-weight: bold;">Employee Name</span>
+            </td>
+            <td>
+                @Html.DisplayFor(m => m.Employee_Name)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span style="font-size: small; font-weight: bold;">Current Station </span>
+            </td>
+            <td>
+                @Html.DisplayFor(m => m.Original_Station_Name)
+            </td>
+            <td>
+                <span style="font-size: small; font-weight: bold;">Preferred Station 1 </span>
+            </td>
+            <td>
+                @Html.DisplayFor(m => m.Suggested_Station_1_Name)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span style="font-size: small; font-weight: bold;">Preferred Station 2 </span>
+            </td>
+            <td>
+                @Html.DisplayFor(m => m.Suggested_Station_2_Name)
+            </td>
+            <td>
+                <span style="font-size: small; font-weight: bold;">Preferred Station 3 </span>
+            </td>
+            <td>
+                @Html.DisplayFor(m => m.Suggested_Station_3_Name)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span style="font-size: small; font-weight: bold;">Reason </span>
+            </td>
+            <td>
+                @Html.DisplayFor(m => m.Transfer_Reason_Code)
+            </td>
+            <td>
+                <span style="font-size: small; font-weight: bold;">Remarks </span>
+            </td>
+            <td>
+                @Html.DisplayFor(m => m.Remarks)
+            </td>
+        </tr>
+
+
+        <tr>
+            <td>
+                <span style="font-size: small; font-weight: bold;">Request Date </span>
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.Date_Created, new { @class = "form-control", id = "txtTransfer_Date" })
+            </td>
+            <td>
+                <span style="font-size: small; font-weight: bold;">Status </span>
+            </td>
+            <td>
+                @Html.DisplayFor(m => m.Status, new { id = "txtStatus" })
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span style="font-size: small; font-weight: bold;">HOS Recommendation </span>
+            </td>
+            <td>
+
+                @Html.DropDownListFor(model => model.HOS_Recommendation, new List<SelectListItem>
+                {
+                    new SelectListItem { Text = "--Select--", Value = "" },
+                    new SelectListItem { Text = "Recommend", Value = "Recommend" },
+                    new SelectListItem { Text = "Not Recommend", Value = "Not Recommend" },
+                    new SelectListItem { Text = "Recomended with Conditions", Value = "Recomended with Conditions" }
+                }, new { @class = "form-control", id = "ddlHOSRecommend" })
+                @Html.TextBoxFor(m => m.HOS_Remarks, new { @class = "form-control", PlaceHolder = "Conditions", id = "txtHOSRecommend" })
+            </td>
+            <td>
+                <span style="font-size: small; font-weight: bold;">Mobility Recommendation </span>
+            </td>
+            <td>
+                @Html.DropDownListFor(model => model.MobilityRecommendation, new List<SelectListItem>
+                {
+                    new SelectListItem { Text = "--Select--", Value = "" },
+                    new SelectListItem { Text = "Recommend", Value = "Recommend" },
+                    new SelectListItem { Text = "Not Recommend", Value = "Not Recommend" }
+                }, new { @class = "form-control", id = "ddlMobilityRecommend" })
+
+                @*@Html.TextBoxFor(m => m.MobilityRecommendation, new { @class = "form-control", @id = "TxtMobilityRecommendation" })*@
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span style="font-size: small; font-weight: bold;">HOD Mobility Recommendation </span>
+            </td>
+            <td>
+                @Html.DropDownListFor(model => model.HeadofMobility, new List<SelectListItem>
+                {
+                    new SelectListItem { Text = "--Select--", Value = "" },
+                    new SelectListItem { Text = "Approve", Value = "Approve" },
+                    new SelectListItem { Text = "Not Approve", Value = "Not Approve" },
+                    new SelectListItem { Text = "Review", Value = "Review" }
+                }, new { @class = "form-control", id = "ddlHODRecommend" })
+                @* @Html.TextBoxFor(m => m.HeadofMobility, new { @class = "form-control", @PlaceHolder = "Review Comments", @id = "TxtHeadofMobility" })*@
+            </td>
+            <td>
+                <span style="font-size: small; font-weight: bold;">Director Recommendation </span>
+            </td>
+            <td>
+                @Html.DropDownListFor(model => model.DirectorRecommendation, new List<SelectListItem>
+                {
+                    new SelectListItem { Text = "--Select--", Value = "" },
+                    new SelectListItem { Text = "Approve", Value = "Approve" },
+                    new SelectListItem { Text = "Not Approve", Value = "Not Approve" },
+                    new SelectListItem { Text = "Review", Value = "Review" }
+                }, new { @class = "form-control", id = "TxtDirectorRecommendation" })
+                @*@Html.TextAreaFor(m => m.DirectorRecommendation, new { @class = "form-control", @id = "TxtDirectorRecommendation" })*@
+            </td>
+        </tr>
+    </table>
+</div>
+<div align="center" id="DivUpdateButton">
+    <input type="button" class="btn btn-primary waves-effect waves-light" value="Update Transfer Document" onclick="UpdateSelfTransferDocument('@Model.Document_No');"/>
+</div>
+<hr style="border:1px solid black"/>
+<div class="row">
+    <div class="col-md-12">
+        <b>Attachments</b>
+        <div id="divAttachDocs"></div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var HOSRecommend = '@Model.HOS_Recommendation';
+var MobHRecommend = '@Model.HeadofMobility';
+var MobRecommend = '@Model.MobilityRecommendation';
+var DirRecomend = '@Model.DirectorRecommendation';
+
+if (HOSRecommend == '') {
+    disableElements(["ddlMobilityRecommend", "ddlHODRecommend", "TxtDirectorRecommendation"]);
+} else if (MobRecommend == '') {
+    disableElements(["ddlHOSRecommend", "txtHOSRecommend", "ddlHODRecommend", "TxtDirectorRecommendation"]);
+} else if (MobHRecommend == '') {
+    disableElements(["ddlHOSRecommend", "txtHOSRecommend", "ddlMobilityRecommend", "TxtDirectorRecommendation"]);
+} else if (DirRecomend == '') {
+    disableElements(["ddlHOSRecommend", "txtHOSRecommend", "ddlMobilityRecommend", "ddlHODRecommend"]);
+}
+        var status = `@Model.Status`;
+        if (status == "Open") {
+            $("#txtTransfer_Date").attr("readonly", false);
+            $("#DivUpdateButton").show();
+            $('#txtTransfer_Date').datepicker({
+                changeMonth: true,
+                changeYear: true,
+                autoclose: true,
+                yearRange: '-0:+2',
+                showOtherMonths: true,
+                dateFormat: 'dd/mm/yy'
+            });
+            $(window).resize(function () {
+                $('#txtTransfer_Date').datepicker('hide');
+                $('#txtTransfer_Date').blur();
+            });
+        } else {
+            $("#txtTransfer_Date").attr("readonly", true);
+            $("#DivUpdateButton").hide();
+        }       
+
+    var GetDocumentAttachments = function () {
+        ShowProgress();
+        var DocNo = `@Model.Document_No`;
+        var Status = `@Model.Status`;
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ DocNo: DocNo, TableID: 69055, Status: 'Approved'}),
+            url: "/Common/DocumentAttachments",
+            success: function (data) {
+                HideProgress();
+                $("#divAttachDocs").html(data);
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+        };
+    });
+    function disableElements(elementIds) {
+        elementIds.forEach(function (id) {
+            var element = document.getElementById(id);
+            if (element) {
+                element.disabled = true;
+            }
+        });
+    }
+</script>

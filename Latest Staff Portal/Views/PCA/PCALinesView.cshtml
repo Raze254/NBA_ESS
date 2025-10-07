@@ -1,0 +1,64 @@
+﻿@model List<Latest_Staff_Portal.ViewModel.PCALines>
+
+<div class="table-responsive">
+    <table class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;" id="pcaLines">
+        <thead style="background-color:black;color:white">
+        <tr>
+            <th>Transaction Code</th>
+            <th>Transaction Name</th>
+            <th>Amount</th>
+            <th>Balance</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th style="text-align:center">Employer Amount</th>
+            <th class="tdAction">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        @if (Model != null && Model.Count() > 0)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.TransactionCode)</td>
+                    <td>@Html.DisplayFor(modelItem => item.TransactionName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Amount)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Balance)</td>
+                    <td>@Html.DisplayFor(modelItem => item.StartDate)</td>
+                    <td>@Html.DisplayFor(modelItem => item.EndDate)</td>
+                    <td style="text-align:center">@Html.DisplayFor(modelItem => item.EmployerAmount)</td>
+                    <td style="text-align:right" class="tdAction">
+                        <a href="javascript:void(0);" class="mr-3 text-primary" data-toggle="tooltip" data-placement="top" title="Edit" onclick="EditItem('@item.ChangeAdviceSerialNo', '@item.TransactionCode');">
+                            <i class="mdi mdi-pencil font-size-16"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="text-danger" data-toggle="tooltip" data-placement="top" title="Delete" onclick="RemoveItem('@item.ChangeAdviceSerialNo', '@item.TransactionCode');">
+                            <i class="mdi mdi-close font-size-16"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="8" style="color:red">No Records Found</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <div style="text-align:right">
+        <input type="button" style="background: #162f25; color:whitesmoke; border-radius:10px" id="addPCALine" value="Add PCA Line" onclick="AddPCALines();"/>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var status = '@ViewBag.Status'; 
+        if (status == "Pending") {
+            $(".tdAction").show();
+        }
+        else {
+            $(".tdAction").hide();
+        }
+    });
+	
+</script>

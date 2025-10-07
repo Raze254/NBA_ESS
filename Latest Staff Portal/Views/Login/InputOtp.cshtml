@@ -1,0 +1,155 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input OTP</title>
+    <link rel="shortcut icon" type="image/x-icon" href="~/assets/img/logo.png">
+    <link rel="stylesheet" href="~/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/assets/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/assets/css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="~/assets/css/custom.css">
+    <link href="~/assets/css/Loader.css" rel="stylesheet"/>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="~/assets/js/ObfuscateSite.js"></script>
+
+    <style>
+		.error-message {
+			color: red;
+			display: none;
+		}
+
+		.otp-timer {
+			font-size: 14px;
+			color: red;
+		}
+	</style>
+</head>
+<body>
+<div class="loading" align="center" id="divLoader">
+    <div class="loader-container">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</div>
+
+<div class="main-wrapper login-body">
+    <div class="login-wrapper">
+        <div class="container">
+            <div class="loginboxx">
+               
+
+                <div class="login-right">
+                    <div class="login-right-wrap">
+                        
+                        <center>
+                            <img class="img-fluid" src="/assets/img/logo.png" alt="Logo" style="height: 60px;">
+                            <h1 class="mb-4 mt-10 mt-3" style="font-size: 24px ">OTP Verification</h1>
+                        </center>
+
+@*                        <p style="font-size: 18px;" class="mt-4 mb-4">Input OTP that was sent to you</p>*@
+                        <!-- Form -->
+                        <div class="form-group">
+                            <label for="otp" class="lblClass">OTP</label>
+                            <input type="text" class="form-control" id="OtpCode" placeholder="Enter OTP" required>
+                            <div id="otpErrorMessage" class="error-message">Incorrect OTP. Please try again.</div>
+                            <div class="otp-timer" id="otpTimer">OTP expires in: 05:00</div>
+                        </div>
+
+                        <div class="mt-3">
+                            <button class="btn btn-info btn-block" id="login" type="submit" onclick="ConfirmOtp()">Login</button>
+                        </div>
+
+                        <!-- /Form -->
+                        <div class="text-center forgotpass mt-4">
+                            <a href="~/Settings/RequestOtp"><i class="fa fa-reply"></i> Back</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/js/jquery-3.2.1.min.js"></script>
+<script src="~/assets/js/popper.min.js"></script>
+<script src="~/assets/js/bootstrap.min.js"></script>
+<script src="~/assets/js/script.js"></script>
+<script src="~/assets/js/ShowProgression.js"></script>
+@*<script src="~/SiteJS/LoginJS.js"></script>*@
+<script src="~/SiteJS/ForgetPasswordJS.js"></script>
+
+<script>
+		document.addEventListener('DOMContentLoaded', (event) => {
+			const otpField = document.getElementById('OtpCode');
+			otpField.addEventListener('paste', (e) => {
+				e.preventDefault();
+				alert('Pasting is disabled for this field.');
+			});
+
+			// Start the OTP timer
+			startOtpTimer();
+		});
+
+		function startOtpTimer() {
+			const otpTimerElement = document.getElementById('otpTimer');
+			let timeRemaining = 300; // 5 minutes in seconds
+
+			const timerInterval = setInterval(() => {
+				let minutes = Math.floor(timeRemaining / 60);
+				let seconds = timeRemaining % 60;
+
+				if (seconds < 10) {
+					seconds = '0' + seconds;
+				}
+
+				otpTimerElement.textContent = `OTP expires in: ${minutes}:${seconds}`;
+
+				if (timeRemaining <= 0) {
+					clearInterval(timerInterval);
+					otpTimerElement.textContent = 'OTP has expired';
+					// You can add additional actions here if needed, such as disabling the input or showing an alert
+				}
+
+				timeRemaining--;
+			}, 1000);
+		}
+
+		function ConfirmOtp() {
+			var otpCode = $("#OtpCode").val();
+			if (!otpCode) {
+				Swal.fire('Warning', 'Please enter the OTP code.', 'warning');
+				HideProgress();
+				return;
+			}
+
+			ShowProgress();
+
+			$.ajax({
+				type: "POST",
+				url: "/Login/ConfirmOtp",
+				data: JSON.stringify({ otp: otpCode }),
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+				success: function (response) {
+					if (response.success) {
+						window.location = response.message;
+					} else {
+						Swal.fire('Error', response.message, 'error');
+						HideProgress();
+					}
+				},
+				error: function (xhr, status, error) {
+					HideProgress();
+					Swal.fire('Error', 'An unexpected error occurred: ' + xhr.responseText, 'error');
+				}
+			});
+		}
+	</script>
+</body>
+</html>

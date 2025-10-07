@@ -1,0 +1,295 @@
+﻿@{
+    ViewBag.Title = "ImprestMemoRequisitionList";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+<style>
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#" onclick="Dashboard();">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active">Petty Cash Vouchers List</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<hr />
+<br />
+<div class="card">
+    <div class="card-header">
+
+        <h4>Petty Cash Vouchers List</h4>
+        <div style="text-align:right">
+            <a href="#" onclick="NewPettyCashVoucherRequest();" class="btn action-buttons">New Rquest</a>
+        </div>
+
+    </div>
+
+    <div class="card-body">
+
+        <div id="divRegList"></div>
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">New Petty Cash Voucher Requisition</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal Links////////////////////////////*@
+<div class="modal fade" id="myModalLinks" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Actions</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodyLinks">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">$(document).ready(function () {
+        LoadPettyCashVoucherList();
+    });
+    var LoadPettyCashVoucherList = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: "/PettyCash/PettyCashVouchersListPartialView",
+            success: function (data) {
+                $("#divRegList").html(data);
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+    var NewPettyCashVoucherRequest = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: "/PettyCash/NewPettyCashVoucherRequest",
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var SubmitPettyCashVoucherRequest = function () {
+        var Account_Type = $("#Account_Type").val();
+        var Paying_Bank_Account = $("#Paying_Bank_Account").val();
+        var Payment_Narration = $("#Payment_Narration").val();
+        /*if (!Subject) {
+            Swal.fire('Warning', "Subject is required", 'warning');
+            return;
+        }
+        if (!Objective) {
+            Swal.fire('Warning', "Objective IS required", 'warning');
+            return;
+        }
+*/
+
+        var Data = {
+            Account_Type: Account_Type,
+            Paying_Bank_Account: Paying_Bank_Account,
+            Payment_Narration: Payment_Narration
+        }
+
+        ShowProgress();
+        //Send the JSON array to Controller using AJAX.
+        $.ajax({
+            type: "POST",
+            url: "/PettyCash/SubmitPettyCashVoucherRequest",
+            data: JSON.stringify({ Account_Type: Account_Type, Paying_Bank_Account: Paying_Bank_Account, Payment_Narration: Payment_Narration }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+                    HideProgress();
+                    ViewDoc(data.message)
+                    //window.location = "/PettyCash/PettyCashVouchersDocumentView?DocNo=" + data.message;
+                }
+                else {
+                    Swal.fire('Warning', data.message, 'warning');
+                    HideProgress();
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    };
+    var SelectedRow = function (DocNo, Status) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo, Status: Status, DocType: 'IMP' }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/CommonActions',
+            success: function (data) {
+                $("#modalBodyLinks").html(data);
+                HideProgress();
+                $("#myModalLinks").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var ViewDoc2 = function (DocNo) {
+        ShowProgress();
+        window.location = "/PettyCash/PettyCashVouchersDocumentView?DocNo=" + DocNo;
+    }
+    var ViewDoc = function (DocNo) {
+        ShowProgress();
+        var form = $('<form>', {
+            action: '/PettyCash/PettyCashVouchersDocumentView',
+            method: 'POST'
+        }).append($('<input>', {
+            type: 'hidden',
+            name: 'DocNo',
+            value: DocNo
+        }));
+        form.appendTo('body').submit();
+    }
+    var SendDocForApproval = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/PettyCash/SendPettyCashVoucherApproval',
+            success: function (data) {
+                if (data.success == true) {
+                    HideProgress();
+                    Swal.fire('Success', "Document created", 'success').then((result) => {
+                        // This will run after the user clicks OK or dismisses the Swal
+                        window.location.href = "/PettyCash/PettyCashVouchersDocumentView?DocNo=" + DocNo;
+                    });
+                    // ViewDoc2(data.message)  // You can uncomment this if needed
+                }
+                else {
+                        HideProgress();
+                        Swal.fire('Error', data.message, 'error');
+                 }  
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var CancelDocForApproval = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/PettyCash/CancelPettyCashVoucherApproval',
+            success: function (data) {
+                if (data.LogOut == false) {
+                    window.location = data.message;
+                }
+                else {
+                    if (data.success == true) {
+                        HideProgress();
+                        LoadImprestMemoReqList();
+                        $("#myModalLinks").modal("hide");
+                        Swal.fire('Success', data.message, 'success');
+                    }
+                    else {
+                        HideProgress();
+                        Swal.fire('Error', data.message, 'error');
+                    }
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    };
+    var ViewApprovalTrail = function (DocNo) {
+        $("#labelF").text("Document Approval Trail");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo, RecID: "Imprest Memo Header: " + DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/DocumentApprovalTrail',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModalLinks").modal("hide");
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+  
+</script>

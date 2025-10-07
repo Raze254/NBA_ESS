@@ -1,0 +1,363 @@
+﻿@{
+    ViewBag.Title = "TransportRequisitionList";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+<style>
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+<!--
+<link href="~/assets/css/Loader.css" rel="stylesheet" />
+<div class="loading" align="center" id="divLoader">
+    <br />
+    <img src="~/assets/images/ajax-loader.gif" alt="" />
+</div>
+-->
+
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/Dashboard/HumanResource">Human Resource</a>
+                </li>
+                <li class="breadcrumb-item active">Transport Requisition List</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="card-body">
+    <div style="text-align:right">
+        <input type="button" style="background: #162f25; color:whitesmoke; border-radius:10px" id="btnEdit" value="New Transport Request" onclick="NewTrasnportRequisition();"/>
+    </div>
+    <hr/>
+    <div id="divTransportRegList"></div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">New Transport Requisition</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal Links////////////////////////////*@
+<div class="modal fade" id="myModalLinks" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Actions</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodyLinks">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadTransportReqList();
+    });
+    var LoadTransportReqList = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: "/Transport/TransportRequisitionListPartialView",
+            success: function (data) {
+                $("#divTransportRegList").html(data);
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                alert("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+    var NewTrasnportRequisition = function () {
+        $("#labelF").text("New Transport Requisition");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Transport/NewTransportApplication',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var SubmitTransportRequisition = function () {
+        var Commencement = $("#txtCommence").val();
+        var employeeNo = $("#txtEmpoyeeNo").val();
+        var transportType = $("#ddlTransportCategory").children("option:selected").val();
+        var destination = $("#txtDestination").val();
+        var routeCode = $("#routeCode").val();
+        var dateOfTrip = $("#dtPicker").val();
+        var timeOfTrip = $("#txtTime").val();
+        var noOfDays = $("#txtNoOfDays").val();
+        var hours = $("#txtHrs").val();
+        var responsibilityCentre = $("#ddlRespC").children("option:selected").val();
+        var purposeOfTrip = $("#txtPurpose").val();
+
+        // Perform validation
+        if (Commencement === "") {
+            Swal.fire('error', 'Enter Place of Commencement', 'error');
+            return;
+        }
+        if (employeeNo === "") {
+            Swal.fire('error', 'Enter Employee No', 'error');
+            return;
+        }
+        if (transportType === "") {
+            Swal.fire('error', 'Select Transport Type', 'error');
+            return;
+        }
+        if (destination === "") {
+            Swal.fire('error', 'Enter Destination', 'error');
+            return;
+        }
+        if (routeCode === "") {
+            Swal.fire('error', 'Select Route Code', 'error');
+            return;
+        }
+        if (dateOfTrip === "") {
+            Swal.fire('error', 'Enter Date of Trip', 'error');
+            return;
+        }
+        if (timeOfTrip === "") {
+            Swal.fire('error', 'Enter Time of Trip', 'error');
+            return;
+        }
+        if (noOfDays === "") {
+            Swal.fire('error', 'Enter Number of Days', 'error');
+            return;
+        }
+        if (isNaN(noOfDays) || parseInt(noOfDays) <= 0) {
+            Swal.fire('error', 'Number of Days must be a positive number', 'error');
+            return;
+        }
+        //if (hours === "") {
+        //    Swal.fire('error', 'Enter Hours', 'error');
+        //    return;
+        //}
+        //if (isNaN(hours) || parseFloat(hours) <= 0) {
+        //    Swal.fire('error', 'Hours must be a positive number', 'error');
+        //    return;
+        //}
+        if (responsibilityCentre === "") {
+            Swal.fire('error', 'Select Responsibility Centre', 'error');
+            return;
+        }
+        if (purposeOfTrip === "") {
+            Swal.fire('error', 'Enter Purpose of the Trip', 'error');
+            return;
+        }
+
+        // Prepare data for submission
+        var transportRequisition = {
+            RequestedBy: employeeNo,
+            From: Commencement,
+            Destination: destination,
+            DateofTrip: dateOfTrip,
+            Timeout: timeOfTrip,
+            RouteCOde: routeCode,
+            NoofDaysRequested: noOfDays,
+            Subject: purposeOfTrip,
+            NumberofHoursRequested: hours,
+            Requisitiontype: transportType,
+            ResponsibilityCenter: responsibilityCentre
+        };
+
+        ShowProgress();
+        $.ajax({
+            type: "POST",
+            url: "/Transport/SubmitTransportDocument", // URL of your endpoint
+            data: JSON.stringify({ transportRequisition: transportRequisition }),
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                HideProgress();
+                if (data.success) {
+                    window.location = data.message;
+                    $("#myModal").modal("hide");
+                } else {
+                    Swal.fire('error', data.message, 'error');
+                }
+            },
+            error: function (xhr, status, error) {
+                HideProgress();
+                Swal.fire('error', 'An error occurred while processing your request. Please try again later.', 'error');
+                console.error(xhr, status, error);
+            }
+        });
+    };
+
+    var SelectedRow = function (DocNo, Status) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo, Status: Status, DocType: 'TRANSP' }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/CommonActions',
+            success: function (data) {
+                $("#modalBodyLinks").html(data);
+                HideProgress();
+                $("#myModalLinks").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var ViewDoc = function (DocNo) {
+        ShowProgress();
+        window.location = "/Transport/TransportDocumentDetails?AppDoc=" + DocNo;
+    }
+    var SendDocForApproval = function (DocNo) {
+
+        if (DocNo != "") {
+
+            Swal.fire('Warning', 'kindly open the document to send it for approval', 'warning');
+            return;
+        }
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Transport/SendDocAppForApproval',
+            success: function (data) {
+                if (data.success == true) {
+                    HideProgress();
+                    LoadTransportReqList();
+                    $("#myModalLinks").modal("hide");
+                    Swal.fire('Success', data.message, 'success');
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var CancelDocForApproval = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Transport/CancelTransportAppForApproval',
+            success: function (data) {
+                if (data.success == true) {
+                    HideProgress();
+                    LoadTransportReqList();
+                    $("#myModalLinks").modal("hide");
+                    Swal.fire('Success', data.message, 'success');
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var ViewApprovalTrail = function (DocNo) {
+        $("#labelF").text("Document Approval Trail");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo, RecID: "FLT-Transport Requisition: " + DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/DocumentApprovalTrail',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModalLinks").modal("hide");
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var ViewDocComments = function (documentNumber) {
+        $("#labelF").text("Document Comments");
+        ShowProgress();
+        var RecordID = "FLT-Transport Requisition: " + DocNo;
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ docNo: documentNumber }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/DocumentApprovalComments',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModalLinks").modal("hide");
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+</script>

@@ -1,0 +1,190 @@
+﻿@model Latest_Staff_Portal.ViewModel.PASCoreValuesLines
+@{
+    var documentStage = ViewBag.pasDocStage;
+    bool isEvaluation = documentStage != "Evaluation";
+    bool isReadOnly = documentStage != "Evaluation" || !(bool)ViewBag.Capable;
+    bool isCapable = ViewBag.Capable;
+}
+
+<div class="row">
+    <div class="form-group col-md-6">
+        <label for="ListOfCoreValues" class="control-label">Strategic Objective</label>
+        <input type="text" class="form-control" id="CoreValue" value="@Model.Core_Value" readonly>
+    </div>
+
+    @if (isCapable)
+    {
+        <div class="form-group col-md-6">
+            <label for="jointAssessment" class="control-label">Joint/Achieved Agreement</label>
+            <select id="jointAssessment" name="Joint_Assessment" class="form-control"
+                    @(Model.stage == "Evaluated and Agreed" ? "disabled title='Joint assessment is locked after evaluation agreement'" : "")>
+                @for (int i = 0; i <= 5; i++)
+                {
+                    <option value="@i" @(i == Model.Joint_Assessment ? "selected" : "")>@i</option>
+                }
+            </select>
+
+            @Html.ValidationMessageFor(model => model.Joint_Assessment, "", new { @class = "text-danger" })
+
+            @if (isEvaluation)
+            {
+                <span class="text-warning d-block mt-2">
+                    The score cannot be awarded until the Negotiation stage.
+                    <span class="text-success">Current Stage: <strong>@documentStage</strong></span>
+                </span>
+            }
+        </div>
+
+    }
+    else
+    {
+        <div class="form-group col-md-6">
+            <label for="selfAssessmentTarget" class="control-label">Self Assessment</label>
+            <select id="selfAssessmentTarget" name="Self_Assessment" class="form-control"
+                    @(Model.stage == "Awaiting Evaluation" ? "disabled title='Self Assessment is locked until evaluation is complete'" : "")>
+                @for (int i = 0; i <= 5; i++)
+                {
+                    <option value="@i" @(i == Model.Self_Assessment ? "selected" : "")>@i</option>
+                }
+            </select>
+        </div>
+
+    }
+</div>
+
+<div class="form-group">
+    <label for="behaviouralExpectation" class="control-label col-md-12">Behavioural Expectations</label>
+    @Html.TextAreaFor(model => model.Behavioural_expectation,
+        new { @id = "behaviouralExpectation", @class = "form-control", @placeholder = "Enter Behavioural Expectation", @rows = 3, @readonly = "readonly" })
+    @Html.ValidationMessageFor(model => model.Behavioural_expectation, "", new { @class = "text-danger" })
+</div>
+
+@if (isCapable)
+{
+    <div class="form-group">
+        <label for="AppraisersComments" class="control-label">Appraiser's Comments</label>
+        <small>Describe core value demonstration</small>
+        <textarea placeholder="Describe core value demonstration" class="form-control" id="AppraisersComments" name="AppraisersComments" rows="3"
+                  @(Model.stage == "Evaluated and Agreed" ? "disabled title='Comments are locked after evaluation agreement'" : "")>
+        @Model.Appraisers_Comments
+    </textarea>
+    </div>
+
+}
+else
+{
+    <div class="form-group">
+        <label for="AppraiseeComments" class="control-label">Appraisee Comments</label>
+        <textarea class="form-control" id="AppraiseeComments" name="AppraiseeComments" rows="3"
+                  @(Model.stage == "Awaiting Evaluation" ? "disabled title='Comments cannot be edited during evaluation'" : "")>
+        @Model.Appraisee_Comments
+    </textarea>
+    </div>
+
+}
+
+@if ((Model.stage != "Waiting Evaluation" && !isCapable) || (Model.stage != "Evaluated and Agreed" && isCapable))
+{
+    <div class="row">
+        <div class="form-group col-md-12 text-center">
+            <button type="submit" class="btn btn-primary" onclick="submitEditCoreValueLineForm();">Update</button>
+        </div>
+    </div>
+}
+
+
+
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+
+        $('#CoreValue').change(function () {
+            var selectedValue = $(this).val();
+            if (selectedValue) {
+                ShowProgress();
+                $.ajax({
+                    async: true,
+                    type: "POST",
+                    url: "/Pas/CoreValuesResponse",
+                    data: JSON.stringify({ coreValue: selectedValue }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data) {
+                            $('#behaviouralExpectation').val(data.Value);
+                        }
+                        HideProgress();
+                    },
+                    error: function (xhr, status, error) {
+                        HideProgress();
+                        Swal.fire("Error", "An error occurred while retrieving data: " + error, "error");
+                    }
+                });
+            }
+        });
+
+        $('#myModal').on('shown.bs.modal', function () {
+            setTimeout(function () {
+                $('.select2').select2({
+                    dropdownParent: $('#myModal'),
+                });
+            }, 200);
+        });
+    });
+
+    function submitEditCoreValueLineForm() {
+
+        var coreValue = $("#CoreValue").val();
+        var appraiseeComments = $("#AppraiseeComments").val();
+        var appraiserComment = $("#AppraisersComments").val();
+        var behaviouralExpectation = $("#behaviouralExpectation").val();
+        var jointAssessment = $("#jointAssessment").val();
+        var selfAssessment = $("#selfAssessmentTarget").val();
+
+
+        var Line_No = '@Model.Line_No';
+        var DocNo = '@Model.DocNo';
+        var Strategic_Plan_ID = '@Model.Strategic_Plan_ID';
+
+
+        var updatedItems = {
+            Line_No: Line_No,
+            DocNo: DocNo,
+            Strategic_Plan_ID: Strategic_Plan_ID,
+            Core_Value: coreValue,
+            Appraisee_Comments: appraiseeComments,
+            Appraisers_Comments: appraiserComment,
+            Behavioural_expectation: behaviouralExpectation,
+            Joint_Assessment: jointAssessment,
+            Self_Assessment: selfAssessment
+        };
+
+        ShowProgress();
+        $.ajax({
+            type: "POST",
+            url: "/Pas/SubmitUpdateCoreValuesLine",
+            data: JSON.stringify(updatedItems),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                HideProgress();
+                if (data.success) {
+                    Swal.fire("Success", "Record updated successfully", "success")
+                    $('#myModal').modal('hide').on('hidden.bs.modal', function () {
+                        $('body').removeClass('modal-open');
+                        $('.modal-backdrop').remove();
+                    });
+                } else {
+                    Swal.fire("Error", data.message, "error");
+                }
+            },
+            error: function (xhr, status, error) {
+                HideProgress();
+                var errorMessage = xhr.responseJSON ? xhr.responseJSON.message : "An error occurred while updating the record.";
+                Swal.fire("Error", errorMessage, "error");
+            }
+        });
+    }
+</script>

@@ -1,0 +1,241 @@
+﻿@model Latest_Staff_Portal.ViewModel.WorkTicketLines
+
+
+<div class="form-group">
+    @Html.Label("Transport Requisition No", new { @class = "control-label col-md-12" })
+    <div class="col-md-12">
+        @Html.DropDownListFor(m => m.TransportRequisitionNo, new SelectList(Model.TransportRequisitionNoList, "Value", "Text", Model.TransportRequisitionNo), "--Select Transport Requisition No --", new { id = "ddlTrans", @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        @Html.ValidationMessageFor(model => model.TransportRequisitionNo, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.Label("Drivers No", new { @class = "control-label col-md-12" })
+    <div class="col-md-12">
+        @Html.DropDownListFor(m => m.DriverNo, new SelectList(Model.DriverNoList, "Value", "Text", Model.DriverNo), "--Select Drivers No --", new { id = "ddlDriversNo", @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        @Html.ValidationMessageFor(model => model.DriverNo, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Date ", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="text" class="form-control" placeholder="dd/mm/yyyy" id="mthDate" onkeydown="return false;" autocomplete="off"/>
+                <div class="a"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Details of Journey and Route", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="text" class="form-control" id="txtJourneyDetails"/>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Oil Draw (Litres)", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="text" class="form-control" id="txtOilDrawLitres"/>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Fuel Drawn (Litres)", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="text" class="form-control" id="txtFuelDrawnLitres"/>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Time Out", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="time" class="form-control" id="txtTimeOut"/>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Time In", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="time" class="form-control" id="txtTimeIn"/>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Receipt No", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="text" class="form-control" id="txtReceiptNo"/>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Fuel Carried Forward", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="text" class="form-control" id="txtFuelCarriedForward"/>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Opening Odometer Reading", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="text" class="form-control" id="txtOpeningOdometerReading"/>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Closing Odometer Reading", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="text" class="form-control" id="txtClosingOdometerReading"/>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Authorized By", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(m => m.AuthName, new SelectList(Model.ListOfAuths, "Value", "Text", Model.AuthName), "--Select Auth--", new { id = "ddlAuthorizedBy", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.AuthName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Authorized by Other GOK Officer", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="text" class="form-control" id="txtAuthorizedbyotherGOKOfficer"/>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Defect", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="text" class="form-control" id="txtDefect"/>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Defect Date", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="text" class="form-control" placeholder="dd/mm/yyyy" id="dtDefectDate" onkeydown="return false;" autocomplete="off"/>
+                <div class="a"></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row">
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Action Taken/Reported", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="text" class="form-control" id="txtActionTakenReported"/>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Designation", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="text" class="form-control" id="txtDesignation"/>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Total Kilometers", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="text" class="form-control" id="txtTotalKilometers"/>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Total Miles Per Litre", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="text" class="form-control" id="txtTotalMilesPerLitre"/>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Total Miles Per Litre (Oil)", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="text" class="form-control" id="txtTotalMilesPerLtr_Oil"/>
+            </div>
+        </div>
+    </div>
+
+</div>
+<hr/>
+<div align="center">
+    <input type="button" class="btn btn-primary waves-effect waves-light" value="Submit Request" onclick="SubmitWorkTicketLines();"/>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#mthDate,#dtDefectDate').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-1:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy'
+        });
+        $("#dtDefectDate, #mthDate").focus(function () {
+            $("#ui-datepicker-div").position({
+                my: "left top",
+                at: "left bottom",
+                of: $(this)
+            });
+        });
+        $("#ddlDim1,#ddlVehicles,#ddlAuthorizedBy,#ddlCostCentre").select2({
+            width: '100%'
+        });
+        //document.getElementById("ddlDim2").disabled = true;
+        //document.getElementById("ddlDim1").disabled = true;
+        //document.getElementById("ddlDim3").disabled = true;
+    });
+</script>

@@ -1,0 +1,75 @@
+﻿@model Latest_Staff_Portal.ViewModel.StoreRequisitions
+
+<div class="row">
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Location", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.DropDownListFor(m => m.Location_Code, Model.ListOfLocation_Code, "Select Option--", new { @class = "form-control", @id = "Location_Code" })
+            @Html.ValidationMessageFor(model => model.Location_Code, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Request Date", htmlAttributes: new { @class = "control-label col-md-2" })
+            <input type="text" class="form-control" placeholder="dd/mm/yyyy" id="Request_Date" onkeydown="return false;" autocomplete="off" />
+            @Html.ValidationMessageFor(model => model.Order_Date, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    @*<div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Programme", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.DropDownListFor(m => m.Shortcut_Dimension_1_Code, Model.ListOfProgramme, "Select Option--", new { @class = "form-control", @id = "Shortcut_Dimension_1_Code" })
+            @Html.ValidationMessageFor(model => model.Shortcut_Dimension_1_Code, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Department Name", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.DropDownListFor(m => m.Shortcut_Dimension_2_Code, Model.ListOfDepartment, "Select Option--", new { @class = "form-control", @id = "Shortcut_Dimension_2_Code" })
+            @Html.ValidationMessageFor(model => model.Shortcut_Dimension_2_Code, "", new { @class = "text-danger" })
+        </div>
+    </div>*@
+
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <textarea class="form-control" id="Description"></textarea>
+          @*  @Html.TextAreaFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @id= "Description" } })*@
+            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        // Initialize datepickers
+        $('#Request_Date').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-1:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy'
+        });
+
+        // Adjust the position of the datepicker for both fields
+        $('#Request_Date').focus(function () {
+            $("#ui-datepicker-div").position({
+                my: "left top",
+                at: "left bottom",
+                of: $(this)
+            });
+        });
+
+        // Set default value to today's date
+        var today = new Date();
+        var day = ("0" + today.getDate()).slice(-2);
+        var month = ("0" + (today.getMonth() + 1)).slice(-2);
+        var todayFormatted = day + "/" + month + "/" + today.getFullYear();
+        $('#Request_Date').val(todayFormatted);
+    });
+</script>

@@ -1,0 +1,296 @@
+﻿@{
+    ViewBag.Title = "MedicalCardReplacement";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+<!--
+<link href="~/assets/css/Loader.css" rel="stylesheet" />
+<div class="loading" align="center" id="divLoader">
+    <br />
+    <img src="~/assets/images/ajax-loader.gif" alt="" />
+</div>
+-->
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/Dashboard/HumanResource">Human Resource</a>
+                </li>
+                <li class="breadcrumb-item active">Medical Card Replacement</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="card-body">
+    <div style="text-align:right">
+        <input type="button" style="background: #162f25; color:whitesmoke; border-radius:10px" id="btnEdit" value="New Medical Card" onclick="MedicalCardRequirements();"/>
+    </div>
+    <hr/>
+    <div id="divMedicalCardsList"></div>
+</div>
+
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">New Medical Card</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal Links////////////////////////////*@
+<div class="modal fade" id="myModalLinks" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Actions</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodyLinks">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadMedicalCardReplacements ();
+        var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+        if (Successmsg != "") {
+            Swal.fire('Success', Successmsg, 'success', true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+    });
+    var LoadMedicalCardReplacements  = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: "/WelfareManagement/MedicalCardReplacementPartialView",
+            success: function (data) {
+                $("#divMedicalCardsList").empty().html(data);
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+    var Proceed = function () {
+
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: "/WelfareManagement/NewMedicalCard",
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+
+    var viewCard = function (DocNo) {
+        ShowProgress();
+        window.location = "/WelfareManagement/MedicalCardReplacementDocument?documentNo=" + DocNo;
+    }
+
+    var MedicalCardRequirements = function () {
+
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: "/WelfareManagement/MedicalCardRequirements",
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+
+    //var SubmitNewCard = function() {
+    //    var employeeNo = $('#txtEmployeeNo').val();
+    //    var employeeName = $('#txtEmployeeName').val();
+    //    var dependantNo = $('#ddlDependantNo').val();
+    //    var dependantName = $('#txtDependantName').val();
+    //    var cardNo = $('#txtCardNo').val();
+    //    var date = $('#txtDate').val();
+    //    var description = $('#txtDescription').val();
+
+    //    if (!employeeNo) {
+    //        Swal.fire('Warning', 'Employee No is missing.', 'warning');
+    //        return;
+    //    }
+
+    //    if (!dependantNo || dependantNo === "--Select Dependant No--") {
+    //        Swal.fire('Warning', 'Please select the dependant number.', 'warning');
+    //        return;
+    //    }
+
+    //    if (!cardNo) {
+    //        Swal.fire('Warning', 'Please enter the card number.', 'warning');
+    //        return;
+    //    }
+
+    //    if (!date) {
+    //        Swal.fire('Warning', 'Please select the date.', 'warning');
+    //        return;
+    //    }
+
+    //    if (!description) {
+    //        Swal.fire('Warning', 'Please enter the description.', 'warning');
+    //        return;
+    //    }
+
+    //    var data = {
+    //        EmployeeNo: employeeNo,
+    //        EmployeeName: employeeName,
+    //        DependantNo: dependantNo,
+    //        DependantName: dependantName,
+    //        CardNo: cardNo,
+    //        Date: date,
+    //        Description: description
+    //    };
+
+    //    $.ajax({
+    //        type: "POST",
+    //        url: "/WelfareManagement/SubmitNewCard",
+    //        data: JSON.stringify(data),
+    //        contentType: "application/json; charset=utf-8",
+    //        dataType: "json",
+    //        success: function (response) {
+    //            if (response.success) {
+    //                Swal.fire('Success', response.message, 'success');
+    //            } else {
+    //                Swal.fire('Error', response.message, 'error');
+    //            }
+    //        },
+    //        error: function (xhr, status, error) {
+    //            Swal.fire('Error', 'Failed to submit data. Please try again.', 'error');
+    //        }
+    //    });
+    //}
+    var SubmitNewCard = function () {
+        var employeeNo = $('#txtEmployeeNo').val();
+        var employeeName = $('#txtEmployeeName').val();
+        var dependantNo = $('#ddlDependantNo').val();
+        var dependantName = $('#txtDependantName').val();
+        var cardNo = $('#txtCardNo').val();
+        var date = $('#txtDate').val();
+        var description = $('#txtDescription').val();
+
+        if (!employeeNo) {
+            Swal.fire('Warning', 'Employee No is missing.', 'warning');
+            return;
+        }
+
+        if (!dependantNo || dependantNo === "--Select Dependant No--") {
+            Swal.fire('Warning', 'Please select the dependant number.', 'warning');
+            return;
+        }
+
+        if (!cardNo) {
+            Swal.fire('Warning', 'Please enter the card number.', 'warning');
+            return;
+        }
+
+        if (!date) {
+            Swal.fire('Warning', 'Please select the date.', 'warning');
+            return;
+        }
+
+        if (!description) {
+            Swal.fire('Warning', 'Please enter the description.', 'warning');
+            return;
+        }
+
+        var medicalCardReplacement = {
+            EmployeeNo: employeeNo,
+            EmployeeName: employeeName,
+            DependantNo: dependantNo,
+            DependantName: dependantName,
+            CardNo: cardNo,
+            DocumentDate: date,
+            Description: description
+        };
+
+        ShowProgress();
+        $.ajax({
+            type: "POST",
+            url: "/WelfareManagement/SubmitNewCardRequest",
+            data: JSON.stringify(medicalCardReplacement),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+                    window.location = data.message;
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (xhr, status, error) {
+                Swal.fire('Error', xhr.responseText, 'error');
+            },
+            complete: function () {
+                HideProgress();
+            }
+        });
+    };
+
+</script>

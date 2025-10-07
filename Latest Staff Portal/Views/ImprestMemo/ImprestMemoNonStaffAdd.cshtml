@@ -1,0 +1,38 @@
+﻿@model Latest_Staff_Portal.ViewModel.ImprestMemoNonStaffList
+
+<style>
+    .ui-front {
+        z-index: 2000 !important;
+    }
+
+    .ui-autocomplete {
+        /* these sets the height and width */
+        max-height: 200px;
+        max-width: 236px;
+        /* these make it scroll for anything outside */
+        overflow-x: scroll;
+        overflow-y: scroll;
+    }
+</style>
+<div class="bg-soft-dark" style="color:black">
+    <div class="row">
+        <div class="col-md-6" runat="server">
+            <span style="font-weight: bold"> Names</span>
+            <input type="text" class="form-control" id="txtNames"/>
+        </div>
+        <div class="col-md-6" runat="server">
+            <span style="font-weight: bold">Organization</span>
+            <input type="text" class="form-control" id="txtOrganization"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6" runat="server">
+            <span style="font-weight: bold"> Designation</span>
+            <input type="text" class="form-control" id="txtDesignation"/>
+        </div>
+    </div>
+    <hr/>
+    <div align="center">
+        <input type="button" class="btn btn-primary waves-effect waves-light" value="Add Non-Staff" onclick="AddMemoNonStaff();"/>
+    </div>
+</div>

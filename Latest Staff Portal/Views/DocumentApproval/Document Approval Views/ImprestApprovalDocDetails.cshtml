@@ -1,0 +1,128 @@
+﻿@model Latest_Staff_Portal.ViewModel.ImprestDocument
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    hr {
+        margin: 4px;
+    }
+</style>
+<div class="row">
+    <div class="col-md-6">
+        <b>Document No</b>
+        @Html.TextBoxFor(m => m.DocHeader.No, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        <b>Date Needed</b>
+        @Html.TextBoxFor(m => m.DocHeader.DateNeeded, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Account No</b>
+        @Html.TextBoxFor(m => m.DocHeader.RequestorNo, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        <b>Payee</b>
+        @Html.TextBoxFor(m => m.DocHeader.RequestorName, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Status</b>
+        @Html.TextBoxFor(m => m.DocHeader.Status, new { @class = "form-control", @readonly = "readonly", rows = 5 })
+    </div>
+    <div class="col-md-6">
+        <b>Station</b>
+        @Html.TextBoxFor(m => m.DocHeader.Dim1, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Department</b>
+        @Html.TextBoxFor(m => m.DocHeader.Dim2, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        @*<b>Section</b>
+        @Html.TextBoxFor(m => m.DocHeader.Section, new { @class = "form-control", @readonly = "readonly" })*@
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Purpose</b>
+        @Html.TextAreaFor(m => m.DocHeader.Remarks, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        <b>Total Net Amount</b>
+        @Html.TextBoxFor(m => m.DocHeader.TotalAmount, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<hr/>
+<hr style="border:1px solid black"/>
+<b>Imprest Lines</b>
+<hr/>
+<div class="pre-scrollable">
+    <table class="table table-hover" id="PurchaseRequisitionLine">
+        <thead>
+        <tr>
+            <th>Advance Type</th>
+            <th>Account No</th>
+            <th>Account Name</th>
+            <th>Description</th>
+            <th style="text-align:center">Quanity</th>
+            <th style="text-align:center">Unit Amount</th>
+            <th style="text-align:center">Amount</th>
+        </tr>
+        </thead>
+        <tbody>
+        @{
+            if (Model.ListOfImprestLines != null && Model.ListOfImprestLines.Count() > 0)
+            {
+                foreach (var item in Model.ListOfImprestLines)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AdvanceType)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Item)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ItemDesc)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ItemDesc2)
+                        </td>
+                        <td style="text-align:center">
+                            @Html.DisplayFor(modelItem => item.Quantity)
+                        </td>
+                        <td style="text-align:center">
+                            @Html.DisplayFor(modelItem => item.UnitAmount)
+                        </td>
+                        <td style="text-align:center">
+                            @Html.DisplayFor(modelItem => item.Amount)
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5" style="color:red">
+                        No Records Found
+                    </td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>
+<hr style="border:1px solid black"/>
+<div class="row">
+    <div class="col-md-12">
+        <b>Attachments</b>
+        <div id="divAttachDocs"></div>
+    </div>
+</div>

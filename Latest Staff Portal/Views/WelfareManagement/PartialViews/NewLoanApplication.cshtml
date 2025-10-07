@@ -1,0 +1,294 @@
+﻿@model Latest_Staff_Portal.ViewModel.LoanApplicationCard
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("PJ No", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="text" class="form-control" id="txtEmployeeNo" readonly style="background-color: #dedebd;" value="@Model.EmployeeNo">
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Employee Name", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="text" class="form-control" id="txtEmployeeName" readonly style="background-color: #dedebd;" value="@Model.EmployeeName">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Loan Product Type", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="text" class="form-control" value="Advance" id="txtLoanProductType" readonly style="background-color: #dedebd;" value="@Model.LoanProductType">
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Repayment Period", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <select id="ddlRepaymentPeriod" name="ddlRepaymentPeriod" class="form-control">
+                    <option value="">----</option>
+                    <option value="1">1 Month</option>
+                    <option value="2">2 Months</option>
+                    <option value="3">3 Months</option>
+                    <option value="4">4 Months</option>
+                    <option value="5">5 Months</option>
+                    <option value="6">6 Months</option>
+                    <option value="7">7 Months</option>
+                    <option value="8">8 Months</option>
+                    <option value="9">9 Months</option>
+                    <option value="10">10 Months</option>
+                    <option value="11">11 Months</option>
+                    <option value="12">12 Months</option>
+                </select>
+                <div class="a"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Basic Pay", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="text" class="form-control" id="txtBpay" readonly style="background-color: #dedebd;" value="@Model.BasicPay">
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Net Salary", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="text" class="form-control" id="txtNPay" readonly style="background-color: #dedebd;" value="@Model.NetPay">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Amount Requested", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="text" class="form-control" onchange="CheckAThird()" id="txtAmountRequested"/>
+            </div>
+        </div>
+    </div>
+
+    @*<div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    <input type="text" class="form-control" id="txtDescription" value="@Model.Description">
+                </div>
+            </div>
+        </div>*@
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Reason", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <textarea class="form-control" id="txtReason" rows="4"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <p>Attachments</p>
+    <div class="col-md-12">
+        <input type="file" class="form-control" required id="attachments" multiple="multiple"/>
+        @*<span class="text-danger">*</span>*@
+    </div>
+</div>
+
+<hr/>
+<div align="center">
+    <input type="button" class="btn btn-primary waves-effect waves-light" value="Submit Request" onclick="SubmitLoansApplication();"/>
+</div>
+<script type="text/javascript">
+        $(document).ready(function () {
+            $('#txtDate').datepicker({
+                changeMonth: true,
+                changeYear: true,
+                autoclose: true,
+                yearRange: '-1:+2',
+                showOtherMonths: true,
+                dateFormat: 'dd/mm/yy'
+            });
+            $("#txtDate").focus(function () {
+                $("#ui-datepicker-div").position({
+                    my: "left top",
+                    at: "left bottom",
+                    of: $(this)
+                });
+            });
+
+            //document.getElementById("ddlDim2").disabled = true;
+            //document.getElementById("ddlDim1").disabled = true;
+            //document.getElementById("ddlDim3").disabled = true;
+        });
+
+        var SubmitLoansApplication = function () {
+            var reason = $("#txtReason").val();
+            var productType = $("#txtLoanProductType").val();
+            var appDate = $("#txtDate").val();
+            var amount = $("#txtAmountRequested").val();
+            var attachment = $("#attachments").val();
+            var Instalment = $("#ddlRepaymentPeriod").children("option:selected").val();
+
+            // Allowed file types
+            var allowedFileTypes = ['image/jpeg', 'image/png', 'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+
+            //if (attachment === "") {
+            //    Swal.fire('Warning', "Please Attach Supporting Documents", 'warning');
+            //    return;
+            //}
+
+            if (reason === "") {
+                Swal.fire('Warning', "Input reason for application", 'warning');
+                return;
+            } else if (amount === "") {
+                Swal.fire('Warning', "Enter Amount Requested", 'warning');
+                return;
+            } else if (appDate === "") {
+                Swal.fire('Warning', "Input Date", 'warning');
+                return;
+            } else {
+                var LoanApplicationCard = {
+                    ApplicationDate: appDate,
+                    LoanProductType: productType,
+                    AmountRequested: amount,
+                    Instalment: Instalment,
+                    Reason: reason
+                };
+                var filename, base64String, filetype;
+                var files = document.getElementById('attachments').files;
+                var file = files[0];
+
+                if (!file) {
+                    //Swal.fire('Warning', 'Please add attachment. Thanks!!', 'warning');
+                    //return;
+                    ShowProgress();
+                    $.ajax({
+                        type: "POST",
+                        url: "/WelfareManagement/SubmitLoansApplication",
+                        data: JSON.stringify({
+                            NewApp: LoanApplicationCard,
+                            FileName: '',
+                            FileType: '',
+                            FileContent: ''
+                        }),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.success) {
+                                window.location = data.message;
+                            } else {
+                                Swal.fire('Warning', data.message, 'warning');
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            Swal.fire('Error', xhr.responseText, 'error');
+                        },
+                        complete: function () {
+                            HideProgress();
+                        }
+                    });
+
+                }
+                else {
+
+                    if (files.length) {
+                        if (!allowedFileTypes.includes(file.type)) {
+                            Swal.fire('Warning', 'Invalid file format. Please upload JPEG, PNG, PDF, DOC, or DOCX files only.', 'warning');
+                            return;
+                        }
+                        if (file.size > 10000000) {
+                            Swal.fire('Warning', 'Please only files less than 10MB allowed. Thanks!!', 'warning');
+                            return;
+                        } else {
+                            var blob = file.slice();
+                            filetype = file.type;
+                            filename = file.name;
+                            var reader = new FileReader();
+                            reader.onloadend = function (evt) {
+                                if (evt.target.readyState === FileReader.DONE) {
+                                    var cont = evt.target.result;
+                                    base64String = getB64Str(cont);
+
+                                    ShowProgress();
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/WelfareManagement/SubmitLoansApplication",
+                                        data: JSON.stringify({
+                                            NewApp: LoanApplicationCard,
+                                            FileName: filename,
+                                            FileType: filetype,
+                                            FilType: "json",
+                                            suceContent: base64String
+                                        }),
+                                        contentType: "application/json; charset=utf-8",
+                                        datacess: function (data) {
+                                            if (data.success) {
+                                                window.location = data.message;
+                                            } else {
+                                                Swal.fire('Warning', data.message, 'warning');
+                                            }
+                                        },
+                                        error: function (xhr, status, error) {
+                                            Swal.fire('Error', xhr.responseText, 'error');
+                                        },
+                                        complete: function () {
+                                            HideProgress();
+                                        }
+                                    });
+                                }
+                            };
+                            reader.readAsArrayBuffer(blob);
+                        }
+                    }
+                }
+            }
+        };
+        function CheckAThird() {
+            var basicP = parseFloat($("#txtBpay").val());  // Parse float to ensure numeric comparison
+            var netP = parseFloat($("#txtNPay").val());    // Parse float to ensure numeric comparison
+            var amount = parseFloat($("#txtAmountRequested").val());  // Parse float to ensure numeric comparison
+            var Instalment = parseInt($("#ddlRepaymentPeriod").children("option:selected").val());  // Parse int for numeric operations
+            if (amount > basicP) {
+                Swal.fire('Warning', 'Salary advance should not be more than one months basic pay', 'warning');
+                $("#txtAmountRequested").val('');  // Clear the amount field
+                return;
+
+            }
+            if (isNaN(Instalment) || Instalment === '') {
+                Swal.fire('Warning', 'Please select the repayment period.', 'warning');
+                $("#txtAmountRequested").val('');  // Clear the amount field
+                return;
+            }
+
+            // Check if the requested amount exceeds one-third of net pay
+            if (netP - amount / Instalment < basicP / 3) {
+                Swal.fire('Warning', 'The amount exceeds a third of your net pay.', 'warning');
+                $("#txtAmountRequested").val('');  // Clear the amount field
+                return;
+            }
+        }
+        function getB64Str(buffer) {
+            var binary = '';
+            var bytes = new Uint8Array(buffer);
+            var len = bytes.byteLength;
+            for (var i = 0; i < len; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            return window.btoa(binary);
+        }
+    </script>

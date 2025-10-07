@@ -1,0 +1,323 @@
+﻿@model Latest_Staff_Portal.ViewModel.ANUPEAisalCardList
+@{
+    ViewBag.Title = "ProbationScoreCard";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+</style>
+<!--
+<link href="~/assets/css/Loader.css" rel="stylesheet" />
+<div class="loading" align="center" id="divLoader">
+    <br />
+    <img src="~/assets/images/ajax-loader.gif" alt="" />
+</div>
+-->
+<div style="background-color: black;">
+    <a href="#" onclick="AppRequisitionLink();" style="color:yellow"><<< Back To Probation List</a>
+</div>
+<div class="card">
+    <div class="card-title">Probation Document(Document No : @Request.QueryString["AppDoc"])</div>
+    <div class="card-body">
+        <div id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="card mb-1 shadow-none">
+                <div class="card-header" id="headingOne" aria-controls="collapseOne" aria-expanded="true" data-toggle="collapse" href="#collapseOne">
+                    <h6 class="m-0">
+                        <span class="fa fa-arrow-up"></span>Section 1 : Employee Details
+                    </h6>
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+                        <div class="row" style="padding: 2px">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label style="font-size: 12px; font-weight: bold">Apprisal Code</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <span class="label label-warning" id="DocNo">@Model.ApprisalCode</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label style="font-size: 12px; font-weight: bold">ANUPEAisal Date</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <span class="label label-warning">@Model.ANUPEAisalDate</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="padding: 2px">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label style="font-size: 12px; font-weight: bold">Staff Number</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <span class="label label-warning">@Model.StaffNo</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label style="font-size: 12px; font-weight: bold">Staff Name</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <span class="label label-warning">@Model.StaffName</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="padding: 2px">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label style="font-size: 12px; font-weight: bold">Evaluation Period Start Date</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <span class="label label-warning">@Model.ANUPEAisalStartDate</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label style="font-size: 12px; font-weight: bold">Evaluation Period End Date</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <span class="label label-warning">@Model.ANUPEAisalEndDate</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="padding: 2px">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label style="font-size: 12px; font-weight: bold">Appointment Date</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <span class="label label-warning" id="AppPeriod">@Model.AppointmentDate</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label style="font-size: 12px; font-weight: bold">Designation</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <span class="label label-warning">@Model.Designation</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="padding: 2px">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label style="font-size: 12px; font-weight: bold">Department</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <span class="label label-warning" id="AppPeriod">@Model.Department</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label style="font-size: 12px; font-weight: bold">ANUPEAisal Period</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <span class="label label-warning">@Model.ApprisalPeriod</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="padding: 2px">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label style="font-size: 12px; font-weight: bold">ANUPEAisal Stage</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <span class="label label-warning" id="AppPeriod">@Model.ANUPEAisalStage</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-1 shadow-none">
+                <div class="card-header" id="headingEight" aria-expanded="false" aria-controls="collapseEight" data-toggle="collapse" href="#collapseEight">
+                    <h6 class="m-0">
+                        <span class="fa fa-arrow-down"></span> Section 2 : Major Accomplishments
+                    </h6>
+                </div>
+                <div id="collapseEight" class="collapse" aria-labelledby="headingEight" data-parent="#accordion">
+                    <div class="card-body">
+                        <div id="divAccombl"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-1 shadow-none">
+                <div class="card-header" id="headingNine" aria-expanded="false" aria-controls="collapseNine" data-toggle="collapse" href="#collapseNine">
+                    <h6 class="m-0">
+                        <span class="fa fa-arrow-down"></span>Section 3 : Key Strengths
+                    </h6>
+                </div>
+                <div id="collapseNine" class="collapse" aria-labelledby="headingNine" data-parent="#accordion">
+                    <div class="card-body">
+                        <div id="divEmpStrength"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-1 shadow-none">
+                <div class="card-header" id="headingTen" aria-expanded="false" aria-controls="collapseTen" data-toggle="collapse" href="#collapseTen">
+                    <h6 class="m-0">
+                        <span class="fa fa-arrow-down"></span>Section 4 : Areas of Improvement
+                    </h6>
+                </div>
+                <div id="collapseTen" class="collapse" aria-labelledby="headingTen" data-parent="#accordion">
+                    <div class="card-body">
+                        <div id="divEmpAreaOfImprovement"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-1 shadow-none">
+                <div class="card-header" id="headingEleven" aria-expanded="false" aria-controls="collapseEleven" data-toggle="collapse" href="#collapseEleven">
+                    <h6 class="m-0">
+                        <span class="fa fa-arrow-down"></span> Section 5 :Other Comments (if any)
+                    </h6>
+                </div>
+                <div id="collapseEleven" class="collapse" aria-labelledby="headingEleven" data-parent="#accordion">
+                    <div class="card-body">
+                        <div id="diveOtherComm"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div align="right">
+            <hr/>
+            <input type="button" value="Send To Supervisor >>>" class="btn btn-primary pull-right" id="btnApp" onclick="SendDocTo();"/>
+        </div>
+    </div>
+</div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <label id="labelF"></label>
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal Small Modal////////////////////////////*@
+<div class="modal fade" id="myModalSmall" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <label id="labelF"></label>
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodySmall">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.shadow-none').on('shown.bs.collapse', function () {
+            $(this).find('.fa-arrow-down').removeClass('fa-arrow-down').addClass('fa-arrow-up');
+        }).on('hidden.bs.collapse', function () {
+            $(this).find('.fa-arrow-up').removeClass('fa-arrow-up').addClass('fa-arrow-down');
+        });
+        LoadSectionData();
+    });
+    var LoadSectionData = function () {
+        ShowProgress();
+        var DocNo = $("#DocNo").html();
+        LoadEmpExtraInf(DocNo, "Major Accomplishments", '1', "divAccombl");
+        LoadEmpExtraInf(DocNo, "Key Strengths", '2', "divEmpStrength");
+        LoadEmpExtraInf(DocNo, "Areas of Improvement", '3', "divEmpAreaOfImprovement");
+        //LoadEmpExtraInf(DocNo, "Expected Standard(s) of Performance", '4', "diveOtherComm");
+        HideProgress();
+    };
+    var LoadEmpExtraInf = function (DocNo, Title, EntryType, DivID) {
+        $.ajax({
+            async: true,
+            type: "post",
+            contentType: "application/json; charset = utf-8",
+            data: JSON.stringify({ AppDoc: DocNo, Level: "A", Title: Title, EntryType: EntryType }),
+            url: "/ANUPEAisal/LoadOtherEmployeeANUPEAisalInf",
+            success: function (data) {
+                $("#" + DivID).html(data);
+            },
+            error: function () {
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+    var AppRequisitionLink = function () {
+        ShowProgress();
+        window.location = "/ANUPEAisal/MyProbationList";
+    };
+    var SendDocTo = function () {
+        var DocNo = $("#DocNo").html();
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo, SendTo: "1" }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/ANUPEAisal/SendDocumentTo',
+            success: function (data) {
+                if (data.success == true) {
+                    ShowProgress();
+                    window.location = "/ANUPEAisal/MyProbationList";
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+</script>

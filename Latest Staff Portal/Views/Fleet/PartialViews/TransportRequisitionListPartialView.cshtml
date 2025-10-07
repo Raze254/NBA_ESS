@@ -1,0 +1,79 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.FleetRequests>
+
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead>
+            <tr>
+                <th>Action</th>
+                <th>Requisition No</th>
+              
+               
+             @*   <th>Destination</th>
+               *@
+                <th>Date of Request</th>
+                <th>Time Requested</th>
+               
+                <th>Journey Route</th>  
+                <th>Days Requested</th>            
+                <th>Trip End Date</th>
+                <th>Trip End Time</th>
+                <th>Status</th>
+               
+            </tr>
+        </thead>
+
+        <tbody>
+
+
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <input class="btn btn-primary btn-sm action-buttons2"  type="button" onclick="ViewDoc('@item.Transport_Requisition_No');"  value="Select" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Transport_Requisition_No)
+                    </td>
+                   
+                  
+                  @*  <td>
+                        @Html.DisplayFor(modelItem => item.Destination)
+                    </td>*@
+                   
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date_of_Trip)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Time_Requested)
+                    </td>
+                   
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Journey_Route)
+                    </td>
+                   
+                    <td>
+                        @Html.DisplayFor(modelItem => item.No_of_Days_Requested)
+                    </td>
+                  
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Trip_End_Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Trip_End_Time)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                   
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>$("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100] // Same options for the second table
+    });</script>

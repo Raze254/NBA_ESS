@@ -1,0 +1,309 @@
+﻿@model Latest_Staff_Portal.ViewModel.IFSTenderCommitteeCard
+
+
+<style>
+	thead {
+		background-color: black;
+		color: white;
+	}
+
+	hr {
+		margin: 4px;
+	}
+
+	.BtnPadding {
+		padding: 1px;
+		font-size: 12px;
+	}
+</style>
+<hr />
+
+
+
+	
+	<div class="card-body">
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Document_No ", htmlAttributes: new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Document_No, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Committee_Type", htmlAttributes: new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Committee_Type, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("IFS_Code ", htmlAttributes: new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.IFS_Code, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Description ", htmlAttributes: new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Description, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Document_Date ", htmlAttributes: new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Document_Date, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Appointment_Effective_Date ", htmlAttributes: new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Appointment_Effective_Date, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Appointing_Authority ", htmlAttributes: new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Appointing_Authority, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Tender_Name ", htmlAttributes: new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Tender_Name, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Duration ", htmlAttributes: new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Duration, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Raised_By ", htmlAttributes: new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Raised_By, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Name ", htmlAttributes: new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Name, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Designation ", htmlAttributes: new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Designation, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+				</div>
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Global_Dimension_1_Code ", htmlAttributes: new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Global_Dimension_1_Code, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Global_Dimension_2_Code ", htmlAttributes: new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Global_Dimension_2_Code, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Min_Required_No_of_Members ", htmlAttributes: new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Min_Required_No_of_Members, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Actual_No_of_Committee_Memb ", htmlAttributes: new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Actual_No_of_Committee_Memb, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+				</div>
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Approval_Status", htmlAttributes: new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Approval_Status, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Approval_Status", htmlAttributes: new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Approval_Status, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+				</div>
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Created_Date ", htmlAttributes: new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Created_Date, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Created_Time ", htmlAttributes: new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Created_Time, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+				</div>
+			</div>
+		</div>
+
+
+		<hr />
+		@*<div align="center" id="DivUpdateButton">
+				<input type="button" class="btn btn-primary waves-effect waves-light" value="Update Header" onclick="UpdatePurchaseHeader();" />
+			</div>*@
+		<div>
+			<hr style="border:1px solid black" />
+			<b>Committee Lines</b>
+			<hr />
+			<div id="divIFSTenderCommitteeLines"></div>
+			<hr style="border:1px solid black" />
+		</div>
+	</div>
+
+	@{
+		@* if (Model.Status == "Open")
+			{
+				<div align="center">
+					<input type="button" class="btn btn-primary waves-effect waves-light" value="Send (@Model.Code) For Approval" onclick="SendDocForApproval('@Model.Code');" />
+				</div>
+			}*@
+	}
+
+
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content bg-white">
+			<div class="modal-header">
+				<h4 class="modal-title"><label id="labelF"></label></h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body" id="modalBody">
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+@*//////////////////////Modal View Doc////////////////////////////*@
+<div class="modal fade" id="myModalAttachment" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content bg-white">
+			<div class="modal-header">
+				<h4 class="modal-title">Attachment</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body" id="modalAttachmentBody" style="width:100%;height:450px">
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+@*//////////////////////Document Rejection Modal////////////////////////////*@
+<div class="modal fade" id="myModalComments" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content bg-white">
+			<div class="modal-header">
+				<h4 class="modal-title">Rejection Comments</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body" id="modalCommentBody">
+				<div id="divDocComments"></div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script src="~/assets/js/pdfobject.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadIFSTenderCommitteeLines(`@Model.Document_No`);
+      
+        var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+        if (Successmsg != "") {
+            Swal.fire('Success', Successmsg, 'success', true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+    });
+    var LoadIFSTenderCommitteeLines = function (DocNo) {
+        var status = '@Model.Approval_Status';
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "html",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ DocNo: DocNo, status: status }),
+            url: "/Purchase/IFSTenderCommitteeLines",
+            success: function (data) {
+                $("#divIFSTenderCommitteeLines").html(data);
+                HideProgress();
+                GetDocumentAttachments();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    };
+
+
+   
+
+	
+
+   
+
+
+</script>
+
+
+
+

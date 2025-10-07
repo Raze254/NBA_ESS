@@ -1,0 +1,127 @@
+﻿@model Latest_Staff_Portal.ViewModel.WarrantImprestLines
+
+@{
+    ViewBag.Title = "NewImprestWarrantLine";
+}
+
+
+    
+<div class="row">
+    @*<div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.No, htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.No, new { htmlAttributes = new { @class = "form-control", @id = "No" } })
+            @Html.ValidationMessageFor(model => model.No, "", new { @class = "text-danger" })
+        </div>
+    </div>*@
+
+    @* <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Advance_Type, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                @Html.EditorFor(model => model.Advance_Type, new { htmlAttributes = new { @class = "form-control", @id="" } })
+                @Html.ValidationMessageFor(model => model.Advance_Type, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Account Type", htmlAttributes: new { @class = "control-label col-md-2" })
+            <select class="form-control" id=" Account_Type">
+                <option value="0">G/L Account</option>
+                <option value="1">Customer</option>
+                <option value="2">Vendor</option>
+                <option value="3">Bank Account</option>
+                <option value="4">Fixed Asset</option>
+                <option value="5">IC Partner</option>
+                <option value="6">Employee</option>
+
+            </select>
+
+            @Html.ValidationMessageFor(model => model.Account_Type, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Account No", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.DropDownListFor(model => model.Account_No, Model.ListOfGLAccounts, "Select Option", new { @class = "form-control", @id = "Account_No" })
+            @Html.ValidationMessageFor(model => model.Account_No, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    @*<div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Account_Name, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                @Html.EditorFor(model => model.Account_Name, new { htmlAttributes = new { @class = "form-control", @id="Account_Name" } })
+                @Html.ValidationMessageFor(model => model.Account_Name, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+    @* <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Purpose, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                @Html.EditorFor(model => model.Purpose, new { htmlAttributes = new { @class = "form-control", @id="" } })
+                @Html.ValidationMessageFor(model => model.Purpose, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Daily Rate", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.Daily_Rate, new { htmlAttributes = new { @class = "form-control", @id = "Daily_Rate" } })
+            @Html.ValidationMessageFor(model => model.Daily_Rate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("No of Days", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.No_of_Days, new { htmlAttributes = new { @class = "form-control", @id = "No_of_Days" } })
+            @Html.ValidationMessageFor(model => model.No_of_Days, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Vote Item", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.DropDownListFor(model => model.Vote_Item, Model.ListOfVoteItems, "Select Option", new { @class = "form-control", @id = "Vote_Item" })
+            @Html.ValidationMessageFor(model => model.Vote_Item, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    @*  <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Currency_Code, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                @Html.EditorFor(model => model.Currency_Code, new { htmlAttributes = new { @class = "form-control", @id="Currency_Code" } })
+                @Html.ValidationMessageFor(model => model.Currency_Code, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Amount", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control", @id = "Amount" } })
+            @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    @* <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Project, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                @Html.EditorFor(model => model.Project, new { htmlAttributes = new { @class = "form-control", @id="Project" } })
+                @Html.ValidationMessageFor(model => model.Project, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Task_No, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                @Html.EditorFor(model => model.Task_No, new { htmlAttributes = new { @class = "form-control", @id="Task_No" } })
+                @Html.ValidationMessageFor(model => model.Task_No, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+</div>
+<div align="center">
+    <input type="button" class="btn btn-primary action-buttons" value="Submit Record" onclick="SubmitImprestWarrantLine();" />
+</div>

@@ -1,0 +1,67 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.SafariImprest>
+
+@{
+    ViewBag.Title = "SafariImprestWarrantList";
+}
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black; color:white;">
+
+            <tr>
+                <th>Action</th>
+                <th>No</th>
+                <th>Date</th>
+                <th>Subject</th>
+                <th>Requestor</th>
+                <th>Requestor Name</th>
+                <th>Status</th>
+                <th>User ID</th>
+            </tr>
+        </thead>
+        <tbody>
+
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <input type="button" onclick="ViewDoc('@item.No');" class="btn action-buttons2" value="Select" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.No)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Subject)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Requestor)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Requestor_Name)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.User_ID)
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script type="text/javascript">$("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100] // Same options for the second table
+    });</script>
+

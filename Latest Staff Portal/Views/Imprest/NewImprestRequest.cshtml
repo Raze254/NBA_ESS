@@ -1,0 +1,600 @@
+﻿@model Latest_Staff_Portal.ViewModel.NewImprestRequisition
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+
+    .NoRecords {
+        background-color: #dedbdb
+    }
+</style>
+<!--
+<link href="~/assets/css/Loader.css" rel="stylesheet" />
+<div class="loading" align="center" id="divLoader">
+    <br />
+    <img src="~/assets/images/ajax-loader.gif" alt="" />
+</div>
+-->
+<div class="card pre-scrollable">
+<div class="card-body">
+<b>Travel Advance Header</b>
+<hr/>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Travel Type", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @*@Html.DropDownListFor(model => model.ImprestDueType, Model.ListOfImprestDue, "--select Travel Type--", new { @class = "form-control", @id = "ddlImprestDueType" })
+                        @Html.ValidationMessageFor(model => model.ImprestDueType, "", new { @class = "text-danger" })*@
+                <select class="form-control" id="PRVType" name="PRVType" onchange="ShowRequiredDiv()">
+                    <option value="">--Select Type--</option>
+                    <option value="0">Local</option>
+                    <option value="1">International</option>
+
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Date required:", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="datetime" class="form-control" placeholder="dd/mm/yyyy" id="dtPicker" onkeydown="return false;" autocomplete="off"/>
+                <div class="a"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Date of Travel:", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="datetime" class="form-control" placeholder="dd/mm/yyyy" id="TxtTravelDate" onkeydown="return false;" autocomplete="off"/>
+                <div class="a"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Expected Date of Return:", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="datetime" class="form-control" placeholder="dd/mm/yyyy" id="TxtReturnDate" onkeydown="return false;" autocomplete="off"/>
+                <div class="a"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Donor Code:", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(model => model.Dim1, Model.ListOfDim1, "--select Donor--", new { @class = "form-control", id = "ddlDim1", onchange = "FilterDimension2()" })
+                @Html.ValidationMessageFor(model => model.Dim1, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Donor Name", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @*@Html.LabelFor(m => m.Dim1Name, new { @class = "form-control", @readonly = "readonly", @id = "txtDim1" })*@
+                <label id="txtDim1" class="form-control">@Model.Dim1Name</label><br/>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Project Code", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(model => model.Dim2, Model.ListOfDim2, "--select Project--", new { @class = "form-control", id = "ddlDim2", onchange = "FilterDimension3()" })
+                @Html.ValidationMessageFor(model => model.Dim2, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <div class="form-group">
+                @Html.Label("Project Name", new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    @*@Html.LabelFor(m => m.Dim2Name, new { @class = "form-control", @readonly = "readonly",  @id = "txtDim2" })*@
+                    <label id="txtDim2" class="form-control">@Model.Dim2Name</label><br/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Program Area Code", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(model => model.Dim3, Model.ListOfDim3, "--select Program--", new { @class = "form-control", id = "ddlDim3", onchange = "FilterDimension4()" })
+                @Html.ValidationMessageFor(model => model.Dim3, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <div class="form-group">
+                @Html.Label("Program Area Name", new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    @*@Html.LabelFor(m => m.Dim3, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd", @id = "txtDim3" })*@
+                    <label id="txtDim3" class="form-control">@Model.Dim3Name</label><br/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="row" id="DivSubprogram">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Sub-Program Code", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(model => model.Dim7, Model.ListOfDim7, "--select Sub-Program--", new { @class = "form-control", id = "ddlDim7", onchange = "GetDimension7Name()" })
+                @Html.ValidationMessageFor(model => model.Dim7, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <div class="form-group">
+                @Html.Label("Sub Program Name", new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    @*@Html.LabelFor(m => m.Dim7, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd", @id = "txtDim7" })*@
+                    <label id="txtDim7" class="form-control">@Model.Dim7Name</label><br/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Activity/ Beneficiary Code", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(model => model.Dim4, Model.ListOfDim4, "--select Activity--", new { @class = "form-control", id = "ddlDim4", onchange = "GetDimension4Name()" })
+                @Html.ValidationMessageFor(model => model.Dim4, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <div class="form-group">
+                @Html.Label("Activity/ Beneficiary Name", new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    @*@Html.LabelFor(m => m.Dim4, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd", @id = "txtDim4" })*@
+                    <label id="txtDim4" class="form-control">@Model.Dim4Name</label><br/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("County Code", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(model => model.Dim5, Model.ListOfDim5, "--select County--", new { @class = "form-control", id = "ddlDim5", onchange = "GetDimension5Name()" })
+                @Html.ValidationMessageFor(model => model.Dim5, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <div class="form-group">
+                @Html.Label("County Name", new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    @*@Html.LabelFor(m => m.Dim5, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd", @id = "txtDim5" })*@
+                    <label id="txtDim5" class="form-control">@Model.Dim5Name</label><br/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" id="DivMCC">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Major Cost Category Code", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(model => model.Dim6, Model.ListOfDim6, "--select Major Cost Category--", new { @class = "form-control", id = "ddlDim6", onchange = "GetDimension6Name()" })
+                @Html.ValidationMessageFor(model => model.Dim6, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <div class="form-group">
+                @Html.Label("Major Cost Category Name", new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    @*@Html.LabelFor(m => m.Dim6, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd", @id = "txtDim6" })*@
+                    <label id="txtDim6" class="form-control">@Model.Dim6Name</label><br/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Responsibility Centre", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(model => model.RespC, Model.ListOfResponsibility, "--select Responsibility Centre--", new { @class = "form-control", id = "ddlRespC" })
+                @Html.ValidationMessageFor(model => model.RespC, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <!--<div class="col-md-6">
+    <div class="form-group">
+    <div class="form-group">-->
+    @*@Html.Label("Responsibility Centre Name", htmlAttributes: new { @class = "control-label col-md-12" })*@
+    <!--<div class="col-md-12">-->
+    @*@Html.LabelFor(m => m.RespC, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd", @id = "txtRespC" })*@
+    <!--<label id="txtRespC" class="form-control">@Model.RespC</label><br />
+    </div>
+    </div>
+    </div>
+    </div>-->
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Purpose:(150 Characters)", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <textarea id="txtRemarks" class="form-control" maxlength="150"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+<hr style="border:1px solid black"/>
+<div align="center">
+    <input type="button" class="btn btn-primary waves-effect waves-light" value="Create Document" onclick="SubmitImprestRequisition();"/>
+</div>
+</div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" ke aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myModalLabel">New Imprest Line</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#dtPicker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-0:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy',
+            minDate: 0
+        });
+        $('#TxtTravelDate').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-0:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy',
+            minDate: 0
+        });
+        
+        $('#TxtReturnDate').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-0:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy',
+            minDate: 0
+        });
+        $(window).resize(function () {
+            $('#dtPicker').datepicker('hide');
+            $('#dtPicker').blur();
+            $('#TxtTravelDate').datepicker('hide');
+            $('#TxtTravelDate').blur();
+            $('#TxtReturnDate').datepicker('hide');
+            $('#TxtReturnDate').blur();
+
+        });
+        //#ddlDim1,#ddlDim2,#ddlDim3,#ddlDim4,#ddlDim5,
+        $("#ddlRespC,#ddlImprestDueType").select2({
+            width: '100%'
+        });
+        //document.getElementById("ddlDim1").disabled = true;
+        //document.getElementById("ddlDim2").disabled = true;
+    });   
+    var FilterDimension2 = function () {
+        var Dim1 = $("#ddlDim1").children("option:selected").val();
+       
+        if (Dim1 == "") {
+            $("#ddlDim2 option").remove();
+            $('#ddlDim2').empty().append('<option selected="selected" value="">--Select Project--</option>');
+        }
+        else {
+           // ShowProgress();
+            
+            $("#ddlDim2 option").remove();
+            $('#ddlDim2').empty().append('<option selected="selected" value="">--Select Project---</option>');
+
+            $.getJSON("/Common/FilterDimension2", { Dim1: Dim1 },
+                function (data) {
+                    $('#ddlDim2').empty().append('<option selected="selected" value="">--Select Project--</option>');
+                    $.each(data.ListOfDim2, function () {
+                        $("#ddlDim2").append($("<option></option>").val(this['Value']).html(this['Text']));
+                    });
+                    //var dname = data.DName;
+                    $("#txtDim1").val(data.DName);
+                  //  HideProgress();
+                });
+            $.getJSON("/Common/GetDimensionName", { Dim1: Dim1 },
+                function (data) {
+                    if (data.DName != null) {
+                        $("#txtDim1").text(data.DName);
+                        //  $("#txtVacantPosition").text(data.newBal.VacantPositions);
+                    }
+                    else {
+                        Swal.fire('Warning', data.message, 'warning');
+                    }
+                   // HideProgress();
+                   
+                });
+            FilterDimension6();
+            if (Dim1 != "CDC") {
+                $("#DivSubprogram").hide();
+                $("#DivMCC").hide();
+                $("#ddlDim7 option:selected").val('');
+                $("#ddlDim6 option:selected").val('');
+            }
+            else {
+                $("#DivSubprogram").show();
+                $("#DivMCC").show();
+            }
+            
+            $("#ddlDim1 option:selected").text($("#ddlDim1").val());
+        }
+    }
+    var FilterDimension3 = function () {
+        var Dim1 = $("#ddlDim1").children("option:selected").val();
+        var Dim2 = $("#ddlDim2").children("option:selected").val();
+        if (Dim1 == "") {
+            $("#ddlDim3 option").remove();
+            $('#ddlDim3').empty().append('<option selected="selected" value="">--Select Programme--</option>');
+        }
+        else {
+            //ShowProgress();
+           
+            $("#ddlDim3 option").remove();
+            $('#ddlDim3').empty().append('<option selected="selected" value="">--Select Programme Area---</option>');
+
+            $.getJSON("/Common/FilterDimension3", { Dim1: Dim1, Dim2: Dim2 },
+                function (data) {
+                    $('#ddlDim3').empty().append('<option selected="selected" value="">--Select Programme Area--</option>');
+                    $.each(data.ListOfDim3, function () {
+                        $("#ddlDim3").append($("<option></option>").val(this['Value']).html(this['Text']));
+                    });
+                  //  HideProgress();
+                });
+            $.getJSON("/Common/GetDimensionName", { Dim1: Dim2 },
+                function (data) {
+                    if (data.DName != null) {
+                        $("#txtDim2").text(data.DName);
+                        //  $("#txtVacantPosition").text(data.newBal.VacantPositions);
+                    }
+                    else {
+                        Swal.fire('Warning', data.message, 'warning');
+                    }
+                    $("#ddlDim2 option:selected").text($("#ddlDim2").val());
+                    //HideProgress();
+                });
+            
+        }
+    }
+    var FilterDimension4 = function () {
+        var Dim1 = $("#ddlDim1").children("option:selected").val();
+        var Dim2 = $("#ddlDim2").children("option:selected").val();
+        var Dim3 = $("#ddlDim3").children("option:selected").val();
+        if (Dim1 == "") {
+            $("#ddlDim4 option").remove();
+            $('#ddlDim4').empty().append('<option selected="selected" value="">--Select Activity--</option>');
+        }
+        else {
+            ShowProgress();
+           
+            $("#ddlDim4 option").remove();
+            $('#ddlDim4').empty().append('<option selected="selected" value="">--Select Activity---</option>');
+
+            $.getJSON("/Common/FilterDimension4", { Dim1: Dim1, Dim2: Dim2, Dim3: Dim3 },
+                function (data) {
+                    $('#ddlDim4').empty().append('<option selected="selected" value="">--Select Activity--</option>');
+                    $.each(data.ListOfDim4, function () {
+                        $("#ddlDim4").append($("<option></option>").val(this['Value']).html(this['Text']));
+                    });
+                    HideProgress();
+                });
+
+            $.getJSON("/Common/GetDimensionNames", { Dim1: Dim3,DimNo: 3 },
+                function (data) {
+                    if (data.DName != null) {
+                        $("#txtDim3").text(data.DName);
+                        //  $("#txtVacantPosition").text(data.newBal.VacantPositions);
+                    }
+                    else {
+                        Swal.fire('Warning', data.message, 'warning');
+                    }
+                    $("#ddlDim3 option:selected").text($("#ddlDim3").val());
+                    HideProgress();
+                });
+            FilterDimension7();
+        }
+    }
+    var FilterDimension7 = function () {
+        var Dim1 = $("#ddlDim1").children("option:selected").val();
+        var Dim2 = $("#ddlDim2").children("option:selected").val();
+        var Dim3 = $("#ddlDim3").children("option:selected").val();
+        if (Dim1 == "") {
+            $("#ddlDim7 option").remove();
+            $('#ddlDim7').empty().append('<option selected="selected" value="">--Select Sub Program--</option>'); c
+        }
+        else {
+            ShowProgress();
+            $("#ddlDim7 option").remove();
+            $('#ddlDim7').empty().append('<option selected="selected" value="">--Select Sub Program---</option>');
+
+            $.getJSON("/Common/FilterDimension7", { Dim1: Dim1, Dim3: Dim3 },
+                function (data) {
+                    $('#ddlDim7').empty().append('<option selected="selected" value="">--Select Sub Program--</option>');
+                    $.each(data.ListOfDim7, function () {
+                        $("#ddlDim7").append($("<option></option>").val(this['Value']).html(this['Text']));
+                    });
+                    HideProgress();
+                });
+        }
+    }
+    var GetDimension4Name = function () {
+        var Dim1 = $("#ddlDim4").children("option:selected").val();
+        if (Dim1 == "") {
+            $("#ddlDim4 option").remove();
+            $('#ddlDim4').empty().append('<option selected="selected" value="">--Select Activity--</option>');
+        }
+        else {
+            ShowProgress();  
+            
+            $.getJSON("/Common/GetDimensionName", { Dim1: Dim1 },
+                function (data) {
+                    if (data.DName != null) {
+                        $("#txtDim4").text(data.DName);
+                        
+                    }
+                    else {
+                        Swal.fire('Warning', data.message, 'warning');
+                    }
+                    HideProgress();
+                    $("#ddlDim4 option:selected").text($("#ddlDim4").val());
+                });
+        }
+    }
+    var GetDimension5Name = function () {
+        var Dim1 = $("#ddlDim5").children("option:selected").val();
+        if (Dim1 == "") {
+            $("#ddlDim5 option").remove();
+            $('#ddlDim5').empty().append('<option selected="selected" value="">--Select County--</option>');
+        }
+        else {
+            ShowProgress();
+            
+            $.getJSON("/Common/GetDimensionName", { Dim1: Dim1 },
+                function (data) {
+                    if (data.DName != null) {
+                        $("#txtDim5").text(data.DName);
+
+                    }
+                    else {
+                    }
+                    HideProgress();
+                   
+                });
+            var dimm = $("#ddlDim5").val();
+            
+           $("#ddlDim5 option:selected").text(dimm);
+        }
+    }
+    var GetDimension6Name = function () {
+        var Dim1 = $("#ddlDim6").children("option:selected").val();
+        if (Dim1 == "") {
+            $("#ddlDim6 option").remove();
+            $('#ddlDim6').empty().append('<option selected="selected" value="">--Select MCC--</option>');
+        }
+        else {
+            ShowProgress();
+           
+            $.getJSON("/Common/GetDimensionName", { Dim1: Dim1 },
+                function (data) {
+                    if (data.DName != null) {
+                        $("#txtDim6").text(data.DName);
+
+                    }
+                    else {
+                        Swal.fire('Warning', data.message, 'warning');
+                    }
+                    HideProgress();
+                    $("#ddlDim6 option:selected").text($("#ddlDim6").val());
+
+                });
+        }
+    }
+    var GetDimension7Name = function () {
+        var Dim1 = $("#ddlDim7").children("option:selected").val();
+        if (Dim1 == "") {
+            $("#ddlDim7 option").remove();
+            $('#ddlDim7').empty().append('<option selected="selected" value="">--Select SubProgram--</option>');
+        }
+        else {
+            ShowProgress();
+           
+            $.getJSON("/Common/GetDimensionName", { Dim1: Dim1 },
+                function (data) {
+                    if (data.DName != null) {
+                        $("#txtDim7").text(data.DName);
+
+                    }
+                    else {
+                        Swal.fire('Warning', data.message, 'warning');
+                    }
+                    HideProgress();
+                    $("#ddlDim7 option:selected").text($("#ddlDim7").val());
+                });
+        }
+    }
+    var FilterDimension6 = function () {
+        var Dim1 = $("#ddlDim1").children("option:selected").val();
+
+        if (Dim1 == "") {
+            $("#ddlDim6 option").remove();
+            $('#ddlDim6').empty().append('<option selected="selected" value="">--Select MCC--</option>');
+        }
+        else {
+            // ShowProgress();
+            $("#ddlDim6 option").remove();
+            $('#ddlDim6').empty().append('<option selected="selected" value="">--Select MCC---</option>');
+
+            $.getJSON("/Common/FilterDimension6", { Dim1: Dim1 },
+                function (data) {
+                    $('#ddlDim6').empty().append('<option selected="selected" value="">--Select MCC--</option>');
+                    $.each(data.ListOfDim6, function () {
+                        $("#ddlDim6").append($("<option></option>").val(this['Value']).html(this['Text']));
+                    });
+                    //  HideProgress();
+                });
+
+
+
+        }
+    }
+</script>

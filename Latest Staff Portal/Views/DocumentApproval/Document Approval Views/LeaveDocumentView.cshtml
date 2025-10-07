@@ -1,0 +1,241 @@
+﻿@model Latest_Staff_Portal.ViewModel.LeaveReqList
+<table class="table table-bordered" style="width: 100%">
+    <tr>
+        <td>
+            <span style="font-size: small; font-weight: bold;">Document No</span>
+        </td>
+        <td>
+            @Html.DisplayFor(m => m.No)
+        </td>
+        <td>
+            <span style="font-size: small; font-weight: bold;">Employee No</span>
+        </td>
+        <td>
+            @Html.DisplayFor(m => m.EmpNo)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <span style="font-size: small; font-weight: bold;">Employee Name </span>
+        </td>
+        <td>
+            @Html.DisplayFor(m => m.EmpName)
+        </td>
+        @*<td>
+                <span style="font-size: small; font-weight: bold;">Department </span>
+            </td>
+            <td>
+                @Html.DisplayFor(m => m.Department)
+            </td>*@
+    </tr>
+    <tr>
+        <td>
+            <span style="font-size: small; font-weight: bold;">Application Date </span>
+        </td>
+        <td>
+            @Html.DisplayFor(m => m.Date)
+        </td>
+        <td>
+            <span style="font-size: small; font-weight: bold;">Applied Days </span>
+        </td>
+        <td>
+            @Html.DisplayFor(m => m.Applied_Days)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <span style="font-size: small; font-weight: bold;">Starting Date </span>
+        </td>
+        <td>
+            @Html.DisplayFor(m => m.Starting_Date)
+        </td>
+        <td>
+            <span style="font-size: small; font-weight: bold;">End Date </span>
+        </td>
+        <td>
+            @Html.DisplayFor(m => m.End_Date)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <span style="font-size: small; font-weight: bold;">Return Date </span>
+        </td>
+        <td>
+            @Html.DisplayFor(m => m.Return_Date)
+        </td>
+        <td>
+            <span style="font-size: small; font-weight: bold;">Remarks / Purpose </span>
+        </td>
+        <td>
+            @Html.DisplayFor(m => m.Remarks)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <span style="font-size: small; font-weight: bold;">Leave Type </span>
+        </td>
+        <td>
+            @Html.DisplayFor(m => m.Leave_Type)
+        </td>
+        <td>
+            <span style="font-size: small; font-weight: bold;">Reliever Admin unit </span>
+        </td>
+        <td>
+            @Html.DropDownListFor(m => m.RelieverImplementingUnit, new SelectList(Model.ListOfImplementingUnits, "Value", "Text", Model.RelieverImplementingUnit), "--Change Admin unit--", new { @id = "ddlDirectorate", @class = "form-control", @onchange = "GetLeaveRelievers()" })
+
+            @Html.DisplayFor(m => m.RelieverImplementingUnit)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <span style="font-size: small; font-weight: bold;">Reliever Name </span>
+        </td>
+        <td>
+            @Html.DropDownListFor(m => m.Reliever, new SelectList(Model.ListOfRelievers, "Value", "Text", Model.Reliever), "--Change Reliever--", new { id = "ddlReliever", Onchange = "ChangeReliever()", @class = "form-control" })
+
+            @Html.DisplayFor(m => m.RelieverName)
+        </td>
+    </tr>
+</table>
+<hr style="border:1px solid black"/>
+<b>HandOver Tasks </b>
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+        <tr>
+            <th>No</th>
+            <th>Activity</th>
+            <th>Status</th>
+            <th>Reason</th>
+        </tr>
+        </thead>
+        <tbody>
+        @if (Model.ListOfHandoverTasks.Count() > 0)
+        {
+            foreach (var item in Model.ListOfHandoverTasks)
+            {
+                <tr>
+                    <td>@item.No</td>
+                    <td>@item.Activity</td>
+                    <td>@item.Status</td>
+                    <td>@item.Reason</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6" style="color:red">
+                    No Records Found
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <hr style="border:1px solid black"/>
+    <b>HandOver Files </b>
+
+    <div class="table-responsive">
+        <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+            <thead style="background-color:black;color:white">
+            <tr>
+                <th>No</th>
+                <th>Item</th>
+                <th>Description</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            @if (Model.ListOfHandoverFiles.Count() > 0)
+            {
+                foreach (var item in Model.ListOfHandoverFiles)
+                {
+                    <tr>
+                        <td>@item.No</td>
+                        <td>@item.Activity</td>
+                        <td>@item.Status</td>
+
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6" style="color:red">
+                        No Records Found
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    <script type="text/javascript">
+        function ChangeReliever() {
+            var reliever = $("#ddlReliever").children("option:selected").val();
+            var DocNo = '@Model.No';
+
+            Swal.fire({
+                title: 'Change reliever?',
+                text: "Do you wish to change the reliever!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Change reliever!'
+            }).then((result) => {
+                if (result.value) {
+                    ShowProgress();
+                    $.ajax({
+                        type: "POST",
+                        url: "/Leave/ChangeLeaveReliever",
+                        data: JSON.stringify({
+                            DocNo: DocNo,
+                            NewReliever: reliever
+                        }),
+                        //contentType: "application/json; charset=utf-8",
+                        //success: function (data) {
+                        //    if (data.success) {
+                        //        window.location = data.message;
+                        //    } else {
+                        //        Swal.fire('Warning', data.message, 'warning');
+                        //    }
+                        //},
+                        //error: function (xhr, status, error) {
+                        //    Swal.fire('Error', xhr.responseText, 'error');
+                        //},
+                        complete: function () {
+                            HideProgress();
+                        }
+                    });
+                } else {
+                    Swal.fire('Cancelled', 'Reliever not changed', 'error');
+                }
+            });
+        }
+        var GetLeaveRelievers = function () {
+            var Department = $("#ddlDirectorate").children("option:selected").val();
+
+            if (Department == "") {
+                return;
+            }
+            else {
+                ShowProgress();
+                $.getJSON("/Leave/GetLeaveRelievers", { Department: Department },
+                    function (data) {
+                        if (data.success == true) {
+                            $("#ddlReliever").empty().append('<option selected="selected--select Relievers--</option>');
+                            $.each(data.NewAppl.ListOfRelievers, function () {
+                                $("#ddlReliever").append($("<option></option>").val(this['Value']).html(this['Text']));
+                            });
+                        }
+                        else {
+                            Swal.fire('Warning', data.message, 'warning');
+                        }
+                        HideProgress();
+                    });
+            }
+        }
+
+    </script>
+</div>

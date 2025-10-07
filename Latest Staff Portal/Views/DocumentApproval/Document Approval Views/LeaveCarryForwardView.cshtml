@@ -1,0 +1,88 @@
+﻿@model Latest_Staff_Portal.ViewModel.LeaveReimbursementList
+
+<table class="table table-bordered" style="width: 100%">
+    <tr>
+        <td>
+            <span style="font-size: small; font-weight: bold;">Document No</span>
+        </td>
+        <td>
+            @Html.DisplayFor(m => m.No)
+        </td>
+        <td>
+            <span style="font-size: small; font-weight: bold;">Employee No</span>
+        </td>
+        <td>
+            @Html.DisplayFor(m => m.EmpNo)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <span style="font-size: small; font-weight: bold;">Employee Name </span>
+        </td>
+        <td>
+            @Html.DisplayFor(m => m.EmpName)
+        </td>
+        <td>
+            <span style="font-size: small; font-weight: bold;">Department </span>
+        </td>
+        <td>
+            @Html.DisplayFor(m => m.Department)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <span style="font-size: small; font-weight: bold;">Application Date </span>
+        </td>
+        <td>
+            @Html.DisplayFor(m => m.Date)
+        </td>
+        <td>
+            <span style="font-size: small; font-weight: bold;">Applied Days </span>
+        </td>
+        <td>
+            @Html.DisplayFor(m => m.Days_Applied)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <span style="font-size: small; font-weight: bold;">Days Approved </span>
+        </td>
+        <td>
+            @Html.TextBoxFor(m => m.DaystoReimburse, new { @class = "form-control", id = "txtDaystoReimburse" })
+        </td>
+        @*<td>
+                <span style="font-size: small; font-weight: bold;">End Date </span>
+            </td>
+            <td>
+                @Html.DisplayFor(m => m.End_Date)
+            </td>*@
+    </tr>
+    <tr>
+        @*<td>
+                <span style="font-size: small; font-weight: bold;">Return Date </span>
+            </td>
+            <td>
+                @Html.DisplayFor(m => m.Return_Date)
+            </td>*@
+        <td>
+            <span style="font-size: small; font-weight: bold;">Remarks </span>
+        </td>
+        <td>
+            @Html.DisplayFor(m => m.Remarks)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <span style="font-size: small; font-weight: bold;">Leave Type </span>
+        </td>
+        <td>
+            @Html.DisplayFor(m => m.Leave_Type)
+        </td>
+        @*<td>
+                <span style="font-size: small; font-weight: bold;">Reliever Name </span>
+            </td>
+            <td>
+                @Html.DisplayFor(m => m.Reliever)
+            </td>*@
+    </tr>
+</table>

@@ -1,0 +1,152 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.IndividualScoreCard>
+@{
+    string buttonText = ViewBag.PASDocStage == "Negotiation" ? "Negotiate" : ViewBag.PASDocStage == "Evaluation" ? "Evaluate" : "Review";
+   
+}
+
+
+<style>
+    .btn:hover {
+        color: white !Important;
+    }
+
+    .card-body:hover .btn {
+        color: white !important;
+    }
+</style>
+<div class="row" id="content">
+
+    <div class="col-xl-12 col-sm-12 col-12">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="table-responsive">
+                    <table class="datatable table table-stripped" id="datatable-buttons">
+                        <thead style="background-color:black;color:white">
+                            <tr>
+                                <th>Action</th>
+                                <th>Doc No</th>
+                                <th>Staff No</th>
+                                <th>Staff Name</th>
+                                <th>Appraisal Period</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                              
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                
+                                    {
+                                        if (Model.Count() > 0)
+                                        {
+                                            foreach (var item in Model)
+                                            {
+                                                <tr>
+                                                                                <td>
+                                                                                    @if (ViewBag.PASDocStage == "Initial stage" || ViewBag.PASDocStage == "Returned To Employee")
+                                                                                    {
+                                                                                        <span class="d-inline-block custom-tooltip" tabindex="0" data-toggle="tooltip" data-placement="right"
+                                                                                              title="Wait until Negotiation"
+                                                                                              data-template='<div class="tooltip custom-tooltip-template" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'>
+                                                                                            <a href="#" class="btn py-1 px-2 btn-primary customBtn disabled"
+                                                                                               style="color: white !important;" id="ViewDoc"
+                                                                                               data-toggle="tooltip" title="Document is still at the Initial stage and cannot be reviewed">
+                                                                                                Review
+                                                                                            </a>
+                                                                                        </span>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <a href="#" onclick="ViewDoc('@item.DocNo');"
+                                                                                           class="btn py-1 px-2 btn-primary customBtn text-white" id="ViewDoc">
+                                                                                            @buttonText
+                                                                                        </a>
+                                                                                    }
+
+                                                                                </td>
+
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.DocNo)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Responsible_Employee_No)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Employee_Name)
+                                                        @if (item.Document_Stage == "No Action Taken")
+                                                        {
+                                                            <span class="badge badge-danger p-1 ml-3">...</span>
+                                                        }
+                                                        else if (item.Document_Stage == "Mid-Year Review")
+                                                        {
+                                                            <span class="badge badge-warning p-1 ml-3">@Html.DisplayFor(modelItem => item.Document_Stage)</span>
+                                                        }
+                                                        else if (item.Document_Stage == "Completed Mid-Year Review")
+                                                        {
+                                                            <span class="badge badge-success p-1 ml-3">@Html.DisplayFor(modelItem => item.Document_Stage)</span>
+                                                        }
+                                                        else if (item.Document_Stage == "Sent To Supervisor")
+                                                        {
+                                                            <span class="badge badge-danger p-1 ml-3">Pending Negotiation</span>
+                                                        }
+                                                        else if(item.Document_Stage == "Returned To Employee")
+                            {
+                                                    <span class="badge badge-info p-1 ml-3">Agreed & Negotiated</span>
+                            }
+                                                        else
+                                                        {
+                                                            <span class="badge badge-info p-1 ml-3">@Html.DisplayFor(modelItem => item.Document_Stage)</span>
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Contract_Year)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Start_Date)
+
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.End_Date)
+                                                    </td>
+                                                   
+                                                </tr>
+                                            }
+
+                                    }
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script>
+    var ViewDoc = function (DocNo) {
+        ShowProgress();
+        var form = $('<form>', {
+            action: '/Pas/SupervisorReviewDocView',
+            method: 'POST'
+        }).append($('<input>', {
+            type: 'hidden',
+            name: 'DocNo',
+            value: DocNo
+        }));
+        form.appendTo('body').submit();
+    };
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+
+    $("#datatable-buttons").DataTable({
+        lengthChange: true,
+        order: [[1, 'desc']],
+        lengthMenu: [5, 10, 25, 50, 100],
+        "bDestroy": true
+    });
+
+
+</script>

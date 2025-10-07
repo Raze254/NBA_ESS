@@ -1,0 +1,99 @@
+﻿@model Latest_Staff_Portal.ViewModel.ExpenseRequisitionLine
+
+<div class="card-body">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Document No:", new { @class = "control-label col-md-12", @for = "DocumentNo" })
+                @Html.TextBoxFor(m => m.DocumentNo, new { @class = "form-control", id = "DocumentNo", @readonly = "readonly", style = "background-color:#F2F2F2" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Activity Code", new { @class = "control-label col-md-12", @for = "ActivityCode" })
+                @Html.DropDownListFor(m => m.ActivityId, Model.ListOfActivities, "--Select Activity Code--", new { @class = "form-control select2", id = "ActivityCode", onchange = "GetGlAccounts(this.value)" })
+                @Html.ValidationMessageFor(m => m.ActivityId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("G/L Account:", new { @class = "control-label col-md-12", @for = "GLAccount" })
+                <select id="GLAccount" class="form-control select2">
+                    <option value="">-- Select G/L Account --</option>
+                </select>
+                @Html.ValidationMessageFor(m => m.GLAccount, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Total Amount:", new { @class = "control-label col-md-12", @for = "TotalAmount" })
+                @Html.TextBoxFor(m => m.TotalAmount, new { @class = "form-control", id = "TotalAmount", type = "number", min = "0", step = "1" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.TextBoxFor(m => m.ResourceReqNo, new { @class = "form-control", id = "ResourceReqNo", @readonly = "readonly", style = "background-color:#dedebd; display:none;" })
+            </div>
+        </div>
+    </div>
+
+</div>
+<hr />
+<div align="center">
+    <input type="button" class="btn btn-primary action-buttons" value="Submit Request" onclick="SubmitExpenseRequisitionLine();" />
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+		var activityId = $("#ActivityCode").val();
+		GetGlAccounts(activityId);
+        $('#myModal').on('shown.bs.modal', function () {
+            setTimeout(function () {
+                $('.select2').select2({
+                    dropdownParent: $('#myModal'),
+                });
+            }, 200);
+        });
+    });
+
+    function GetGlAccounts(activityId) {
+		var workplanNo = '@Model.Workplan';
+
+		var GLAccounts = document.getElementById('GLAccount');
+
+        ShowProgress();
+
+        if (workplanNo) {
+            $.ajax({
+                url: '@Url.Action("GetActivityGL", "ExpenseRequisition")',
+                type: 'GET',
+                data: { workplanNo: workplanNo, activityId: activityId },
+                success: function(response) {
+                    HideProgress();
+                    GLAccounts.innerHTML = '<option value="">-- Select G/L Account--</option>';
+                    if (response.success && response.LisOfGl.length > 0) {
+                        $.each(response.LisOfGl, function(index, item) {
+                            var option = document.createElement('option');
+                            option.value = item.Value;
+                            option.text = item.Text;
+                            GLAccounts.add(option);
+                        });
+
+                    } else {
+                        var option = document.createElement('option');
+                        option.text = 'No G/L Account found';
+                        option.disabled = true;
+                        GLAccounts.add(option);
+                    }
+                },
+                error: function(xhr, status, error) {
+                }
+            });
+        } else {
+            GLAccounts.innerHTML = '<option value="">-- Select G/L Account --</option>';
+        }
+    }
+</script>

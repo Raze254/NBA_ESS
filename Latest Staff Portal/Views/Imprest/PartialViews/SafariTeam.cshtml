@@ -1,0 +1,57 @@
+﻿@model Latest_Staff_Portal.ViewModel.SafariTeamList
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color: black; color: white;">
+        <tr>
+            <th>Imprest Memo No</th>
+            <th>Line No</th>
+            <th>PJ NO</th>
+            <th>G/L Account</th>
+            <th>Name</th>
+            <th>Currency Code</th>
+            <th>Time Period</th>
+            <th>Direct Unit Cost</th>
+            <th>Entitlement</th>
+            <th>Total Entitlement</th>
+            <th>Outstanding Amount</th>
+        </tr>
+        </thead>
+        <tbody>
+        @if (Model.ListOfSafariTeam != null && Model.ListOfSafariTeam.Any())
+        {
+            foreach (var item in Model.ListOfSafariTeam)
+            {
+                <tr>
+                    <td>@item.ImprestMemoNo</td>
+                    <td>@item.LineNo</td>
+                    <td>@item.No</td>
+                    <td>@item.GLAccount</td>
+                    <td>@item.Name</td>
+                    <td>@item.CurrencyCode</td>
+                    <td>@item.TimePeriod</td>
+                    <td>@item.DirectUnitCost</td>
+                    <td>@item.Entitlement</td>
+                    <td>@item.TotalEntitlement</td>
+                    <td>@item.OutstandingAmount</td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>
+
+@if (Model.Status == "Open")
+{
+    <div style="text-align:right">
+        <button style="background: #162f25; color: whitesmoke; border-radius: 10px;" onclick="AddImprestLine();">
+            <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Line
+        </button>
+    </div>
+}
+<script>
+    $("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100] // Same options for the second table
+    });
+</script>

@@ -1,0 +1,94 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.SafariTeam2>
+
+@{
+    var Status = ViewBag.Status;
+}
+
+<div class="table-responsive">
+    <table id="ImpLines" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead>
+            <tr>
+                <th>Destination Town</th>
+                <th>Payroll No</th>
+                @*<th>G/L Account</th>*@
+                <th>Name</th>
+                <th>Unit of Measure</th>
+                <th>No Of Days</th>
+                <th>Rate</th>
+                <th>Total DSA</th>
+                <th>Transport Costs</th>
+                <th>Mileage Cost</th>
+                <th>Total Entitlement</th>
+                <th>Outstanding Amount</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Work_Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Unit_of_Measure)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Time_Period)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Direct_Unit_Cost)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Entitlement)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Transport_Costs)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Total_Mileage_Cost)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Total_Entitlement)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Outstanding_Amount)
+                    </td>
+                    <td>
+                        @if (Status == "Open")
+                        {
+                            <input type="button" class="btn btn-danger btn-sm " value="Delete" onclick="DeleteItem(`@item.Work_Type`,`@item.Imprest_Memo_No`, `@item.Line_No`)" />
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div style="text-align:right; margin-top: 20px">
+    @if (Status == "Open")
+    {
+        <button class="btn btn-primary action-buttons2" onclick="AddImprestMemoLines();">
+            <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Line
+        </button>
+    }
+
+</div>
+
+
+
+
+<script>
+    $("#ImpLines").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100] // Same options for the second table
+    });</script>

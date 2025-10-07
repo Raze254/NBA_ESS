@@ -1,0 +1,392 @@
+﻿@model Latest_Staff_Portal.ViewModel.ICTHelpDesk
+
+@{
+    ViewBag.Title = "ICTHelpDeskDocumentView";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/ICT/ICTHelpDeskList">ICT HelpDesk List</a>
+                </li>
+                <li class="breadcrumb-item active">ICT HelpDesk Document (@Model.Job_No)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<hr />
+<br />
+<div class="card">
+    <div class="card-header">
+     
+            @if (Model.Status == "Open")
+            {
+                <div class="text-right">
+                    <button class="btn btn-primary action-buttons2" onclick="SubmitHelpDeskRequestToICT('@Model.Job_No');">
+                        <i class="fa fa-check" aria-hidden="true"></i> Submit HelpDesk Request
+                    </button>
+
+                </div>
+            }
+
+            <div class="text-center mt-3">
+                <h4>ICT HelpDesk Document (@Model.Job_No)</h4>
+            </div>
+
+
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Document No", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Job_No, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Job_No, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Department", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Global_Dimension_2_Code, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Global_Dimension_2_Code, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Employee No", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Employee_No, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Employee_No, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Requesting Officer", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Requesting_Officer, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Requesting_Officer, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Requesting Officer Name", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Requesting_Officer_Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Requesting_Officer_Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Phone", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Email", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Request Date", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Request_Date, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Request_Date, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Request Time", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Request_Time, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Request_Time, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Status", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Status, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 mt-3 mb-2">
+                <hr />
+                <h4>Issue Description:</h4>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Helpdesk Category", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @* @Html.EditorFor(model => model.ICT_Issue_Category, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2", @id = "HelpDesk_Category" } })*@
+                    @Html.DropDownListFor(m => m.ICT_Issue_Category, Model.ListOfCategories, "Select Option--", new { @class = "form-control", @disabled = "disabled", style = "background-color:#f2f2f2", @id = "HelpDesk_Category" })
+
+                    @Html.ValidationMessageFor(model => model.HelpDesk_Category, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Helpdesk Subcategory", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @*@Html.EditorFor(model => model.Helpdesk_subcategory, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2", @id = "Helpdesk_subcategory" } })*@
+                    @Html.DropDownListFor(m => m.Helpdesk_subcategory, Model.ListOfSubCategories, "Select Option--", new { @class = "form-control", @disabled = "disabled", style = "background-color:#f2f2f2", @id = "Helpdesk_subcategory" })
+                    @Html.ValidationMessageFor(model => model.Helpdesk_subcategory, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.TextAreaFor(model => model.Description_of_the_issue, new { @class = "form-control", @rows = "3", @readonly = "readonly", style = "background-color:#f2f2f2", @id = "Issue_Description" })
+
+                    @*@Html.DropDownListFor(m => m.HelpDesk_Category, Model.ListOfCategories, "Select Option--", new { @class = "form-control", @id = "HelpDesk_Category" })*@
+                    @Html.ValidationMessageFor(model => model.Description_of_the_issue, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 mt-3 mb-2">
+                <hr />
+                <h4>Issue Assigning</h4>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Assigned To", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Assigned_To, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2", @id = "Assigned_To" } })
+                    @Html.ValidationMessageFor(model => model.Assigned_To, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Assigned Date", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Assigned_Date, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2", @id = "Assigned_Date" } })
+                    @Html.ValidationMessageFor(model => model.Assigned_Date, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    @Html.Label("Action Taken", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.TextAreaFor(model => model.Action_Taken, new { @class = "form-control", @rows = "3", @id = "Action_Taken", @readonly = "readonly", })
+
+                </div>
+            </div>
+            @* <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Expected Resolution", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                @Html.EditorFor(model => model.Expected_Resolution, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2", @id = "Expected_Resolution" } })
+                @Html.ValidationMessageFor(model => model.Expected_Resolution, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+
+        </div>
+
+        <div class="row">
+            @if (Model.Status == "Open")
+            {
+                @* <div class="col-md-12" style="text-align:center" id="UpdateHelpDeskIssue">
+                <button class="btn btn-primary action-buttons" onclick="UpdateHelpDeskIssue();">
+                    <i class="fa fa-pencil" aria-hidden="true"></i> Update Issue
+                </button>
+            </div>
+            <div class="col-md-12" style="text-align:center" id="SubmitUpdatedHelpDeskIssue" hidden>
+                <button class="btn btn-success action-buttons" onclick="SubmitUpdatedHelpDeskIssue();">
+                    <i class="fa fa-check-circle " aria-hidden="true"></i> Update
+                </button>
+                <button class="btn btn-danger" onclick="CancelUpdateHelpDeskIssue();">
+                    <i class="fa fa-check-x" aria-hidden="true"></i> Cancel
+                </button>
+            </div>*@
+            }
+
+        </div>
+        <div class="row">
+            @if (Model.Status == "Resolved")
+            {
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        @Html.Label("Comments", htmlAttributes: new { @class = "control-label col-md-2" })
+                        @Html.TextAreaFor(model => model.Comments, new { @class = "form-control", @rows = "3", @id = "Comments" })
+                    </div>
+                </div>
+                <div class=" col-md-12 text-center">
+                    <button class="btn btn-primary action-buttons" onclick="CloseHelpDesk('@Model.Job_No');">
+                        <i class="fa fa-check" aria-hidden="true"></i> Close HelpDesk Issue
+                    </button>
+
+                </div>
+
+            }
+        </div>
+
+    </div>
+</div>
+
+<script>
+
+
+    function UpdateHelpDeskIssue() {
+        $("#HelpDesk_Category").prop("disabled", false).css("background-color", "");
+        $("#Helpdesk_subcategory").prop("disabled", false).css("background-color", "");
+        $("#Issue_Description").prop("readonly", false).css("background-color", "");
+        $("#UpdateHelpDeskIssue").attr("hidden", true); // Hide the button
+        $("#SubmitUpdatedHelpDeskIssue").removeAttr("hidden"); // Show the button
+
+    }
+
+    function CancelUpdateHelpDeskIssue() {
+        $("#HelpDesk_Category").prop("disabled", true).css("background-color", "#f2f2f2");
+        $("#Helpdesk_subcategory").prop("disabled", true).css("background-color", "#f2f2f2");
+        $("#Issue_Description").prop("readonly", true).css("background-color", "#f2f2f2");
+        $("#SubmitUpdatedHelpDeskIssue").attr("hidden", true); // Hide the button
+        $("#UpdateHelpDeskIssue").removeAttr("hidden"); // Show the button
+
+
+    }
+
+
+    var SubmitUpdatedHelpDeskIssue = function () {
+        var Job_No = '@Model.Job_No';
+        var HelpDesk_Category = $("#HelpDesk_Category").val();
+        var HelpDesk_SubCategory = $("#Helpdesk_subcategory").val();
+        var Issue_Description = $("#Issue_Description").val();
+
+        var isValid = true;
+
+        //validations
+        if (!HelpDesk_Category) {
+            Swal.fire('Warning', 'Select Helpdesk Category', 'warning');
+            var isValid = false;
+        }
+
+        if (!HelpDesk_SubCategory) {
+            Swal.fire('Warning', 'Select HelpDesk_SubCategory', 'warning');
+            var isValid = false;
+        }
+
+
+
+        if (!Issue_Description) {
+            Swal.fire('Warning', 'Select Issue Description', 'warning');
+            var isValid = false;
+        }
+
+        if (!isValid) {
+            return
+        }
+
+        var issueData = {
+            Job_No: Job_No,
+            HelpDesk_Category: HelpDesk_Category,
+            Helpdesk_subcategory: HelpDesk_SubCategory,
+            Description_of_the_issue: Issue_Description
+        };
+
+        ShowProgress();
+
+        $.ajax({
+            type: "POST",
+            url: "/ICT/SubmitUpdatedHelpDeskIssue",
+            data: JSON.stringify(issueData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                HideProgress();
+                if (data.success) {
+                    Swal.fire('Success', 'Record submitted successfully.', 'success');
+                    window.location.reload();
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Error', 'An error occurred while submitting the request.', 'error');
+            }
+        });
+
+
+
+    };
+
+    var SubmitHelpDeskRequestToICT = function (JobNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            data: JSON.stringify({ Job_No: JobNo }),
+            url: "/ICT/SubmitHelpDeskRequestToICT",
+            success: function (data) {
+                HideProgress();
+                if (data.success) {
+                    Swal.fire('Success', 'Record submitted successfully.', 'success');
+                    window.location.reload();
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Error', 'An error occurred while submitting the request.', 'error');
+            }
+        });
+    }
+    var CloseHelpDesk = function (JobNo) {
+
+        var Comments = $("#Comments").val();
+        if (!Comments) {
+            Swal.fire('Warning', 'Comments required', 'warning');
+            return;
+        }
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            data: JSON.stringify({ Job_No: JobNo, Comments: Comments }),
+            url: "/ICT/CloseHelpDesk",
+            success: function (data) {
+                HideProgress();
+                if (data.success) {
+                    Swal.fire('Success', 'Helpdesk Closed successfully.', 'success');
+                    window.location.reload();
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Error', 'An error occurred while submitting the request.', 'error');
+            }
+        });
+    }
+
+
+</script>

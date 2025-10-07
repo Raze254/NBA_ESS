@@ -1,0 +1,59 @@
+﻿@model Latest_Staff_Portal.ViewModel.PMMUCard
+
+<div class="card-body">
+    <div class="row">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="col-md-12">
+            <div class="form-group">
+                @Html.Label("Responsible Employee No", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.EditorFor(model => model.Responsible_Employee_No, new { htmlAttributes = new { @class = "form-control", @id = "Responsible_Employee_No", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.Responsible_Employee_No, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="form-group">
+                @Html.Label("Responsible Employee", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.EditorFor(model => model.Employee_Name, new { htmlAttributes = new { @class = "form-control", @id = "Employee_Name", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.Employee_Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @id = "Description" } })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="form-group">
+                @Html.Label("Strategy Plan ID", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.DropDownListFor(m => m.Strategy_Plan_ID, Model.ListOfStrategyPlanID, "Select Option--", new { @class = "form-control", @id = "Strategy_Plan_ID" })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @* <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Admin Unit", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.Admin_Unit, new { htmlAttributes = new { @class = "form-control", @id = "Admin_Unit", @readonly="readonly" } })
+           @* @Html.DropDownListFor(m => m.Responsibility_Center, Model.ListOfImplementingUnit, "Select Option--", new { @class = "form-control", @id = "Responsibility_Center" })
+        @Html.ValidationMessageFor(model => model.Admin_Unit, "", new { @class = "text-danger" })
+    </div>
+        </div>*@
+
+
+        @* <div class="col-md-12">
+            <div class="form-group">
+                @Html.Label("Evaluation Committee", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.DropDownListFor(m => m.Evaluation_Committee, Model.ListOfEvaluationCommittee, "Select Option--", new { @class = "form-control", @id = "Evaluation_Committee" })
+                @Html.ValidationMessageFor(model => model.Evaluation_Committee, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+            </div>
+    <div class="form-group row text-center" style="text-align:center">
+        <input type="button" class="btn btn-primary waves-effect waves-light" value="Submit Request" onclick="SubmitPMMU();" />
+    </div>
+</div>

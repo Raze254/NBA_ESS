@@ -1,0 +1,229 @@
+﻿@model Latest_Staff_Portal.ViewModel.DependentList
+
+<div>
+    <h2>Dependent Requirement</h2>
+    <div class="row">
+
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Select relationship", new { @class = "control-label col-md-12" })
+
+                <div class="col-md-12">
+                    @Html.DropDownListFor(m => m.Relationship, new SelectList(Model.ListOfRelationships, "Value", "Text", Model.Relationship), "--Select Relationship--", new { id = "ddlRelationship", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Relationship, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div style="display:none" id="divChild">
+        <p>Attach Required Documents below:</p>
+        <p>Children:</p>
+        <ul>
+            <li>A child of age 6 months and above: Birth Certificate</li>
+            <li>Child below 6 months: Birth Notification</li>
+        </ul>
+        <b>Select Files</b>
+        <div class="row">
+            <div class="form-group">
+                <input type="file" class="form-control" required id="childDocuments" multiple="multiple"/>
+                <span class="text-danger">*</span>
+            </div>
+            @*<div class="col-md-3 align-items-center  justify-content-center">
+                <input type="button" class="btn btn-primary waves-effect waves-light" value="Add" onclick="AddChildDocument();" />
+            </div>*@
+        </div>
+
+    </div>
+    <div style="display:none" id="divSpouse">
+        <p>Attach Required Documents below:</p>
+        <p>Spouse:</p>
+        <ul>
+            <li>Marriage Certificate or Affidavit</li>
+            <li>Copy of National ID Card for the spouse</li>
+        </ul>
+        <b>Select Files</b>
+        <div class="row">
+            <div class="col-md-9">
+                <input type="file" class="form-control" required id="spouseDocuments"/>
+                <span class="text-danger">*</span>
+            </div>
+            <div class="col-md-3 align-items-center justify-content-center">
+                <input type="button" class="btn btn-primary waves-effect waves-light" value="Add" onclick="AddSpouseDocument();"/>
+            </div>
+        </div>
+
+    </div>
+    <div id="divDocs">
+    </div>
+    <br/>
+    <p>For inquiries, please contact: <a href="mailto:welfarebenefitsandmedical@court.go.ke" style="color:darkblue">welfarebenefitsandmedical@court.go.ke</a></p>
+
+    <div align="center">
+        <input type="button" class="btn btn-primary waves-effect waves-light" value="Proceed" onclick="Proceed();"/>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#ddlRelationship").change(function () {
+            var selectedValue = $(this).val();
+
+            $("#divChild").hide();
+            $("#divSpouse").hide();
+
+            if (selectedValue === "CHILD") {
+                $("#divChild").show();
+
+            } else if (selectedValue === "SPOUSE") {
+                $("#divSpouse").show();
+            }
+        });
+    });
+
+    //function Proceed() {
+    //    ShowProgress();
+
+    //    var relationship = $("#ddlRelationship").val();
+
+    //    var requestData = JSON.stringify({ relationship: relationship });
+
+    //    $.ajax({
+    //        async: true,
+    //        type: "POST",
+    //        dataType: "html",
+    //        contentType: "application/json; charset=utf-8",
+    //        data: requestData,
+    //        url: "/WelfareManagement/NewDependent",
+    //        success: function (data) {
+    //            $("#modalBody").html(data);
+    //            HideProgress();
+    //            $("#myModal").modal("show");
+    //        },
+    //        error: function (err) {
+    //            HideProgress();
+    //            Swal.fire('Warning', err, 'warning');
+    //        }
+    //    });
+    //}
+    function Proceed() {
+		var selectedValue = $("#ddlRelationship").val();
+    var files = "";
+
+    //$("#divChild").hide();
+    //$("#divSpouse").hide();
+
+    if (selectedValue === "CHILD") {
+        files = document.getElementById('childDocuments').files;
+    } else if (selectedValue === "SPOUSE") {
+        files = document.getElementById('spouseDocuments').files;
+    }
+
+    var DocNo = '@Model.Document_No';
+    var filename, base64String, filetype;
+
+    if (files.length === 0) {
+        Swal.fire('Warning', 'No file selected', 'warning');
+        return;
+    }
+
+    if (files.length) {
+        var file = files[0];
+        if (file.size > 5000000) {
+            Swal.fire('Warning', 'Please only files less than 5MB allowed. Thanks!!', 'warning');
+        } else {
+            var blob = file.slice();
+            filetype = file.type;
+            filename = file.name;
+            var reader = new FileReader();
+            reader.onloadend = function (evt) {
+                if (evt.target.readyState == FileReader.DONE) { // DONE == 2
+                    var cont = evt.target.result;
+                    base64String = getB64Str(cont);
+                    ShowProgress();
+
+                    // Send the JSON array to Controller using AJAX.
+                    $.ajax({
+                        type: "POST",
+                        url: "/Common/SaveAttachedFile",
+                        data: JSON.stringify({
+                            DocNo: DocNo,
+                            base64Upload: base64String,
+                            fileName: filename,
+                            Extn: filetype,
+                            TableID: 65063
+                        }),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.success) {
+                                $("#modalBody").html(data);
+                                HideProgress();
+                                $("#myModal").modal("show");
+                            } else {
+                                Swal.fire('Warning', data.message, 'warning');
+                                HideProgress();
+                            }
+                        },
+                        error: function (err) {
+                            HideProgress();
+                            Swal.fire('Warning', err, 'warning');
+                        }
+                    });
+                }
+            };
+            reader.readAsArrayBuffer(blob);
+        }
+    }
+}
+
+
+    //function AddChildDocument() {
+    //    var input = document.getElementById('childDocuments');
+    //    var files = input.files;
+    //    var divDocs = document.getElementById('divDocs');
+    //    var ul = document.createElement('ul');
+
+    //    for (var i = 0; i < files.length; i++) {
+    //        var li = document.createElement('li');
+    //        li.textContent = files[i].name;
+
+    //        var removeBtn = document.createElement('button');
+    //        removeBtn.textContent = 'Remove';
+    //        removeBtn.className = 'btn btn-danger btn-sm';
+
+    //        (function (li) {
+    //            removeBtn.addEventListener('click', function () {
+    //                ul.removeChild(li);
+    //            });
+    //        })(li);
+
+    //        li.appendChild(removeBtn);
+    //        ul.appendChild(li);
+    //    }
+
+    //    divDocs.appendChild(ul);
+    //}
+
+    //function AddSpouseDocument() {
+    //    var input = document.getElementById('spouseDocuments');
+    //    var files = input.files;
+    //    var divDocs = document.getElementById('divDocs');
+    //    var ul = document.createElement('ul');
+
+    //    for (var i = 0; i < files.length; i++) {
+    //        var li = document.createElement('li');
+    //        li.textContent = files[i].name;
+    //        var removeBtn = document.createElement('button');
+    //        removeBtn.textContent = 'Remove';
+    //        removeBtn.className = 'btn btn-danger btn-sm';
+    //        removeBtn.addEventListener('click', function () {
+    //            ul.removeChild(li);
+    //        });
+
+    //        li.appendChild(removeBtn);
+
+    //        ul.appendChild(li);
+    //    }
+    //    divDocs.appendChild(ul);
+    //}
+</script>

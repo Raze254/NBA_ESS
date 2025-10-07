@@ -1,0 +1,613 @@
+﻿@model Latest_Staff_Portal.ViewModel.EmployeeExitVoucher
+
+@{
+    ViewBag.Title = "EmployeeExitVoucherDocumentView";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/EmployeeExit/EmployeeExitVoucherList">Employee Exit Voucher List</a>
+                </li>
+                <li class="breadcrumb-item active">Employee Exit Voucher Document (@Model.DocumentNo)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<hr />
+<br />
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-6">
+                <h4>Employee Exit Voucher Document (@Model.DocumentNo)</h4>
+            </div>
+            @{
+                /*if (@Model.Posted)
+                {*/
+                <div class="col-md-6 text-right">
+
+                    <button class="btn btn-primary action-buttons2" onclick="SendExitVoucherForApproval('@Model.DocumentNo');">
+                        <i class="fa fa-check-circle"></i> Send For Approval
+                    </button>
+
+                    <button class="btn btn-primary action-buttons2" onclick="CreateHandoverVoucher('@Model.DocumentNo');">
+                        <i class="fas fa-handshake"></i> Create Handover Voucher
+                    </button>
+                </div>
+
+
+                @*  }
+                    else
+                    {
+
+                        <div class="col-md-6 text-right">
+                            <input type="button" class="btn btn-primary btn-sm action-buttons" value="Cancel Approval Request" onclick="CancelICTHelpDeskApproval('@Model.DocumentNo');" />
+                        </div>
+
+                    }*@
+            }
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Document No", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.DocumentNo, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.DocumentNo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Employee No", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model=>model.EmployeeNo, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeNo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Employee Names", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.EmployeeNames, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeNames, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Exit Method", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.ExitMethod, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.ExitMethod, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Job ID", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.JobId, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.JobId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Reasons", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.ReasonsCode, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.ReasonsCode, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Created On", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.CreatedOn, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.CreatedOn, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Created By", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.CreatedBy, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.CreatedBy, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Document Date", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.DocumentDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.DocumentDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <hr />
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-md-12">
+                <hr />
+                <h4 class="mb-3">Important Dates</h4>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Date of Join", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.DateofJoin, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.DateofJoin, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Last working Date", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.LastworkingDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.LastworkingDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Notice Date", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.NoticeDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.NoticeDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Employee Exit Date", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.EmployeeExitDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeExitDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Leave Days Due Payable", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Leave_Days_Due_Payable, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Leave_Days_Due_Payable, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Pay in Line of Notice", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Pay_in_Line_of_Notice, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Pay_in_Line_of_Notice, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Notice_Period, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Notice_Period, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Notice_Period, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+
+            <div class="col-md-12">
+                <hr />
+                <h4 class="mb-3">Statistics</h4>
+            </div>
+
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("No. Of HandOver Notes", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.NoofHandOverNotes, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.NoofHandOverNotes, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("No. Of Open HandOver Notes", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.NoofOpenHandOverNotes, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.NoofOpenHandOverNotes, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("No Of Open Hand Cleared Notes", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.NoofOpenHandClearedNotes, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.NoofOpenHandClearedNotes, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align:center">
+            <div id="updateExitVoucherHeader">
+                <button class="btn btn-primary action-buttons" id="editButton">
+                    <i class="fa fa-pencil" aria-hidden="true"></i> Update Document
+                </button>
+            </div>
+            <div id="submitButton" style="display: none;">
+                <div class="row d-flex justify-content-center align-items-center">
+                    <div class="mr-2">
+                        <button class="btn btn-danger" id="cancelButton">
+                            <i class="fa fa-times" aria-hidden="true"></i> Cancel
+                        </button>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary action-buttons" onclick="SubmitUpdatedExitVoucherDocument();">
+                            <i class="fa fa-pencil" aria-hidden="true"></i> Submit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="DivExitVoucherLines">
+            <hr style="border:1px solid black" />
+            <b>Employee Exit Voucher Lines</b>
+            <hr />
+            <div id="divExitVoucherLines"></div>
+            <hr style="border:1px solid black" />
+            <div class="row">
+                <div class="col-md-12">
+                    <b>Attachments</b>
+                    <div id="divAttachDocs"></div>
+                </div>
+            </div>
+            <hr />
+        </div>
+    </div>
+</div>
+
+
+@*//////////////////////New Exit Voucher line modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Line</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-primary action-buttons" value="Submit" onclick="SubmitExitVoucherLine();" />
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*//////////////////////update Exit Voucher line modal////////////////////////////*@
+<div class="modal" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Update Line</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody2">
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-primary action-buttons" value="Update" onclick="SubmitExitVoucherLine();" />
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+         LoadExitVoucherLines(`@Model.DocumentNo`,"Open");
+         var status = "Open";
+         var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+         if (Successmsg != "") {
+             Swal.fire('Success', Successmsg, 'success',true);
+             $.ajax({
+                 type: "POST",
+                 url: "/Common/NullibySessions"
+             });
+        }
+
+
+        $("#editButton").on("click", function () {
+            const inputs = $("input.form-control");
+            document.getElementById("editButton").style.display = "none";
+            document.getElementById("submitButton").style.display = "block";
+            // Remove readonly attribute from all inputs
+            inputs.each(function () {
+                $(this).removeAttr("readonly");
+                $(this).css("background-color", "");
+            });
+        });
+
+        $("#cancelButton").on("click", function () {
+            const inputs = $("input.form-control");
+
+            var editButton = document.getElementById("editButton");
+            var submitButton = document.getElementById("submitButton");
+            editButton.style.display = "block";
+            editButton.style.position = "relative";
+            editButton.style.top = "50%";            // Centers vertically
+            editButton.style.left = "50%";           // Centers horizontally
+
+            editButton.style.transform = "translate(-50%, -50%)";
+            submitButton.style.display = "none";
+
+            // Remove readonly attribute from all inputs
+            inputs.each(function () {
+                $(this).attr("readonly", "readonly");
+                $(this).css("background-color", "#dedebd");
+            });
+        });
+
+
+    });
+    var LoadExitVoucherLines = function (DocNo, Status) {
+
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ Document_No: DocNo, Status: Status }),
+            url: "/EmployeeExit/EmployeeExitVoucherLinesPartialView",
+            success: function (data) {
+                $("#divExitVoucherLines").html(data);
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    };
+
+    var SubmitUpdatedExitVoucherDocument = function () {
+        var Job_No = '@Model.DocumentNo';
+        var HelpDesk_Category = $("#HelpDesk_Category").val();
+        var HelpDesk_SubCategory = $("#Helpdesk_subcategory").val();
+        var ICT_Inventory = $("#ICT_Inventory").val();
+        var Issue_Description = $("#Issue_Description").val();
+
+        var isValid = true;
+
+        //validations
+        if (!HelpDesk_Category) {
+            Swal.fire('Warning', 'Select Helpdesk Category', 'warning');
+            var isValid = false;
+        }
+        if (!isValid) {
+            return
+        }
+
+        var issueData = {
+            Job_No: Job_No,
+            HelpDesk_Category: HelpDesk_Category,
+            Helpdesk_subcategory: HelpDesk_SubCategory,
+            ICT_Inventory: ICT_Inventory,
+            Description_of_the_issue: Issue_Description
+        };
+
+        // Show progress indicator
+        ShowProgress();
+
+        // Send data via AJAX
+        $.ajax({
+            type: "POST",
+            url: "/EmployeeExit/SubmitUpdatedExitVoucherDocument",
+            data: JSON.stringify(issueData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                HideProgress();
+                if (data.success) {
+                    console.log(data.succes)
+                    /*ViewDoc(data.message);*/
+                    Swal.fire('Success', 'Record submitted successfully.', 'success');
+                    window.location.reload();
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Error', 'An error occurred while submitting the request.', 'error');
+            }
+        });
+
+
+
+    };
+
+    var AddExitVoucherLine = function () {
+        var Exit_Header_No = '@Model.DocumentNo';
+        var LineNo = 0;
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: "html",
+            url: '/EmployeeExit/NewExitVoucherLine',
+            data: {
+                Exit_Header_No, Exit_Header_No,
+                LineNo: LineNo
+            },
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseText, 'warning');
+            }
+        });
+    }
+    var EditItem = function (Exit_Header_No, LineNo, PrimaryDirectorate, PlannedDate) {
+
+        ShowProgress();
+
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: "html",
+            url: '/EmployeeExit/NewExitVoucherLine',
+            data: {
+                Exit_Header_No: Exit_Header_No,
+                LineNo: LineNo,
+                PrimaryDirectorate: PrimaryDirectorate,
+                PlannedDate: PlannedDate,
+            },
+            success: function (data) {
+                $("#modalBody2").html(data);
+                HideProgress();
+                $("#myModal2").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseText || 'An error occurred while processing your request.', 'warning');
+            }
+        });
+    };
+    function SubmitExitVoucherLine() {
+        var isValid = true;
+
+        // Collect data from the form
+        var Exit_Header_No = $("#Exit_Header_No").val();
+        var LineNo = $("#LineNo").val();
+        var PrimaryDirectorate = $("#PrimaryDirectorate").val();
+        var PlannedDate = $("#PlannedDate").val();
+
+
+        // Validation checks
+        if (!PrimaryDirectorate) {
+            Swal.fire('Warning', 'Select Primary Directorate', 'warning');
+        isValid = false;
+        }
+
+        if (!PlannedDate) {
+            Swal.fire('Warning', 'Select date', 'warning');
+        isValid = false;
+        }
+
+
+        // Exit if validation fails
+        if (!isValid) {
+            return;
+        }
+
+        // Prepare data object
+        var newImprestLine = {
+            Exit_Header_No: Exit_Header_No,
+            LineNo: LineNo,
+            PrimaryDirectorate: PrimaryDirectorate,
+            PlannedDate: PlannedDate,
+
+        };
+
+        // Show progress indicator
+        ShowProgress();
+
+        // Send data via AJAX
+        $.ajax({
+            type: "POST",
+            url: "/EmployeeExit/SubmitExitVoucherLine", // Change this to your actual endpoint
+            data: JSON.stringify(newImprestLine),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                HideProgress();
+                    if (data.success) {
+                        console.log(data.succes)
+                    /*ViewDoc(data.message);*/
+                        Swal.fire('Success', 'Imprest line submitted successfully.', 'success');
+                        window.location.reload();
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Error', 'An error occurred while submitting the request.', 'error');
+                }
+            });
+        }
+
+    var SendExitVoucherForApproval = function (JobNo) {
+        // Send data via AJAX
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            url: "/EmployeeExit/SendExitVoucherDocForApproval",
+            url: "/EmployeeExit/SendExitVoucherDocForApproval",
+            success: function (data) {
+                HideProgress();
+                if (data.success) {
+                    console.log(data.success)
+                    /*ViewDoc(data.message);*/
+                    Swal.fire('Success', 'Record submitted successfully.', 'success');
+                    window.location.reload();
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Error', 'An error occurred while submitting the request.', 'error');
+            }
+        });
+    }
+    var CreateHandoverVoucher = function (JobNo) {
+        // Send data via AJAX
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            data: JSON.stringify({ Exit_Header_No: JobNo }),
+            url: "/EmployeeExit/CreateHandoverVoucher",
+            success: function (data) {
+                HideProgress();
+                if (data.success) {
+                    console.log(data.success)
+                    /*ViewDoc(data.message);*/
+                    Swal.fire('Success', 'Handovwer voucher successfully created.', 'success');
+                    window.location.reload();
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Error', 'An error occurred while submitting the request.', 'error');
+            }
+        });
+    }
+</script>

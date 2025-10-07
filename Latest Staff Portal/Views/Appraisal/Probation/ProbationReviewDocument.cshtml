@@ -1,0 +1,554 @@
+﻿@model Latest_Staff_Portal.ViewModel.ANUPEAisalCardList
+@{
+    ViewBag.Title = "ApprisalReviewDocument";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+    .RadioClass {
+        width: 20px;
+        height: 20px;
+        padding: 0px;
+    }
+    label {
+        vertical-align: -webkit-baseline-middle;
+    }
+</style>
+<!--
+<link href="~/assets/css/Loader.css" rel="stylesheet" />
+<div class="loading" align="center" id="divLoader">
+    <br />
+    <img src="~/assets/images/ajax-loader.gif" alt="" />
+</div>
+-->
+<div style="background-color: black;">
+    <a href="#" onclick="AppRequisitionLink();" style="color:yellow"><<< Back To Probation Review List</a>
+</div>
+<div class="card">
+<div class="card-title">Probation Document(Document No : @Request.QueryString["AppDoc"])</div>
+<div class="card-body">
+<div id="accordion" role="tablist" aria-multiselectable="true">
+<div class="card mb-1 shadow-none">
+    <div class="card-header" id="headingOne" aria-controls="collapseOne" aria-expanded="true" data-toggle="collapse" href="#collapseOne">
+        <h6 class="m-0">
+            <span class="fa fa-arrow-up"></span>Section 1 : Employee Details
+        </h6>
+    </div>
+    <div id="collapseOne" class="panel-collapse collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+        <div class="card-body">
+            <div class="row" style="padding: 2px">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label style="font-size: 12px; font-weight: bold">Apprisal Code</label>
+                        </div>
+                        <div class="col-md-8">
+                            <span class="label label-warning" id="DocNo">@Model.ApprisalCode</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label style="font-size: 12px; font-weight: bold">ANUPEAisal Date</label>
+                        </div>
+                        <div class="col-md-8">
+                            <span class="label label-warning">@Model.ANUPEAisalDate</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="padding: 2px">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label style="font-size: 12px; font-weight: bold">Staff Number</label>
+                        </div>
+                        <div class="col-md-8">
+                            <span class="label label-warning">@Model.StaffNo</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label style="font-size: 12px; font-weight: bold">Staff Name</label>
+                        </div>
+                        <div class="col-md-8">
+                            <span class="label label-warning">@Model.StaffName</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="padding: 2px">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label style="font-size: 12px; font-weight: bold">Evaluation Period Start Date</label>
+                        </div>
+                        <div class="col-md-8">
+                            <span class="label label-warning">@Model.ANUPEAisalStartDate</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label style="font-size: 12px; font-weight: bold">Evaluation Period End Date</label>
+                        </div>
+                        <div class="col-md-8">
+                            <span class="label label-warning">@Model.ANUPEAisalEndDate</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="padding: 2px">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label style="font-size: 12px; font-weight: bold">Appointment Date</label>
+                        </div>
+                        <div class="col-md-8">
+                            <span class="label label-warning" id="AppPeriod">@Model.AppointmentDate</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label style="font-size: 12px; font-weight: bold">Designation</label>
+                        </div>
+                        <div class="col-md-8">
+                            <span class="label label-warning">@Model.Designation</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="padding: 2px">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label style="font-size: 12px; font-weight: bold">Department</label>
+                        </div>
+                        <div class="col-md-8">
+                            <span class="label label-warning" id="AppPeriod">@Model.Department</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label style="font-size: 12px; font-weight: bold">ANUPEAisal Period</label>
+                        </div>
+                        <div class="col-md-8">
+                            <span class="label label-warning">@Model.ApprisalPeriod</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="padding: 2px">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label style="font-size: 12px; font-weight: bold">ANUPEAisal Stage</label>
+                        </div>
+                        <div class="col-md-8">
+                            <span class="label label-warning" id="AppPeriod">@Model.ANUPEAisalStage</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card mb-1 shadow-none">
+    <div class="card-header" id="headingEight" aria-expanded="false" aria-controls="collapseEight" data-toggle="collapse" href="#collapseEight">
+        <h6 class="m-0">
+            <span class="fa fa-arrow-down"></span> Section 2 : Major Accomplishments
+        </h6>
+    </div>
+    <div id="collapseEight" class="collapse" aria-labelledby="headingEight" data-parent="#accordion">
+        <div class="card-body">
+            <div id="divAccombl"></div>
+        </div>
+    </div>
+</div>
+<div class="card mb-1 shadow-none">
+    <div class="card-header" id="headingNine" aria-expanded="false" aria-controls="collapseNine" data-toggle="collapse" href="#collapseNine">
+        <h6 class="m-0">
+            <span class="fa fa-arrow-down"></span>Section 3 : Key Strengths
+        </h6>
+    </div>
+    <div id="collapseNine" class="collapse" aria-labelledby="headingNine" data-parent="#accordion">
+        <div class="card-body">
+            <div id="divEmpStrength"></div>
+        </div>
+    </div>
+</div>
+<div class="card mb-1 shadow-none">
+    <div class="card-header" id="headingTen" aria-expanded="false" aria-controls="collapseTen" data-toggle="collapse" href="#collapseTen">
+        <h6 class="m-0">
+            <span class="fa fa-arrow-down"></span>Section 4 : Areas of Improvement
+        </h6>
+    </div>
+    <div id="collapseTen" class="collapse" aria-labelledby="headingTen" data-parent="#accordion">
+        <div class="card-body">
+            <div id="divEmpAreaOfImprovement"></div>
+        </div>
+    </div>
+</div>
+<div class="card mb-1 shadow-none">
+    <div class="card-header" id="headingEleven" aria-expanded="false" aria-controls="collapseEleven" data-toggle="collapse" href="#collapseEleven">
+        <h6 class="m-0">
+            <span class="fa fa-arrow-down"></span> Section 5 :Other Comments (if any)
+        </h6>
+    </div>
+    <div id="collapseEleven" class="collapse" aria-labelledby="headingEleven" data-parent="#accordion">
+        <div class="card-body">
+            <div id="diveOtherComm"></div>
+        </div>
+    </div>
+</div>
+<div class="card mb-1 shadow-none">
+    <div class="card-header" id="headingTwelve" aria-expanded="false" aria-controls="collapseTwelve" data-toggle="collapse" href="#collapseTwelve">
+        <h6 class="m-0">
+            <span class="fa fa-arrow-down"></span> Section 6 : Overall Performance Rating & Recommandations
+        </h6>
+    </div>
+    <div id="collapseEleven" class="collapse" aria-labelledby="headingEleven" data-parent="#accordion">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-hover" id="tblRating">
+                        <thead class="bg-soft-secondary">
+                        <tr style="border:1px solid black">
+                            <th width="50%">Employee competence</th>
+                            <th width="10%" style="text-align:center">Strongly Agree</th>
+                            <th width="10%" style="text-align:center">Agree</th>
+                            <th width="10%" style="text-align:center">Disagree</th>
+                            <th width="10%" style="text-align:center">Strongly Disagree</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>The employee is competent in work performance</td>
+                            <td>
+                                <input type="radio" class="RadioClass"/>
+                            </td>
+                            <td>
+                                <input type="radio" class="RadioClass"/>
+                            </td>
+                            <td>
+                                <input type="radio" class="RadioClass"/>
+                            </td>
+                            <td>
+                                <input type="radio" class="RadioClass"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>The employee’s performance is good in relation to the key job requirements</td>
+                            <td>
+                                <input type="radio" class="RadioClass"/>
+                            </td>
+                            <td>
+                                <input type="radio" class="RadioClass"/>
+                            </td>
+                            <td>
+                                <input type="radio" class="RadioClass"/>
+                            </td>
+                            <td>
+                                <input type="radio" class="RadioClass"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>The employee takes initiative</td>
+                            <td>
+                                <input type="radio" class="RadioClass"/>
+                            </td>
+                            <td>
+                                <input type="radio" class="RadioClass"/>
+                            </td>
+                            <td>
+                                <input type="radio" class="RadioClass"/>
+                            </td>
+                            <td>
+                                <input type="radio" class="RadioClass"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>The employee is a good fit with their skills and interests</td>
+                            <td>
+                                <input type="radio" class="RadioClass"/>
+                            </td>
+                            <td>
+                                <input type="radio" class="RadioClass"/>
+                            </td>
+                            <td>
+                                <input type="radio" class="RadioClass"/>
+                            </td>
+                            <td>
+                                <input type="radio" class="RadioClass"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>The employee is innovative</td>
+                            <td>
+                                <input type="radio" class="RadioClass"/>
+                            </td>
+                            <td>
+                                <input type="radio" class="RadioClass"/>
+                            </td>
+                            <td>
+                                <input type="radio" class="RadioClass"/>
+                            </td>
+                            <td>
+                                <input type="radio" class="RadioClass"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>The employee is reliable</td>
+                            <td>
+                                <input type="radio" class="RadioClass"/>
+                            </td>
+                            <td>
+                                <input type="radio" class="RadioClass"/>
+                            </td>
+                            <td>
+                                <input type="radio" class="RadioClass"/>
+                            </td>
+                            <td>
+                                <input type="radio" class="RadioClass"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>The employee works under minimal supervision</td>
+                            <td>
+                                <input type="radio" class="RadioClass"/>
+                            </td>
+                            <td>
+                                <input type="radio" class="RadioClass"/>
+                            </td>
+                            <td>
+                                <input type="radio" class="RadioClass"/>
+                            </td>
+                            <td>
+                                <input type="radio" class="RadioClass"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>The employee completes assignments on time</td>
+                            <td>
+                                <input type="radio" class="RadioClass"/>
+                            </td>
+                            <td>
+                                <input type="radio" class="RadioClass"/>
+                            </td>
+                            <td>
+                                <input type="radio" class="RadioClass"/>
+                            </td>
+                            <td>
+                                <input type="radio" class="RadioClass"/>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <label id="labelF"></label>
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal fade" id="myModalRev" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <label id="labelEva"></label>
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodyRev">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.shadow-none').on('shown.bs.collapse', function () {
+            $(this).find('.fa-arrow-down').removeClass('fa-arrow-down').addClass('fa-arrow-up');
+        }).on('hidden.bs.collapse', function () {
+            $(this).find('.fa-arrow-up').removeClass('fa-arrow-up').addClass('fa-arrow-down');
+        });
+        $("#ddlPeer").select2({
+            width: '100%'
+        });
+        LoadSectionData();
+    });
+    var LoadSectionData = function () {
+        ShowProgress();
+        var DocNo = $("#DocNo").html();
+        LoadEmpExtraInf(DocNo, "Major Accomplishments", '1', "divAccombl");
+        LoadEmpExtraInf(DocNo, "Key Strengths", '2', "divEmpStrength");
+        LoadEmpExtraInf(DocNo, "Areas of Improvement", '3', "divEmpAreaOfImprovement");
+        HideProgress();
+    };
+    ///////////////Load Data////////////////
+    var LoadEmpExtraInf = function (DocNo, Title, EntryType, DivID) {
+        $.ajax({
+            async: true,
+            type: "post",
+            contentType: "application/json; charset = utf-8",
+            data: JSON.stringify({ AppDoc: DocNo, Level: "S", Title: Title, EntryType: EntryType }),
+            url: "/ANUPEAisal/LoadOtherEmployeeANUPEAisalInf",
+            success: function (data) {
+                $("#" + DivID).html(data);
+            },
+            error: function () {
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+    var AddEmpExtra = function (Title, Section) {
+        $("#labelF").text(Title);
+        var DocNo = $("#DocNo").html();
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ DocNo: DocNo, Section: Section }),
+            url: '/ANUPEAisal/GetExtraEmpInfoForm',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var SaveExtraInfRecord = function (DocNo, EntrType) {
+        var remarks = $("#txtDescr").val();
+
+        if (DocNo == "") {
+            Swal.fire('error', 'ANUPEAisal Doc No cannot be empty', 'error');
+            return;
+        }
+        else if (remarks == "") {
+            Swal.fire('error', 'Enter Value', 'error');
+            return;
+        }
+        else {
+            ShowProgress();
+            $.ajax({
+                type: "post",
+                url: "/ANUPEAisal/SubmitEmpExtraInf",
+                data: JSON.stringify({ DocNo: DocNo, EntryType: EntrType, Descr: remarks }),
+                contentType: "application/json; charset = utf-8",
+                success: function (data) {
+                    if (data.success == true) {
+                        Swal.fire('Success', data.message, 'success');
+                        if (EntrType == "1") {
+                            LoadEmpExtraInf(DocNo, "Major Accomplishments", '1', "divAccombl");
+                        }
+                        else if (EntrType == "2") {
+                            LoadEmpExtraInf(DocNo, "Key Strengths", '2', "divEmpStrength");
+                        }
+                        else if (EntrType == "3") {
+                            LoadEmpExtraInf(DocNo, "Areas of Improvement", '3', "divEmpAreaOfImprovement");
+                        }
+                        else if (EntrType == "4") {
+                            //LoadEmpExtraInf(DocNo, "Expected Standard(s) of Performance", '4', "divEmpExpectedPerformance");
+                        }
+                        else { }
+                        $("#myModal").modal("hide");
+                        HideProgress();
+                    }
+                    else {
+                        HideProgress();
+                        Swal.fire('error', data.message, 'error');
+                    }
+                },
+                error: function () {
+                    HideProgress();
+                    Swal.fire('error', data.message, 'error');
+                }
+            });
+        }
+    }
+    var AppRequisitionLink = function () {
+        ShowProgress();
+        window.location = "/ANUPEAisal/MyReviewANUPEAisalList";
+    };
+    var SendDocTo = function () {
+        var DocNo = $("#DocNo").html();
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo, SendTo: "0" }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/ANUPEAisal/SendDocumentTo',
+            success: function (data) {
+                if (data.success == true) {
+                    ShowProgress();
+                    window.location = "/ANUPEAisal/MyReviewANUPEAisalList";
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+</script>

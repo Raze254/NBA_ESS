@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.StaffClaimList>
+<div class="pre-scrollable">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+        <tr>
+            <th>Action</th>
+            <th>No</th>
+            <th>Date</th>
+            <th>Request Description</th>
+            <th>Responsibility Center</th>
+            <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        @{
+            if (Model != null && Model.Count() > 0)
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <input type="button" onclick="SelectedRow('@item.No','@item.Status');" style="background: #162f25; color:whitesmoke; border-radius:10px" value="Select"/>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.No)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ReqDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Purpose)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RespC)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Status)
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6" style="color:red">
+                        No Records Found
+                    </td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>

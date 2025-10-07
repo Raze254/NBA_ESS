@@ -1,0 +1,1252 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B77A4665-9838-4D49-8ED7-A6C12A295B4D}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Latest_Staff_Portal</RootNamespace>
+    <AssemblyName>Latest Staff Portal</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort>44365</IISExpressSSLPort>
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BouncyCastle.Cryptography, Version=2.0.0.0, Culture=neutral, PublicKeyToken=072edcf4a5328938, processorArchitecture=MSIL">
+      <HintPath>..\packages\BouncyCastle.Cryptography.2.5.1\lib\net461\BouncyCastle.Cryptography.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp, Version=5.5.13.4, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\iTextSharp.5.5.13.4\lib\net461\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=2.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.2.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="QRCoder, Version=1.6.0.0, Culture=neutral, PublicKeyToken=c4ed5b9ae8358a28, processorArchitecture=MSIL">
+      <HintPath>..\packages\QRCoder.1.6.0\lib\net40\QRCoder.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.IO, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.4.3.0\lib\net462\System.IO.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.4.3.0\lib\net462\System.Runtime.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.3.1\lib\net463\System.Security.Cryptography.Algorithms.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Principal.Windows, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Principal.Windows.5.0.0\lib\net461\System.Security.Principal.Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Mvc, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.9\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="zxing, Version=0.16.9.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZXing.Net.0.16.9\lib\net48\zxing.dll</HintPath>
+    </Reference>
+    <Reference Include="zxing.presentation, Version=0.16.9.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZXing.Net.0.16.9\lib\net48\zxing.presentation.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferences Include="Web References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\CommonController.cs" />
+    <Compile Include="Controllers\DashboardController.cs" />
+    <Compile Include="Controllers\DocumentApprovalController.cs" />
+    <Compile Include="Controllers\EmployeeExitController.cs" />
+    <Compile Include="Controllers\ExpenseRequisitionController.cs" />
+    <Compile Include="Controllers\FleetController.cs" />
+    <Compile Include="Controllers\ICTController.cs" />
+    <Compile Include="Controllers\ImprestController.cs" />
+    <Compile Include="Controllers\ImprestMemoController.cs" />
+    <Compile Include="Controllers\ImprestSurrenderController.cs" />
+    <Compile Include="Controllers\ImprestWarrantController.cs" />
+    <Compile Include="Controllers\LeaveController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\PasController.cs" />
+    <Compile Include="Controllers\PerformanceAppraisalController.cs" />
+    <Compile Include="Controllers\PerformanceController.cs" />
+    <Compile Include="Controllers\PettyCashController.cs" />
+    <Compile Include="Controllers\PurchaseController.cs" />
+    <Compile Include="Controllers\SettingsController.cs" />
+    <Compile Include="Controllers\StaffClaimController.cs" />
+    <Compile Include="Controllers\StoreRequisitionController.cs" />
+    <Compile Include="Controllers\TechnicalController.cs" />
+    <Compile Include="Controllers\TrainingController.cs" />
+    <Compile Include="Controllers\ViewDocumentController.cs" />
+    <Compile Include="Controllers\ViewDocumentsController.cs" />
+    <Compile Include="Controllers\WelfareManagementController.cs" />
+    <Compile Include="CustomSecurity\CustomAuthorization.cs" />
+    <Compile Include="CustomSecurity\CustomeAuthentication.cs" />
+    <Compile Include="CustomSecurity\CustomPrincipal.cs" />
+    <Compile Include="DimensionValues\DimensinValuesList.cs" />
+    <Compile Include="EdmsDocuments\RetrieveDocuments.cs" />
+    <Compile Include="EdmsDocuments\UploadDocuments.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Helper.cs" />
+    <Compile Include="Models\Authedication.cs" />
+    <Compile Include="Models\CommonClass.cs" />
+    <Compile Include="Models\Credentials.cs" />
+    <Compile Include="Models\EdmsDocuments.cs" />
+    <Compile Include="Models\UserViewModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Utils\EncryptionHelper.cs" />
+    <Compile Include="Utils\LogHelper.cs" />
+    <Compile Include="Utils\SetUserAuthentication.cs" />
+    <Compile Include="ViewModel\Appraisal.cs" />
+    <Compile Include="ViewModel\Deposits.cs" />
+    <Compile Include="ViewModel\DocComments.cs" />
+    <Compile Include="ViewModel\EmployeeExit.cs" />
+    <Compile Include="ViewModel\CommonViewClass.cs" />
+    <Compile Include="ViewModel\DocumentAttachment.cs" />
+    <Compile Include="ViewModel\DocumentsForApproval.cs" />
+    <Compile Include="ViewModel\EmployeeView.cs" />
+    <Compile Include="ViewModel\Error.cs" />
+    <Compile Include="ViewModel\FleetRequests.cs" />
+    <Compile Include="ViewModel\ICT.cs" />
+    <Compile Include="ViewModel\ImportantDocs.cs" />
+    <Compile Include="ViewModel\Imprest.cs" />
+    <Compile Include="ViewModel\ImprestMemo.cs" />
+    <Compile Include="ViewModel\ImprestSurrender.cs" />
+    <Compile Include="ViewModel\Invoices.cs" />
+    <Compile Include="ViewModel\Leave.cs" />
+    <Compile Include="ViewModel\LeaveReimbursement.cs" />
+    <Compile Include="ViewModel\Lecturer.cs" />
+    <Compile Include="ViewModel\Maintenance.cs" />
+    <Compile Include="ViewModel\Mobility.cs" />
+    <Compile Include="ViewModel\PayChangeAdvice.cs" />
+    <Compile Include="ViewModel\Performance.cs" />
+    <Compile Include="ViewModel\PettyCash.cs" />
+    <Compile Include="ViewModel\Procurement.cs" />
+    <Compile Include="ViewModel\Programme.cs" />
+    <Compile Include="ViewModel\Purchase.cs" />
+    <Compile Include="ViewModel\StaffClaim.cs" />
+    <Compile Include="ViewModel\Store.cs" />
+    <Compile Include="ViewModel\Technical.cs" />
+    <Compile Include="ViewModel\Timesheet.cs" />
+    <Compile Include="ViewModel\Training.cs" />
+    <Compile Include="ViewModel\Transport.cs" />
+    <Compile Include="ViewModel\ViewDocuments.cs" />
+    <Compile Include="ViewModel\WelfareManagement.cs" />
+    <Compile Include="ViewModel\Workplans.cs" />
+    <Compile Include="Web References\NAVWS2\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\NAVWS\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="assets\css1\bootstrap.min.css" />
+    <Content Include="assets\css1\feathericon.min.css" />
+    <Content Include="assets\css1\font-awesome.min.css" />
+    <Content Include="assets\css1\select2.min.css" />
+    <Content Include="assets\css1\style.css" />
+    <Content Include="assets\css\app-dark.min.css" />
+    <Content Include="assets\css\app-rtl.min.css" />
+    <Content Include="assets\css\app.min.css" />
+    <Content Include="assets\css\bootstrap.min.css" />
+    <Content Include="assets\css\buttons.bootstrap4.min.css" />
+    <Content Include="assets\css\custom-styles.css" />
+    <Content Include="assets\css\custom.css" />
+    <Content Include="assets\css\dataTables.bootstrap4.min.css" />
+    <Content Include="assets\css\feathericon.min.css" />
+    <Content Include="assets\css\font-awesome.min.css" />
+    <Content Include="assets\css\hr-styles.css" />
+    <Content Include="assets\css\icons.min.css" />
+    <Content Include="assets\css\Loader.css" />
+    <Content Include="assets\css\Loader1.css" />
+    <Content Include="assets\css\responsive.bootstrap4.min.css" />
+    <Content Include="assets\css\select2.min.css" />
+    <Content Include="assets\css\style-main.css" />
+    <Content Include="assets\css\style.css" />
+    <Content Include="assets\css\stylehealth.min.css" />
+    <Content Include="assets\css\sweetalert2.min.css" />
+    <Content Include="assets\fonts1\feathericon.svg" />
+    <Content Include="assets\fonts1\fontawesome-webfont3e6e.html" />
+    <Content Include="assets\fonts1\fontawesome-webfont3e6e.svg" />
+    <Content Include="assets\fonts1\MaterialIcons-Regular.html" />
+    <Content Include="assets\fonts\boxicons.html" />
+    <Content Include="assets\fonts\boxiconsd41d.svg" />
+    <Content Include="assets\fonts\dripicons-v2.svg" />
+    <Content Include="assets\fonts\fa-brands-400.html" />
+    <Content Include="assets\fonts\fa-brands-400.svg" />
+    <Content Include="assets\fonts\fa-regular-400.html" />
+    <Content Include="assets\fonts\fa-regular-400.svg" />
+    <Content Include="assets\fonts\fa-solid-900.html" />
+    <Content Include="assets\fonts\fa-solid-900.svg" />
+    <Content Include="assets\fonts\feathericon.svg" />
+    <Content Include="assets\fonts\fontawesome-webfont3e6e.html" />
+    <Content Include="assets\fonts\fontawesome-webfont3e6e.svg" />
+    <Content Include="assets\fonts\materialdesignicons-webfont2f9b.html" />
+    <Content Include="assets\fonts\MaterialIcons-Regular.html" />
+    <Content Include="assets\images\favicon-32x32.png" />
+    <Content Include="assets\images\logo.png" />
+    <Content Include="assets\images\profile_m.png" />
+    <Content Include="assets\img\white.jpg" />
+    <Content Include="assets\js1\bootstrap.min.js" />
+    <Content Include="assets\js1\chart.morris.js" />
+    <Content Include="assets\js1\form-validation.js" />
+    <Content Include="assets\js1\jquery-3.2.1.min.js" />
+    <Content Include="assets\js1\jquery.maskedinput.min.js" />
+    <Content Include="assets\js1\mask.js" />
+    <Content Include="assets\js1\popper.min.js" />
+    <Content Include="assets\js1\script.js" />
+    <Content Include="assets\js1\select2.min.js" />
+    <Content Include="assets\js\app.js" />
+    <Content Include="assets\js\bootstrap.min.js" />
+    <Content Include="assets\js\buttons.bootstrap4.min.js" />
+    <Content Include="assets\js\buttons.colVis.min.js" />
+    <Content Include="assets\js\buttons.html5.min.js" />
+    <Content Include="assets\js\buttons.print.min.js" />
+    <Content Include="assets\js\chart.morris.js" />
+    <Content Include="assets\js\dataTables.bootstrap4.min.js" />
+    <Content Include="assets\js\dataTables.buttons.min.js" />
+    <Content Include="assets\js\datatables.init.js" />
+    <Content Include="assets\js\dataTables.responsive.min.js" />
+    <Content Include="assets\js\form-validation.js" />
+    <Content Include="assets\js\jquery-1.11.1.min.js" />
+    <Content Include="assets\js\jquery-3.2.1.min.js" />
+    <Content Include="assets\js\jquery.dataTables.min.js" />
+    <Content Include="assets\js\jquery.maskedinput.min.js" />
+    <Content Include="assets\js\jquery2.0.3.min.js" />
+    <Content Include="assets\js\jszip.min.js" />
+    <Content Include="assets\js\mask.js" />
+    <Content Include="assets\js\modernizr.custom.js" />
+    <Content Include="assets\js\ObfuscateSite.js" />
+    <Content Include="assets\js\pages\app.js" />
+    <Content Include="assets\js\pages\bootstrap.bundle.min.js" />
+    <Content Include="assets\js\pages\jquery.min.js" />
+    <Content Include="assets\js\pages\metisMenu.min.js" />
+    <Content Include="assets\js\pages\simplebar.min.js" />
+    <Content Include="assets\js\pages\waves.min.js" />
+    <Content Include="assets\js\pdfmake.min.js" />
+    <Content Include="assets\js\pdfobject.min.js" />
+    <Content Include="assets\js\popper.min.js" />
+    <Content Include="assets\js\responsive.bootstrap4.min.js" />
+    <Content Include="assets\js\script.js" />
+    <Content Include="assets\js\select2.min.js" />
+    <Content Include="assets\js\ShowProgression.js" />
+    <Content Include="assets\js\sweetalert2.min.js" />
+    <Content Include="assets\js\toolkit.js" />
+    <Content Include="assets\js\vfs_fonts.js" />
+    <Content Include="assets\plugins1\datatables\datatables.min.css" />
+    <Content Include="assets\plugins1\datatables\datatables.min.js" />
+    <Content Include="assets\plugins1\datatables\jquery.dataTables.min.js" />
+    <Content Include="assets\plugins1\morris\morris.css" />
+    <Content Include="assets\plugins1\morris\morris.min.js" />
+    <Content Include="assets\plugins1\raphael\raphael.min.js" />
+    <Content Include="assets\plugins1\slimscroll\jquery.slimscroll.min.js" />
+    <Content Include="assets\plugins\bootstrap-social\bootstrap-social.css" />
+    <Content Include="assets\plugins\bootstrap-toggle\bootstrap-toggle.min.css" />
+    <Content Include="assets\plugins\bootstrap-toggle\bootstrap-toggle.min.js" />
+    <Content Include="assets\plugins\bootstrap-wysihtml5\bootstrap-wysihtml5.css" />
+    <Content Include="assets\plugins\chartJs\Chart.min.js" />
+    <Content Include="assets\plugins\counterup\jquery.counterup.min.js" />
+    <Content Include="assets\plugins\counterup\waypoints.js" />
+    <Content Include="assets\plugins\datamaps\d3.min.js" />
+    <Content Include="assets\plugins\datamaps\datamaps.all.min.js" />
+    <Content Include="assets\plugins\datamaps\topojson.min.js" />
+    <Content Include="assets\plugins\emojionearea\emojionearea.min.css" />
+    <Content Include="assets\plugins\emojionearea\emojionearea.min.js" />
+    <Content Include="assets\plugins\fastclick\fastclick.min.js" />
+    <Content Include="assets\plugins\fullcalendar\fullcalendar.min.css" />
+    <Content Include="assets\plugins\fullcalendar\fullcalendar.min.js" />
+    <Content Include="assets\plugins\fullcalendar\fullcalendar.print.min.css" />
+    <Content Include="assets\plugins\fullcalendar\lib\moment.min.js" />
+    <Content Include="assets\plugins\icheck\icheck.min.js" />
+    <Content Include="assets\plugins\icheck\skins\all.css" />
+    <Content Include="assets\plugins\icheck\skins\flat\aero%402x.png" />
+    <Content Include="assets\plugins\icheck\skins\flat\aero.png" />
+    <Content Include="assets\plugins\icheck\skins\flat\blue%402x.png" />
+    <Content Include="assets\plugins\icheck\skins\flat\blue.png" />
+    <Content Include="assets\plugins\icheck\skins\flat\flat%402x.png" />
+    <Content Include="assets\plugins\icheck\skins\flat\flat.png" />
+    <Content Include="assets\plugins\icheck\skins\flat\green%402x.png" />
+    <Content Include="assets\plugins\icheck\skins\flat\green.png" />
+    <Content Include="assets\plugins\icheck\skins\flat\grey%402x.png" />
+    <Content Include="assets\plugins\icheck\skins\flat\grey.png" />
+    <Content Include="assets\plugins\icheck\skins\flat\orange%402x.png" />
+    <Content Include="assets\plugins\icheck\skins\flat\orange.png" />
+    <Content Include="assets\plugins\icheck\skins\flat\pink%402x.png" />
+    <Content Include="assets\plugins\icheck\skins\flat\pink.png" />
+    <Content Include="assets\plugins\icheck\skins\flat\purple%402x.png" />
+    <Content Include="assets\plugins\icheck\skins\flat\purple.png" />
+    <Content Include="assets\plugins\icheck\skins\flat\red%402x.png" />
+    <Content Include="assets\plugins\icheck\skins\flat\red.png" />
+    <Content Include="assets\plugins\icheck\skins\flat\yellow%402x.png" />
+    <Content Include="assets\plugins\icheck\skins\flat\yellow.png" />
+    <Content Include="assets\plugins\icheck\skins\flat\_all.css" />
+    <Content Include="assets\plugins\icheck\skins\futurico\futurico%402x.png" />
+    <Content Include="assets\plugins\icheck\skins\futurico\futurico.css" />
+    <Content Include="assets\plugins\icheck\skins\futurico\futurico.png" />
+    <Content Include="assets\plugins\icheck\skins\line\line%402x.png" />
+    <Content Include="assets\plugins\icheck\skins\line\line.png" />
+    <Content Include="assets\plugins\icheck\skins\line\_all.css" />
+    <Content Include="assets\plugins\icheck\skins\minimal\aero%402x.png" />
+    <Content Include="assets\plugins\icheck\skins\minimal\aero.png" />
+    <Content Include="assets\plugins\icheck\skins\minimal\blue%402x.png" />
+    <Content Include="assets\plugins\icheck\skins\minimal\blue.png" />
+    <Content Include="assets\plugins\icheck\skins\minimal\green%402x.png" />
+    <Content Include="assets\plugins\icheck\skins\minimal\green.png" />
+    <Content Include="assets\plugins\icheck\skins\minimal\grey%402x.png" />
+    <Content Include="assets\plugins\icheck\skins\minimal\grey.png" />
+    <Content Include="assets\plugins\icheck\skins\minimal\minimal%402x.png" />
+    <Content Include="assets\plugins\icheck\skins\minimal\minimal.png" />
+    <Content Include="assets\plugins\icheck\skins\minimal\orange%402x.png" />
+    <Content Include="assets\plugins\icheck\skins\minimal\orange.png" />
+    <Content Include="assets\plugins\icheck\skins\minimal\pink%402x.png" />
+    <Content Include="assets\plugins\icheck\skins\minimal\pink.png" />
+    <Content Include="assets\plugins\icheck\skins\minimal\purple%402x.png" />
+    <Content Include="assets\plugins\icheck\skins\minimal\purple.png" />
+    <Content Include="assets\plugins\icheck\skins\minimal\red%402x.png" />
+    <Content Include="assets\plugins\icheck\skins\minimal\red.png" />
+    <Content Include="assets\plugins\icheck\skins\minimal\yellow%402x.png" />
+    <Content Include="assets\plugins\icheck\skins\minimal\yellow.png" />
+    <Content Include="assets\plugins\icheck\skins\minimal\_all.css" />
+    <Content Include="assets\plugins\icheck\skins\polaris\polaris%402x.png" />
+    <Content Include="assets\plugins\icheck\skins\polaris\polaris.css" />
+    <Content Include="assets\plugins\icheck\skins\polaris\polaris.png" />
+    <Content Include="assets\plugins\icheck\skins\square\aero%402x.png" />
+    <Content Include="assets\plugins\icheck\skins\square\aero.png" />
+    <Content Include="assets\plugins\icheck\skins\square\blue%402x.png" />
+    <Content Include="assets\plugins\icheck\skins\square\blue.png" />
+    <Content Include="assets\plugins\icheck\skins\square\green%402x.png" />
+    <Content Include="assets\plugins\icheck\skins\square\green.png" />
+    <Content Include="assets\plugins\icheck\skins\square\grey%402x.png" />
+    <Content Include="assets\plugins\icheck\skins\square\grey.png" />
+    <Content Include="assets\plugins\icheck\skins\square\orange%402x.png" />
+    <Content Include="assets\plugins\icheck\skins\square\orange.png" />
+    <Content Include="assets\plugins\icheck\skins\square\pink%402x.png" />
+    <Content Include="assets\plugins\icheck\skins\square\pink.png" />
+    <Content Include="assets\plugins\icheck\skins\square\purple%402x.png" />
+    <Content Include="assets\plugins\icheck\skins\square\purple.png" />
+    <Content Include="assets\plugins\icheck\skins\square\red%402x.png" />
+    <Content Include="assets\plugins\icheck\skins\square\red.png" />
+    <Content Include="assets\plugins\icheck\skins\square\square%402x.png" />
+    <Content Include="assets\plugins\icheck\skins\square\square.png" />
+    <Content Include="assets\plugins\icheck\skins\square\yellow%402x.png" />
+    <Content Include="assets\plugins\icheck\skins\square\yellow.png" />
+    <Content Include="assets\plugins\icheck\skins\square\_all.css" />
+    <Content Include="assets\plugins\ion\css\ion.rangeSlider.css" />
+    <Content Include="assets\plugins\ion\css\ion.rangeSlider.skinFlat.css" />
+    <Content Include="assets\plugins\ion\img\sprite-skin-flat.png" />
+    <Content Include="assets\plugins\ion\js\ion.rangeSlider.min.js" />
+    <Content Include="assets\plugins\jquery-ui-1.12.1\jquery-ui.min.css" />
+    <Content Include="assets\plugins\jquery-ui-1.12.1\jquery-ui.min.js" />
+    <Content Include="assets\plugins\jQuery\jquery-1.12.4.min.js" />
+    <Content Include="assets\plugins\lobipanel\lobipanel.min.css" />
+    <Content Include="assets\plugins\lobipanel\lobipanel.min.js" />
+    <Content Include="assets\plugins\modals\classie.js" />
+    <Content Include="assets\plugins\modals\component.css" />
+    <Content Include="assets\plugins\modals\modalEffects.js" />
+    <Content Include="assets\plugins\moment\moment.js" />
+    <Content Include="assets\plugins\monthly\monthly.css" />
+    <Content Include="assets\plugins\monthly\monthly.js" />
+    <Content Include="assets\plugins\NotificationStyles\css\demo.css" />
+    <Content Include="assets\plugins\NotificationStyles\css\ns-default.css" />
+    <Content Include="assets\plugins\NotificationStyles\css\ns-style-attached.css" />
+    <Content Include="assets\plugins\NotificationStyles\css\ns-style-bar.css" />
+    <Content Include="assets\plugins\NotificationStyles\css\ns-style-growl.css" />
+    <Content Include="assets\plugins\NotificationStyles\css\ns-style-other.css" />
+    <Content Include="assets\plugins\NotificationStyles\fonts\codropsicons\codropsicons-2.html" />
+    <Content Include="assets\plugins\NotificationStyles\fonts\codropsicons\codropsicons-3.html" />
+    <Content Include="assets\plugins\NotificationStyles\fonts\codropsicons\codropsicons-4.html" />
+    <Content Include="assets\plugins\NotificationStyles\fonts\codropsicons\codropsicons.html" />
+    <Content Include="assets\plugins\NotificationStyles\fonts\codropsicons\codropsiconsd41d.html" />
+    <Content Include="assets\plugins\NotificationStyles\fonts\linecons\lineconsba9e.svg" />
+    <Content Include="assets\plugins\NotificationStyles\js\classie.js" />
+    <Content Include="assets\plugins\NotificationStyles\js\modernizr.custom.js" />
+    <Content Include="assets\plugins\NotificationStyles\js\notificationFx.js" />
+    <Content Include="assets\plugins\NotificationStyles\js\snap.svg-min.js" />
+    <Content Include="assets\plugins\pace\flash.css" />
+    <Content Include="assets\plugins\pace\pace.min.js" />
+    <Content Include="assets\plugins\slimScroll\jquery.slimscroll.min.js" />
+    <Content Include="assets\plugins\sparkline\sparkline.min.js" />
+    <Content Include="assets\plugins\summernote\summernote.css" />
+    <Content Include="assets\plugins\summernote\summernote.js" />
+    <Content Include="assets\plugins\sweetalert\sweetalert.css" />
+    <Content Include="assets\plugins\sweetalert\sweetalert.min.js" />
+    <Content Include="assets\plugins\toastr\toastr.css" />
+    <Content Include="assets\plugins\toastr\toastr.min.js" />
+    <Content Include="assets\select2\css\select2.min.css" />
+    <Content Include="assets\select2\js\select2.min.js" />
+    <Content Include="bin\Latest Staff Portal.dll" />
+    <Content Include="bin\Latest Staff Portal.pdb" />
+    <Content Include="DatePicker\images\ui-icons_444444_256x240.png" />
+    <Content Include="DatePicker\images\ui-icons_555555_256x240.png" />
+    <Content Include="DatePicker\images\ui-icons_777620_256x240.png" />
+    <Content Include="DatePicker\images\ui-icons_777777_256x240.png" />
+    <Content Include="DatePicker\images\ui-icons_cc0000_256x240.png" />
+    <Content Include="DatePicker\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="DatePicker\jquery-ui.min.css" />
+    <Content Include="DatePicker\jquery-ui.min.js" />
+    <Content Include="Global.asax" />
+    <Content Include="sdebarimg.png" />
+    <Content Include="sidebarImg.jpg" />
+    <Content Include="SiteJS\DashboardJS.js" />
+    <Content Include="SiteJS\ForgetPasswordJS.js" />
+    <Content Include="SiteJS\LoginJS.js" />
+    <Content Include="SiteJS\LogoutSession.js" />
+    <Content Include="SiteJS\RejectedApprovalRequests.js" />
+    <Content Include="SiteJS\SearchLinks.js" />
+    <Content Include="SiteJS\SideBarLink.js" />
+    <Content Include="SiteJS\SubmitLoanApplication.js" />
+    <Content Include="assets\fonts1\feathericon.eot" />
+    <Content Include="assets\fonts1\feathericon.ttf" />
+    <Content Include="assets\fonts1\feathericon.woff" />
+    <Content Include="assets\fonts1\feathericond41d.eot" />
+    <Content Include="assets\fonts1\fontawesome-webfont3e6e.eot" />
+    <Content Include="assets\fonts1\fontawesome-webfont3e6e.ttf" />
+    <Content Include="assets\fonts1\fontawesome-webfont3e6e.woff" />
+    <Content Include="assets\fonts1\fontawesome-webfontd41d.eot" />
+    <Content Include="assets\fonts1\MaterialIcons-Regular.eot" />
+    <Content Include="assets\fonts1\MaterialIcons-Regular.ttf" />
+    <Content Include="assets\fonts1\MaterialIcons-Regular.woff" />
+    <None Include="packages.config" />
+    <Content Include="Views\Common\AllocatedAssetsView.cshtml" />
+    <Content Include="Views\Common\CommonAction.cshtml" />
+    <Content Include="Views\Common\Dimensions.cshtml" />
+    <Content Include="Views\Common\EdmsDocumentAttachmentList.cshtml" />
+    <Content Include="Views\Common\EdmsDocumentAttachmentList.cshtml" />
+    <Content Include="Views\Common\ErrorMessange.cshtml" />
+    <Content Include="Views\Common\FAQsView.cshtml" />
+    <Content Include="Views\Common\HRInformation.cshtml" />
+    <Content Include="Views\Common\Notice.cshtml" />
+    <Content Include="Views\Common\OpenNotification.cshtml" />
+    <Content Include="Views\Common\PartialViews\HrNoticeboardView.cshtml" />
+    <Content Include="Views\Common\PartialViews\NoticeListView.cshtml" />
+    <Content Include="Views\Common\PartialViews\NotificationsView.cshtml" />
+    <Content Include="Views\Common\PartialViews\PerActivity.cshtml" />
+    <Content Include="Views\Common\Unauthorized.cshtml" />
+    <Content Include="Views\Dashboard\Dashboard.cshtml" />
+    <Content Include="Views\Dashboard\LeaveBalances.cshtml" />
+    <Content Include="Views\Dashboard\PartialView\AttendanceList.cshtml" />
+    <Content Include="Views\Dashboard\PartialView\EmployeeQualification.cshtml" />
+    <Content Include="Views\Dashboard\PartialView\FeedbackAndComplaint.cshtml" />
+    <Content Include="Views\Dashboard\PartialView\TrainingHistory.cshtml" />
+    <Content Include="Views\Dashboard\PersonalProfile.cshtml" />
+    <Content Include="Views\Dashboard\PersonalProfile2.cshtml" />
+    <Content Include="Views\Dashboard\ProfilePic.cshtml" />
+    <Content Include="Views\ICT\CancelRemarks.cshtml" />
+    <Content Include="Views\ICT\ConfirmRemarks.cshtml" />
+    <Content Include="Views\ICT\DocumentComments.cshtml" />
+    <Content Include="Views\ICT\ICTAssetRequestDocument.cshtml" />
+    <Content Include="Views\ICT\ICTAssetServiceReqListView.cshtml" />
+    <Content Include="Views\ICT\ICTAssetTransferList.cshtml" />
+    <Content Include="Views\ICT\ICTAssetTransferListView.cshtml" />
+    <Content Include="Views\ICT\ICTAssignedList.cshtml" />
+    <Content Include="Views\ICT\ICTAssignmentList.cshtml" />
+    <Content Include="Views\ICT\ICTListView.cshtml" />
+    <Content Include="Views\ICT\ICTRequisitionList.cshtml" />
+    <Content Include="Views\ICT\ICTResolveRemarks.cshtml" />
+    <Content Include="Views\ICT\ICTServMntList.cshtml" />
+    <Content Include="Views\ICT\NewICTAssetRequest.cshtml" />
+    <Content Include="Views\ICT\NewICTRequest.cshtml" />
+    <Content Include="Views\ICT\NewICTServiceRequest.cshtml" />
+    <Content Include="Views\ICT\ServiceDocView.cshtml" />
+    <Content Include="Views\ImprestSurrender\ImprestSurrenderDocumentView.cshtml" />
+    <Content Include="Views\ImprestSurrender\ImprestSurrenderLinesPartialView.cshtml" />
+    <Content Include="Views\ImprestSurrender\ImprestSurrenderList.cshtml" />
+    <Content Include="Views\ImprestSurrender\ImprestSurrenderListPartialView.cshtml" />
+    <Content Include="Views\ImprestSurrender\PartialViews\NewImprestSurrender.cshtml" />
+    <Content Include="Views\ImprestSurrender\PartialViews\UpdateImprestSurrenderLine.cshtml" />
+    <Content Include="Views\Imprest\ImprestDocumentView.cshtml" />
+    <Content Include="Views\Imprest\ImprestLinesPartialView.cshtml" />
+    <Content Include="Views\Imprest\ImprestList.cshtml" />
+    <Content Include="Views\Imprest\ImprestListPartialView.cshtml" />
+    <Content Include="Views\Imprest\PartialViews\NewImprest.cshtml" />
+    <Content Include="Views\Imprest\PartialViews\NewImprestLine.cshtml" />
+    <Content Include="Views\Imprest\PartialViews\UpdateImprestLine.cshtml" />
+    <Content Include="Views\Leave\LeaveApplication.cshtml" />
+    <Content Include="Views\Leave\LeaveApplicationsDocumentView.cshtml" />
+    <Content Include="Views\Leave\LeavePlanner.cshtml" />
+    <Content Include="Views\Leave\LeavePlannerDocumentView.cshtml" />
+    <Content Include="Views\Leave\NewLeaveApplication.cshtml" />
+    <Content Include="Views\Leave\NewLeavePlanner.cshtml" />
+    <Content Include="Views\Leave\PostedLeaveApplications.cshtml" />
+    <Content Include="Views\Leave\StaffAdvance.cshtml" />
+    <Content Include="Views\Login\ForgotPassword.cshtml" />
+    <Content Include="Views\Login\InputOtp.cshtml" />
+    <Content Include="Views\Login\Login.cshtml" />
+    <Content Include="Views\Login\RequestOtp.cshtml" />
+    <Content Include="Views\Login\sdebarimg.png" />
+    <Content Include="Views\Login\sidebarImg.jpg" />
+    <Content Include="Views\Settings\ChangePassword.cshtml" />
+    <Content Include="Views\Shared\DashboardLayout.cshtml" />
+    <Content Include="Views\Shared\DashLayout.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\LoginMaster.cshtml" />
+    <Content Include="Views\Shared\mainLayout.cshtml" />
+    <Content Include="Views\Shared\Partial Views\ApprovalTrail.cshtml" />
+    <Content Include="Views\Shared\Partial Views\DocumentApprovalComments.cshtml" />
+    <Content Include="Views\Shared\Partial Views\ErroMessangeView.cshtml" />
+    <Content Include="Views\Shared\Partial Views\FileAttachmentForm.cshtml" />
+    <Content Include="Views\Shared\Partial Views\ImportantDocs.cshtml" />
+    <Content Include="Views\Shared\Partial Views\ImportantDocsToApprove.cshtml" />
+    <Content Include="Views\Shared\Partial Views\TransferHistory.cshtml" />
+    <Content Include="Views\Shared\Sitemaster.cshtml" />
+    <Content Include="Views\Training\PartialViews\NewTrainingRequisition.cshtml" />
+    <Content Include="Views\Training\PartialViews\NewTrainingRequisitionLine.cshtml" />
+    <Content Include="Views\Training\PartialViews\TrainingRequisitionLinesPartialView.cshtml" />
+    <Content Include="Views\Training\PartialViews\TrainingRequisitionListPartialView.cshtml" />
+    <Content Include="Views\Training\TrainingRequisitionDocumentView.cshtml" />
+    <Content Include="Views\Training\TrainingRequisitionList.cshtml" />
+    <Content Include="Views\Transport\Partial Views\EditWorkTicketLineView.cshtml" />
+    <Content Include="Views\Transport\Partial Views\ExternalPassengerForm.cshtml" />
+    <Content Include="Views\Transport\Partial Views\ExternalPassengers.cshtml" />
+    <Content Include="Views\Transport\Partial Views\FileAttachmentForm.cshtml" />
+    <Content Include="Views\Transport\Partial Views\NewIncidence.cshtml" />
+    <Content Include="Views\Transport\Partial Views\NewTransportRequisition.cshtml" />
+    <Content Include="Views\Transport\Partial Views\NewWorkTicket.cshtml" />
+    <Content Include="Views\Transport\Partial Views\NewWorkTicketLine.cshtml" />
+    <Content Include="Views\Transport\Partial Views\PassengerForm.cshtml" />
+    <Content Include="Views\Transport\Partial Views\PassengerList.cshtml" />
+    <Content Include="Views\Transport\Partial Views\TRListView.cshtml" />
+    <Content Include="Views\Transport\Partial Views\VehicleIncidenceListPartialView.cshtml" />
+    <Content Include="Views\Transport\Partial Views\WorkTicketLinesPartialView.cshtml" />
+    <Content Include="Views\Transport\TransportDocumentDetails.cshtml" />
+    <Content Include="Views\Transport\TransportRequisitionList.cshtml" />
+    <Content Include="Views\Transport\VehicleIncidenceDocument.cshtml" />
+    <Content Include="Views\Transport\VehicleIncidentView.cshtml" />
+    <Content Include="Views\Transport\VehicleRequisition.cshtml" />
+    <Content Include="Views\Transport\VehicleRequisitionListPartialView.cshtml" />
+    <Content Include="Views\Transport\WorkTicket.cshtml" />
+    <Content Include="Views\Transport\WorkTicketDocument.cshtml" />
+    <Content Include="Views\Transport\WorkTicketListPartialView.cshtml" />
+    <Content Include="Views\ViewDocuments\SharepointIntegration.cshtml" />
+    <Content Include="Views\ViewDocuments\ViewDocuments.cshtml" />
+    <Content Include="Views\ViewDocument\DocumentViewp9.cshtml" />
+    <Content Include="Views\ViewDocument\DocumentViewPayslip.cshtml" />
+    <Content Include="Views\ViewDocument\LeaveStatement.cshtml" />
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\WelfareManagement\CarLoanApplicationsList.cshtml" />
+    <Content Include="Views\WelfareManagement\DependantChangeRequests.cshtml" />
+    <Content Include="Views\WelfareManagement\DependentsChangeDocumentView.cshtml" />
+    <Content Include="Views\WelfareManagement\HrMedicalClaimListView.cshtml" />
+    <Content Include="Views\WelfareManagement\IncidenceReporting.cshtml" />
+    <Content Include="Views\WelfareManagement\LoanApplicationCardDocument.cshtml" />
+    <Content Include="Views\WelfareManagement\MedicalCardReplacement.cshtml" />
+    <Content Include="Views\WelfareManagement\MedicalCardReplacementDocument.cshtml" />
+    <Content Include="Views\WelfareManagement\MortgageLoanApplicationsList.cshtml" />
+    <Content Include="Views\WelfareManagement\PartialViews\DependantsChangeRequestsListView.cshtml" />
+    <Content Include="Views\WelfareManagement\PartialViews\DependantsList.cshtml" />
+    <Content Include="Views\WelfareManagement\PartialViews\DependentRequirement.cshtml" />
+    <Content Include="Views\WelfareManagement\PartialViews\HrMedicalClaimListPartialView.cshtml" />
+    <Content Include="Views\WelfareManagement\PartialViews\HrWelfareIncidenceList.cshtml" />
+    <Content Include="Views\WelfareManagement\PartialViews\LoanApplicationsListPartialView.cshtml" />
+    <Content Include="Views\WelfareManagement\PartialViews\MedicalCardReplacementPartialView.cshtml" />
+    <Content Include="Views\WelfareManagement\PartialViews\MedicalCardRequirements.cshtml" />
+    <Content Include="Views\WelfareManagement\PartialViews\NewCarLoanApplication.cshtml" />
+    <Content Include="Views\WelfareManagement\PartialViews\NewDependantsChangeRequest.cshtml" />
+    <Content Include="Views\WelfareManagement\PartialViews\NewDependent.cshtml" />
+    <Content Include="Views\WelfareManagement\PartialViews\NewIncident.cshtml" />
+    <Content Include="Views\WelfareManagement\PartialViews\NewLoanApplication.cshtml" />
+    <Content Include="Views\WelfareManagement\PartialViews\NewMedicalCardView.cshtml" />
+    <Content Include="Views\WelfareManagement\PartialViews\NewMortgageApplication.cshtml" />
+    <Content Include="Views\WelfareManagement\SalaryAdvanceLoanApplicationsList.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Web.config" />
+    <Content Include="Latest Staff Portal.csproj.DotSettings" />
+    <Content Include="Views\Appraisal\AppraisalReview\AppraisalReviewList.cshtml" />
+    <Content Include="Views\Appraisal\AppraisalReview\ApprisalReviewDocument.cshtml" />
+    <Content Include="Views\Appraisal\AppraisalReview\CompetenceValues.cshtml" />
+    <Content Include="Views\Appraisal\AppraisalReview\ExtraEmpInfForm.cshtml" />
+    <Content Include="Views\Appraisal\AppraisalReview\SupervisorKPIReviewForm.cshtml" />
+    <Content Include="Views\Appraisal\AppraisalReview\SupTrainingDevForm.cshtml" />
+    <Content Include="Views\Appraisal\AppraisalReview\ValueCompetenceForm.cshtml" />
+    <Content Include="Views\Appraisal\AppraisalScoreCard.cshtml" />
+    <Content Include="Views\Appraisal\ContractrenewalScoreCard.cshtml" />
+    <Content Include="Views\Appraisal\EndYearEvaluationCard.cshtml" />
+    <Content Include="Views\Appraisal\EndYearSupEvaluationCard.cshtml" />
+    <Content Include="Views\Appraisal\MidYearEvaluationCard.cshtml" />
+    <Content Include="Views\Appraisal\MidYearSupEvaluationCard.cshtml" />
+    <Content Include="Views\Appraisal\MyAppraisalList.cshtml" />
+    <Content Include="Views\Appraisal\MyContractRenewalReviewlList.cshtml" />
+    <Content Include="Views\Appraisal\MyContractReviewList.cshtml" />
+    <Content Include="Views\Appraisal\MyProbationList.cshtml" />
+    <Content Include="Views\Appraisal\MyProbationReviewlList.cshtml" />
+    <Content Include="Views\Appraisal\MyReviewAppraisalList.cshtml" />
+    <Content Include="Views\Appraisal\Partial Views\AppraisalListView.cshtml" />
+    <Content Include="Views\Appraisal\Partial Views\CompetenceValues.cshtml" />
+    <Content Include="Views\Appraisal\Partial Views\DepartmentalObjective.cshtml" />
+    <Content Include="Views\Appraisal\Partial Views\ExtraInfList.cshtml" />
+    <Content Include="Views\Appraisal\Partial Views\KPIForm.cshtml" />
+    <Content Include="Views\Appraisal\Partial Views\KPIReviewForm.cshtml" />
+    <Content Include="Views\Appraisal\Partial Views\MGRCompetenceValues.cshtml" />
+    <Content Include="Views\Appraisal\Partial Views\NewApprisalRequest.cshtml" />
+    <Content Include="Views\Appraisal\Partial Views\PerformanceIndicator.cshtml" />
+    <Content Include="Views\Appraisal\Partial Views\PerformanceIndicatorReview.cshtml" />
+    <Content Include="Views\Appraisal\Partial Views\StaffValues.cshtml" />
+    <Content Include="Views\Appraisal\Partial Views\TrainingDevelopment.cshtml" />
+    <Content Include="Views\Appraisal\Partial Views\TrainingDevForm.cshtml" />
+    <Content Include="Views\Appraisal\Partial Views\ValueCompetenceForm.cshtml" />
+    <Content Include="Views\Appraisal\ProbationScoreCard.cshtml" />
+    <Content Include="Views\Appraisal\Probation\ExtraEmpInfForm.cshtml" />
+    <Content Include="Views\Appraisal\Probation\NewRequest.cshtml" />
+    <Content Include="Views\Appraisal\Probation\ProbationReviewDocument.cshtml" />
+    <Content Include="Views\Appraisal\Probation\ProbationReviewList.cshtml" />
+    <Content Include="Views\Appraisal\Quarter1_Card.cshtml" />
+    <Content Include="Views\Appraisal\Quarter2_Card.cshtml" />
+    <Content Include="Views\Appraisal\Quarter3_Card.cshtml" />
+    <Content Include="Views\Appraisal\Quarter4_Card.cshtml" />
+    <Content Include="Views\Appraisal\Sup_Quarter1_Card.cshtml" />
+    <Content Include="Views\Appraisal\Sup_Quarter2_Card.cshtml" />
+    <Content Include="Views\Appraisal\Sup_Quarter3_Card.cshtml" />
+    <Content Include="Views\Appraisal\Sup_Quarter4_Card.cshtml" />
+    <Content Include="Views\Asset\AssetRequestDocument.cshtml" />
+    <Content Include="Views\Asset\AssetRequestList.cshtml" />
+    <Content Include="Views\Asset\AssetRequestListView.cshtml" />
+    <Content Include="Views\Asset\AssetTransferList.cshtml" />
+    <Content Include="Views\Asset\AssignedAssetList.cshtml" />
+    <Content Include="Views\Asset\NewAssetRequest.cshtml" />
+    <Content Include="Views\Asset\Partial Views\AssetTransferForm.cshtml" />
+    <Content Include="Views\Asset\Partial Views\AssignedAssetList.cshtml" />
+    <Content Include="Views\Asset\Partial Views\TransferAssetList.cshtml" />
+    <Content Include="Views\Common\FileAttachmentForm.cshtml" />
+    <Content Include="Views\Common\PartialViews\FileAttachmentForm.cshtml" />
+    <Content Include="Views\Common\UpdateBankDetails.cshtml" />
+    <Content Include="Views\Dashboard\ICTView.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\DocApprovalTrail.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\DocumentComments.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\DocumentForApprovalList.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\EftDocumentView.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\ExpenseRequisition.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\FuelApprovalView.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\IFSDocument.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\ImprestApprovalDocDetails.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\ImprestMemoApproval.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\ImprestSurrenderApprovalDocDetails.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\ImprestWarrantDocument.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\LeaveCarryForwardView.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\LeaveDocumentView.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\LeavePlannerDetails.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\LeaveRecallDocumentView.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\LeaveReimbursementView.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\LoanApproval.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\MaintenanceApprovalView.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\ManagementTransferDocView.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\PcaDocDetails.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\ProcurementPlanDetails.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\PRVItemEditForm.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\PurchaseApprovalDocDetails.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\PurchaseDocumentView.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\PurchaseOrdersDocumentView.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\PVDocument.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\RFQDocumentDetail.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\RFQDocumentDetails.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\SelfTransferDocView.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\SpecialImprestDocument.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\StaffclaimApprovalDocDetails.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\StaffClaimDocumentView.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\StandingImprestDocument.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\StoreApprovalDocDetails.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\TimeSheetDocumentDetail.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\TrainingApprovalDocDetails.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\TransferOrder.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\TransportApprovalDocDetails.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\WorkshopDocumentDetail.cshtml" />
+    <Content Include="Views\DocumentApproval\DocumentForApprovalSummery.cshtml" />
+    <Content Include="Views\DocumentApproval\GetDocumentForApprovalList.cshtml" />
+    <Content Include="Views\DocumentApproval\PartialViews\ApprovalRequestsView.cshtml" />
+    <Content Include="Views\DocumentApproval\RejectedDocuments.cshtml" />
+    <Content Include="Views\DocumentApproval\ResourceRequirementsDocument.cshtml" />
+    <Content Include="Views\DocumentApproval\SourceDocument.cshtml" />
+    <Content Include="Views\LeaveReimbursement\LeaveReimbursementDocument.cshtml" />
+    <Content Include="Views\LeaveReimbursement\LeaveReimbursementList.cshtml" />
+    <Content Include="Views\LeaveReimbursement\LeaveReimbursementListView.cshtml" />
+    <Content Include="Views\LeaveReimbursement\NewLeaveReimbursement.cshtml" />
+    <Content Include="Views\PCA\PartialViews\NewPCA.cshtml" />
+    <Content Include="Views\PCA\PartialViews\NewPCALine.cshtml" />
+    <Content Include="Views\PCA\PartialViews\PCAAttachmets.cshtml" />
+    <Content Include="Views\PCA\PCAApprovedList.cshtml" />
+    <Content Include="Views\PCA\PCADocumentView.cshtml" />
+    <Content Include="Views\PCA\PCALinesView.cshtml" />
+    <Content Include="Views\PCA\PCAList.cshtml" />
+    <Content Include="Views\PCA\PCAs.cshtml" />
+    <Content Include="Views\Leave\EmployeesApprovedLeaveList.cshtml" />
+    <Content Include="Views\Leave\EmployeesOnLeave.cshtml" />
+    <Content Include="Views\Leave\EmployeesOnLeaveList.cshtml" />
+    <Content Include="Views\Leave\LaeveApplicationRecall.cshtml" />
+    <Content Include="Views\Leave\LeaveDocumentView.cshtml" />
+    <Content Include="Views\Leave\LeavePlannerDocument.cshtml" />
+    <Content Include="Views\Leave\LeaveReqListPartialView.cshtml" />
+    <Content Include="Views\Leave\LeaveRequisitionList.cshtml" />
+    <Content Include="Views\Leave\PartialView\EditLeavePlannerLine.cshtml" />
+    <Content Include="Views\Leave\PartialView\LaeveApplicationRecallListPartialView.cshtml" />
+    <Content Include="Views\Leave\PartialView\LeavePlannerLinesPartialView.cshtml" />
+    <Content Include="Views\Leave\PartialView\LeavePlannerListPartialView.cshtml" />
+    <Content Include="Views\Leave\PartialView\NewLeavePlanner.cshtml" />
+    <Content Include="Views\Leave\PartialView\NewLeavePlannerLine.cshtml" />
+    <Content Include="Views\Leave\PartialView\NewLeaveRecall.cshtml" />
+    <Content Include="Views\Purchase\PurchaseRequisitionList.cshtml" />
+    <Content Include="Views\Purchase\PurchaseRequisitionListPartialView2.cshtml" />
+    <Content Include="Views\Purchase\PurchaseRequisitionListPartialView.cshtml" />
+    <Content Include="Views\Purchase\PurchaseRequisitionsDocumentView.cshtml" />
+    <Content Include="Views\Purchase\PurchaseRequisitionLinesPartialView2.cshtml" />
+    <Content Include="Views\StoreRequisition\StoreRequisitionListPartialView.cshtml" />
+    <Content Include="Views\StoreRequisition\StoreRequisitionList.cshtml" />
+    <Content Include="Views\StoreRequisition\StoreRequisitionsDocumentView.cshtml" />
+    <Content Include="Views\StoreRequisition\StoreRequisitionLinesPartialView.cshtml" />
+    <Content Include="Views\Purchase\PartialViews\NewPurchaseRequisition.cshtml" />
+    <Content Include="Views\Purchase\PartialViews\NewPurchaseRequisitionLine.cshtml" />
+    <Content Include="Views\StoreRequisition\PartialViews\NewStoreRequisition.cshtml" />
+    <Content Include="Views\StoreRequisition\PartialViews\NewStoreRequisitionLine.cshtml" />
+    <Content Include="Views\Purchase\PurchaseRequisitionLinesPartialView.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\PurchaseRequisitionsDocumentView.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\StoreRequisitionsDocumentView.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\ImprestDocumentView.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\ImprestSurrenderDocumentView.cshtml" />
+    <Content Include="Views\ICT\ICTHelpDeskList.cshtml" />
+    <Content Include="Views\ICT\ICTHelpDeskListPartialView.cshtml" />
+    <Content Include="Views\ICT\ICTHelpDeskDocumentView.cshtml" />
+    <Content Include="Views\ICT\IssuanceVoucherListPartialView.cshtml" />
+    <Content Include="Views\ICT\IssuanceVoucherList.cshtml" />
+    <Content Include="Views\ICT\IssuanceVoucherDocumentView.cshtml" />
+    <Content Include="Views\ICT\IssuanceVoucherLinesPartialView.cshtml" />
+    <Content Include="Views\ICT\PartialViews\NewIssuanceVoucherLine.cshtml" />
+    <Content Include="Views\ICT\NewICTHelpDeskRequest.cshtml" />
+    <Content Include="Views\EmployeeExit\EmployeeExitVoucherList.cshtml" />
+    <Content Include="Views\EmployeeExit\PartialViews\EmployeeExitVoucherListPartialView.cshtml" />
+    <Content Include="Views\EmployeeExit\EmployeeExitVoucherDocumentView.cshtml" />
+    <Content Include="Views\EmployeeExit\PartialViews\EmployeeExitVoucherLinesPartialView.cshtml" />
+    <Content Include="Views\EmployeeExit\PartialViews\NewExitVoucherLine.cshtml" />
+    <Content Include="Views\ICT\PartialViews\FixedAssetsListPartialView.cshtml" />
+    <Content Include="Views\ICT\FixedAssetsList.cshtml" />
+    <Content Include="Views\ICT\FixedAssetsDocumentView.cshtml" />
+    <Content Include="Views\Imprest\FileAttachmentForm.cshtml" />
+    <Content Include="Views\Imprest\ImprestDocumentLineView.cshtml" />
+    <Content Include="Views\Imprest\ImprestEditItemForm.cshtml" />
+    <Content Include="Views\Imprest\ImprestItemForm.cshtml" />
+    <Content Include="Views\Imprest\ImprestMemo.cshtml" />
+    <Content Include="Views\Imprest\ImprestMemoDocument.cshtml" />
+    <Content Include="Views\Imprest\ImprestReqListView.cshtml" />
+    <Content Include="Views\Imprest\ImprestRequisitionList.cshtml" />
+    <Content Include="Views\Imprest\ImprestSurrenderDocumentView.cshtml" />
+    <Content Include="Views\Imprest\ImprestSurrenderLinesPartialView.cshtml" />
+    <Content Include="Views\Imprest\ImprestSurrenderList.cshtml" />
+    <Content Include="Views\Imprest\ImprestSurrenderListPartialView.cshtml" />
+    <Content Include="Views\Imprest\ImprestWarrant.cshtml" />
+    <Content Include="Views\Imprest\ImprestWarrantDocument.cshtml" />
+    <Content Include="Views\Imprest\ImprestWarrantUserDocument.cshtml" />
+    <Content Include="Views\Imprest\NewImprestRequest.cshtml" />
+    <Content Include="Views\Imprest\PartialViews\ImprestLines.cshtml" />
+    <Content Include="Views\Imprest\PartialViews\ImprestMemoList.cshtml" />
+    <Content Include="Views\Imprest\PartialViews\ImprestWarrantList.cshtml" />
+    <Content Include="Views\Imprest\PartialViews\NewImprestLines.cshtml" />
+    <Content Include="Views\Imprest\PartialViews\SafariTeam.cshtml" />
+    <Content Include="Views\Imprest\PartialViews\SpecialImprestList.cshtml" />
+    <Content Include="Views\Imprest\PartialViews\StandingImprestLines.cshtml" />
+    <Content Include="Views\Imprest\PartialViews\StandingImprestList.cshtml" />
+    <Content Include="Views\Imprest\PartialViews\WarrantImprestLines.cshtml" />
+    <Content Include="Views\Imprest\SpecialImprest.cshtml" />
+    <Content Include="Views\Imprest\SpecialImprestDocument.cshtml" />
+    <Content Include="Views\Imprest\StandingImprest.cshtml" />
+    <Content Include="Views\Imprest\StandingImprestDocument.cshtml" />
+    <Content Include="Views\ImprestSurrender\FileAttachmentForm.cshtml" />
+    <Content Include="Views\ImprestSurrender\ImprestSurrender.cshtml" />
+    <Content Include="Views\ImprestSurrender\ImprestSurrenderLineView.cshtml" />
+    <Content Include="Views\ImprestSurrender\ImprestSurrenderListView.cshtml" />
+    <Content Include="Views\ImprestSurrender\ImprestSurrenderRequisitionList.cshtml" />
+    <Content Include="Views\ImprestSurrender\PartialViews\GenerateImprestReceipt.cshtml" />
+    <Content Include="Views\ImprestSurrender\SurrenderItemEditForm.cshtml" />
+    <Content Include="Views\ImprestSurrender\ViewSurrenderDocument.cshtml" />
+    <Content Include="Views\StaffClaim\FileAttachmentForm.cshtml" />
+    <Content Include="Views\StaffClaim\NewStaffClaimRequest.cshtml" />
+    <Content Include="Views\StaffClaim\PartialViews\NewStaffClaimRequest.cshtml" />
+    <Content Include="Views\StaffClaim\PartialViews\StaffClaimLines.cshtml" />
+    <Content Include="Views\StaffClaim\PartialViews\StaffClaimsList.cshtml" />
+    <Content Include="Views\StaffClaim\StaffClaimDocumentLineView.cshtml" />
+    <Content Include="Views\StaffClaim\StaffClaimDocumentView.cshtml" />
+    <Content Include="Views\StaffClaim\StaffClaimEditItemForm.cshtml" />
+    <Content Include="Views\StaffClaim\StaffClaimItemForm.cshtml" />
+    <Content Include="Views\StaffClaim\StaffClaimReqListView.cshtml" />
+    <Content Include="Views\StaffClaim\StaffClaimRequisitionList.cshtml" />
+    <Content Include="Views\StaffClaim\StaffClaims.cshtml" />
+    <Content Include="Views\ExpenseRequisition\AieView.cshtml" />
+    <Content Include="Views\ExpenseRequisition\ExpenseRequisition.cshtml" />
+    <Content Include="Views\ExpenseRequisition\ExpenseRequisitionDocument.cshtml" />
+    <Content Include="Views\ExpenseRequisition\PartialViews\AddNonStaffClaim.cshtml" />
+    <Content Include="Views\ExpenseRequisition\PartialViews\AddStaffClaimLine.cshtml" />
+    <Content Include="Views\ExpenseRequisition\PartialViews\AieLinesList.cshtml" />
+    <Content Include="Views\ExpenseRequisition\PartialViews\AieList.cshtml" />
+    <Content Include="Views\ExpenseRequisition\PartialViews\ContractPaymentLines.cshtml" />
+    <Content Include="Views\ExpenseRequisition\PartialViews\ExpenseRequisitionLine.cshtml" />
+    <Content Include="Views\ExpenseRequisition\PartialViews\ExpenseRequisitionList.cshtml" />
+    <Content Include="Views\ExpenseRequisition\PartialViews\FileAttachmentForm.cshtml" />
+    <Content Include="Views\ExpenseRequisition\PartialViews\NewContractPayment.cshtml" />
+    <Content Include="Views\ExpenseRequisition\PartialViews\NewExpenseRequisition.cshtml" />
+    <Content Include="Views\ExpenseRequisition\PartialViews\NewExpenseRequisitionLine.cshtml" />
+    <Content Include="Views\ExpenseRequisition\PartialViews\NonStaffClaimLines.cshtml" />
+    <Content Include="Views\ExpenseRequisition\PartialViews\PerActivity.cshtml" />
+    <Content Include="Views\ExpenseRequisition\PartialViews\StaffClaimLines.cshtml" />
+    <Content Include="Views\ImprestMemo\FileAttachmentForm.cshtml" />
+    <Content Include="Views\ImprestMemo\ImprestMemoDocumentLineView.cshtml" />
+    <Content Include="Views\ImprestMemo\ImprestMemoEditItemForm.cshtml" />
+    <Content Include="Views\ImprestMemo\ImprestMemoItemForm.cshtml" />
+    <Content Include="Views\ImprestMemo\ImprestMemoItemsAdd.cshtml" />
+    <Content Include="Views\ImprestMemo\ImprestMemoItemsList.cshtml" />
+    <Content Include="Views\ImprestMemo\ImprestMemoNonStaffAdd.cshtml" />
+    <Content Include="Views\ImprestMemo\ImprestMemoNonStaffList.cshtml" />
+    <Content Include="Views\ImprestMemo\ImprestMemoReqListView.cshtml" />
+    <Content Include="Views\ImprestMemo\ImprestMemoRequisitionList.cshtml" />
+    <Content Include="Views\ImprestMemo\NewImprestMemoRequest.cshtml" />
+    <Content Include="Views\Imprest\SafariImprestDocument.cshtml" />
+    <Content Include="Views\Imprest\SafariImprestWarrant.cshtml" />
+    <Content Include="Views\Imprest\PartialViews\SafariImprestLine.cshtml" />
+    <Content Include="Views\Imprest\PartialViews\SafariWarrantImprestList2.cshtml" />
+    <Content Include="Views\Imprest\PartialViews\ApprovedSafariImprestWarrantList.cshtml" />
+    <Content Include="Views\Imprest\PartialViews\ApprovedStandingImprestList.cshtml" />
+    <Content Include="Views\Imprest\ApprovedImprestDocument.cshtml" />
+    <Content Include="Views\Imprest\ApprovedImprestList.cshtml" />
+    <Content Include="Views\Imprest\ApprovedSafariImprestWarrant.cshtml" />
+    <Content Include="Views\Imprest\ApprovedStandingImprest.cshtml" />
+    <Content Include="Views\Imprest\PartialViews\SafariImprestWarrantList.cshtml" />
+    <Content Include="Views\ImprestMemo\ImprestMemoDocumentView.cshtml" />
+    <Content Include="Views\ImprestMemo\ImprestMemoDocumentLines.cshtml" />
+    <Content Include="Views\ImprestMemo\NewImprestMemoRequest2.cshtml" />
+    <Content Include="Views\Fleet\TransportRequisitionList.cshtml" />
+    <Content Include="Views\Fleet\PartialViews\TransportRequisitionListPartialView.cshtml" />
+    <Content Include="Views\Fleet\TransportRequisitionDocumentView.cshtml" />
+    <Content Include="Views\Fleet\PartialViews\TransportRequisitionLinesPartialView.cshtml" />
+    <Content Include="Views\Fleet\PartialViews\TransportRequisitionItemsPartialView.cshtml" />
+    <Content Include="Views\Fleet\PartialViews\NewTransportRequisitionLine.cshtml" />
+    <Content Include="Views\Fleet\PartialViews\NewTransportRequisitionItem.cshtml" />
+    <Content Include="Views\Fleet\PartialViews\NewTransportRequisition.cshtml" />
+    <Content Include="Views\Fleet\MaintenanceRequisitionList.cshtml" />
+    <Content Include="Views\Fleet\PartialViews\MaintenanceRequisitionListPartialView.cshtml" />
+    <Content Include="Views\Fleet\MaintenanceRequisitionDocumentView.cshtml" />
+    <Content Include="Views\Fleet\PartialViews\NewMaintenanceRequisition.cshtml" />
+    <Content Include="Views\Fleet\WorkTicketList.cshtml" />
+    <Content Include="Views\Fleet\PartialViews\WorkTicketListPartialView.cshtml" />
+    <Content Include="Views\Fleet\WorkTicketDocumentView.cshtml" />
+    <Content Include="Views\Fleet\PartialViews\WorkTicketLinesPartialView.cshtml" />
+    <Content Include="Views\Purchase\NewPurchaseRequisition.cshtml" />
+    <Content Include="Views\Fleet\FuelRequisitionList.cshtml" />
+    <Content Include="Views\Fleet\PartialViews\FuelRequisitionListPartialView.cshtml" />
+    <Content Include="Views\Fleet\FuelRequisitionDocumentView.cshtml" />
+    <Content Include="Views\Fleet\PartialViews\NewTransportRequisitionLine2.cshtml" />
+    <Content Include="Views\Fleet\PartialViews\NewWorkTicket.cshtml" />
+    <Content Include="Views\Fleet\PartialViews\NewFuelRequisition2.cshtml" />
+    <Content Include="Views\ImprestMemo\NewImprestMemoLine.cshtml" />
+    <Content Include="Views\ImprestWarrant\ImprestWarrantRequisitionList.cshtml" />
+    <Content Include="Views\ImprestWarrant\PartialViews\ImprestWarrantRequisitionListPartialView.cshtml" />
+    <Content Include="Views\ImprestWarrant\ImprestWarrantDocumentView.cshtml" />
+    <Content Include="Views\ImprestWarrant\PartialViews\ImprestWarrantLines.cshtml" />
+    <Content Include="Views\PettyCash\PettyCashVouchersList.cshtml" />
+    <Content Include="Views\PettyCash\PartialViews\PettyCashVouchersListPartialView.cshtml" />
+    <Content Include="Views\PettyCash\PettyCashVouchersDocumentView.cshtml" />
+    <Content Include="Views\PettyCash\PartialViews\PettyCashVouchersLines.cshtml" />
+    <Content Include="Views\ImprestWarrant\PartialViews\NewImprestWarrantRequest.cshtml" />
+    <Content Include="Views\ImprestWarrant\PartialViews\NewImprestWarrantLine.cshtml" />
+    <Content Include="Views\PettyCash\PartialViews\NewPettyCashVouchersRequest.cshtml" />
+    <Content Include="Views\PettyCash\PartialViews\NewPettyCashVoucherRequest.cshtml" />
+    <Content Include="Views\Fleet\PartialViews\NewFuelRequisition.cshtml" />
+    <Content Include="Views\ImprestSurrender\ApprovedImprestSurrenderListPartialView.cshtml" />
+    <Content Include="Views\ImprestSurrender\ViewApprovedSurrenderDocument.cshtml" />
+    <Content Include="Views\EmployeeExit\PartialViews\NewExitVoucher.cshtml" />
+    <Content Include="Views\DocumentApproval\ImprestWarrantDocumentDetails.cshtml" />
+    <Content Include="Views\Common\Notifications.cshtml" />
+    <Content Include="Views\Common\PartialViews\NotificationListPartialView.cshtml" />
+    <Content Include="Views\Performance\CommitteeAppointmentVouchers.cshtml" />
+    <Content Include="Views\Performance\CommitteeAppointmentVouchersDocumentView.cshtml" />
+    <Content Include="Views\Performance\IndividualScorecardList.cshtml" />
+    <Content Include="Views\Performance\IndividualScoreDocumentView.cshtml" />
+    <Content Include="Views\Performance\Partial Views\AppointmentVouchersLines.cshtml" />
+    <Content Include="Views\Performance\Partial Views\CommitteeAppointmentVouchersList.cshtml" />
+    <Content Include="Views\Performance\Partial Views\IndividualScorecardListView.cshtml" />
+    <Content Include="Views\Performance\Partial Views\NewAppointmentCommitteeLine.cshtml" />
+    <Content Include="Views\Performance\Partial Views\NewAppointmentVoucher.cshtml" />
+    <Content Include="Views\Performance\Partial Views\NewIndividualScoreCard.cshtml" />
+    <Content Include="Views\Performance\Partial Views\NewPMMU.cshtml" />
+    <Content Include="Views\Performance\Partial Views\NewPMMULine.cshtml" />
+    <Content Include="Views\Performance\Partial Views\PmmuActivities.cshtml" />
+    <Content Include="Views\Performance\Partial Views\PMMULines.cshtml" />
+    <Content Include="Views\Performance\Partial Views\PMMUList.cshtml" />
+    <Content Include="Views\Performance\Partial Views\UpdateCommitteeHeader.cshtml" />
+    <Content Include="Views\Performance\Partial Views\updatePmmuActivities.cshtml" />
+    <Content Include="Views\Performance\Partial Views\UpdatePMMUHeader.cshtml" />
+    <Content Include="Views\Performance\PMMU.cshtml" />
+    <Content Include="Views\Performance\PMMUDocumentView.cshtml" />
+    <Content Include="Views\Performance\PositionTargetList.cshtml" />
+    <Content Include="Views\Pas\EditTargetLine.cshtml" />
+    <Content Include="Views\Pas\EmployeePASReport.cshtml" />
+    <Content Include="Views\Pas\IndividualScorecardList.cshtml" />
+    <Content Include="Views\Pas\Partial Views\EditTraining.cshtml" />
+    <Content Include="Views\Pas\Partial Views\EvidenceView.cshtml" />
+    <Content Include="Views\Pas\Partial Views\FileAttachmentForm.cshtml" />
+    <Content Include="Views\Pas\Partial Views\IndividualScorecardListView2.cshtml" />
+    <Content Include="Views\Pas\Partial Views\NewIndividualScoreCard.cshtml" />
+    <Content Include="Views\Pas\Partial Views\NewPASCoreValuesLine.cshtml" />
+    <Content Include="Views\Pas\Partial Views\NewPASTrainingNeed.cshtml" />
+    <Content Include="Views\Pas\Partial Views\NewPerformanceTargetLine.cshtml" />
+    <Content Include="Views\Pas\Partial Views\PASCoreValuesLines.cshtml" />
+    <Content Include="Views\Pas\Partial Views\PASTrainingNeedsLines.cshtml" />
+    <Content Include="Views\Pas\Partial Views\PerformanceTargetLines.cshtml" />
+    <Content Include="Views\Pas\Partial Views\SupervisorAppraisalListListView.cshtml" />
+    <Content Include="Views\Pas\Partial Views\UpdateCoreValuesLine.cshtml" />
+    <Content Include="Views\Pas\Partial Views\ViewTargetLine.cshtml" />
+    <Content Include="Views\Pas\PerformanceTargetLines.cshtml" />
+    <Content Include="Views\Pas\SupervisorReviewDocView.cshtml" />
+    <Content Include="Views\Pas\SupervisorsApprisals.cshtml" />
+    <Content Include="Views\Pas\TargetNotSetReport.cshtml" />
+    <Content Include="Views\Pas\ViewIndividualScorecard.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\TransportRequisitionDocumentView.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\MaintenanceRequisitionDocumentView.cshtml" />
+    <Content Include="Views\StaffClaim\PartialViews\NewStaffClaimLine.cshtml" />
+    <Content Include="Views\PettyCash\PartialViews\NewPettyCashVoucherLine.cshtml" />
+    <Content Include="Views\PettyCash\PettyCashSurrenderList.cshtml" />
+    <Content Include="Views\PettyCash\PartialViews\PettyCashSurrenderListPartialView.cshtml" />
+    <Content Include="Views\PettyCash\PettyCashSurrenderDocumentView.cshtml" />
+    <Content Include="Views\PettyCash\PartialViews\NewPettyCashSurrenderRequest.cshtml" />
+    <Content Include="Views\Training\PartialViews\NewTrainingCostLine.cshtml" />
+    <Content Include="Views\Training\PartialViews\NewTrainingEvaluation.cshtml" />
+    <Content Include="Views\Training\PartialViews\NewTrainingEvaluationLine.cshtml" />
+    <Content Include="Views\Training\PartialViews\NewTrainingLine.cshtml" />
+    <Content Include="Views\Training\PartialViews\TrainingCosts.cshtml" />
+    <Content Include="Views\Training\PartialViews\TrainingEvaluationLines.cshtml" />
+    <Content Include="Views\Training\PartialViews\TrainingEvaluationListPartialView.cshtml" />
+    <Content Include="Views\Training\PartialViews\TrainingNeedsLines.cshtml" />
+    <Content Include="Views\Training\PartialViews\TrainingNeedsList.cshtml" />
+    <Content Include="Views\Training\PartialViews\TrainingRequisitionList.cshtml" />
+    <Content Include="Views\Training\PartialViews\View.cshtml" />
+    <Content Include="Views\Training\TrainingEvaluationDocumentView.cshtml" />
+    <Content Include="Views\Training\TrainingEvaluationRequisitionList.cshtml" />
+    <Content Include="Views\Training\TrainingNeeds.cshtml" />
+    <Content Include="Views\Training\TrainingNeedsDocumentView.cshtml" />
+    <Content Include="Views\PerformanceAppraisal\HRAppraisalsList.cshtml" />
+    <Content Include="Views\PerformanceAppraisal\PartialViews\HRAppraisalsListPartialView.cshtml" />
+    <Content Include="Views\PerformanceAppraisal\HRAppraisalDocumentView.cshtml" />
+    <Content Include="Views\PerformanceAppraisal\PartialViews\DutiesLines.cshtml" />
+    <Content Include="Views\PerformanceAppraisal\PartialViews\ObjectivesLines.cshtml" />
+    <Content Include="Views\PerformanceAppraisal\PartialViews\EvaluationLines.cshtml" />
+    <Content Include="Views\PerformanceAppraisal\PartialViews\NewObjective.cshtml" />
+    <Content Include="Views\PerformanceAppraisal\PartialViews\NewHRAppraisal.cshtml" />
+    <Content Include="Views\PerformanceAppraisal\PartialViews\NewEvaluationLine.cshtml" />
+    <Content Include="Views\Training\PartialViews\NewTrainingAssessmentRequest.cshtml" />
+    <Content Include="Views\PettyCash\PartialViews\PettyCashSurrenderLines.cshtml" />
+    <Content Include="Views\PerformanceAppraisal\PartialViews\KPIs.cshtml" />
+    <Content Include="Views\PerformanceAppraisal\PartialViews\NewKPI.cshtml" />
+    <Content Include="Views\Dashboard\PartialView\NextOfKinList.cshtml" />
+    <Content Include="Views\Dashboard\PartialView\AddNextOfKinForm.cshtml" />
+    <Content Include="Views\ImprestMemo\OtherCosts.cshtml" />
+    <Content Include="Views\ImprestMemo\NewCostLine.cshtml" />
+    <Content Include="Views\DocumentApproval\PartialViews\ImprestMemoDocumentView.cshtml" />
+    <Content Include="Views\Shared\Partial Views\ImportantDocsToApprove2.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\TrainingRequisitionDocument.cshtml" />
+    <Content Include="Views\PerformanceAppraisal\PartialViews\OtherDutiesLines.cshtml" />
+    <Content Include="Views\PerformanceAppraisal\PartialViews\NewOtherDuty.cshtml" />
+    <Content Include="Views\Technical\LabSampleManagementList.cshtml" />
+    <Content Include="Views\Technical\PartialViews\LabSampleManagementListPartialView.cshtml" />
+    <Content Include="Views\Technical\LabSampleManagementDocumentView.cshtml" />
+    <Content Include="Views\Technical\PartialViews\LabSampleManagementLinesPartialView.cshtml" />
+    <Content Include="Views\Technical\PartialViews\NewLabSampleLine.cshtml" />
+    <Content Include="Views\Technical\PartialViews\NewLabSampleManagement.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\ViewLabSampleManagementDocument.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\ViewPettyCashDocumentView.cshtml" />
+    <Content Include="Views\DocumentApproval\Document Approval Views\ViewPettyCashSurrenderDocumentView.cshtml" />
+    <Content Include="Views\Common\PartialViews\DocumentApprovalComments.cshtml" />
+    <None Include="Web References\NAVWS2\HRportal2.wsdl" />
+    <Content Include="Web References\NAVWS2\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </Content>
+    <None Include="Web References\NAVWS\HrPortal.wsdl" />
+    <Content Include="Web References\NAVWS\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </Content>
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="assets\plugins\datatables\" />
+    <Folder Include="assets\plugins\morris\" />
+    <Folder Include="assets\plugins\raphael\" />
+    <Folder Include="Attachments\" />
+    <Folder Include="Downloads\" />
+    <Folder Include="Properties\PublishProfiles\" />
+    <Folder Include="Uploads\" />
+    <Folder Include="Views\PerformanceBackup\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="assets\fonts\boxicons.eot" />
+    <Content Include="assets\fonts\boxicons.ttf" />
+    <Content Include="assets\fonts\boxicons.woff" />
+    <Content Include="assets\fonts\dripicons-v2.eot" />
+    <Content Include="assets\fonts\dripicons-v2.ttf" />
+    <Content Include="assets\fonts\dripicons-v2.woff" />
+    <Content Include="assets\fonts\dripicons-v2d41d.eot" />
+    <Content Include="assets\fonts\fa-brands-400.eot" />
+    <Content Include="assets\fonts\fa-brands-400.ttf" />
+    <Content Include="assets\fonts\fa-brands-400.woff" />
+    <Content Include="assets\fonts\fa-brands-400d41d.eot" />
+    <Content Include="assets\fonts\fa-regular-400.eot" />
+    <Content Include="assets\fonts\fa-regular-400.ttf" />
+    <Content Include="assets\fonts\fa-regular-400.woff" />
+    <Content Include="assets\fonts\fa-regular-400d41d.eot" />
+    <Content Include="assets\fonts\fa-solid-900.eot" />
+    <Content Include="assets\fonts\fa-solid-900.ttf" />
+    <Content Include="assets\fonts\fa-solid-900.woff" />
+    <Content Include="assets\fonts\fa-solid-900d41d.eot" />
+    <Content Include="assets\fonts\feathericon.eot" />
+    <Content Include="assets\fonts\feathericon.ttf" />
+    <Content Include="assets\fonts\feathericon.woff" />
+    <Content Include="assets\fonts\feathericond41d.eot" />
+    <Content Include="assets\fonts\fontawesome-webfont3e6e.eot" />
+    <Content Include="assets\fonts\fontawesome-webfont3e6e.ttf" />
+    <Content Include="assets\fonts\fontawesome-webfont3e6e.woff" />
+    <Content Include="assets\fonts\fontawesome-webfontd41d.eot" />
+    <Content Include="assets\fonts\materialdesignicons-webfont2f9b.eot" />
+    <Content Include="assets\fonts\materialdesignicons-webfont2f9b.ttf" />
+    <Content Include="assets\fonts\materialdesignicons-webfont2f9b.woff" />
+    <Content Include="assets\fonts\materialdesignicons-webfontd41d.eot" />
+    <Content Include="assets\fonts\MaterialIcons-Regular.eot" />
+    <Content Include="assets\fonts\MaterialIcons-Regular.ttf" />
+    <Content Include="assets\fonts\MaterialIcons-Regular.woff" />
+    <Content Include="assets\plugins\NotificationStyles\fonts\linecons\lineconsba9e.eot" />
+    <Content Include="assets\plugins\NotificationStyles\fonts\linecons\lineconsba9e.ttf" />
+    <Content Include="assets\plugins\NotificationStyles\fonts\linecons\lineconsba9e.woff" />
+    <Content Include="assets\plugins\NotificationStyles\fonts\linecons\lineconsd41d.eot" />
+    <Content Include="assets\plugins\summernote\font\summernote6659.eot" />
+    <Content Include="assets\plugins\summernote\font\summernote6659.ttf" />
+    <Content Include="assets\plugins\summernote\font\summernote6659.woff" />
+    <Content Include="assets\plugins\summernote\font\summernoted41d.eot" />
+    <Content Include="assets\fonts\feathericon.eot" />
+    <Content Include="assets\fonts\feathericon.ttf" />
+    <Content Include="assets\fonts\feathericon.woff" />
+    <Content Include="assets\fonts\feathericond41d.eot" />
+    <Content Include="assets\fonts\fontawesome-webfont3e6e.eot" />
+    <Content Include="assets\fonts\fontawesome-webfont3e6e.ttf" />
+    <Content Include="assets\fonts\fontawesome-webfont3e6e.woff" />
+    <Content Include="assets\fonts\fontawesome-webfontd41d.eot" />
+    <Content Include="assets\fonts\MaterialIcons-Regular.eot" />
+    <Content Include="assets\fonts\MaterialIcons-Regular.ttf" />
+    <Content Include="assets\fonts\MaterialIcons-Regular.woff" />
+    <Content Include="assets\fonts1\feathericon.eot" />
+    <Content Include="assets\fonts1\feathericon.ttf" />
+    <Content Include="assets\fonts1\feathericon.woff" />
+    <Content Include="assets\fonts1\feathericond41d.eot" />
+    <Content Include="assets\fonts1\fontawesome-webfont3e6e.eot" />
+    <Content Include="assets\fonts1\fontawesome-webfont3e6e.ttf" />
+    <Content Include="assets\fonts1\fontawesome-webfont3e6e.woff" />
+    <Content Include="assets\fonts1\fontawesome-webfontd41d.eot" />
+    <Content Include="assets\fonts1\MaterialIcons-Regular.eot" />
+    <Content Include="assets\fonts1\MaterialIcons-Regular.ttf" />
+    <Content Include="assets\fonts1\MaterialIcons-Regular.woff" />
+    <Content Include="assets\css\custom-styles.css" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferences Include="Web References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferenceUrl Include="http://greencom-svr023.greencom.co.ke:7047/BC252/WS/NBA%2520TEST/Codeunit/HrPortal">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\NAVWS\</RelPath>
+      <UpdateFromURL>http://greencom-svr023.greencom.co.ke:7047/BC252/WS/NBA%2520TEST/Codeunit/HrPortal</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>
+      </CachedAppSettingsObjectName>
+      <CachedSettingsPropName>
+      </CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="http://greencom-svr023.greencom.co.ke:7047/BC252/WS/NBA%2520TEST/Codeunit/HRportal2">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\NAVWS2\</RelPath>
+      <UpdateFromURL>http://greencom-svr023.greencom.co.ke:7047/BC252/WS/NBA%2520TEST/Codeunit/HRportal2</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>
+      </CachedAppSettingsObjectName>
+      <CachedSettingsPropName>
+      </CachedSettingsPropName>
+    </WebReferenceUrl>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>51144</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>https://localhost:44365/</IISUrl>
+          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
+          <IISAppRootUrl>https://localhost:44365/</IISAppRootUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.BinFix.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.BinFix.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.BinFix.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.BinFix.targets'))" />
+  </Target>
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.BinFix.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.BinFix.targets" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.BinFix.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.BinFix.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

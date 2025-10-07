@@ -1,0 +1,52 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.DepartmentalObjectives>
+<style>
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+<div class="pre-scrollable">
+    <table id="tableScoreCard" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead>
+        <tr>
+            <th>Perspective Code</th>
+            <th>Perspective Description</th>
+            <th>Objective Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        @{
+            if (Model != null)
+            {
+                {
+                    if (Model.Count() > 0)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Perspective_Code)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Perspective_Description)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Objective_Description)
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="3" style="color:red">
+                                No Records Found
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+        }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,95 @@
+﻿@model Latest_Staff_Portal.ViewModel.StoreRequisitionsLines
+
+
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Document No", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.Document_No, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #ccc", @id = "Document_No" } })
+            @Html.ValidationMessageFor(model => model.Document_No, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Item Category", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.DropDownListFor(m => m.Item_Category, Model.ListOfPP_Planning_Category, "Select Option--", new { @class = "form-control", @id = "Item_Category", @onchange = "GetItems(this.value)" })
+            @Html.ValidationMessageFor(model => model.Item_Category, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Service Item", htmlAttributes: new { @class = "control-label col-md-2" })
+            <select id="Service_Item_Code" class="form-control">
+                <option value="">--Select Option--</option>
+            </select>
+            @* @Html.DropDownListFor(m => m.Service_Item_Code, Model.ListOfItems, "Select Option--", new { @class = "form-control", @id = "Service_Item_Code" })*@
+            @Html.ValidationMessageFor(model => model.Service_Item_Code, "", new { @class = "text-danger" })
+        </div>
+    </div>
+   @* <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Unit Of Measure", htmlAttributes: new { @class = "control-label col-md-2" })
+            <input class="form-control" type="text" id="UOM" readonly/>
+        </div>
+    </div>*@
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Qty Requested", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.Qty_Requested, new { htmlAttributes = new { @class = "form-control", @id = "Qty_Requested" } })
+            @Html.ValidationMessageFor(model => model.Qty_Requested, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+   function GetItems(Item_Category) {
+    if (Item_Category) {
+        ShowProgress();
+        $.ajax({
+            url: '@Url.Action("GetItems", "StoreRequisition")',
+            type: 'GET',
+            data: { Item_Category: Item_Category },
+            success: function (response) {
+               
+                populateDropdown("#Service_Item_Code", response.ListOfItems, "Select Item");
+                HideProgress();
+            },
+            error: function (xhr, status, error) {
+                console.error('Error occurred: ' + error);
+                HideProgress();
+            }
+        });
+    } else {
+        $("#Service_Item_Code").html('<option value="">-- Select Item --</option>');
+        HideProgress();
+    }
+}
+
+
+
+    function populateDropdown(dropdownSelector, items, defaultText) {
+        var dropdown = $(dropdownSelector);
+        dropdown.empty(); // Clear existing options
+        if (items && items.length > 0) {
+            dropdown.append($("<option></option>").val("").text("-- " + defaultText + " --")); // Default option
+            $.each(items, function (index, item) {
+                var option = document.createElement('option');
+                option.value = item.Value;
+                option.text = item.Text;
+                dropdown.append(option);
+/*
+                var txt = item.Text;
+                $("#UOM").val(txt); */
+            });
+        } else {
+            dropdown.append($("<option></option>").val("").text("No Records Found"));
+        }
+    }
+
+
+</script>

@@ -1,0 +1,67 @@
+﻿@model Latest_Staff_Portal.ViewModel.TrainingDev
+<div class="bg-soft-dark" style="color:black">
+    <div class="row">
+        <div class="col-md-6">
+            <span style="font-weight: bold">Name of Course</span>
+            @Html.TextBoxFor(m => m.Name_of_the_Course, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+        <div class="col-md-6">
+            <span style="font-weight: bold">Duration of Course</span>
+            <div class="row">
+                <div class="col-md-4">
+                    @Html.TextBoxFor(m => m.Duration_of_Course, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+                <div class="col-md-8">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <span style="font-weight: bold">Expected Start Date</span>
+            @Html.TextBoxFor(m => m.Expected_Start_Date, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+        <div class="col-md-6">
+            <span style="font-weight: bold">Reaction on the Training Attended</span>
+            @Html.TextAreaFor(m => m.Reaction, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <span style="font-weight: bold">
+                Learning Obtained from the Training
+            </span>
+            @Html.TextAreaFor(m => m.Learning_Obtained, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+        <div class="col-md-6">
+            <span style="font-weight: bold">
+                Behavior Changes Adopted
+            </span>
+            @Html.TextAreaFor(m => m.Behavior_Changes_Adopted, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <span style="font-weight: bold">
+                Results Obtained
+            </span>
+            @Html.TextAreaFor(m => m.Results_Obtained, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+        <div class="col-md-6">
+            <span style="font-weight: bold">Comments</span>
+            @Html.TextAreaFor(m => m.Remarks_ANUPEAisee, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <span style="font-weight: bold">
+                Supervisor Comments
+            </span>
+            @Html.TextAreaFor(m => m.Remarks_Supervisor, new { @class = "form-control", id = "txtSupTRDevComm" })
+        </div>
+    </div>
+    <hr/>
+    <div align="center">
+        <input type="button" class="btn btn-primary" value="Save Comment" onclick="SaveSupTrainingDevComment('@Model.ANUPEAisal_No', '@Model.Line_No');"/>
+    </div>
+</div>

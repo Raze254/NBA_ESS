@@ -1,0 +1,81 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.TrainingDev>
+<style>
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+<div class="pre-scrollable">
+    <table id="tableScoreCard" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead>
+        <tr>
+            <th>Title of Training</th>
+            <th>Training Objective</th>
+            <th>Reasons why it is Required</th>
+            <th>Development Actions to be Taken</th>
+            <th>
+                Results Achieved Against Development Action Plan
+            </th>
+            <th>
+                Remarks ANUPEAisee
+            </th>
+            <th>
+                Remarks Supervisor
+            </th>
+            <th style="text-align:right" width="5%">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        @{
+            if (Model != null)
+            {
+                {
+                    if (Model.Count() > 0)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Course_Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Objective)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Reason)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Action)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Results_Obtained)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Remarks_ANUPEAisee)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Remarks_Supervisor)
+                                </td>
+                                <td style="text-align:right">
+                                    <a href="javascript:void(0);" class="text-success" onclick="DropTrainingDevRecord('@item.ANUPEAisal_No','@item.Line_No');">Remove</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="9" style="color:red">
+                                No Records Found
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+        }
+        </tbody>
+    </table>
+</div>
+<div align="right">
+    <input type="button" value="Add Training and Development" class="btn btn-success BtnPadding" onclick="AddTrainingDev();"/>
+</div>

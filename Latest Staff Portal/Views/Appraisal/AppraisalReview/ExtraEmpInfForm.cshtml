@@ -1,0 +1,13 @@
+﻿@model Latest_Staff_Portal.ViewModel.ExtraInf
+<div class="bg-soft-dark" style="color:black">
+    <div class="row">
+        <div class="col-md-12">
+            <span style="font-weight: bold">Description</span>
+            <textarea class="form-control" id="txtDescr"></textarea>
+        </div>
+    </div>
+    <hr/>
+    <div align="center">
+        <input type="button" class="btn btn-primary" value="Save Record" onclick="SaveExtraInfRecord('@Model.ANUPEAisal_No', '@Model.Entry_Type');"/>
+    </div>
+</div>

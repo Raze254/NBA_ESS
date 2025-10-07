@@ -1,0 +1,28 @@
+﻿@model List<Latest_Staff_Portal.ViewModel.FAQs>
+
+@{
+    ViewBag.Title = "FAQsView";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+    var counter = 1;
+}
+
+<div>
+    <h2>FAQs</h2>
+    @if (Model != null && Model.Count > 0)
+    {
+        <ul>
+            @foreach (var faq in Model)
+            {
+                <li>
+                    <strong>Q @counter:</strong> @faq.Question<br/>
+                    <strong>Answer:</strong> @faq.Answer<br/>
+                </li>
+                counter++;
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No FAQs available.</p>
+    }
+</div>

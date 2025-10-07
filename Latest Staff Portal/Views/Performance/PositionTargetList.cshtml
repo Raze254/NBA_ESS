@@ -1,0 +1,18 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.PositionTargetList>
+@{
+    Layout = null;
+}
+<select class="form-control select2" id="positiontarget" name="positiontarget" data-live-search="true">
+
+    <option value="">-- Position Target List  --</option>
+
+
+    <optgroup label="Strategic Objective">
+        @foreach (var item in Model)
+        {
+
+            <option value="@item.Position_Code">@item.Strategic_Objective</option>
+
+        }
+    </optgroup>
+</select>

@@ -1,0 +1,60 @@
+﻿@model Latest_Staff_Portal.ViewModel.NoticeBoard
+
+@{
+    ViewBag.Title = "Notice";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/Dashboard/Dashboard">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active">Notifications(@Model.Title)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    @*<div class="card-title">Notification Details (@Model.Title)</div>
+        <hr />
+        <div style="text-align:right" id="HideEditButton">
+            <input type="button" class="btn btn-danger BtnPadding" id="btnEdit" value="Edit" onclick="EditDocument();" />
+            <hr />
+        </div>*@
+
+    <div class="card-body">
+
+        <div class="row" style="padding: 2px">
+
+            <div class="col-md-6">
+                <label style="font-size: 12px; font-weight: bold">Title</label>
+                @Html.TextBoxFor(m => m.Title, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "Title" })
+            </div>
+            <div class="col-md-6">
+                <label style="font-size: 12px; font-weight: bold">Dew Date</label>
+                @Html.TextBoxFor(m => m.Expiration_Date, "{0:yyyy-MM-dd}", new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "ExpirationDate" })
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-12">
+                <label style="font-size: 12px; font-weight: bold">Description</label>
+                @Html.TextAreaFor(m => m.Description, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", rows = "4", id = "Description" })
+            </div>
+        </div>
+        <hr/>
+        <div class="d-flex justify-content-between align-items-center">
+            <span>Attachments (@Model.Title)</span>
+            <a href="/path/to/conditions_of_employment.pdf" class="btn btn-primary btn-sm" download>View</a>
+
+            @*<a href="/path/to/conditions_of_employment.pdf" class="btn btn-primary btn-sm" download>Download</a>*@
+        </div>
+    </div>
+
+
+</div>

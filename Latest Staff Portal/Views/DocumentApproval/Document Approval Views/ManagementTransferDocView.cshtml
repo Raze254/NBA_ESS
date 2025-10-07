@@ -1,0 +1,56 @@
+﻿@model Latest_Staff_Portal.ViewModel.EmpTransferView
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Employee No", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DisplayFor(m => m.Employee_No)
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Current Station", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(model => model.Original_Station, Model.ListOfDutyStations, "--select--", new { @class = "form-control", id = "ddlCurrentStation" })
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Baggage Allowance Distance(KMs)", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DisplayFor(m => m.Distance)
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("New Station", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(model => model.New_Station, Model.ListOfDutyStations, "--select--", new { @class = "form-control", id = "ddlNewStation" })
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Remarks", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DisplayFor(m => m.Remarks)
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Request Date", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DisplayFor(m => m.Transfer_Date)
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,92 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.DocumentAttachment>
+
+@{ 
+    var documentStatus= ViewBag.documentStatus;
+}
+
+<style>
+    .btnPadding {
+        padding: 5px;
+        font-size: 10px;
+    }
+</style>
+<table class="table table-bordered table-hover" id="documentAttachements">
+    <thead >
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            File Extention
+        </th>
+        <th>
+            Document ID
+        </th>
+        <th>
+            Action
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    @{
+        if (Model != null)
+        {
+            if (Model.Count() > 0)
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FileExtension)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ID)
+                        </td>
+                        <td>
+                            <button id="btnview" class="btn btn-primary action-buttons2" onclick="ViewAttachment('@item.No','@item.ID');"> <i class="fa fa-eye" aria-hidden="true"></i> View</button>
+
+                            @if (documentStatus == "Open")
+                            {
+                                <button id="btnview" class="btn btn-danger action-buttons2" style="background: red" onclick="DeleteAttachment('@item.No','@item.ID');"> <i class="fa fa-trash" aria-hidden="true"></i> Delete</button>
+                            }
+                            </td>
+
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="4" style="color:red">
+                        No Files Found
+                    </td>
+                </tr>
+            }
+        }
+
+
+}
+    </tbody>
+</table>
+
+
+<div class="text-right">
+    @if (documentStatus == "Open")
+    {
+        <button id="btnview" class="btn btn-primary action-buttons2" onclick="AddAttachment();"> <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Attachment</button>
+    }
+
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		// Count the number of rows in the table (excluding header and empty message row)
+		var rowCount = $('#documentAttachments tbody tr').length;
+		if ($('#documentAttachments tbody tr td[colspan="4"]').length > 0) {
+			rowCount = 0;
+        }
+	});
+</script>

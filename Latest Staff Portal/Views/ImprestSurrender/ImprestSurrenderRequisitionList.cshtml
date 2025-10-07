@@ -1,0 +1,435 @@
+﻿@{
+    ViewBag.Title = "ImprestSurrenderRequisitionList";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+<style>
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+<!--
+<link href="~/assets/css/Loader.css" rel="stylesheet" />
+<div class="loading" align="center" id="divLoader">
+    <br />
+    <img src="~/assets/images/ajax-loader.gif" alt="" />
+</div>
+-->
+<div class="card pre-scrollable">
+    <div class="card-title">Travel Advance Liquidation List</div>
+    <hr/>
+    <div class="card-body">
+        <a href="#" onclick="NewImprestSurrenderRequisition();" class="btn btn-primary BtnPadding">New Liquidation</a>
+        <hr/>
+        <div id="divRegList"></div>
+    </div>
+</div>
+@*//////////////////////My Imprest Doc List////////////////////////////*@
+<div class="modal fade" id="myImprestModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">My Travel Advance Documents</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalImpBody">
+                <div class="row">
+                    <div class="col-md-12">
+                        <span style="font-weight: bold">Travel Advance Document List</span>
+                        <select class="form-control" id="ddlImpDocs" name="ddlImpDocs"></select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12" id="Div2" runat="server">
+                        <span style="font-weight: bold">Is there a claim or Refund?</span>
+                        <select class="form-control" id="PRVType" name="PRVType" onchange="ShowRequiredDiv()">
+                            <option value="">--Select--</option>
+                            <option value="1">Yes</option>
+                            <option value="2">No</option>
+
+                        </select>
+                    </div>
+                </div>
+                <div class="row" id="DivClaimAmount">
+                    <div class="col-md-6">
+                        Claim Amount
+                        <input type="text" class="form-control" id="txtClaimAmount" onkeypress="return functionDecimal(event,this.value)"/>
+                    </div>
+                </div>
+                <hr/>
+                <div align="center">
+                    <input type="button" class="btn btn-primary waves-effect waves-light" value="Liquidate Travel Advance" onclick="SurrenderImprestDoc();"/>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <label id="labelF"></label>
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal Links////////////////////////////*@
+<div class="modal fade" id="myModalLinks" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Actions</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodyLinks">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadImprestSurrenderList();
+        var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+        var Errormsg = '@Request.RequestContext.HttpContext.Session["ErrorMsg"]';
+        if (Successmsg != "") {
+            Swal.fire('Success', Successmsg, 'success',true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+        if (Errormsg != "") {
+            Swal.fire('Warning', Errormsg, 'warning',true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+    });
+    var LoadImprestSurrenderList = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: "/ImprestSurrender/ImprestSurrenderListPartialView",
+            success: function (data) {
+                $("#divRegList").html(data);
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+    var NewImprestSurrenderRequisition = function () {
+        $("#myImprestModal").modal("show");
+        ShowProgress();
+        $.getJSON("/ImprestSurrender/NewImprestSurrender", null,
+            function (data) {
+                $('#ddlImpDocs').empty().append('<option selected="selected" value="">--Select Imprest Document--</option>');
+                $.each(data.ImpSurrender.ListOfImprests, function () {
+                    $("#ddlImpDocs").append($("<option></option>").val(this['Value']).html(this['Text']));
+                });
+                $("#myImprestModal").modal("show");
+                HideProgress();
+            });
+    }
+    var SurrenderImprestDoc = function () {
+        var DocNo = $("#ddlImpDocs").val();
+        var Claim = $("#PRVType").val();
+        var ClaimAmount = $("#txtClaimAmount").val();
+        if (DocNo == "") {
+            Swal.fire('Warning', 'Select Travel Advance document to surrender', 'warning');
+            return;
+        }
+        else if (Claim=="")
+        {
+            Swal.fire('Warning', 'Choose if you are claiming', 'warning');
+            return;
+        }
+        else {
+            $.ajaxSetup({ cache: false });
+            Swal.fire({
+                title: 'NOTE:',
+                text: "Liquidating. Do you wish to proceed?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Proceed!'
+            }).then((result) => {
+                if (result.value) {
+                    ShowProgress();
+                    $.ajax({
+                        type: "POST",
+                        url: "/ImprestSurrender/SubmitImprestSurrender",
+                        //data: data,
+                        data: JSON.stringify({ DocNo: DocNo, Claim: Claim, ClaimAmount: ClaimAmount }),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.success) {
+                                window.location = "/ImprestSurrender/ViewSurrenderDocument?DocNo=" + data.DocNo;
+                            }
+                            else {
+                                Swal.fire('Warning', data.message, 'warning');
+                                HideProgress();
+                            }
+                        },
+                        error: function (err) {
+                            HideProgress();
+                            Swal.fire('Warning', err, 'warning');
+                        }
+                    });
+                }
+                else {
+                    window.location = "/ImprestSurrender/ViewSurrenderDocument?DocNo=" + DocNo;
+                }
+            });            
+        }
+    }
+    var SelectedRow = function (DocNo, Status) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo, Status: Status, DocType: 'SURR' }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/CommonActions',
+            success: function (data) {
+                $("#modalBodyLinks").html(data);
+                HideProgress();
+                $("#myModalLinks").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var ViewDoc = function (DocNo) {
+        ShowProgress();
+        window.location = "/ImprestSurrender/ViewSurrenderDocument?DocNo=" + DocNo;
+    }
+    var SendDocForApproval = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo, Redirect: "N" }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/ImprestSurrender/SendImprestSurrenderForApproval',
+            success: function (data) {
+                if (data.success == true) {
+                    HideProgress();
+                    LoadImprestSurrenderList();
+                    HideProgress();
+                    $("#myModalLinks").modal("hide");
+                    Swal.fire('Success', data.message, 'success');
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var DelegateDocForApproval = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo, Redirect: "N" }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/DelegateApproval',
+            success: function (data) {
+                if (data.success == true) {
+                    HideProgress();
+                    LoadImprestSurrenderList();
+                    HideProgress();
+                    $("#myModalLinks").modal("hide");
+                    Swal.fire('Success', data.message, 'success');
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var CancelDocForApproval = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/ImprestSurrender/CancelImprestSurrenderForApproval',
+            success: function (data) {
+                if (data.success == true) {
+                    HideProgress();
+                    LoadImprestSurrenderList();
+                    $("#myModalLinks").modal("hide");
+                    Swal.fire('Success', data.message, 'success');
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+
+    }
+    var ViewApprovalTrail = function (DocNo) {
+        $("#labelF").text("Document Approval Trail");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo, RecID: "Imprest Surrender Header: " + DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/DocumentApprovalTrail',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModalLinks").modal("hide");
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var ViewDocComments = function (documentNumber) {
+        $("#labelF").text("Document Comments");
+        ShowProgress();
+        var RecordID = "Imprest Surrender Header: " + DocNo;
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ docNo: documentNumber }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/DocumentApprovalComments',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModalLinks").modal("hide");
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var ShowRequiredDiv = function () {
+        var PRVType = $("#PRVType").children("option:selected").val();
+        if (PRVType == "") {
+            $("#DivDSA").hide();
+            $("#DivOtherImprest").hide();
+        }
+        else {
+            ShowProgress();
+            var url;
+            if (PRVType == "1") {
+                $("#DivClaimAmount").show();
+                
+            }
+            else if (PRVType == "2") {
+               
+                $("#DivClaimAmount").hide();
+            }
+
+            else {
+                return;
+            }
+            HideProgress();
+
+        }
+    }
+
+
+    function functionDecimal(evt, val) {
+        try {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+
+            if (charCode == 46) {
+                if (!(val.indexOf(".") > -1)) {
+                    return true;
+                }
+                else {
+                    Swal.fire('Warning', 'Kindly ensure to specify decimals only', 'warning');
+                }
+            }
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                Swal.fire('Warning', 'Kindly ensure to specify decimals only', 'warning');
+                return false;
+            }
+            return true;
+        } catch (w) {
+            Swal.fire(w);
+        }
+    }
+    function functionx(evt) {
+        if (evt.charCode > 31 && (evt.charCode < 48 || evt.charCode > 57)) {
+            Swal.fire("Error", "Please enter only numeric characters in the text box", "error");
+            return false;
+        }
+    }
+</script>

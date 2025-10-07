@@ -1,0 +1,85 @@
+﻿@model Latest_Staff_Portal.ViewModel.EmployeeExitVoucher
+
+@{
+    ViewBag.Title = "NewExitVoucher";
+}
+
+
+<div class="row">
+
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-2" })
+            <textarea class="form-control" rows="3" id="Description" placeholder="Enter Description"></textarea>
+            @*  @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })*@
+            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Exit Method", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.DropDownListFor(m => m.ExitMethod, Model.ListOfExitMethods, "Select Option--", new { @class = "form-control", @id = "ExitMethod" })
+
+            @Html.ValidationMessageFor(model => model.ExitMethod, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Reasons", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.DropDownListFor(m => m.ReasonsCode, Model.ListOfReasons, "Select Option--", new { @class = "form-control", @id = "ReasonsCode" })
+
+            @Html.ValidationMessageFor(model => model.ReasonsCode, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Last Working Date", htmlAttributes: new { @class = "control-label col-md-2" })
+            <input type="datetime" required class="form-control" placeholder="dd/mm/yyyy" id="lastWorkingDate" autocomplete="off" />
+        </div>
+    </div>
+
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Notice Date", htmlAttributes: new { @class = "control-label col-md-2" })
+            <input type="datetime" required class="form-control" placeholder="dd/mm/yyyy" id="noticeDate" autocomplete="off" />
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Employee Exit Date", htmlAttributes: new { @class = "control-label col-md-2" })
+            <input type="datetime" required class="form-control" placeholder="dd/mm/yyyy" id="emplExitDate" autocomplete="off" />
+        </div>
+    </div>
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        // $('#ddlNoDays').empty().append('<option selected="selected">--No of Days--</option>');
+        $('#lastWorkingDate').html("dd/mm/yyyy");
+        $('#noticeDate').html("dd/mm/yyyy");
+        $('#emplExitDate').html("dd/mm/yyyy");
+
+        $('#lastWorkingDate, #noticeDate, #emplExitDate').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-0:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy',
+            minDate: 0
+        });
+
+        $(window).resize(function () {
+            $('#lastWorkingDate, #noticeDate, #emplExitDate').datepicker('hide').blur();
+        });
+    });
+
+</script>

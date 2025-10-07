@@ -1,0 +1,108 @@
+﻿@using System.Globalization
+@model Latest_Staff_Portal.ViewModel.ImprestSurrenderLinesList
+
+<div class="table-responsive">
+    <table id="ImpSurrLines" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th>Account No</th>
+                <th>Account Name</th>
+                <th>Purpose</th>
+                <th style="text-align:center">Amount</th>
+                <th class="tdAction">Actual Spent</th>
+                <th class="tdAction">Remaining Amount</th>
+                <th style="width: 100px">Receipt No</th>
+                <th class="tdAction">Receipt Amount</th>
+                <th class="tdAction">Total Amount</th>
+                @if (Model.Status == "Open")
+                {
+                    <th>Action</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model.ListOfImprestSurrenderLines != null && Model.ListOfImprestSurrenderLines.Any())
+                {
+                    foreach (var item in Model.ListOfImprestSurrenderLines)
+                    {
+                        var actualSpent = decimal.Parse(item.ActualSpent, NumberStyles.Currency, new CultureInfo("sw-KE"));
+                        var cashReceiptAmount = decimal.Parse(item.CashReceiptAmount, NumberStyles.Currency, new CultureInfo("sw-KE"));
+                        var remainingAmount = decimal.Parse(item.RemainingAmount, NumberStyles.Currency, new CultureInfo("sw-KE"));
+                        var total = (actualSpent + cashReceiptAmount).ToString("#,##0.00");
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AccountNo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AccountName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Purpose)
+                            </td>
+                            <td style="text-align:center">
+                                @Html.DisplayFor(modelItem => item.Amount)
+                            </td>
+                            <td style="text-align:center">
+                                <input type="text" name="ActualSpent" value="@item.ActualSpent" class="form-control"
+                                       id="actualSpent-@item.LineNo" style="text-align:center" />
+                            </td>
+                            <td style="text-align:center">
+                                @item.RemainingAmount
+                            </td>
+                            <td style="width: 100px">
+                                @{
+                                    decimal remaining;
+                                    bool isValid = decimal.TryParse(item.RemainingAmount, out remaining);
+                                }
+
+                                @if (isValid && remaining > 0 && ViewBag.Receipts != null && ViewBag.Receipts.Count > 0)
+                                {
+                                    @Html.DropDownListFor(
+                                        m => item.ReceiptNo,
+                                        new SelectList(ViewBag.Receipts, "Value", "Text", item.ReceiptNo),
+                                        "--Select Receipt Number--",
+                                        new { id = $"receiptNo-{item.LineNo}", @class = "form-control" }
+                                    )
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(
+                                        m => item.ReceiptNo,
+                                        new SelectList(ViewBag.Receipts, "Value", "Text", item.ReceiptNo),
+                                        "--Select Receipt Number--",
+                                        new { id = $"receiptNo-{item.LineNo}", @class = "form-control" }
+                                    )
+                                }
+
+                            </td>
+
+                            <td style="text-align:center">
+                                @cashReceiptAmount
+                            </td>
+                            <td style="text-align:center">
+                                @total
+                            </td>
+                            @if (Model.Status == "Open")
+                            {
+                                <td style="text-align:right" class="tdAction">
+                                    <button class="btn btn-success ml-3" title="Add Contract Payment"
+                                            onclick="UpdateSurrenderLines('@item.No', '@item.LineNo');">
+                                        Update Line
+                                    </button>
+                                </td>
+                            }
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $("#ImpSurrLines").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100]
+    });
+</script>

@@ -1,0 +1,100 @@
+﻿@model Latest_Staff_Portal.ViewModel.NewTransferForm
+<div class="bg-soft-dark" style="color:black">
+
+    <div class="row">
+        <div class="col-md-6">
+            <span style="font-weight: bold">Transfer Type</span>
+            <select id="ddlTransferType" class="form-control">
+                <option value="">--Select Transfer type--</option>
+                <option value="1">Internal</option>
+                <option value="2">External</option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            Asset To Transfer
+            @Html.TextBoxFor(m => m.AssetNo, new { id = "txtAssetToTransfer", @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            Transfer From
+            @Html.DropDownListFor(m => m.TransferDoc.FromDimension1Code, new SelectList(Model.ListOfDepartment, "Value", "Text", Model.TransferDoc.FromDimension1Code), "--Select from location--", new { id = "ddlFromLocation", @class = "form-control" })
+        </div>
+        <div class="col-md-6">
+            Transfer To
+            @Html.TextBoxFor(m => m.TransferDoc.ToLocation, new { id = "txtToLocation", @class = "form-control" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            Department From
+            @Html.DropDownListFor(m => m.TransferDoc.FromDimension1Code, new SelectList(Model.ListOfDepartment, "Value", "Text", Model.TransferDoc.FromDimension1Code), "--Select from location--", new { id = "ddlFromDepartment", @class = "form-control" })
+        </div>
+        <div class="col-md-6">
+            Department To
+            @Html.DropDownListFor(m => m.TransferDoc.ToDimension1Code, new SelectList(Model.ListOfDepartment, "Value", "Text", Model.TransferDoc.ToDimension1Code), "--Select To location--", new { id = "ddlToDepartment", @class = "form-control" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            Division From
+            @Html.DropDownListFor(m => m.TransferDoc.FromDimension2Code, new SelectList(Model.ListOfDivision, "Value", "Text", Model.TransferDoc.FromDimension2Code), "--Select from Division--", new { id = "ddlFromDivision", @class = "form-control" })
+        </div>
+        <div class="col-md-6">
+            Division To
+            @Html.DropDownListFor(m => m.TransferDoc.ToDimension1Code, new SelectList(Model.ListOfDivision, "Value", "Text", Model.TransferDoc.ToDimension1Code), "--Select To location--", new { id = "ddlToDivision", @class = "form-control" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            To Responsible Employee
+            @Html.DropDownListFor(m => m.TransferDoc.ToResponsibleEmployee, new SelectList(Model.ListOfEmployee, "Value", "Text", Model.TransferDoc.ToResponsibleEmployee), "--Select to Responsible Employee--", new { id = "ddlToEmployee", @class = "form-control" })
+        </div>
+        <div class="col-md-6">
+            Comments
+            @Html.TextAreaFor(m => m.TransferDoc.Comments, new { id = "txtComments", @class = "form-control" })
+        </div>
+    </div>
+    <hr/>
+    <div align="center">
+        <input type="button" class="btn btn-primary waves-effect waves-light" value="Submit Transfer" onclick="SubmitTransfer('@Model.AssetNo');"/>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#DivFromData").hide()
+        $("#ddlPersontoSee,#ddlDim2").select2({
+            width: '100%',
+            placeholder: 'Search...'
+        });
+    });
+    var ShowHiddenForm = function () {
+        var AssType = $("#ddlAssetType").children("option:selected").val();
+        if (AssType == "") {
+            $("#ddlPassenger option").remove();
+            $('#ddlPassenger').empty().append('<option selected="selected" value="">--Select Passenger--</option>');
+        }
+        else {
+            ShowProgress();
+            $('#ddlPassenger').empty().append('<option selected="selected" value="">--Select Passenger--</option>');
+            var url;
+            if (PType == "0") {
+                url = "/Common/GetEmployeeList";
+            }
+            else {
+                url = "/Common/GetStudentList";
+            }
+            $.getJSON(url,
+                function (data) {
+                    $('#ddlPassenger').empty().append('<option selected="selected" value="">--Select Passenger--</option>');
+                    $.each(data.ddlList, function () {
+                        $("#ddlPassenger").append($("<option></option>").val(this['Value']).html(this['Text']));
+                    });
+                    HideProgress();
+                });
+            $("#ddlPassenger").select2({
+                width: '100%'
+            });
+        }
+    }
+</script>

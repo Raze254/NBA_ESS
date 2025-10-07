@@ -1,0 +1,119 @@
+﻿@model Latest_Staff_Portal.ViewModel.ImprestSurrenderDocument
+<div class="row">
+    <div class="col-md-6">
+        <b>Document No</b>
+        @Html.TextBoxFor(m => m.DocHeader.No, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+    </div>
+    <div class="col-md-6">
+        <b>Surrender Date</b>
+        @Html.TextBoxFor(m => m.DocHeader.SurrenderDate, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", autocomplete = "off" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Account No</b>
+        @Html.TextBoxFor(m => m.DocHeader.AccountNo, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+    </div>
+    <div class="col-md-6">
+        <b>Payee</b>
+        @Html.TextBoxFor(m => m.DocHeader.AccountName, new { @class = "form-control ", @readonly = "readonly", style = "background-color:#dedebd" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Imprest Issue Doc</b>
+        @Html.TextBoxFor(m => m.DocHeader.ImprestNo, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+    </div>
+    <div class="col-md-6">
+        <b>Imprest Issue Date</b>
+        @Html.TextBoxFor(m => m.DocHeader.ImpIssueDate, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Station</b>
+        @Html.TextBoxFor(m => m.DocHeader.Dim1, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+    </div>
+    <div class="col-md-6">
+        <b>Department</b>
+        @Html.TextBoxFor(m => m.DocHeader.Department, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Status</b>
+        @Html.TextBoxFor(m => m.DocHeader.Status, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+    </div>
+    <div class="col-md-6">
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Amount</b>
+        @Html.TextBoxFor(m => m.DocHeader.TotalAmount, new { @class = "form-control ", @readonly = "readonly", style = "background-color:#dedebd" })
+    </div>
+    <div class="col-md-6">
+    </div>
+</div>
+<hr/>
+<hr style="border:1px solid black"/>
+<b>Imprest Lines</b>
+<hr/>
+<div class="pre-scrollable">
+    <table class="table table-centered table-nowrap" id="ImpLines">
+        <thead>
+        <tr>
+            <th>Account No</th>
+            <th>Account Name</th>
+            <th style="text-align:center">Amount</th>
+            <th class="tdAction">Actual Spend</th>
+            <th>Receipt No</th>
+            <th class="tdAction">Receipt Amount</th>
+            <th class="tdAction">Total Amount</th>
+        </tr>
+        </thead>
+        <tbody>
+        @{
+            if (Model.ListOfImprestSurrenderLines != null && Model.ListOfImprestSurrenderLines.Count() > 0)
+            {
+                foreach (var item in Model.ListOfImprestSurrenderLines)
+                {
+                    var Total = Convert.ToDecimal(item.ActaulSpend) + Convert.ToDecimal(item.ReceiptAmount);
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AccountNo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AccountName)
+                        </td>
+                        <td style="text-align:center">
+                            @Html.DisplayFor(modelItem => item.Amount)
+                        </td>
+                        <td style="text-align:center">
+                            @Html.DisplayFor(modelItem => item.ActaulSpend)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ReceiptNo)
+                        </td>
+                        <td style="text-align:center">
+                            @Html.DisplayFor(modelItem => item.ReceiptAmount)
+                        </td>
+                        <td style="text-align:center">
+                            @Total
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6" style="color:red">
+                        No Records Found
+                    </td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>

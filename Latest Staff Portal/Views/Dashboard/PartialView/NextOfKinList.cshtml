@@ -1,0 +1,63 @@
+﻿﻿@model List<Latest_Staff_Portal.ViewModel.NextOfKin>
+<div class="row" id="">
+    <div class="col-xl-12 col-sm-12 col-12">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="datatable table table-stripped" id="datatable-buttons">
+                                <thead style="background-color:black;color:white">
+                                    <tr>
+                                        <th>Action</th>
+                                        <th>Employee No</th>
+                                        <th>Relationship</th>
+                                        <th>SurName</th>
+                                        <th>Other Names</th>
+                                        <th>Date Of Birth</th>
+                                        <th>Phone No.</th>
+                                        <th>Email</th>
+                                        <th>Gender</th>
+                                        <th>Id/Passport No.</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model != null && Model.Any())
+                                    {
+                                        foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <button class="btn btn-danger btn-sm ml-1" data-toggle="tooltip" data-placement="top" title="Delete" onclick="DeleteNextOfKinLine('@item.Employee_Code', '@item.Relationship', '@item.Line_No', '@item.ID_No_Passport_No');">
+                                                        <i class="fa fa-trash"></i> Delete
+                                                    </button>
+                                                </td>
+                                                <td>@item.Employee_Code</td>
+                                                <td>@item.Relationship</td>
+                                                <td>@item.SurName</td>
+                                                <td>@item.Other_Names</td>
+                                                <td>@item.Date_Of_Birth</td>
+                                                <td>@item.Home_Tel_No</td>
+                                                <td>@item.E_mail</td>
+                                                <td>@item.Gender</td>
+                                                <td>@item.ID_No_Passport_No</td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100],
+        "bDestroy": true
+    });
+</script>

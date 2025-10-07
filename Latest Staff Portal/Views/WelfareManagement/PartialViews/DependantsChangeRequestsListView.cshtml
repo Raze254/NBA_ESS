@@ -1,0 +1,58 @@
+﻿@model List<Latest_Staff_Portal.ViewModel.DependantChangeRequests>
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+        <tr>
+            <th>Action</th>
+            <th>No</th>
+            <th>RequestorID</th>
+            <th>EmployeeNo</th>
+            <th>EmployeeName</th>
+            <th>Description</th>
+            <th>DocumentDate</th>
+            <th>TimeCreated</th>
+            <th>PostedBy</th>
+            <th>PostingDate</th>
+            <th>PostingTime</th>
+            <th>Status</th>
+            <th>DocumentStatus</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        @if (Model.Count() > 0)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <input type="button" onclick="viewCard('@item.No');" style="background: #162f25; color:whitesmoke; border-radius:10px" value="Select"/>
+                    </td>
+                    <td>@item.No</td>
+                    <td>@item.RequestorID</td>
+                    <td>@item.EmployeeNo</td>
+                    <td>@item.EmployeeName</td>
+                    <td>@item.Description</td>
+                    <td>@item.DocumentDate</td>
+                    <td>@item.TimeCreated</td>
+                    <td>@item.PostedBy</td>
+                    <td>@item.PostingDate</td>
+                    <td>@item.PostingTime.</td>
+                    <td>@item..Status</td>
+                    <td>@item.DocumentStatus</td>
+
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="17" style="color:red">
+                    No Records Found
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,105 @@
+﻿@model Latest_Staff_Portal.ViewModel.PCALines
+
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Transaction Code", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(m => m.TransactionCode, new SelectList(Model.ListOfTransactionCodes, "Value", "Text", Model.TransactionCode), "--Transaction Code--", new { id = "TransactionCode", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.TransactionCode, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Change Type", new { @class = "control-label col-md-12" })
+
+            <div class="col-md-12">
+                @Html.DropDownListFor(m => m.ChangeType, new SelectList(new[]
+                {
+                    new SelectListItem { Text = "Increment", Value = "1" },
+                    new SelectListItem { Text = "Addition", Value = "2" },
+                    new SelectListItem { Text = "Reduction", Value = "3" },
+                    new SelectListItem { Text = "Stoppage", Value = "4" }
+                }, "Value", "Text", Model.ChangeType), "--Select Change Type--", new { id = "ddlChangeType", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.ChangeType, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("From", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="text" class="form-control" placeholder="dd/mm/yyyy" id="txtFrom" onkeydown="return false;" autocomplete="off"/>
+                <div class="a"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("To", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="text" class="form-control" placeholder="dd/mm/yyyy" id="txtTo" onkeydown="return false;" autocomplete="off"/>
+                <div class="a"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <div class="form-group">
+                @Html.Label("Paid Amount", new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    <input type="text" class="form-control" id="txtpaid"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Comments", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <textarea class="form-control" id="txtComments"></textarea>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<hr/>
+<div align="center">
+    <input type="button" class="btn btn-primary waves-effect waves-light" value="Submit" onclick="SubmitPCALine();"/>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#txtTo,#txtFrom').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-1:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy'
+        });
+        $("#txtTo,#txtFrom").focus(function () {
+            $("#ui-datepicker-div").position({
+                my: "left top",
+                at: "left bottom",
+                of: $(this)
+            });
+        });
+        $("#ddlpjNo,#ddlVehicles,#ddlAuthorizedBy,#ddlCostCentre").select2({
+            width: '100%'
+        });
+        //document.getElementById("ddlDim2").disabled = true;
+        //document.getElementById("ddlDim1").disabled = true;
+        //document.getElementById("ddlDim3").disabled = true;
+    });
+</script>

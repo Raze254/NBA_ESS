@@ -1,0 +1,89 @@
+﻿@model Latest_Staff_Portal.ViewModel.SafariTeam2
+
+@{
+    ViewBag.Title = "NewImprestMemoLine";
+}
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Employee", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.DropDownListFor(model => model.No, Model.ListOfEmployees, "Select Option", new { @class = "form-control", @id = "EmpNo", @onchange = "GetEmployeeJobID(this.value)" })
+            @Html.ValidationMessageFor(model => model.No, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Destination Town", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.DropDownListFor(model => model.Work_Type, Model.ListOfImprestTypes, "Select Option", new { @class = "form-control", @id = "Work_Type" })
+            @Html.ValidationMessageFor(model => model.Work_Type, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-12" >
+        <div class="form-group">
+            @Html.Label("Number Of Days", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Time_Period, new { htmlAttributes = new { @class = "form-control", @id = "Time_Period" } })
+            @Html.ValidationMessageFor(model => model.Time_Period, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Transport Costs", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Transport_Costs, new { htmlAttributes = new { @class = "form-control", @id = "Transport_Costs" } })
+            @Html.ValidationMessageFor(model => model.Transport_Costs, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="col-md-12" id="divMileage" style="display: none;">
+        <div class="form-group">
+            @Html.Label("Mileage", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Total_Mileage_Cost, new { htmlAttributes = new { @class = "form-control", @id = "Total_Mileage_Cost" } })
+            @Html.ValidationMessageFor(model => model.Total_Mileage_Cost, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+</div>
+<div align="center">
+    <input type="button" class="btn btn-primary action-buttons" value="Submit Record" onclick="SubmitImprestMemoLine();" />
+</div>
+
+
+<script>
+    var GetEmployeeJobID = function (StaffNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ StaffNo: StaffNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/ImprestMemo/GetEmployeeJobID',
+            success: function (data) {
+                HideProgress();
+                if (data == "NB1" || data == "NB2" || data == "NB3") {
+                    //Swal.fire('Success', data, 'success');
+                    $('#divMileage').show();
+                }
+                else {
+                    $('#divMileage').hide(); 
+                   /* Swal.fire('Success', data, 'success');*/
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+</script>

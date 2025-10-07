@@ -1,0 +1,39 @@
+﻿@model Latest_Staff_Portal.ViewModel.ExitPlanLines
+
+@{
+    ViewBag.Title = "NewExitVoucherLine";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Exit Header No", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.Exit_Header_No, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #ccc", @id = "Exit_Header_No" } })
+            @Html.ValidationMessageFor(model => model.Exit_Header_No, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Line No", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.LineNo, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #ccc", @id = "LineNo" } })
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Primary Directorate", htmlAttributes: new { @class = "control-label col-md-2" })
+            @*  @Html.DropDownListFor(model => model.PrimaryDirectorate, Model.ListOfResponsibilityCenters, new { htmlAttributes = new { @class = "form-control ", @id = "PrimaryDirectorate" } })*@
+            @Html.DropDownListFor(m => m.PrimaryDirectorate, Model.ListOfResponsibilityCenters, "Select Option--", new { @class = "form-control select2", @id = "PrimaryDirectorate" })
+            @Html.ValidationMessageFor(model => model.PrimaryDirectorate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Planned Date", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.PlannedDate, new { htmlAttributes = new { @class = "form-control", @id = "PlannedDate" } })
+            @Html.ValidationMessageFor(model => model.PlannedDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+</div>

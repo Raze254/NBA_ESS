@@ -1,0 +1,147 @@
+﻿@model Latest_Staff_Portal.ViewModel.PASCoreValuesLines
+@{
+    var shouldHide = ViewBag.Trigger == 1;
+    var StrategicID = ViewBag.StrategicID;
+    var documentStage = ViewBag.pasDocStage;
+    bool isReadOnly = documentStage != "Evaluation";
+}
+
+<div class="form-horizontal">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Core Values", htmlAttributes: new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    @Html.DropDownListFor(model => model.Core_Value,
+                        new SelectList(Model.ListOfCoreValues, "Value", "Text", Model.Core_Value),
+                        "--Select Core Value--",
+                        new { @id = "coreValues", @class = "form-control select2" })
+                    @Html.ValidationMessageFor(model => model.Core_Value, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                @Html.Label("Behavioural Expectations", htmlAttributes: new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    @Html.TextAreaFor(model => model.Behavioural_expectation,
+                        new { @id = "behaviouralExpectation", @class = "form-control", @rows = "4", @placeholder = "Enter Behavioural Expectation" })
+                    @Html.ValidationMessageFor(model => model.Behavioural_expectation, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @if (ViewBag.pasDocStage == "Evaluation")
+    {
+        <div class="row">
+            @if (!shouldHide)
+            {
+                <div class="form-group col-md-6">
+                    @Html.Label("Joint /Agreed Assessment", htmlAttributes: new { @class = "control-label" })
+
+                    @{
+                        var htmlAttributes = new Dictionary<string, object>
+                                {
+                        { "id", "jointAssessment" },
+                        { "class", "form-control" }
+                    };
+
+                        if (isReadOnly)
+                        {
+                            htmlAttributes.Add("readonly", "readonly");
+                        }
+                    }
+
+                    @Html.EditorFor(model => model.Joint_Assessment, new { htmlAttributes })
+                    @Html.ValidationMessageFor(model => model.Joint_Assessment, "", new { @class = "text-danger" })
+
+                    @if (isReadOnly)
+                    {
+                        <span class="text-warning">
+                            The score cannot be awarded until the evaluation stage.
+                            <span class="text-success">
+                                Current Stage: <strong>@documentStage</strong>
+                            </span>
+                        </span>
+                    }
+                </div>
+            }
+        </div>
+    }
+
+
+
+
+    @*
+        @if (shouldHide)
+        {
+            <div class="form-group col-md-12">
+                @Html.LabelFor(model => model.Appraisee_Comments, "Appraisee Comment", htmlAttributes: new { @class = "control-label" })
+                @Html.TextAreaFor(model => model.Appraisee_Comments, new { @id = "appraiseeComment", @class = "form-control", rows = 4 })
+                @Html.ValidationMessageFor(model => model.Appraisee_Comments, "", new { @class = "text-danger" })
+            </div>
+        }
+
+        @if (!shouldHide)
+        {
+            <div class="form-group col-md-12">
+                @Html.LabelFor(model => model.Appraisers_Comments, "Appraisers Comments", htmlAttributes: new { @class = "control-label col-md-10" })
+                <div class="col-md-12">
+                    @Html.TextAreaFor(model => model.Appraisers_Comments, new { @id = "appraiserComment", @class = "form-control", rows = 4 })
+                    @Html.ValidationMessageFor(model => model.Appraisers_Comments, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+    *@
+
+
+
+    <div class="row">
+        <div class="form-group col-md-12 text-center">
+            <input type="button" value="Create" onclick="SubmitCoreValuesLine()" class="btn btn-primary" />
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#coreValues').change(function () {
+            var selectedValue = $(this).val();
+            if (selectedValue) {
+
+                $.ajax({
+                    async: true,
+                    type: "POST",
+                    datatype: "json",
+                    contentType: "application/json; charset=utf-8",
+                    url: "/Pas/CoreValuesResponse",
+                    data: JSON.stringify({ coreValue: selectedValue }),
+                    success: function (data) {
+                        if (data) {
+                            $('#behaviouralExpectation').val(data.Value);
+                        }
+                        HideProgress();
+                    },
+                    error: function (xhr, status, error) {
+                        console.log("Error: " + error);
+                    }
+                });
+            }
+        });
+        $('#myModal').on('shown.bs.modal', function () {
+            setTimeout(function () {
+                $('.select2').select2({
+                    dropdownParent: $('#myModal'),
+
+                });
+            }, 200);
+        });
+    });
+</script>

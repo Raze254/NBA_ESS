@@ -1,0 +1,101 @@
+﻿@model Latest_Staff_Portal.ViewModel.NewICTRequisition
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Station", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(model => model.Directorate, Model.ListOfDirectorate, "--Select Donor--", new { @class = "form-control", id = "ddlDirectorate", @readonly = "readonly", style = "background-color:#dedebd" })
+                @Html.ValidationMessageFor(model => model.Directorate, "", new { @class = "text-danger" })
+            </div>
+
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Project", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(model => model.Department, Model.ListOfDepartment, "--Select Project--", new { @class = "form-control", id = "ddlDim2", @readonly = "readonly", style = "background-color:#dedebd" })
+                @Html.ValidationMessageFor(model => model.Department, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Requisition Category", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(model => model.Category, Model.ListOfCategory, "--select Category--", new { @class = "form-control", id = "ddlCategory" })
+                @Html.ValidationMessageFor(model => model.Category, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Urgency", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <select id="ddlUrgency" class="form-control">
+                    <option value="">----</option>
+                    <option value="0">Low</option>
+                    <option value="1">Moderate</option>
+                    <option value="2">High</option>
+                    <option value="3">Very High</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Date Required", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="datetime" class="form-control" placeholder="dd/mm/yyyy" id="dtPicker" onkeydown="return false;" autocomplete="off"/>
+                @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("General Description", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <textarea id="txtRemarks" rows="5" class="form-control"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+<hr/>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Attachment:", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="file" class="form-control" id="LeavefileAttachment"/>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6"></div>
+</div>
+<hr/>
+<div align="center">
+    <input type="button" class="btn btn-primary waves-effect waves-light" value="Submit Request" onclick="SubmitRequisition();"/>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#dtPicker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-0:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy',
+            minDate: 0
+        });
+        $(window).resize(function () {
+            $('#dtPicker').datepicker('hide');
+            $('#dtPicker').blur();
+        });
+    });
+    document.getElementById("ddlDirectorate").disabled = true;
+    document.getElementById("ddlDim2").disabled = true;
+</script>

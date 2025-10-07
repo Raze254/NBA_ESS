@@ -1,0 +1,99 @@
+﻿@model Latest_Staff_Portal.ViewModel.StoreDocument
+<div class="row">
+    <div class="col-md-6">
+        <b>Document No</b>
+        @Html.TextBoxFor(m => m.DocHeader.No, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        <b>Date Needed</b>
+        @Html.TextBoxFor(m => m.DocHeader.DateNeeded, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Requestor No</b>
+        @Html.TextBoxFor(m => m.DocHeader.RequestorNo, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        <b>Requestor Name</b>
+        @Html.TextBoxFor(m => m.DocHeader.RequestorName, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Date Requested</b>
+        @Html.TextBoxFor(m => m.DocHeader.DateRequested, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        <b>Station</b>
+        @Html.TextBoxFor(m => m.DocHeader.Division, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Department</b>
+        @Html.TextBoxFor(m => m.DocHeader.Department, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        @*<b>Section</b>
+        @Html.TextBoxFor(m => m.DocHeader.Section, new { @class = "form-control", @readonly = "readonly" })*@
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Purpose</b>
+        @Html.TextAreaFor(m => m.DocHeader.Remarks, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        <b>Status</b>
+        @Html.TextBoxFor(m => m.DocHeader.Status, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<hr/>
+<hr style="border:1px solid black"/>
+<b>Store Lines</b>
+<hr/>
+<div class="pre-scrollable">
+    <table class="table table-hover" id="PurchaseRequisitionLine">
+        <thead>
+        <tr>
+            <th>Item</th>
+            <th>Description</th>
+            <th>Issuing Store</th>
+            <th class="text-center">Quantity</th>
+        </tr>
+        </thead>
+        <tbody>
+        @{
+            if (Model.ListOfStoreRequisitionLine != null && Model.ListOfStoreRequisitionLine.Count() > 0)
+            {
+                foreach (var item in Model.ListOfStoreRequisitionLine)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Item)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ItemDesc)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Location)
+                        </td>
+                        <td class="text-center">
+                            @Html.DisplayFor(modelItem => item.Qnty)
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="3" style="color:red">
+                        No Records Found
+                    </td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>

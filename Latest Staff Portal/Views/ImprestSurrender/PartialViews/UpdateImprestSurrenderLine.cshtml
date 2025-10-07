@@ -1,0 +1,30 @@
+﻿@model Latest_Staff_Portal.ViewModel.ImprestSurrenderLines
+
+
+<div class="row">
+
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Document No.", htmlAttributes: new { @class = "control-label col-md-2" })
+            <input class="form-control" type="text" id="DocumentNo" value="@Model.Document_No" disabled />
+            @Html.ValidationMessageFor(model => model.ActualSpent, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Line No.", htmlAttributes: new { @class = "control-label col-md-2" })
+            <input class="form-control" type="text" id="LineNo" value="@Model.Line_No" disabled />
+            @Html.ValidationMessageFor(model => model.ActualSpent, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Actual Amount Spent", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.ActualSpent, new { htmlAttributes = new { @class = "form-control", @id = "ActualSpent" } })
+            @Html.ValidationMessageFor(model => model.ActualSpent, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+</div>

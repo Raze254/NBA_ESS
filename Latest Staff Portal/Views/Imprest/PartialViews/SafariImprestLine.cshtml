@@ -1,0 +1,47 @@
+﻿@model Latest_Staff_Portal.ViewModel.ImprestLinesList2
+
+<div class="table-responsive">
+    <table id="datatable-buttons2" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color: black; color: white;">
+            <tr>
+                <th>No</th>
+                <th>Line No</th>
+                <th>Account_Type </th>
+                <th>Account_No</th>
+                <th>Purpose</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.ListOfImprestLines2 != null && Model.ListOfImprestLines2.Any())
+            {
+                foreach (var item in Model.ListOfImprestLines2)
+                {
+                    <tr>
+                        <td>@item.No</td>
+                        <td>@item.Line_No</td>
+                        <td>@item.Account_Type</td>
+                        <td>@item.Account_No</td>
+                        <td>@item.Purpose</td>
+                        <td>@item.Amount</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+@if (Model.Status == "Open")
+{
+    <div style="text-align:right">
+        <button class="btn-sm action-buttons2" onclick="AddImprestLine();">
+            <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Line
+        </button>
+    </div>
+}
+<script>
+    $("#datatable-buttons2").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100] // Same options for the second table
+    });
+</script>

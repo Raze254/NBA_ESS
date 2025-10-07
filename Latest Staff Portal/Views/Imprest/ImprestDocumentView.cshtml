@@ -1,0 +1,1177 @@
+﻿@model Latest_Staff_Portal.ViewModel.ImprestHeader
+@{
+    ViewBag.Title = "ImprestDocumentView";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    hr {
+        margin: 4px;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+<div style="background-color: black;">
+    <a href="#" onclick="ImprestRequisitionLink();" style="color:yellow"><<< Back To Travel Advance List</a>
+</div>
+<div class="card">
+    <div class="card-title">Travel Advance Document Details(@Model.No)</div>
+    <hr/>
+    <div style="text-align:right" id="HideEditButton">
+        <input type="button" class="btn btn-danger BtnPadding" id="btnEdit" value="Edit Header" onclick="EditDocument();"/>
+        <hr/>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <b>Document No</b>
+                @Html.TextBoxFor(m => m.No, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+            <div class="col-md-6">
+                <b>Date Needed</b>
+                @Html.TextBoxFor(m => m.DateNeeded, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "dtPicker", onkeydown = "return false;", autocomplete = "off" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <b>Date of Travel:</b>
+                @Html.TextBoxFor(m => m.DateofTravel, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "TxtTravelDate", onkeydown = "return false;", autocomplete = "off" })
+
+            </div>
+            <div class="col-md-6">
+                <b>Date of Return</b>
+                @Html.TextBoxFor(m => m.DateofReturn, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "TxtReturnDate", onkeydown = "return false;", autocomplete = "off" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <b>Donor Code</b>
+                @Html.DropDownListFor(m => m.Dim1, new SelectList(Model.DocD.ListOfDim1, "Value", "Text", Model.Dim1), "--Select Donor--", new { id = "ddlDim1", @class = "form-control", @readonly = "readonly", onchange = "FilterDimension2()", style = "background-color:#dedebd" })
+            </div>
+            <div class="col-md-6">
+                <b>Donor Name</b>
+                <label id="txtDim1" class="form-control" style="background-color: #dedebd">@Model.Dim1Name</label><br/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <b>Project Code</b>
+                @Html.DropDownListFor(m => m.Dim2, new SelectList(Model.DocD.ListOfDim2, "Value", "Text", Model.Dim2), "--Select Project--", new { id = "ddlDim2", @class = "form-control", @readonly = "readonly", onchange = "FilterDimension3()", style = "background-color:#dedebd" })
+            </div>
+            <div class="col-md-6">
+                <b>Project Name</b>
+                <label id="txtDim2" class="form-control" style="background-color: #dedebd">@Model.Dim2Name</label><br/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <b>Program Area Code</b>
+                @Html.DropDownListFor(m => m.Dim3, new SelectList(Model.DocD.ListOfDim3, "Value", "Text", Model.Dim3), "--Select Program--", new { id = "ddlDim3", @class = "form-control", onchange = "FilterDimension4()", style = "background-color:#dedebd", @readonly = "readonly" })
+            </div>
+            <div class="col-md-6">
+                <b>Program Area Name</b>
+                <label id="txtDim3" class="form-control" style="background-color: #dedebd">@Model.Dim3Name</label><br/>
+            </div>
+        </div>
+        <div class="row" id="DivSubprogram">
+            <div class="col-md-6">
+                <b>Sub Program Code</b>
+                @Html.DropDownListFor(m => m.DocD.Dim7, new SelectList(Model.DocD.ListOfDim7, "Value", "Text", Model.DocD.Dim7), "--Select Sub Program--", new { id = "ddlDim7", @class = "form-control", style = "background-color:#dedebd", @readonly = "readonly", onchange = "GetDimension7Name()" })
+            </div>
+            <div class="col-md-6">
+                <b>Sub Program Name</b>
+                <label id="txtDim7" class="form-control" style="background-color: #dedebd">@Model.Dim7Name</label><br/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <b>Activity/ Beneficiary Code</b>
+                @Html.DropDownListFor(m => m.DocD.Dim4, new SelectList(Model.DocD.ListOfDim4, "Value", "Text", Model.DocD.Dim4), "--Select Activity/ Beneficiary--", new { id = "ddlDim4", @class = "form-control", style = "background-color:#dedebd", @readonly = "readonly", onchange = "GetDimension4Name()" })
+            </div>
+            <div class="col-md-6">
+                <b>Activity/ Beneficiary Name</b>
+                <label id="txtDim4" class="form-control" style="background-color: #dedebd">@Model.Dim4Name</label><br/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <b>County Code</b>
+                @Html.DropDownListFor(m => m.DocD.Dim5, new SelectList(Model.DocD.ListOfDim5, "Value", "Text", Model.Dim5), "--Select County--", new { id = "ddlDim5", @class = "form-control", style = "background-color:#dedebd", @readonly = "readonly", onchange = "GetDimension5Name()" })
+            </div>
+            <div class="col-md-6">
+                <b>County Name</b>
+                <label id="txtDim5" class="form-control" style="background-color: #dedebd">@Model.Dim5Name</label><br/>
+            </div>
+        </div>
+        <div class="row" id="DivMCC">
+            <div class="col-md-6">
+                <b>Major Cost Category</b>
+                @Html.DropDownListFor(m => m.DocD.Dim6, new SelectList(Model.DocD.ListOfDim6, "Value", "Text", Model.Dim4), "--Select Major Cost Category--", new { id = "ddlDim6", @class = "form-control", style = "background-color:#dedebd", @readonly = "readonly", onchange = "GetDimension6Name()" })
+            </div>
+            <div class="col-md-6">
+                <b>Major Cost Category Name</b>
+                <label id="txtDim6" class="form-control" style="background-color: #dedebd">@Model.Dim6Name</label><br/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <b>Responsibility Centre</b>
+                @Html.DropDownListFor(m => m.RespC, new SelectList(Model.DocD.ListOfResponsibility, "Value", "Text", Model.RespC), "--Select Responsibility--", new { id = "ddlRespC", @class = "form-control", style = "background-color:#dedebd", @readonly = "readonly" })
+            </div>
+            <div class="col-md-6">
+                <b>Currency Code</b>
+                @Html.TextBoxFor(m => m.CurrencyCode, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtCurrencyCode" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <b>Status</b>
+                @Html.TextBoxFor(m => m.Status, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtStatus" })
+            </div>
+
+            <div class="col-md-6">
+                <b>Travel Type</b>
+                @Html.DropDownListFor(model => model.TravelType, new List<SelectListItem>
+                {
+                    new SelectListItem { Text = "Local", Value = "Local" },
+                    new SelectListItem { Text = "International", Value = "International" }
+                }, new { @class = "form-control", id = "ddlTravelType", @readonly = "readonly", style = "background-color:#dedebd" })
+                @Html.ValidationMessageFor(model => model.TravelType, "", new { @class = "text-danger" })
+
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <b>Total Net Amount</b>
+                @Html.TextBoxFor(m => m.TotalAmount, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtNetAmount" })
+            </div>
+            <div class="col-md-6">
+                <b>Purpose</b>
+                @Html.TextAreaFor(m => m.Remarks, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", rows = 5, id = "txtPurpose" })
+            </div>
+        </div>
+        <hr/>
+        <div align="center" id="DivUpdateButton">
+            <input type="button" class="btn btn-primary waves-effect waves-light" value="Update Header" onclick="UpdateImprestHeader();"/>
+        </div>
+        <div id="DivImpLines">
+            <hr style="border:1px solid black"/>
+            <b>Travel Advance Lines</b>
+            <hr/>
+            <div id="divImpLines"></div>
+            <hr style="border:1px solid black"/>
+            <div class="row">
+                <div class="col-md-12">
+                    <b>Attachments</b>
+                    <div id="divAttachDocs"></div>
+                </div>
+            </div>
+            <hr style="border:1px solid black"/>
+            <div align="right" id="DivSendForApproval">
+                <input type="button" class="btn btn-danger BtnPadding" value="send for approval >>>" onclick="SendDocForApproval();"/>
+            </div>
+            <hr/>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" ke aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myModalLabel">New Travel Advance Line</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal View Doc////////////////////////////*@
+<div class="modal fade" id="myModalAttachment" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Attachment</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalAttachmentBody" style="width:100%;height:450px">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script src="~/assets/js/pdfobject.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadImprestDocumentLines(`@Model.No`,`@Model.Status`);
+        var status = `@Model.Status`;
+        HideHeaderEditInput(status);
+        var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+        if (Successmsg != "") {
+            Swal.fire('Success', Successmsg, 'success',true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+        var Dim1 = `@Model.Dim1`;
+        var Dim2 = `@Model.Dim2`;
+        if (Dim1 != "CDC") {
+            $("#DivSubprogram").hide();
+            $("#DivMCC").hide();
+
+        }
+        else {
+            $("#DivSubprogram").show();
+            $("#DivMCC").show();
+        }
+    });
+    var LoadImprestDocumentLines = function (DocNo,Status) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ DocNo: DocNo, Status: Status }),
+            url: "/Imprest/ImprestDocumentLines",
+            success: function (data) {
+                $("#divImpLines").html(data);
+                HideProgress();
+                GetDocumentAttachments();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    };
+        var GetDocumentAttachments = function () {
+	var DocNo = `@Model.`;
+	$.ajax({
+		async: true,
+		type: "POST",
+		datatype: "json",
+		contentType: "application/json; charset = utf-8",
+		processData: false,
+        data: JSON.stringify({ DocNo: DocNo}),
+        url: "/Common/EdmsDocumentAttachmentList",
+		success: function (data) {
+			$("#divAttachDocs").html(data);
+		},
+		error: function () {
+			Swal.fire("There is some problem to process your request. Please try after some time");
+		}
+	});
+};
+    var ImprestRequisitionLink = function () {
+        ShowProgress();
+        window.location = "/Imprest/ImprestRequisitionList";
+    }
+    var EditDocument = function () {
+         var status = `@Model.Status`;
+        if ($("#btnEdit").val() == "Edit Header") {
+            $("#btnEdit").val("Clear Header Edit");
+            ShowHeaderEditInput();
+        }
+        else {
+            HideHeaderEditInput(status);
+            $("#btnEdit").val("Edit Header");
+        }
+    }
+    var HideHeaderEditInput = function (Status) {
+        if (Status == "Open" || Status == "Pending") {
+            $("#HideEditButton").show();
+            $("#HideLineButton").show();
+            $("#DivSendForApproval").show();
+        }
+        else {
+            $("#HideEditButton").hide();
+            $("#HideLineButton").hide();
+            $("#DivSendForApproval").hide();
+        }
+        $("#DivUpdateButton").hide();
+        $("#DivImpLines").show();
+        $("#dtPicker,#txtPurpose").css("background-color", "#dedebd");
+        $("#dtPicker,#txtPurpose,#ddlDim1,#ddlDim2,#ddlDim3,#ddlDim4,#ddlDim5,#ddlDim6,#ddlDim7,#TxtTravelDate,#TxtReturnDate,#ddlRespC,#ddlTravelType").attr("readonly", true);
+
+    }
+    var ShowHeaderEditInput = function () {
+        $("#DivUpdateButton").show();
+        $("#DivImpLines").hide();
+        $("#dtPicker,#txtPurpose,#ddlDim1,#ddlDim2,#ddlDim3,#ddlDim4,#ddlDim5,#ddlDim6,#ddlDim7,#TxtTravelDate,#TxtReturnDate,#ddlRespC,#ddlTravelType").css("background-color", "white");
+        $("#dtPicker,#txtPurpose,#ddlDim1,#ddlDim2,#ddlDim3,#ddlDim4,#ddlDim5,#ddlDim6,#ddlDim7,#TxtTravelDate,#TxtReturnDate,#ddlRespC,#ddlTravelType").attr("readonly", false);
+        $('#dtPicker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-0:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy',
+            minDate: 0
+        });
+        $('#TxtTravelDate').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-0:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy',
+            minDate: 0
+        });
+
+        $('#TxtReturnDate').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-0:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy',
+            minDate: 0
+        });
+        $(window).resize(function () {
+            $('#dtPicker').datepicker('hide');
+            $('#dtPicker').blur();
+            $('#TxtTravelDate').datepicker('hide');
+            $('#TxtTravelDate').blur();
+            $('#TxtReturnDate').datepicker('hide');
+            $('#TxtReturnDate').blur();
+        });
+    }
+    var UpdateImprestHeader = function () {
+        var DocNo = `@Model.No`;
+        var Status = `@Model.Status`;
+        var dateNeeded = $("#dtPicker").val().trim();
+        var Remarks = $("#txtPurpose").val().replace(/(\r\n|\n|\r)/gm, " ");
+        var Dim1 = $("#ddlDim1").children("option:selected").val();
+        var Dim2 = $("#ddlDim2").children("option:selected").val();
+        var Dim3 = $("#ddlDim3").children("option:selected").val();
+        var Dim4 = $("#ddlDim4").children("option:selected").val();
+        var Dim5 = $("#ddlDim5").children("option:selected").val();
+        var Dim6 = $("#ddlDim6").children("option:selected").val();
+        var Dim7 = $("#ddlDim7").children("option:selected").val();
+        var TravelType = $("#ddlTravelType").children("option:selected").val();
+        var TravelDate = $("#TxtTravelDate").val().trim();
+        var ReturnDate = $("#TxtReturnDate").val().trim();
+        var RespC = $("#ddlRespC").children("option:selected").val();
+        if (dateNeeded == "") {
+            Swal.fire('Warning', "Select Date needed", 'warning');
+            return;
+        }
+        if (TravelDate == "") {
+            Swal.fire('Warning', "Select Travel Date", 'warning');
+            return;
+        }
+        if (ReturnDate == "") {
+            Swal.fire('Warning', "Select Date of Return", 'warning');
+            return;
+        }
+        if (Remarks == "") {
+            Swal.fire('Warning', "Enter Reason for the purchase", 'warning');
+            return;
+        }
+        if (Remarks.length > 150) {
+            Swal.fire('Warning', "Reason for purchase cannot exceed 150 characters", 'warning');
+            return;
+        }
+        else if (Dim1 == "") {
+            Swal.fire('Warning', "Select Donor", 'warning');
+            return;
+        }
+        else if (Dim2 == "") {
+            Swal.fire('Warning', "Select Project", 'warning');
+            return;
+        }
+        else if (Dim3 == "") {
+            Swal.fire('Warning', "Select Program", 'warning');
+            return;
+        }
+        else if (Dim4 == "") {
+            Swal.fire('Warning', "Select Activity", 'warning');
+            return;
+        }
+        else if (Dim5 == "") {
+            Swal.fire('Warning', "Select County", 'warning');
+            return;
+        }
+        else if ((Dim6 == "") && (Dim1 == "CDC")) {
+            Swal.fire('Warning', "Select Major Cost Category", 'warning');
+            return;
+        }
+        else if (RespC == "") {
+            Swal.fire('Warning', "Select Responsibility Centre", 'warning');
+            return;
+        }
+        else {
+            var ImprestHeader = {};
+            var DocD = {};
+            ImprestHeader.DateNeeded = dateNeeded;
+            ImprestHeader.Remarks = Remarks;
+            ImprestHeader.DateofTravel = TravelDate;
+            ImprestHeader.DateofReturn = ReturnDate;
+            ImprestHeader.TravelType = TravelType;
+            DocD.Dim1 = Dim1;
+            DocD.Dim2 = Dim2;
+            DocD.Dim3 = Dim3;
+            DocD.Dim4 = Dim4;
+            DocD.Dim5 = Dim5;
+            DocD.Dim6 = Dim6;
+            DocD.Dim7 = Dim7;
+            DocD.RespC = RespC;
+            DocD.DateofTravel = TravelDate;
+            DocD.DateofReturn = ReturnDate;
+            ImprestHeader.DocD = DocD;
+            ShowProgress();
+            $.ajax({
+                type: "POST",
+                url: "/Imprest/UpdateImprestHeader",
+                data: JSON.stringify({ DocNo: DocNo, imprestHeader: ImprestHeader }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    if (data.success) {
+                        HideProgress();
+                        HideHeaderEditInput(Status);
+                        $("#btnEdit").val("Edit Header");
+                        $("#dtPicker").val(dateNeeded);
+                        $("#txtPurpose").val(Remarks);
+                        $("#txtCampus").val(CampusName);
+                        $("#txtDepartment").val(DepartmentName);
+                        $("#txtRespC").val(RespoC);
+                        Swal.fire('Success', data.message, 'success');
+                    }
+                    else {
+                        Swal.fire('Warning', data.message, 'warning');
+                        HideProgress();
+                    }
+                },
+                error: function (err) {
+                    HideProgress();
+                    Swal.fire('Warning', err, 'warning');
+                }
+            });
+        }
+    };
+    function getB64Str(buffer) {
+        var binary = '';
+        var bytes = new Uint8Array(buffer);
+        var len = bytes.byteLength;
+        for (var i = 0; i < len; i++) {
+            binary += String.fromCharCode(bytes[i]);
+        }
+        return window.btoa(binary);
+    }
+    var ViewAttachment = function (moduleCheck, docNo, docId) {
+        $.ajaxSetup({ cache: false });
+        ShowProgress();
+
+        var viewer = $("#modalAttachmentBody");
+        viewer.empty();
+
+        $.ajax({
+            url: '/Common/GetEdmsDocuments',
+            type: "GET",
+            datatype: "json",
+            cache: false,
+            contentType: "application/json; charset=utf-8",
+            data: {
+                module: moduleCheck,
+                documentNo: docNo,
+                documentType: "Expenditure Requisition",
+                documentId: docId
+            },
+            success: function (data) {
+                if (data.success) {
+                    if (data.base64) {
+                        var mimeType = data.mimeType || 'application/pdf';
+
+                        if (mimeType.startsWith('application/pdf')) {
+                            viewer.html('<iframe src="data:' + mimeType + ';base64,' + data.base64 + '" style="width:100%; height:500px;" frameborder="0"></iframe>');
+                        } else if (mimeType.startsWith('image/')) {
+                            viewer.html('<img src="data:' + mimeType + ';base64,' + data.base64 + '" style="width:100%;"/>');
+                        } else {
+                            var blob = b64toBlob(data.base64, mimeType);
+                            var url = window.URL.createObjectURL(blob);
+                            window.open(url, '_blank');
+                        }
+                        $("#myModalAttachment").modal("show");
+                    } else {
+                        window.location = '/Common/AttachmentDownload?fileName=' + data.message;
+                        Swal.fire('Success', 'Document Downloaded successfully', 'success');
+                    }
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+                HideProgress();
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Error', err.responseText || 'An error occurred', 'error');
+            }
+        });
+    };
+    var DeleteAttachment = function (tbl, No, Id) {
+    $.ajaxSetup({ cache: false });
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.value) {
+            ShowProgress();
+            $.ajax({
+                cache: false,
+                url: '/Common/DeleteAttachedDocument',
+                datatype: "json",
+                type: "POST",
+                data: JSON.stringify({ DocNo: No, tblID: tbl, DocID: Id}),
+                contentType: "application/json; charset = utf-8",
+                success: function (data) {
+                    if (data.success == true) {
+                        HideProgress();
+                        GetDocumentAttachments();
+                        Swal.fire('Success', 'File Deleted Successfully', 'success');
+                    }
+                    else {
+                        HideProgress();
+                        Swal.fire('Warning', data.message, 'warning');
+                    }
+                },
+                error: function (err) {
+                    HideProgress();
+                    Swal.fire('Warning', err, 'warning');
+                }
+            });
+        }
+        else {
+            Swal.fire('Cancelled', 'Attachment File has not been deleted', 'error');
+        }
+    });
+    };
+    var AddImprestLines = function () {
+        ShowProgress();
+        var DocNo = `@Model.No`;
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            //processData: false,
+            url: '/Imprest/NewImprestLine',
+            data: JSON.stringify({ DocNo: DocNo }),
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    };
+    var AddLineItem = function () {
+        var ImpType = $("#ddlImpType").children("option:selected").val();
+        var ImpTypeDesc = $("#ddlImpType").children("option:selected").text();
+        var Desination = $("#ddlDestination").children("option:selected").val();
+
+        //var Amount = $("#txtAmount").val();
+        //var UoM = $("#ddlUoM").children("option:selected").val();
+        var Amount = "0";
+        var UoM = "";
+        var ImpType2 = $("#ddlImpType2").children("option:selected").val();
+        var Noofdays = $("#txtQuanity").val();
+
+
+        var ItemDescription = $("#txtDescription").val();
+        var expenseType = $("#PRVType").children("option:selected").val();
+        var Qty = $("#txtQuantity").val();
+        var Amnt = $("#txtAmount").val();
+        var exp = expenseType;
+        if (exp == "1") {
+            if (ImpType == "") {
+                Swal.fire('Warning', "Select Imprest Type", 'warning');
+                return;
+            }
+            else if (Noofdays == "") {
+                Swal.fire('Warning', "Enter Quantity", 'warning');
+                return;
+            }
+            else if (Desination == "") {
+                Swal.fire('Warning', "Select Destination", 'warning');
+                return;
+            }
+            else if (ItemDescription == "") {
+                Swal.fire('Warning', "Give brief description of the item", 'warning');
+                return;
+            }
+            else if (ItemDescription.length > 200) {
+                Swal.fire('Warning', "Your Item Description should have a maximum of 200 characters", 'warning');
+                return;
+            }
+            else {
+                var DocNo = `@Model.No`;
+                var ImpLine = {};
+                ImpLine.Item = ImpType;
+                ImpLine.ItemDesc = ItemDescription;
+                ImpLine.NoofDays = Noofdays;
+                ImpLine.Amount = Amount;
+                ImpLine.UoN = UoM;
+                ImpLine.Desination = Desination;
+                ShowProgress();
+                $.ajax({
+                    type: "POST",
+                    url: "/Imprest/SubmitImprestLine",
+                    data: JSON.stringify({ DocNo: DocNo, imprestLine: ImpLine }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.success) {
+                            HideProgress();
+                            LoadImprestDocumentLines(DocNo, 'Pending');
+                            $("#txtNetAmount").val(data.NetAmout);
+                            $("#myModal").modal("hide");
+                            Swal.fire('Success', data.message, 'success');
+                        }
+                        else {
+                            Swal.fire('Warning', data.message, 'warning');
+                            HideProgress();
+                        }
+                    },
+                    error: function (err) {
+                        HideProgress();
+                        Swal.fire('Warning', err, 'warning');
+                    }
+                });
+                //Clear the TextBoxes.
+                //txtName.val("");
+                //txtCountry.val("");
+            }
+        }
+        else if (exp == "2")
+        {
+            if (ImpType2 == "") {
+                Swal.fire('Warning', "Select Imprest Type", 'warning');
+                return;
+            }
+            else if (Qty == "") {
+                Swal.fire('Warning', "Enter Quantity", 'warning');
+                return;
+            }
+            else if (Amnt == "") {
+                Swal.fire('Warning', "Enter the amount", 'warning');
+                return;
+            }
+            else if (ItemDescription == "") {
+                Swal.fire('Warning', "Give brief description of the item", 'warning');
+                return;
+            }
+            else if (ItemDescription.length > 200) {
+                Swal.fire('Warning', "Your Item Description should have a maximum of 200 characters", 'warning');
+                return;
+            }
+            else {
+                var DocNo = `@Model.No`;
+                var ImpLine = {};
+                ImpLine.Item = ImpType2;
+                ImpLine.ItemDesc = ItemDescription;
+                ImpLine.Quantity = Qty;
+                ImpLine.Amount = Amnt;
+                // ImpLine.UoN = UoM;
+                ImpLine.Desination = Desination;
+                ShowProgress();
+                $.ajax({
+                    type: "POST",
+                    url: "/Imprest/SubmitImprestLine",
+                    data: JSON.stringify({ DocNo: DocNo, imprestLine: ImpLine }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.success) {
+                            HideProgress();
+                            LoadImprestDocumentLines(DocNo, 'Pending');
+                            $("#txtNetAmount").val(data.NetAmout);
+                            $("#myModal").modal("hide");
+                            Swal.fire('Success', data.message, 'success');
+                        }
+                        else {
+                            Swal.fire('Warning', data.message, 'warning');
+                            HideProgress();
+                        }
+                    },
+                    error: function (err) {
+                        HideProgress();
+                        Swal.fire('Warning', err, 'warning');
+                    }
+                });
+            }
+        }
+    }
+    var EditItem = function (DocNo, LnNo) {
+        $("#lblT").text("Edit Travel Advance Line");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ LnNo: LnNo, DocNo: DocNo }),
+            url: '/Imprest/EditImprestLine',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    };
+    var UpdateLineItem = function (DocNo, LnNo, ItemNo) {
+        var ImpType = $("#ddlImpType").children("option:selected").val();
+        var ImpTypeDesc = $("#ddlImpType").children("option:selected").text();
+        var Qnty = $("#txtQuanity").val();
+        var Amount = $("#txtAmount").val();
+        var ItemDescription = $("#txtDescription").val();
+        var Destination = $("#ddlDestination").children("option:selected").val();
+
+        if (ImpType == "") {
+            Swal.fire('Warning', "Select Imprest Type", 'warning');
+            return;
+        }
+        else if (Qnty == "") {
+            Swal.fire('Warning', "Enter Quantity", 'warning');
+            return;
+        }
+        else if (Amount == "") {
+            Swal.fire('Warning', "Enter Amount", 'warning');
+            return;
+        }
+        else if (ItemDescription == "") {
+            Swal.fire('Warning', "Give brief description of the item", 'warning');
+            return;
+        }
+        else if (ItemDescription.length > 150) {
+            Swal.fire('Warning', "Your Item Description should have a maximum of 200 characters", 'warning');
+            return;
+        }
+        else {
+            var DocNo = DocNo;
+            var ImpLine = {};
+            ImpLine.Item = ImpType;
+            ImpLine.LnNo = LnNo;
+            ImpLine.ItemDesc = ItemDescription;
+            ImpLine.Quantity = Qnty;
+            ImpLine.Amount = Amount;
+            ImpLine.Desination = Destination;
+            ShowProgress();
+            $.ajax({
+                type: "POST",
+                url: "/Imprest/UpdateImprestLine",
+                data: JSON.stringify({ DocNo: DocNo, imprestLine: ImpLine }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    if (data.success) {
+                        HideProgress();
+                        LoadImprestDocumentLines(DocNo, 'Pending');
+                        $("#txtNetAmount").val(data.NetAmout);
+                        $("#myModal").modal("hide");
+                        Swal.fire('Success', data.message, 'success');
+                    }
+                    else {
+                        Swal.fire('Warning', data.message, 'warning');
+                        HideProgress();
+                    }
+                },
+                error: function (err) {
+                    HideProgress();
+                    Swal.fire('Warning', err, 'warning');
+                }
+            });
+        }
+    }
+    var RemoveItem = function (DocNo, LnNo) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.value) {
+                ShowProgress();
+                $.ajax({
+                    type: "POST",
+                    url: "/Imprest/RemoveImprestLine",
+                    data: JSON.stringify({ DocNo: DocNo, LnNo: LnNo }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.success) {
+                            HideProgress();
+                            LoadImprestDocumentLines(DocNo, 'Pending');
+                            $("#txtNetAmount").val(data.NetAmout);
+                            Swal.fire('Success', data.message, 'success');
+                        }
+                        else {
+                            Swal.fire('Warning', data.message, 'warning');
+                            HideProgress();
+                        }
+                    },
+                    error: function (err) {
+                        HideProgress();
+                        Swal.fire('Warning', err, 'warning');
+                    }
+                });
+            }
+            else {
+                Swal.fire('Cancelled', 'Imprest line has not been deleted', 'error');
+            }
+        });
+    };
+    var SendDocForApproval = function () {
+        var rowCount = $('#ImpLines tr').length;
+        if (rowCount < 1) {
+            Swal.fire('Warning', 'You have not Added any Imprest Requisition line(s)', 'warning');
+            return;
+        }
+        var rowCount1 = $('#DocumentAttachmnts').length;
+        if (rowCount1 == 0) {
+            Swal.fire('Warning', 'Document should have an attachment before sending for approval', 'warning');
+            return;
+        }
+        var DocNo = `@Model.No`;
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Imprest/SendImprestAppForApproval',
+            success: function (data) {
+                if (data.success == true) {
+                    if (data.LogOut == true) {
+                        window.location = data.message;
+                    }
+                    else {
+                        HideProgress();
+                        HideHeaderEditInput('Pending Approval');
+                        LoadImprestDocumentLines(`@Model.No`, 'Pending Approval');
+                        $("#txtStatus").val("Pending Approval");
+                        $("#HideEditButton").hide();
+                        $("#HideLineButton").hide();
+                        $("#DivSendForApproval").hide();
+                        Swal.fire('Success', data.message, 'success');
+                    }
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var FilterDimension2 = function () {
+        var Dim1 = $("#ddlDim1").children("option:selected").val();
+
+        if (Dim1 == "") {
+            $("#ddlDim2 option").remove();
+            $('#ddlDim2').empty().append('<option selected="selected" value="">--Select Project--</option>');
+        }
+        else {
+            // ShowProgress();
+
+            $("#ddlDim2 option").remove();
+            $('#ddlDim2').empty().append('<option selected="selected" value="">--Select Project---</option>');
+
+            $.getJSON("/Common/FilterDimension2", { Dim1: Dim1 },
+                function (data) {
+                    $('#ddlDim2').empty().append('<option selected="selected" value="">--Select Project--</option>');
+                    $.each(data.ListOfDim2, function () {
+                        $("#ddlDim2").append($("<option></option>").val(this['Value']).html(this['Text']));
+                    });
+                    //var dname = data.DName;
+                    $("#txtDim1").val(data.DName);
+                    //  HideProgress();
+                });
+            $.getJSON("/Common/GetDimensionName", { Dim1: Dim1 },
+                function (data) {
+                    if (data.DName != null) {
+                        $("#txtDim1").text(data.DName);
+                        //  $("#txtVacantPosition").text(data.newBal.VacantPositions);
+                    }
+                    else {
+                        Swal.fire('Warning', data.message, 'warning');
+                    }
+                    // HideProgress();
+
+                });
+            FilterDimension6();
+            if (Dim1 != "CDC") {
+                $("#DivSubprogram").hide();
+                $("#DivMCC").hide();
+
+            }
+            else {
+                $("#DivSubprogram").show();
+                $("#DivMCC").show();
+            }
+            $("#ddlDim1 option:selected").text($("#ddlDim1").val());
+        }
+    }
+    var FilterDimension3 = function () {
+        var Dim1 = $("#ddlDim1").children("option:selected").val();
+        var Dim2 = $("#ddlDim2").children("option:selected").val();
+        if (Dim1 == "") {
+            $("#ddlDim3 option").remove();
+            $('#ddlDim3').empty().append('<option selected="selected" value="">--Select Programme--</option>');
+        }
+        else {
+            //ShowProgress();
+
+            $("#ddlDim3 option").remove();
+            $('#ddlDim3').empty().append('<option selected="selected" value="">--Select Programme Area---</option>');
+
+            $.getJSON("/Common/FilterDimension3", { Dim1: Dim1, Dim2: Dim2 },
+                function (data) {
+                    $('#ddlDim3').empty().append('<option selected="selected" value="">--Select Programme Area--</option>');
+                    $.each(data.ListOfDim3, function () {
+                        $("#ddlDim3").append($("<option></option>").val(this['Value']).html(this['Text']));
+                    });
+                    //  HideProgress();
+                });
+            $.getJSON("/Common/GetDimensionName", { Dim1: Dim2 },
+                function (data) {
+                    if (data.DName != null) {
+                        $("#txtDim2").text(data.DName);
+                        //  $("#txtVacantPosition").text(data.newBal.VacantPositions);
+                    }
+                    else {
+                        Swal.fire('Warning', data.message, 'warning');
+                    }
+                    $("#ddlDim2 option:selected").text($("#ddlDim2").val());
+                    //HideProgress();
+                });
+
+        }
+    }
+    var FilterDimension4 = function () {
+        var Dim1 = $("#ddlDim1").children("option:selected").val();
+        var Dim2 = $("#ddlDim2").children("option:selected").val();
+        var Dim3 = $("#ddlDim3").children("option:selected").val();
+        if (Dim1 == "") {
+            $("#ddlDim4 option").remove();
+            $('#ddlDim4').empty().append('<option selected="selected" value="">--Select Activity--</option>');
+        }
+        else {
+           // ShowProgress();
+
+            $("#ddlDim4 option").remove();
+            $('#ddlDim4').empty().append('<option selected="selected" value="">--Select Activity---</option>');
+
+            $.getJSON("/Common/FilterDimension4", { Dim1: Dim1, Dim2: Dim2, Dim3: Dim3 },
+                function (data) {
+                    $('#ddlDim4').empty().append('<option selected="selected" value="">--Select Activity--</option>');
+                    $.each(data.ListOfDim4, function () {
+                        $("#ddlDim4").append($("<option></option>").val(this['Value']).html(this['Text']));
+                    });
+                   // HideProgress();
+                });
+
+            $.getJSON("/Common/GetDimensionNames", { Dim1: Dim3, DimNo:3 },
+                function (data) {
+                    if (data.DName != null) {
+                        $("#txtDim3").text(data.DName);
+                        //  $("#txtVacantPosition").text(data.newBal.VacantPositions);
+                    }
+                    else {
+                        Swal.fire('Warning', data.message, 'warning');
+                    }
+                    $("#ddlDim3 option:selected").text($("#ddlDim3").val());
+
+                });
+            FilterDimension7();
+        }
+    }
+    var FilterDimension7 = function () {
+        var Dim1 = $("#ddlDim1").children("option:selected").val();
+        var Dim2 = $("#ddlDim2").children("option:selected").val();
+        var Dim3 = $("#ddlDim3").children("option:selected").val();
+        if (Dim1 == "") {
+            $("#ddlDim7 option").remove();
+            $('#ddlDim7').empty().append('<option selected="selected" value="">--Select Sub Program--</option>'); c
+        }
+        else {
+            ShowProgress();
+            $("#ddlDim7 option").remove();
+            $('#ddlDim7').empty().append('<option selected="selected" value="">--Select Sub Program---</option>');
+
+            $.getJSON("/Common/FilterDimension7", { Dim1: Dim1, Dim3: Dim3 },
+                function (data) {
+                    $('#ddlDim7').empty().append('<option selected="selected" value="">--Select Sub Program--</option>');
+                    $.each(data.ListOfDim7, function () {
+                        $("#ddlDim7").append($("<option></option>").val(this['Value']).html(this['Text']));
+                    });
+                    HideProgress();
+                });
+        }
+    }
+    var GetDimension4Name = function () {
+        var Dim1 = $("#ddlDim4").children("option:selected").val();
+        if (Dim1 == "") {
+            $("#ddlDim4 option").remove();
+            $('#ddlDim4').empty().append('<option selected="selected" value="">--Select Activity--</option>');
+        }
+        else {
+           // ShowProgress();
+
+            $.getJSON("/Common/GetDimensionNames", { Dim1: Dim1, DimNo: 4 },
+                function (data) {
+                    if (data.DName != null) {
+                        $("#txtDim4").text(data.DName);
+
+                    }
+                    else {
+                        Swal.fire('Warning', data.message, 'warning');
+                    }
+                  //  HideProgress();
+
+                });
+            $("#ddlDim4 option:selected").text($("#ddlDim4").val());
+        }
+    }
+    var GetDimension5Name = function () {
+        var Dim1 = $("#ddlDim5").children("option:selected").val();
+        if (Dim1 == "") {
+            $("#ddlDim5 option").remove();
+            $('#ddlDim5').empty().append('<option selected="selected" value="">--Select County--</option>');
+        }
+        else {
+            ShowProgress();
+
+            $.getJSON("/Common/GetDimensionName", { Dim1: Dim1 },
+                function (data) {
+                    if (data.DName != null) {
+                        $("#txtDim5").text(data.DName);
+
+                    }
+                    else {
+                    }
+                    HideProgress();
+
+                });
+            var dimm = $("#ddlDim5").val();
+            console.log(dimm);
+            //document.getElementById("ddlDim5").text('Heey');
+            //$('#ddlDim5').empty().append();
+            $("#ddlDim5 option:selected").text(dimm);
+        }
+    }
+    var GetDimension6Name = function () {
+        var Dim1 = $("#ddlDim6").children("option:selected").val();
+        if (Dim1 == "") {
+            $("#ddlDim6 option").remove();
+            $('#ddlDim6').empty().append('<option selected="selected" value="">--Select MCC--</option>');
+        }
+        else {
+            ShowProgress();
+
+            $.getJSON("/Common/GetDimensionName", { Dim1: Dim1 },
+                function (data) {
+                    if (data.DName != null) {
+                        $("#txtDim6").text(data.DName);
+
+                    }
+                    else {
+                        Swal.fire('Warning', data.message, 'warning');
+                    }
+                    HideProgress();
+                    $("#ddlDim6 option:selected").text($("#ddlDim6").val());
+
+                });
+        }
+    }
+    var GetDimension7Name = function () {
+        var Dim1 = $("#ddlDim7").children("option:selected").val();
+        if (Dim1 == "") {
+            $("#ddlDim7 option").remove();
+            $('#ddlDim7').empty().append('<option selected="selected" value="">--Select SubProgram--</option>');
+        }
+        else {
+            ShowProgress();
+
+            $.getJSON("/Common/GetDimensionName", { Dim1: Dim1 },
+                function (data) {
+                    if (data.DName != null) {
+                        $("#txtDim7").text(data.DName);
+
+                    }
+                    else {
+                        Swal.fire('Warning', data.message, 'warning');
+                    }
+                    HideProgress();
+                    $("#ddlDim7 option:selected").text($("#ddlDim7").val());
+                });
+        }
+    }
+    var FilterDimension6 = function () {
+        var Dim1 = $("#ddlDim1").children("option:selected").val();
+
+        if (Dim1 == "") {
+            $("#ddlDim6 option").remove();
+            $('#ddlDim6').empty().append('<option selected="selected" value="">--Select MCC--</option>');
+        }
+        else {
+            // ShowProgress();
+            $("#ddlDim6 option").remove();
+            $('#ddlDim6').empty().append('<option selected="selected" value="">--Select MCC---</option>');
+
+            $.getJSON("/Common/FilterDimension6", { Dim1: Dim1 },
+                function (data) {
+                    $('#ddlDim6').empty().append('<option selected="selected" value="">--Select MCC--</option>');
+                    $.each(data.ListOfDim6, function () {
+                        $("#ddlDim6").append($("<option></option>").val(this['Value']).html(this['Text']));
+                    });
+                    //  HideProgress();
+                });
+
+
+
+        }
+    }
+</script>

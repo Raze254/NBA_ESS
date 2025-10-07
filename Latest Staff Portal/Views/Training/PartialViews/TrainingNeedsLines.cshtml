@@ -1,0 +1,76 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.TrainingNeedsLines>
+
+
+<div class="table-responsive">
+    <table class="datatable table table-stripped" id="datatable-lines">
+        <thead style="background-color:black;color:white">
+            <tr>
+                @* <th>Code</th> *@
+                <th>Course ID</th>
+                <th>Domain</th>
+                <th>Domain Name</th>
+                <th>Course Description</th>
+                <th>CPD Points</th>
+                <th>Course Provider</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Total Cost</th>
+                @if (ViewBag.Status != "True")
+                {
+                    <th class="action">Actions</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        @* <td>@item.Document_No</td> *@
+                        <td>@item.Course_ID</td>
+                        <td>@item.Domain</td>
+                        <td>@item.Domain_Name</td>
+                        <td>@item.Course_Description</td>
+                        <td style="text-align: center">@item.CPD_Points</td>
+                        <td>@item.Provider_Name</td>
+                        <td>@item.Start_Date</td>
+                        <td>@item.End_Date</td>
+                        <td style="text-align: center">@item.Total_Cost.ToString("N0")</td>
+                        @if (ViewBag.Status != "True")
+                        {
+                            <td style="text-align:right" class="tdAction">
+                                <button class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Delete" onclick="DeleteTrainingLine('@item.Line_No');">Delete</button>
+                                <button class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="View Training Costs" onclick="LoadTrainingCostLines('@item.Course_ID');">View Training Costs</button>
+                            </td>
+                        }
+
+                    </tr>
+                }
+            }
+        </tbody>
+
+
+
+    </table>
+</div>
+
+@{
+    if (ViewBag.Status != "True")
+    {
+        <div style="text-align:right" class="mt-4">
+            <button class="action-buttons" color:whitesmoke; border-radius:10px" onclick="AddTrainingLine();">
+                <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Line
+            </button>
+        </div>
+    }
+}
+
+
+<script>
+    $("#datatable-lines").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100],
+        "bDestroy": true
+    });
+</script>

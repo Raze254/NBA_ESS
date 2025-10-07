@@ -1,0 +1,202 @@
+﻿@model Latest_Staff_Portal.ViewModel.LeaveReimbursementDocument
+<div class="pre-scrollable">
+    <table class="table table-bordered" style="width: 100%;font-size:12px; background-color:darkgrey">
+        <tr>
+            <td>
+                <span style="font-size: small; font-weight: bold;">Document No</span>
+            </td>
+            <td>
+                @Html.DisplayFor(m => m.DocumentDetails.No, new { id = "txtDocNo" })
+            </td>
+            <td>
+                <span style="font-size: small; font-weight: bold;">Employee No</span>
+            </td>
+            <td>
+                @Html.DisplayFor(m => m.DocumentDetails.EmpNo)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span style="font-size: small; font-weight: bold;">Application Date </span>
+            </td>
+            <td>
+                @Html.DisplayFor(m => m.DocumentDetails.Date)
+            </td>
+            <td>
+                <span style="font-size: small; font-weight: bold;">Applied Days </span>
+            </td>
+            <td>
+                @Html.DropDownListFor(model => model.DocumentDetails.Days_Applied, Model.ListOfDays, "--No of Days--", new { @class = "form-control", id = "ddlNoDays", onchange = "GetDates()" })
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span style="font-size: small; font-weight: bold;">Approved Days </span>
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.DocumentDetails.DaystoReimburse, new { @class = "form-control", id = "txtstartDate" })
+            </td>
+            @* <td>
+        <span style="font-size: small; font-weight: bold;">End Date </span>
+    </td>
+    <td>
+        @Html.TextBoxFor(m => m.DocumentDetails.End_Date, new { @class = "form-control", @id = "EndDate", @readonly = "readonly", @style = "background-color:#dedebd" })
+    </td>*@
+        </tr>
+        <tr>
+            @*<td>
+                <span style="font-size: small; font-weight: bold;">Return Date </span>
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.DocumentDetails.Return_Date, new { @class = "form-control", @id = "ReturnDate", @readonly = "readonly", @style = "background-color:#dedebd" })
+            </td>*@
+            <td>
+                <span style="font-size: small; font-weight: bold;">Remarks </span>
+            </td>
+            <td>
+                @Html.TextAreaFor(m => m.DocumentDetails.Remarks, new { @class = "form-control", id = "txtRemarks" })
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span style="font-size: small; font-weight: bold;">Leave Type </span>
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.DocumentDetails.Leave_Type, new { @class = "form-control", id = "txtLeaveType", @readonly = "readonly", style = "background-color:#dedebd" })
+            </td>
+            @*<td>
+                <span style="font-size: small; font-weight: bold;">Reliever Name </span>
+            </td>
+            <td>
+                @Html.DropDownListFor(model => model.DocumentDetails.Reliever, Model.ListOfRelievers, "--select Reliever--", new { @class = "form-control", @id = "ddlReliever" })
+            </td>*@
+        </tr>
+    </table>
+</div>
+<div align="center" id="DivUpdateButton">
+    <input type="button" class="btn btn-primary waves-effect waves-light" value="Update Leave Document" onclick="UpdateLeaveDocument('@Model.DocumentDetails.No');"/>
+</div>
+<hr style="border:1px solid black"/>
+<div class="row">
+    <div class="col-md-12">
+        <b>Attachments</b>
+        <div id="divAttachDocs"></div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var status = `@Model.DocumentDetails.Status`;
+        if (status == "Open") {
+            $("#txtDays,#txtstartDate,#txtRemarks,#ddlReliever").attr("readonly", false);
+            $("#DivUpdateButton").show();
+            $('#txtstartDate').datepicker({
+                changeMonth: true,
+                changeYear: true,
+                autoclose: true,
+                yearRange: '-5:+5',
+                showOtherMonths: true,
+                dateFormat: 'dd/mm/yy'
+            });
+            $(window).resize(function () {
+                $('#txtstartDate').datepicker('hide');
+                $('#txtstartDate').blur();
+            });
+
+            $('#txtstartDate').change(function () {
+                var StartDate = $('#txtstartDate').val();
+                var days = $("#ddlNoDays").children("option:selected").val();
+                var LvType = `@Model.DocumentDetails.Leave_Type`;
+                if (LvType == "") {
+                    $("#ddlNoDays option").remove();
+                    $('#ddlNoDays').empty().append('<option selected="selected--No of Days--</option>');
+                    Swal.fire('Warning', 'Leave Type cannot be empty', 'warning');
+                    return;
+                }
+                else if (days == "") {
+                    Swal.fire('Warning', 'Select Number of days', 'warning');
+                    return;
+                }
+                else {
+                    ShowProgress();
+                    $.getJSON("/Leave/End_ReturnDates", { startDate: StartDate, days: days, LvType: LvType },
+                        function (data) {
+                            if (data.success == true) {
+                                $('#EndDate').val(data.ERDate.EndDate);
+                                $('#ReturnDate').val(data.ERDate.ReturnDate);
+                                HideProgress();
+                            }
+                            else {
+                                Swal.fire('Error', data.message, 'error');
+                                HideProgress();
+                            }
+                        });
+                }
+            });
+
+            $("#ddlReliever,#ddlRespC").select2({
+                width: '100%'
+            });
+        }
+        else {
+            $("#txtDays,#txtstartDate,#txtRemarks,#ddlReliever").attr("readonly", true);
+            $("#DivUpdateButton").hide();
+            $("#ddlReliever,#ddlNoDays,#ddlRespC").attr("disabled", "disabled");
+            $("#txtReliever,#txtRemarks").css("background-color", "#dedebd");
+        }
+        GetDocumentAttachments();
+    });
+    var GetDates = function () {
+        var StartDate = $('#txtstartDate').val();
+        var days = $("#ddlNoDays").children("option:selected").val();
+        var LvType = `@Model.DocumentDetails.Leave_Type`;
+        if (LvType == "") {
+            Swal.fire('Warning', 'Select Leave Type', 'warning');
+            return;
+        }
+        else if (days == "") {
+            Swal.fire('Warning', 'Select Number of days', 'warning');
+            return;
+        }
+        else if (StartDate == "") {
+            Swal.fire('Warning', 'Select Leave Start Date', 'warning');
+            return;
+        }
+        else {
+            ShowProgress();
+            $.getJSON("/Leave/End_ReturnDates", { startDate: StartDate, days: days, LvType: LvType },
+                function (data) {
+                    if (data.success == true) {
+                        $('#EndDate').val(data.ERDate.EndDate);
+                        $('#ReturnDate').val(data.ERDate.ReturnDate);
+                        HideProgress();
+                    }
+                    else {
+                        Swal.fire('Error', data.message, 'error');
+                        HideProgress();
+                    }
+                });
+        }
+    };
+    var GetDocumentAttachments = function () {
+        ShowProgress();
+        var DocNo = `@Model.DocumentDetails.No`;
+        var Status = `@Model.DocumentDetails.Status`;
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ DocNo: DocNo, TableID: 69205, Status: 'Approved'}),
+            url: "/Common/DocumentAttachments",
+            success: function (data) {
+                HideProgress();
+                $("#divAttachDocs").html(data);
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    };
+</script>

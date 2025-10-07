@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.DocComments>
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100" style="border-collapse: collapse; border-spacing: 0;">
+        <thead style="background-color:black;color:white">
+        <tr>
+            <th style="width:80px">Comments</th>
+            <th style="width:80px">Comment By</th>
+        </tr>
+        </thead>
+        <tbody>
+        @{
+            if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Comment)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CommentBy)
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="2" style="color:red">
+                        No Comments Found
+                    </td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,218 @@
+﻿@model Latest_Staff_Portal.ViewModel.FleetRequests
+
+@{
+    ViewBag.Title = "NewFleetRequisition";
+}
+
+<!-- Flatpickr CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<!-- Flatpickr JS -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+<div class="row">
+    @* <div class="col-md-12">
+            <div class="form-group">
+                @Html.Label("Employee", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                @Html.DropDownListFor(model => model.Requested_By, Model.ListOfEmployees, "Select Option", new { @class = "form-control", @id= "Requested_By" })
+                @Html.ValidationMessageFor(model => model.Requested_By, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    *@
+
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Imprest Memo", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.DropDownListFor(model => model.Approved_Imprest_Memo, Model.ListOfImprestMemo, "Selecty Option", new { @class = "form-control", @id = "Approved_Imprest_Memo", @onchange="GetMemoDetails(this.value)" })
+            @Html.ValidationMessageFor(model => model.Approved_Imprest_Memo, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Commencement", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.From, new { htmlAttributes = new { @class = "form-control", @id = "From" } })
+            @Html.ValidationMessageFor(model => model.From, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Destination", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Destination, new { htmlAttributes = new { @class = "form-control", @id = "Destination" } })
+            @Html.ValidationMessageFor(model => model.Destination, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Route Description", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Route_Description, new { htmlAttributes = new { @class = "form-control", @id = "Route_Description" } })
+            @Html.ValidationMessageFor(model => model.Route_Description, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Date Of Trip", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.TextBoxFor(model => model.Date_of_Trip, new { @class = "form-control", @id = "Date_of_Trip", @placeholder = "dd/mm/yyyy", @autocomplete = "off" })
+            <input class="form-control" type="text" id="Date_of_Trip2" readonly style="display:none;" />
+            @Html.ValidationMessageFor(model => model.Date_of_Trip, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Time Of Trip", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.TextBoxFor(model => model.Time_Requested, new { @class = "form-control", @id = "Time_Requested", @placeholder = "HH:MM", @autocomplete = "off" })
+            @Html.ValidationMessageFor(model => model.Time_Requested, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    @*<div class="form-group">
+            @Html.LabelFor(model => model.Time_out, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Time_out, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Time_out, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Time_In, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Time_In, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Time_In, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Journey_Route, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Journey_Route, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Journey_Route, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    *@
+
+
+<div class="col-md-6">
+    <div class="form-group">
+        @Html.Label("No Of Days Requested", htmlAttributes: new { @class = "control-label col-md-2" })
+
+        @Html.EditorFor(model => model.No_of_Days_Requested, new { htmlAttributes = new { @class = "form-control", @id = "No_of_Days_Requested" } })
+        <input class="form-control" type="text" id="No_of_Days_Requested2" readonly style="display:none;" />
+        @Html.ValidationMessageFor(model => model.No_of_Days_Requested, "", new { @class = "text-danger" })
+    </div>
+</div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Number Of Hours Requested", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Number_of_Hours_Requested, new { htmlAttributes = new { @class = "form-control", @id = "Number_of_Hours_Requested" } })
+            @Html.ValidationMessageFor(model => model.Number_of_Hours_Requested, "", new { @class = "text-danger" })
+        </div>
+    </div>
+   @* <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Trip End Date", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Trip_End_Date, new { htmlAttributes = new { @class = "form-control", @id = "Trip_End_Date", @readonly = "readonly", @style = "background-color: #f2f2f2" } })
+            @Html.ValidationMessageFor(model => model.Trip_End_Date, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Trip End Time", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Trip_End_Time, new { htmlAttributes = new { @class = "form-control", @id = "Trip_End_Time", @readonly = "readonly", @style = "background-color: #f2f2f2" } })
+            @Html.ValidationMessageFor(model => model.Trip_End_Time, "", new { @class = "text-danger" })
+        </div>
+    </div>*@
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Capacity", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Capacity, new { htmlAttributes = new { @class = "form-control", @id = "Capacity" } })
+            @Html.ValidationMessageFor(model => model.Capacity, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Responsibility Center", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.DropDownListFor(model => model.Responsibility_Center, Model.ListOfResponsibilityCenters, "Select Option", new { @class = "form-control", @id = "Responsibility_Center" })
+            @Html.ValidationMessageFor(model => model.Responsibility_Center, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+    @*<div class="form-group">
+            @Html.LabelFor(model => model.Added_On, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Added_On, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Added_On, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+
+</div>
+
+
+<div align="center">
+    <input type="button" class="btn btn-primary action-buttons" value="Submit Record" onclick="SubmitTransportRequisition();" />
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-datetimepicker@2.5.20/build/jquery.datetimepicker.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/jquery-datetimepicker@2.5.20/build/jquery.datetimepicker.full.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        flatpickr("#Date_of_Trip", {
+            dateFormat: "d/m/Y",
+            minDate: "today",
+            allowInput: true
+        });
+
+        // Time picker only
+        flatpickr("#Time_Requested", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            time_24hr: true,
+            allowInput: true
+        });
+
+    });
+
+    function GetMemoDetails(memo) {
+        $.ajax({
+            type: "POST",
+            url: "/Fleet/GetMemoDetails",
+            data: JSON.stringify({ memo: memo }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.success && data.message.length > 0) {
+                    var memo = data.message[0];
+
+                    var startDateParts = memo.Start_Date.split("-");
+                    var formattedStartDate = startDateParts[2] + "/" + startDateParts[1] + "/" + startDateParts[0];
+
+                    $("#Date_of_Trip").val(formattedStartDate).prop("readonly", true);
+                    $("#No_of_Days_Requested").val(memo.No_of_days).prop("readonly", true);
+                }
+                HideProgress();
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Error', 'An error occurred while submitting the request.', 'error');
+            }
+        });
+    }
+</script>
+
+

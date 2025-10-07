@@ -1,0 +1,68 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.LabSampleManagement>
+
+@{
+    ViewBag.Title = "LabSampleManagementListPartialView";
+}
+
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th>Action</th>
+                <th>Sample_ID </th>
+                <th>Description</th>
+                <th>Received_At </th>
+                <th>Analysed_At </th>
+                <th>Exported_At </th>
+                <th>TurnAround_Time </th>
+                <th>Status </th>
+                <th>Created_By </th>
+
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <button class="btn btn-primary btn-sm action-buttons2" onclick="ViewDoc('@item.Sample_ID');" >Select</button> 
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Sample_ID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Received_At)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Analysed_At)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Exported_At)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TurnAround_Time)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Created_By)
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100] // Same options for the second table
+    });
+</script>

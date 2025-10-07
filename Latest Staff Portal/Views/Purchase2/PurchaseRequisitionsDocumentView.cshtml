@@ -1,0 +1,685 @@
+﻿@model Latest_Staff_Portal.ViewModel.PurchaseRequisitions
+
+@{
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/Purchase/PurchaseRequisitionList">Purchase Requisition List</a>
+                </li>
+                <li class="breadcrumb-item active">Purchase Requisition Document View (@Model.No)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<hr />
+
+<br />
+<div class="card">
+    <div class="card-header">
+        <h4>Purchase Requisition Document (@Model.No)</h4>
+        <div class="text-right">
+
+            @if (@Model.Status == "Open")
+            {
+                <button class="btn btn-primary action-buttons2" onclick="SendPurchaseReqDocForApproval('@Model.No');">
+                    <i class="fa fa-check" aria-hidden="true"></i> Send For Approval
+                </button>
+
+            }
+
+            @if (@Model.Status == "Pending Approval")
+            {
+                <button class="btn btn-primary action-buttons2" onclick="CancelPurchaseReqApprovalRequest('@Model.No');">
+                    <i class="fa fa-times" aria-hidden="true"></i> Cancel Approval Request
+                </button>
+
+            }
+            <button class="btn btn-secondary action-buttons2" style=" border:none" onclick="GeneratePurchaseRequisitionReport('@Model.No');">
+                <i class="fa fa-file-alt" aria-hidden="true"></i> Generate Report
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Document Type", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Document_Type, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Document_Type, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("No", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.No, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.No, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("PRN Type", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.PRN_Type, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.PRN_Type, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Document Date", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Document_Date, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Document_Date, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Location Code", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Location_Code, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Location_Code, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Requisition Product Group", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Requisition_Product_Group, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Requisition_Product_Group, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Requester ID", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Requester_ID, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Requester_ID, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Request By No", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Request_By_No, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Request_By_No, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Request By Name", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Request_By_Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Request_By_Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Department Name", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Department_Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Department_Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Procurement Plan ID", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Procurement_Plan_ID, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Procurement_Plan_ID, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Job", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Job, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Job, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Job Task No", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Job_Task_No, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Job_Task_No, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("PP Planning Category", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.PP_Planning_Category, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.PP_Planning_Category, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("PP Total Budget", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.PP_Total_Budget, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.PP_Total_Budget, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Status", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Status, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+      @*  <div style="text-align:center">
+            <button class="btn btn-primary action-buttons" onclick="UpdatePurchaseRequisitionHeader();">
+                <i class="fa fa-pencil" aria-hidden="true"></i> Update Document
+            </button>
+        </div>*@
+
+        <hr style="border:1px solid black" />
+        <b>Purchase Requisition Lines</b>
+        <hr />
+        <div id="divPRLines"></div>
+        <hr style="border:1px solid black" />
+    </div>
+</div>
+
+
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">New Purchase Requisition Line</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-primary action-buttons" value="Submit" onclick="SubmitPurchaseRequisitionLine();" />
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*//////////////////////update Header modal////////////////////////////*@
+<div class="modal" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Update Purchase Requisition Document</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody2">
+            </div>
+            <div class="modal-footer">
+                <div class="text-center">
+                    <input type="button" class="btn btn-primary action-buttons" value="Update" onclick="SubmitUpdatedPurchaseRequisitionHeader();" />
+                </div>
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*//////////////////////Modal View Doc////////////////////////////*@
+<div class="modal fade" id="myModalAttachment" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Attachment</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalAttachmentBody" style="width:100%;height:450px">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script src="~/assets/js/pdfobject.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadPurchaseRequisitionLines(`@Model.No`,`@Model.Status`,`@Model.Procurement_Plan_ID`,`@Model.PP_Planning_Category`);
+        var status = `@Model.Status`;
+        var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+        if (Successmsg != "") {
+            Swal.fire('Success', Successmsg, 'success',true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+
+
+    });
+    var LoadPurchaseRequisitionLines = function (Document_No, Status, ProcurementPlanID, ProcurementPlanCategory) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ Document_No: Document_No, Status: Status, ProcurementPlanID: ProcurementPlanID, ProcurementPlanCategory: ProcurementPlanCategory }),
+            url: "/Purchase/PurchaseRequisitionLinesPartialView",
+            success: function (data) {
+                $("#divPRLines").html(data);
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    };
+
+    var AddPurchaseRequisitionLine = function () {
+        var Document_No = '@Model.No';
+        var Procurement_Plan_ID = `@Model.Procurement_Plan_ID`;
+        var Procurement_Plan_Category =`@Model.PP_Planning_Category`
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: "html",
+            url: '/Purchase/NewPurchaseRequisitionLine',
+            data: {
+                Document_No, Procurement_Plan_ID, Procurement_Plan_Category
+            },
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseText, 'warning');
+            }
+        });
+    }
+
+    function SubmitPurchaseRequisitionLine() {
+        var isValid = true;
+
+        // Collect data from the form
+
+        var formData = {
+            DocumentNo:`@Model.No`,
+            Type: $("#Type").val(),
+            ProcurementPlanID: $("#ProcurementPlanID").val(),
+            ProcurementPlanCategory: $("#ProcurementPlanCategory").val(),
+            Document_Type: $("#Document_Type").val(),
+            Budget: $("#Budget").val(),
+            Budget_Line: $("#Budget_Line").val(),
+            Procurement_Plan_Entry_No: $("#Procurement_Plan_Entry_No").val(),
+            Item_Description: $("#Item_Description").val(),
+            PP_Preference_Reservation_Code: $("#PP_Preference_Reservation_Code").val(),
+            ItemCategoryCode: $("#ItemCategoryCode").val(),
+            No: $("#item").val(),
+            Unit_of_Measure_Code: $("#Unit_of_Measure_Code").val(),
+            Quantity: $("#Quantity").val(),
+            TechnicalSpecifications: $("#TechnicalSpecifications").val(),
+            DirectUnitCost: $("#DirectUnitCost").val(),
+            Location_Code: $("#Location_Code").val()
+        };
+
+
+
+        // Validation checks
+  /*      if (!formData.Type) {
+            Swal.fire('Warning', 'Select Type.', 'warning');
+            isValid = false;
+        }*/
+
+      /*  if (!formData.ProcurementPlanID) {
+            Swal.fire('Warning', 'Select Procurement Plan ID.', 'warning');
+            isValid = false;
+        }*/
+
+       /* if (!formData.ProcurementPlanCategory) {
+            Swal.fire('Warning', 'Procurement Plan Category Cannot be empty.', 'warning');
+            isValid = false;
+        }
+*/
+       /* if (!formData.Document_Type) {
+            Swal.fire('Warning', 'Select Document Type.', 'warning');
+            isValid = false;
+        }
+
+        if (!formData.Budget) {
+            Swal.fire('Warning', 'Select Budget.', 'warning');
+            isValid = false;
+        }
+
+        if (!formData.Budget_Line) {
+            Swal.fire('Warning', 'Select Budget Line.', 'warning');
+            isValid = false;
+        }
+*/
+      /*  if (!formData.Procurement_Plan_Entry_No) {
+            Swal.fire('Warning', 'Select  Procurement Plan Entry Number.', 'warning');
+            isValid = false;
+        }*/
+
+    /*    if (!formData.Item_Description) {
+            Swal.fire('Warning', 'Enter Item Description.', 'warning');
+            isValid = false;
+        }*/
+
+     /*   if (!formData.PP_Preference_Reservation_Code) {
+            Swal.fire('Warning', 'Select Preference Reservation.', 'warning');
+            isValid = false;
+        }*/
+/*
+        if (!formData.Item_Category_Code) {
+            Swal.fire('Warning', 'Select Item Category', 'warning');
+            isValid = false;
+        }
+
+        if (!formData.No) {
+            Swal.fire('Warning', 'Select Item.', 'warning');
+            isValid = false;
+        }
+
+        if (!formData.Unit_of_Measure_Code) {
+            Swal.fire('Warning', 'Select Unit of Measure.', 'warning');
+            isValid = false;
+        }*/
+
+        if (!formData.Quantity || formData.Quantity <= 0) {
+            Swal.fire('Warning', 'Enter a valid Quantity.', 'warning');
+            isValid = false;
+        }
+/*
+        if (!formData.Direct_Unit_Cost || formData.Direct_Unit_Cost <= 0) {
+            Swal.fire('Warning', 'Enter a valid Direct Unit Cost.', 'warning');
+            isValid = false;
+        }
+
+        if (!formData.Location_Code) {
+            Swal.fire('Warning', 'Select Location', 'warning');
+            isValid = false;
+        }
+*/
+
+
+        // Exit if validation fails
+        if (!isValid) {
+            return;
+        }
+
+        // Prepare data object
+        var newPurchaseRequisitionLine = formData;
+
+        // Show progress indicator
+        ShowProgress();
+
+        // Send data via AJAX
+        $.ajax({
+            type: "POST",
+            url: "/Purchase/SubmitPurchaseRequisitionLine", // Change this to your actual endpoint
+            data: JSON.stringify(newPurchaseRequisitionLine),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                HideProgress();
+                    if (data.success) {
+                        console.log(data.succes)
+                    /*ViewDoc(data.message);*/
+                        Swal.fire('Success', 'Purchase Requisition line submitted successfully.', 'success');
+                        window.location.reload();
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Error', 'An error occurred while submitting the request.', 'error');
+            }
+        });
+    }
+
+    var UpdatePurchaseRequisitionHeader = function () {
+        var Document_No = '@Model.No';
+        ShowProgress();
+
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: "html",
+            url: '/Purchase/UpdatePurchaseRequisitionHeader',
+            data: {
+                Document_No, Document_No,
+            },
+            success: function (data) {
+                $("#modalBody2").html(data);
+                HideProgress();
+                $("#myModal2").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseText, 'warning');
+            }
+        });
+    }
+
+    function SubmitUpdatedPurchaseRequisitionHeader() {
+        var isValid = true;
+
+        var formDetails = {
+            No: $("#No").val(),
+            PRN_Type: $("#PRNType").val(),
+            Location_Code: $("#Location_Code").val(),
+            Requisition_Product_Group: $("#Requisition_Product_Group").val(),
+            PP_Planning_Category: $("#PP_Planning_Category").val(),
+        };
+       /* alert(formDetails.Requisition_Product_Group);*/
+
+        // Validation checks
+        if (!formDetails.PRN_Type) {
+            Swal.fire('Warning', 'Please select PRN Type.', 'warning');
+            isValid = false;
+        }
+
+
+        if (!formDetails.Location_Code) {
+            Swal.fire('Warning', 'Please Select Location.', 'warning');
+            isValid = false;
+        }
+
+        if (!formDetails.Requisition_Product_Group) {
+            Swal.fire('Warning', 'Please enter Requisition Product Group.', 'warning');
+            isValid = false;
+        }
+
+
+
+        if (!formDetails.PP_Planning_Category) {
+            Swal.fire('Warning', 'Please Select Planning Category.', 'warning');
+            isValid = false;
+        }
+
+
+        if (!isValid) {
+            return;
+        }
+
+        var purchaseRequisition = formDetails;
+
+        ShowProgress();
+
+        $.ajax({
+            type: "POST",
+            url: "/Purchase/SubmitPurchaseRequisition",
+            data: JSON.stringify(purchaseRequisition),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                HideProgress();
+                if (data.success) {
+                    Swal.fire('Success', 'Purchase Requisition Updated', 'success');
+                    ViewDoc(data.message);
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseText, 'warning');
+            }
+        });
+    }
+
+    function SendPurchaseReqDocForApproval(no) {
+        ShowProgress(); // Ensure this function is defined elsewhere
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            data: JSON.stringify({ Document_No: no }),
+            url: "/Purchase/SendPurchaseReqDocForApproval",
+            beforeSend: function () {
+                ShowProgress(); // Show progress before the request is sent
+            },
+            success: function (data) {
+                if (data.success) {
+                    Swal.fire({
+                        title: 'Success',
+                        text: data.message,
+                        icon: 'success',
+                        showCancelButton: false,
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            ShowProgress(); // Show progress after user confirms Swal button
+                            window.location.reload(); // Reload the page
+                        }
+                    });
+                } else {
+                    HideProgress();
+                    Swal.fire({
+                        title: 'Error',
+                        text: data.message,
+                        icon: 'error'
+                    }).then(() => {
+                        location.reload();
+                    });
+                }
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire('Error', 'There is some problem processing your request. Please try after some time.', 'error');
+            }
+        });
+
+    }
+
+    function CancelPurchaseReqApprovalRequest(no) {
+        ShowProgress(); // Ensure this function is defined elsewhere
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            data: JSON.stringify({ Document_No: no }),
+            url: "/Purchase/CancelPurchaseReqApprovalRequest",
+            beforeSend: function () {
+                ShowProgress(); // Show progress before the request is sent
+            },
+            success: function (data) {
+                if (data.success) {
+                    Swal.fire({
+                        title: 'Success',
+                        text: data.message,
+                        icon: 'success',
+                        showCancelButton: false,
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            ShowProgress(); // Show progress after user confirms Swal button
+                            window.location.reload(); // Reload the page
+                        }
+                    });
+                } else {
+                    HideProgress();
+                    Swal.fire({
+                        title: 'Error',
+                        text: data.message,
+                        icon: 'error'
+                    }).then(() => {
+                        // Reload the page when the alert is dismissed
+                        location.reload();
+                    });
+                }
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire('Error', 'There is some problem processing your request. Please try after some time.', 'error');
+                /*window.location.reload(); // Reload the page*/
+            }
+        });
+    }
+    
+    var GeneratePurchaseRequisitionReport = function (docNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ documentNumber: docNo }),
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            url: '/ExpenseRequisition/GenerateExpenseRequisitionReport',
+            success: function (data) {
+                if (data.success) {
+                    $('iframe').attr('src', "data:application/pdf;base64," + data.message);
+                    $("#myModalUnits").modal("show");
+                    HideProgress();
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                    HideProgress();
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+
+</script>

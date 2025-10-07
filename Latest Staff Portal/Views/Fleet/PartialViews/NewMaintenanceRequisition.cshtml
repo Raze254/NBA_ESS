@@ -1,0 +1,69 @@
+﻿@model Latest_Staff_Portal.ViewModel.MaintenanceRequest2
+
+@{
+    ViewBag.Title = "NewMaintenanceRequisition";
+}
+
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Vehicle Reg No", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.DropDownListFor(model => model.Vehicle_Reg_No,Model.ListOfVehicles, "Select Option",  new { @class = "form-control", @id = "Vehicle_Reg_No"  })
+            @Html.ValidationMessageFor(model => model.Vehicle_Reg_No, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Odometer Reading", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Odometer_Reading, new { htmlAttributes = new { @class = "form-control", @id = "Odometer_Reading" } })
+            @Html.ValidationMessageFor(model => model.Odometer_Reading, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+   @* <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Vendor/Dealer", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.DropDownListFor(model => model.Vendor_Dealer, Model.ListOfVendors, "Select Option", new { @class = "form-control", @id = "Vendor_Dealer" })
+            @Html.ValidationMessageFor(model => model.Vendor_Dealer, "", new { @class = "text-danger" })
+        </div>
+    </div>
+*@
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Responsible Employee", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.DropDownListFor(model => model.Responsible_Employee, Model.ListOfEmployees, "Select Option", new { @class = "form-control", @id = "Responsible_Employee" })
+            @Html.ValidationMessageFor(model => model.Responsible_Employee, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @id = "Description" } })
+            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Service", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.DropDownListFor(model => model.Service_Code, Model.ListOfServiceItem, "Select Option", new { @class = "form-control", @id = "Service_Code" })
+            @Html.ValidationMessageFor(model => model.Service_Code, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+</div>
+
+<div align="center">
+    <input type="button" class="btn btn-primary action-buttons" value="Submit Record" onclick="SubmitMaintenanceRequisition();" />
+</div>

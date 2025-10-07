@@ -1,0 +1,208 @@
+﻿@model Latest_Staff_Portal.ViewModel.Evidence
+
+<div>
+    <p>@Model.Objective</p>
+    <!-- Document Attachment Entrypoint-->
+    <div id="DivCoreValueLines" class="px-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="font-weight-bolder px-3">Attachments</h5>
+            @if ((Model.Document_Stage == "Negotiated and Agreed" || Model.Document_Stage != "Evaluated and Agreed") && Model.PAS_Stage == "Evaluation")
+            {
+                <button style="background: #162f25; color: whitesmoke; border-radius: 10px" onclick="AddAttachment();">
+                    <i class="fas fa-file-plus"></i> Add Attachments
+                </button>
+            }
+
+            
+        </div>
+        <hr />
+        <div class="px-3" id="evidenceDivAttachDocs"></div>
+    </div>
+
+    <!-- Modal View Doc -->
+    <div class="modal fade" id="evidenceModalAttachment" tabindex="-1" role="dialog" style="z-index: 1060;">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content bg-white">
+                <div class="modal-header">
+                    <h4 class="title">Attachment</h4>
+                    <button type="button" class="close" aria-label="Close" id="close-modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body d-flex justify-content-center align-items-center flex-column" id="evidenceModalAttachmentBody">
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script src="~/assets/js/toolkit.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        GetDocumentAttachments();
+    });
+
+    $('#close-modal').click(() => {
+        $('#evidenceModalAttachment').modal('hide');
+    });
+
+
+
+    var GetDocumentAttachments = function () {
+        var DocNo = `@Model.DocNo`;
+        var LineNo = `@Model.Line_No`;
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ DocNo: DocNo, LineNo: LineNo }),
+            url: "/Common/EdmsDocumentAttachmentList",
+            success: function (data) {
+                $("#evidenceDivAttachDocs").html(data);
+            },
+            error: function () {
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    };
+
+    function AddAttachment() {
+        ShowProgress();
+        $.ajax({
+            type: "GET",
+            url: "/Pas/FileAttachmentForm",
+            success: function (data) {
+                $('#evidenceModalAttachmentBody').html(data);
+                $('#evidenceModalAttachment').modal('show');
+                HideProgress();
+            },
+            error: function (xhr, status, error) {
+                Swal.fire('Error', 'Failed to load the file attachment form. Please try again.', 'error');
+                HideProgress();
+            }
+        });
+    }
+
+    var SaveAttachmentFile = function () {
+        var DocNo = `@Model.DocNo`;
+        var LineNo = '@Model.Line_No'
+        var filename; var base64String; var filetype;
+        var files = document.getElementById('pasAttachment').files;
+        if (files.length) {
+            var file = files[0];
+            if (file.size > 10000000) {
+                Swal.fire('Warning', 'Please only files less than 10MB allowed. Thanks!!', 'warning');
+            }
+            else {
+                var blob = file.slice();
+                filetype = file.type;
+                filename = file.name;
+                var reader = new FileReader();
+                reader.onloadend = function (evt) {
+                    if (evt.target.readyState == FileReader.DONE) {
+                        var cont = evt.target.result
+                        base64String = getB64Str(cont);
+                        ShowProgress();
+                        $.ajax({
+                            type: "POST",
+                            url: "/Common/SaveAttachedFile",
+                            data: JSON.stringify({ DocNo: DocNo, base64Upload: base64String, fileName: filename, Extn: filetype, TableID: 80055, module: "HRMD", documentType: "Performance", lineNo: LineNo }),
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (data) {
+                                if (data.success) {
+                                    HideProgress();
+                                    GetDocumentAttachments();
+                                    $('#evidenceModalAttachment').modal("hide");
+                                    Swal.fire('Success', data.message, 'success');
+                                }
+                                else {
+                                    Swal.fire('Warning', data.message, 'warning');
+                                    HideProgress();
+                                }
+                            },
+                            error: function (err) {
+                                HideProgress();
+                                Swal.fire('Warning', err, 'warning');
+                            }
+                        });
+                    }
+                };
+                reader.readAsArrayBuffer(blob);
+            }
+        }
+    };
+
+    function getB64Str(buffer) {
+        var binary = '';
+        var bytes = new Uint8Array(buffer);
+        var len = bytes.byteLength;
+        for (var i = 0; i < len; i++) {
+            binary += String.fromCharCode(bytes[i]);
+        }
+        return window.btoa(binary);
+    }
+
+    var ViewAttachment = function (moduleCheck, docNo, docId) {
+        $.ajaxSetup({ cache: false });
+        ShowProgress();
+
+        var viewer = $("#evidenceModalAttachmentBody");
+        viewer.empty();
+
+        $.ajax({
+            url: '/Common/GetEdmsDocuments',
+            type: "GET",
+            datatype: "json",
+            cache: false,
+            contentType: "application/json; charset=utf-8",
+            data: {
+                module: moduleCheck,
+                documentNo: docNo,
+                documentType: "Expenditure Requisition",
+                documentId: docId
+            },
+            success: function (data) {
+                if (data.success) {
+                    if (data.base64) {
+                        var mimeType = data.mimeType || 'application/pdf';
+
+                        if (mimeType.startsWith('application/pdf')) {
+                            viewer.html('<iframe src="data:' + mimeType + ';base64,' + data.base64 + '" style="width:100%; height:500px;" frameborder="0"></iframe>');
+                        } else if (mimeType.startsWith('image/')) {
+                            viewer.html('<img src="data:' + mimeType + ';base64,' + data.base64 + '" style="width:100%;"/>');
+                        } else {
+                            var blob = b64toBlob(data.base64, mimeType);
+                            var url = window.URL.createObjectURL(blob);
+                            window.open(url, '_blank');
+                        }
+                        $("#evidenceModalAttachment").modal("show");
+                    } else {
+                        window.location = '/Common/AttachmentDownload?fileName=' + data.message;
+                        Swal.fire('Success', 'Document Downloaded successfully', 'success');
+                    }
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+                HideProgress();
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Error', err.responseText || 'An error occurred', 'error');
+            }
+        });
+    };
+
+    // Ensure modal stays on top when shown
+    $('#evidenceModalAttachment').on('show.bs.modal', function () {
+        var zIndex = 1040 + (10 * $('.modal:visible').length);
+        $(this).css('z-index', zIndex);
+        setTimeout(function() {
+            $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+        }, 0);
+    });
+</script>

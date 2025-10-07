@@ -1,0 +1,238 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.PASCoreValuesLines>
+@{
+    var ActionStage = ViewBag.ActionStage;
+}
+
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 4px 8px;
+        font-size: 14px;
+    }
+
+    .text-wrap {
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+    }
+
+    .spinner-border {
+        display: none;
+        width: 1.5rem;
+        height: 1.5rem;
+        border-width: 0.2em;
+    }
+
+    .btn-spinner {
+        position: relative;
+    }
+
+        .btn-spinner .spinner-border {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+    .form-control.is-invalid {
+        border-color: #dc3545;
+    }
+
+        .form-control.is-invalid:focus {
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+        }
+
+    .core-value-cell, .appraisee-comments-cell, .appraisers-comments-cell, .score-cell {
+        max-width: 30vw;
+        overflow-wrap: break-word;
+    }
+
+    .appraisee-comments-cell, .appraisers-comments-cell {
+        max-width: 80vw;
+    }
+
+    .text-end {
+        text-align: right;
+    }
+</style>
+
+<div>
+    <div class="col-xl-12 col-sm-12 col-12">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="">
+                        <div class="table-responsive">
+                            <table class="datatable table table-striped table-hover table-bordered" id="CoreValuesLines">
+                                <thead>
+                                    <tr style="background-color: black;">
+                                        @if (ViewBag.PASDocStage == "Evaluation" && ActionStage != "Evaluated and Agreed")
+                                        {
+                                            <th class="text-center">Action</th>
+                                        }
+                                        <th>S.No</th>
+                                        <th>Behavioural Expectation</th>
+                                        <th>Key Performance Indicator</th>
+                                        <th>Scale 1-5</th>
+                                        <th class="text-wrap" style="max-width: 100px">Weight (%)</th>
+                                        <th class="text-wrap" style="max-width: 80px">Target (%)</th>
+                                        <th class="text-wrap" style="width: 120px;">Self Assessment</th>
+                                        <th class="text-wrap" style="width: 120px;">Joint /Agreed Achievement</th>
+                                        <th class="text-wrap" style="width: 120px;">Weighted Score</th>
+                                        @if (ViewBag.PASDocStage == "Evaluation")
+                                        {
+                                            <th class="text-wrap" style="width: 200px;">Appraise Comments</th>
+                                            <th class="text-wrap" style="width: 200px;">Appraiser's Comments</th>
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model != null && Model.Any())
+                                    {
+                                        int index = 1;
+                                        foreach (var item in Model)
+                                        {
+                                            <tr data-lineno="@item.Line_No"
+                                                data-corevalue="@item.Core_Value"
+                                                data-score="@item.Score"
+                                                data-appraiseecomments="@item.Appraisee_Comments"
+                                                data-appraiserscomments="@item.Appraisers_Comments">
+
+                                                @if (ViewBag.PASDocStage == "Evaluation" && ActionStage != "Evaluated and Agreed")
+                                                {
+                                                    <td class="text-end">
+                                                        <div class="d-inline-block">
+                                                            <a class="btn btn-success BtnPadding btn-spinner" href="#"
+                                                               onclick="EditPASCoreLine('@item.DocNo', '@item.Strategic_Plan_ID', '@item.Line_No', '@item.Core_Value', '@item.Appraisee_Comments', '@item.Appraisers_Comments', '@item.Joint_Assessment', '@item.Self_Assessment','@item.Behavioural_expectation');"
+                                                               title="Edit">
+                                                                <i class="fas fa-edit"></i> Edit
+                                                                <div class="spinner-border text-light" role="status"></div>
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                }
+
+                                                <td>@index</td>
+                                                <td class="text-wrap core-value-cell">@Html.DisplayFor(modelItem => item.Behavioural_expectation)</td>
+                                                <td class="text-wrap core-value-cell">@Html.DisplayFor(modelItem => item.Core_Value)</td>
+                                                <td>Rating</td>
+                                                <td>4</td>
+                                                <td>5</td>
+                                                <td class="text-wrap score-cell">@Html.DisplayFor(modelItem => item.Self_Assessment)</td>
+                                                <td class="text-wrap score-cell">@Html.DisplayFor(modelItem => item.Joint_Assessment)</td>
+                                                <td class="text-wrap score-cell">@Html.DisplayFor(modelItem => item.Score)</td>
+
+                                                @if (ViewBag.PASDocStage == "Evaluation")
+                                                {
+                                                    <td class="text-wrap appraisee-comments-cell">@Html.DisplayFor(modelItem => item.Appraisee_Comments)</td>
+                                                    <td class="text-wrap appraisers-comments-cell">@Html.DisplayFor(modelItem => item.Appraisers_Comments)</td>
+                                                }
+                                            </tr>
+                                            index++;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td colspan="10" class="text-center text-danger">No Records Found</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr style="background-color: black; color: white;">
+                                        <td colspan="3" class="text-end">Total Weight -----------</td>
+                                        <td class="text-start"><span class="badge bg-light text-dark">20</span></td>
+                                        <td colspan="6"></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var table = $("#CoreValuesLines").DataTable({
+            lengthChange: true,
+            order: [[1, 'asc']],
+            lengthMenu: [5, 10, 25, 50, 100],
+            "bDestroy": true
+        });
+    });
+
+    function DeleteCoreLine(DocNo, Line_No, Strategic_Plan_ID) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                ShowProgress();
+                $.ajax({
+                    type: "POST",
+                    url: "/Pas/DeleteCoreValuesLine",
+                    data: { DocNo: DocNo, Line_No: Line_No, Strategic_Plan_ID: Strategic_Plan_ID },
+                    success: function (data) {
+                        Swal.fire("Deleted", "Record deleted successfully", "success");
+                        HideProgress();
+                    },
+                    error: function (error) {
+                        Swal.fire("Error", "An error occurred while fetching record", "error");
+                    }
+                });
+            }
+        });
+    }
+
+    function EditPASCoreLine(DocNo, Strategic_Plan_ID, Line_No, Core_Value, Appraisee_Comments, Appraiser_Comment, Joint_Assessment, Self_Assessment, Behavioural_Expectation) {
+        var lineItems = {
+            Line_No: Line_No,
+            Core_Value: Core_Value,
+            Appraisee_Comments: Appraisee_Comments,
+            Appraisers_Comments: Appraiser_Comment,
+            DocNo: DocNo,
+            Strategic_Plan_ID: Strategic_Plan_ID,
+            Joint_Assessment: Joint_Assessment,
+            Self_Assessment: Self_Assessment,
+            Behavioural_expectation: Behavioural_Expectation,
+            capability: '@ViewBag.Capable',
+            stage: '@ActionStage'
+        }
+        ShowProgress();
+
+        $.ajax({
+            type: "POST",
+            url: "/Pas/UpdateCoreValuesLine",
+            data: JSON.stringify(lineItems),
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $('#modalBody').html(data);
+                $('#myModal').find('.modal-title').html("Edit Core Values");
+                $('#myModal').modal('show');
+                HideProgress();
+                LoadPASCoreValuesLines();
+            },
+            error: function (error) {
+                Swal.fire("Error", "An error occurred while fetching record", "error");
+                HideProgress();
+            }
+        });
+    }
+</script>

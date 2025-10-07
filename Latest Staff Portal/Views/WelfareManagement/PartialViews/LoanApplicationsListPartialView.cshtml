@@ -1,0 +1,61 @@
+﻿@model List<Latest_Staff_Portal.ViewModel.LoanApplicationsLIst>
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+        <tr>
+            <th>Action</th>
+            <th>Loan No</th>
+            <th>Loan Product Type</th>
+            <th>Employee Id</th>
+            <th>Employee Name</th>
+            <th>Description</th>
+            <th>Application Date</th>
+            <th>Amount Requested</th>
+            <th>Approved Amount</th>
+            <th>Issued Date</th>
+            <th>Instalment</th>
+            <th>Repayment</th>
+            <th>Flat Rate Principal</th>
+            <th>Flat Rate Interest</th>
+            <th>Interest Rate</th>
+            <th>Interest Calculation Method</th>
+        </tr>
+        </thead>
+        <tbody>
+        @if (Model.Count() > 0)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <input type="button" onclick="viewCard('@item.LoanNo');" style="background: #162f25; color:whitesmoke; border-radius:10px" value="Select"/>
+                    </td>
+                    <td>@item.LoanNo</td>
+                    <td>@item.LoanProductType</td>
+                    <td>@item.Employee2</td>
+                    <td>@item.EmployeeName</td>
+                    <td>@item.Description</td>
+                    <td>@item.ApplicationDate</td>
+                    <td>@item.AmountRequested</td>
+                    <td>@item.ApprovedAmount</td>
+                    <td>@item.IssuedDate</td>
+                    <td>@item.Instalment</td>
+                    <td>@item.Repayment</td>
+                    <td>@item.FlatRatePrincipal</td>
+                    <td>@item.FlatRateInterest</td>
+                    <td>@item.InterestRate</td>
+                    <td>@item.InterestCalculationMethod</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="17" style="color:red">
+                    No Records Found
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

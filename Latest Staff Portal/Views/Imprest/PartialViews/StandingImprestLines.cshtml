@@ -1,0 +1,50 @@
+﻿@using System.Globalization
+@model IEnumerable<Latest_Staff_Portal.ViewModel.StandingImprestLine>
+<div class="table-responsive">
+    <table id="linesStanding" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th>Line No</th>
+                <th>Account No</th>
+                <th>Account Name</th>
+                <th>Description</th>
+                <th>Amount</th>
+                <th>Payee Bank Code</th>
+                <th>Payee Bank Name</th>
+                <th>Payee Bank Branch Code</th>
+                <th>Payee Bank Branch Name</th>
+                <th>Payee Bank Account No</th>
+                <th>Payee Bank Acc Name</th>
+                <th>Validated Bank Account</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.LineNo</td>
+                        <td>@item.AccountNo</td>
+                        <td>@item.AccountName</td>
+                        <td>@item.Description</td>
+                        <td>@item.Amount.ToString("C", new CultureInfo("sw-KE"))</td>
+                        <td>@item.PayeeBankCode</td>
+                        <td>@item.PayeeBankName</td>
+                        <td>@item.PayeeBankBranchCode</td>
+                        <td>@item.PayeeBankBranchName</td>
+                        <td>@item.PayeeBankAccountNo</td>
+                        <td>@item.PayeeBankAccName</td>
+                        <td>@item.ValidatedBankName</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    $("#linesStanding").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100]
+    });
+</script>

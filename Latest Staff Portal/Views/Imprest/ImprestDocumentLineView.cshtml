@@ -1,0 +1,100 @@
+﻿@model Latest_Staff_Portal.ViewModel.ImprestLinesList
+<div class="table-responsive">
+    <table class="table table-centered table-nowrap" id="ImpLines">
+        <thead>
+        <tr>
+            <th>Advance Type</th>
+            <th>Account No</th>
+            <th>Account Name</th>
+            <th>Description</th>
+            <th>Destination</th>
+            <th style="text-align:center">No. Of Days</th>
+            <th style="text-align:center">Rate (Amount)</th>
+            <th style="text-align:center">Total Amount</th>
+            @*<th style="text-align:center">Amount(LCY)</th>*@
+            @if (Model.Status == "Pending")
+            {
+                <th class="tdAction">Action</th>
+            }
+        </tr>
+        </thead>
+        <tbody>
+        @{
+            if (Model.ListOfImprestLines != null && Model.ListOfImprestLines.Any())
+            {
+                foreach (var item in Model.ListOfImprestLines)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AdvanceType)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Item)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ItemDesc)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ItemDesc2)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Desination)
+                        </td>
+                        <td style="text-align:center">
+                            @Html.DisplayFor(modelItem => item.Quantity)
+                        </td>
+                        <td style="text-align:center">
+                            @Html.DisplayFor(modelItem => item.UnitAmount)
+                        </td>
+                        <td style="text-align:center">
+                            @Html.DisplayFor(modelItem => item.Amount)
+                        </td>
+                        @*<td style="text-align:center">
+                                    @Html.DisplayFor(modelItem => item.AmountLCY)
+                                </td>*@
+                        @if (Model.Status == "Pending")
+                        {
+                            <td style="text-align:right" class="tdAction">
+                                <a href="javascript:void(0);" class="mr-3 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" onclick="EditItem('@item.DocNo','@item.LnNo');">
+                                    <i class="mdi mdi-pencil font-size-16"></i>
+                                </a>
+                                <a href="javascript:void(0);" class="text-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" onclick="RemoveItem('@item.DocNo','@item.LnNo');">
+                                    <i class="mdi mdi-close font-size-16"></i>
+                                </a>
+                            </td>
+                        }
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="8" style="color:red">
+                        No Records Found
+                    </td>
+                </tr>
+            }
+        }
+        </tbody>
+        <tfoot>
+        <tr class="HideLineButton">
+            <td class="text-right" colspan="8">
+                <input type="button" value="Add Item Line" class="btn btn-danger BtnPadding" onclick="AddImprestLines();"/>
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var status = '@Model.Status';
+        if (status == "Pending") {
+            $(".tdAction").show();
+            $(".HideLineButton").show();
+        }
+        else {
+            $(".tdAction").hide();
+            $(".HideLineButton").hide();
+        }
+    });
+</script>

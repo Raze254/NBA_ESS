@@ -1,0 +1,113 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.WorkTicket>
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+        <tr>
+            <th>
+                Action
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Etag)
+                </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.TicketNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VehicleRegistrationNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateOfRequest)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MonthDate)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Department)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ClosedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateClosed)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateCreated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TimeCreated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalKmCovered)
+            </th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @if (Model.Count() > 0)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <input type="button" onclick="SelectedRow('@item.TicketNumber', '@item.Status');" style="background: #162f25; color:whitesmoke; border-radius:10px" value="Select"/>
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TicketNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.VehicleRegistrationNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateOfRequest)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MonthDate)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Department)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ClosedBy)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateClosed)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreatedBy)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateCreated)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TimeCreated)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TotalKmCovered)
+                    </td>
+
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6" style="color:red">
+                    No Records Found
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

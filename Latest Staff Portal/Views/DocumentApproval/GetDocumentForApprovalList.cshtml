@@ -1,0 +1,1149 @@
+﻿@model Latest_Staff_Portal.ViewModel.DocumentsForApprovalList
+@{
+    ViewBag.Title = "LoadDocumentForApprovalListTest";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+<style>
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 7px;
+        font-size: 12px;
+    }
+
+    [data-theme="dark"] .list-group {
+        color: #f4f4f4;
+        background-color: #ccc
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script src="~/SiteJS/SideBarLink.js"></script>
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#" onclick="BackToApprovalSummeryList();">Open Documents Approval List</a>
+                </li>
+                <li class="breadcrumb-item active">@Model.Status @Model.Title List</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<hr /><br />
+<div class="card">
+    <div class="card-title">
+
+        @if (Model.Title == "Leave Requisition")
+        {
+            <div class="mt-3 mr-3" style="text-align: right; ">
+                <button onclick="EmployeesApprovedLeaveLink()" class="btn btn-primary action-buttons2">Leave Approved</button>
+                <button onclick="EmployeesOnLeaveLink()" class="btn btn-primary action-buttons2">Employees on Leave</button>
+                @* <a href="/ViewDocument/LeaveStatement" class="btn btn-primary action-buttons2">Download Leave Balances</a>
+                    <button href="#" class="btn btn-primary action-buttons2" onclick="ApprovedDocLink('Approved');">My Approved Documents</button>
+                    <button href="#" class="btn btn-primary action-buttons2" onclick="RejectedDocLink('Rejected');">My Rejected Documents</button>*@
+            </div>
+        }
+
+    </div>
+    <div class="card-body">
+        <div id="divApprovalDocList"></div>
+    </div>
+</div>
+
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <label id="labelF"></label>
+                </h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="HiddenDocNo" />
+                <input type="hidden" id="HiddenSequence" />
+                <input type="hidden" id="HiddenEntryNo" />
+                <div class="mb-5" id="divDocButtons">
+                    <a href="#" onclick="approveComments();" class="btn btn-primary action-buttons2">Approve Document</a> |
+                    <a href="#" onclick="rejectComments();" class="btn btn-danger btn-sm" id="RejectDoc">Reject Document</a>
+                </div>
+                <div id="modalBody"></div>
+                <hr style="border:1px solid black" />
+                @*<div class="row">
+                    <div class="col-md-12">
+                        <b>Attachments</b>
+                        <div id="divAttachDocs"></div>
+                    </div>
+                </div>
+                <hr />*@
+                <b>Previous Approval Trail</b>
+                <div id="divApprovalTrail"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*//////////////////////Approval Modal////////////////////////////*@
+<div class="modal fade" id="myModalApproveComments" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Approval Comments</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodyApprove">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <b>Enter Approval Comments</b>
+                            <textarea class="form-control" id="txtApproveComments"></textarea>
+                        </div>
+                        <hr />
+                        <div align="center">
+                            <input type="button" class="btn btn-primary action-buttons2" onclick="ApproveDoc();" value="Approve Document" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@*//////////////////////Rejection Modal////////////////////////////*@
+<div class="modal fade" id="myModalRejectComments" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Comments</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodyReject">
+                <div class="row">
+                    <div class="col-md-12">
+                        <b>Give reason for rejecting this document</b>
+                        <textarea class="form-control" id="txtComments"></textarea>
+                        <hr />
+                        <div align="center">
+                            <input type="button" class="btn btn-danger" onclick="RejectedDoc();" value="Reject Document" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Disclaimer Modal -->
+<div class="modal fade" id="disclaimerModal" tabindex="-1" aria-labelledby="disclaimerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="disclaimerModalLabel">Terms and Conditions</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    I certify that I have reviewed the details of this transaction and confirm its accuracy and completeness in accordance with the established laws, policies and procedures. I acknowledge my responsibility for authorizing only valid and verified transactions. I understand that non-compliance with the relevant policies may result in disciplinary and/or legal action. By approving this file, I accept accountability for the integrity and confidentiality of the information processed.
+                </p>
+                <!-- Add any specific disclaimer text here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Reject</button>
+                <button type="button" class="btn btn-success" id="acceptDisclaimerBtn">Accept</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- OTP Modal -->
+<div class="modal fade" id="otpModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Enter OTP</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="otpInput" class="form-control" placeholder="Enter OTP" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="confirmOtpAndApproveDocument()"> Confirm</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal fade" id="myModalUnits" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title" id="labelZ"></h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalUnitsBody">
+                <iframe id="iframe" style="width:100%;height:450px"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal fade" id="myModalCts" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title" id="labelL"></h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalCts">
+                <iframe id="iframe" style="width:100%;height:450px"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal fade" id="myModalSource" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title" id="labelT"></h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalUnitsSource">
+                <iframe id="iframe" style="width:100%;height:450px"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal View Doc////////////////////////////*@
+<div class="modal fade" id="myModalAttachment" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Attachment</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalAttachmentBody" style="width:100%;height:450px">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script src="~/assets/js/pdfobject.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadDocumentApprovalList('@Model.TableID','@Model.Status','@Model.DocType','@Model.Title');
+        let scrollTopPosition;
+
+        $('#myModalUnits').on('show.bs.modal', function () {
+            scrollTopPosition = $('#myModal .modal-body').scrollTop();
+            $('#myModal').css('opacity', '0');
+        });
+        $('#myModalCts').on('show.bs.modal', function () {
+            scrollTopPosition = $('#myModal .modal-body').scrollTop();
+            $('#myModal').css('opacity', '0');
+        });
+        $('#myModalSource').on('show.bs.modal', function () {
+            scrollTopPosition = $('#myModal .modal-body').scrollTop();
+            $('#myModal').css('opacity', '0');
+        });
+        $('#disclaimerModal').on('show.bs.modal', function () {
+            scrollTopPosition = $('#myModal .modal-body').scrollTop();
+            $('#myModal').css('opacity', '0');
+        });
+        $('#otpModal').on('hidden.bs.modal', function () {
+            $('#myModal').css('opacity', '1');
+            $('#myModal .modal-body').scrollTop(scrollTopPosition);
+            if ($('.modal:visible').length) {
+                $('body').addClass('modal-open');
+            }
+        });
+        $('#myModalSource').on('hidden.bs.modal', function () {
+            $('#myModal').css('opacity', '1');
+            $('#myModal .modal-body').scrollTop(scrollTopPosition);
+            if ($('.modal:v3isible').length) {
+                $('body').addClass('modal-open');
+            }
+        });
+        $('#myModalUnits').on('hidden.bs.modal', function () {
+            $('#myModal').css('opacity', '1');
+            $('#myModal .modal-body').scrollTop(scrollTopPosition);
+            if ($('.modal:visible').length) {
+                $('body').addClass('modal-open');
+            }
+        });
+        $('#myModalCts').on('hidden.bs.modal', function () {
+            $('#myModal').css('opacity', '1');
+            $('#myModal .modal-body').scrollTop(scrollTopPosition);
+            if ($('.modal:visible').length) {
+                $('body').addClass('modal-open');
+            }
+        });
+        $('#disclaimerModal').on('hidden.bs.modal', function () {
+            $('.modal-backdrop').remove();
+            $('body').removeClass('modal-open');
+        });
+    });
+    var LoadDocumentApprovalList = function (TableID, Status, DocType, Title) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ TbID: TableID, Status: Status, DocType: DocType, Title: Title }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: "/DocumentApproval/LoadDocumentForApprovalList",
+            success: function (data) {
+                $("#divApprovalDocList").html(data);
+                HideProgress();
+            },
+            error: function () {
+                Swal.fire("There is some problem to process your request. Please try after some time");
+                HideProgress();
+            }
+        });
+    }
+    var ViewDoc = function (TableID, DocNo, Sequence, EntryNo) {
+
+        if (DocNo == "") {
+            Swal.fire('Warning', "Document Number cannot be empty", 'warning');
+            return;
+        }
+        else if (EntryNo == "") {
+            Swal.fire('Warning', "Entry Number cannot be empty", 'warning');
+            return;
+        }
+        else {
+            $("#labelF").text('@Model.Title' + "(" + DocNo+")");
+            $("#HiddenDocNo").val(DocNo);
+            $("#HiddenSequence").val(Sequence);
+            $("#HiddenEntryNo").val(EntryNo);
+            if ('@Model.Status' == "Open") {
+                $("#divDocButtons").show();
+            }
+            else {
+                $("#divDocButtons").hide();
+            }
+            ShowProgress();
+            var url;
+            var DocType = '@Model.DocType';
+            var Title = '@Model.Title';
+            var RecordID;
+            if (TableID == "69205") {
+                url = "/DocumentApproval/LeaveReqDocApprovalDetails";
+                RecordID = "HR Leave Application: " + DocNo;
+            }
+            if ((TableID == "50029") && (Title =="Re-Imbursement")) {
+                url = "/DocumentApproval/LeaveReimbursementDocApprovalDetails";
+                RecordID = "HR Leave Allocation Request: " + DocNo;
+            }
+            if ((TableID == "50029") && (Title == "Time Off Lie")) {
+                url = "/DocumentApproval/LeaveCarryForward";
+                RecordID = "HR Leave Allocation Request: " + DocNo;
+            }
+            if ((TableID == "50029") && (Title == "Carry Forward")) {
+                url = "/DocumentApproval/LeaveCarryForward";
+                RecordID = "HR Leave Allocation Request: " + DocNo;
+            }
+            if (TableID == "38" && Title == "Purchase Requisition") {
+                url = "/DocumentApproval/PurchaseRequisitionsDocumentView";
+                RecordID = "Purchase Header: Quote," + DocNo;
+            }
+            if (TableID == "38" && Title == "LPO Requisition") {
+                url = "/DocumentApproval/PurchaseOrdersDocumentView";
+            }
+            if (TableID == "38") {
+                url = "/DocumentApproval/StoreRequisitionsDocumentView";
+                RecordID = "Store Requistion Header: " + DocNo;
+            }
+
+            if (TableID == "57008" && Title == "Imprest Memo") {  //Imprest Memo
+                url = "/DocumentApproval/ImprestMemoDocumentView";
+                RecordID = "Imprest Memo Header: " + DocNo;
+            }
+            if (TableID == "57008" && Title =="Imprest Requisition") { //Imprest warrant
+                /*url = "/DocumentApproval/ImprestReqDocApprovalDetails";*/
+                url = "/DocumentApproval/ImprestWarrantDocumentDetails";
+                RecordID = "Imprest Header: " + DocNo;
+            }
+
+            if (TableID == "57000" && Title == "Imprest Surrender Requisition") { //Imprest surrender
+                url = "/DocumentApproval/ImprestSurrenderDocumentView";
+                RecordID = "Imprest Surrender Header: " + DocNo;
+            }
+
+            if (TableID == "57000" && Title =="Staff Claim Requisition") {
+                url = "/DocumentApproval/StaffClaimDocumentView";
+                RecordID = "Staff Claims Header: " + DocNo;
+            }
+            if (TableID == "57000" && Title == "Petty Cash") {
+                url = "/DocumentApproval/ViewPettyCashDocumentView";
+                RecordID = "Petty Cash Voucher Header: " + DocNo;
+            }
+
+            if (TableID == "57000" && Title == "Petty Cash Surrender") {
+                url = "/DocumentApproval/ViewPettyCashSurrenderDocumentView";
+                RecordID = "Petty Cash Voucher Header: " + DocNo;
+            }
+
+
+            if (TableID == "59003") {
+                url = "/DocumentApproval/TransportRequisitionDocumentView";
+                RecordID = "FLT-Transport Requisition: " + DocNo;
+            }
+            if (TableID == "70135040") {
+                url = "/DocumentApproval/TrainingReqDocApprovalDetails";
+                RecordID = "HR Training Applications: " + DocNo;
+            }
+            if (TableID == "70135171") {
+                url = "/DocumentApproval/PVReqDocApprovalDetails";
+                RecordID = "Payments Header: " + DocNo;
+            }
+            if (TableID == "5740") {
+                url = "/DocumentApproval/TransferOrderDocApprovalDetails";
+            }
+            if (TableID == "70135057") {
+                url = "/DocumentApproval/TrainingNeedsDocumentDetails";
+                RecordID = "HR Training Needs Analysis: " + DocNo;
+            }
+         
+            if ((TableID == "70135140") && (DocNo.includes("FUEL")))
+            {
+                url = "/DocumentApproval/FuelDocumentDetails";
+                RecordID = "FLT-Fuel & Maintenance Req.: " + DocNo;
+            }
+            if ((TableID == "59005")/* && (DocNo.includes("MENT"))*/)
+            {
+                url = "/DocumentApproval/MaintenanceRequisitionDocumentView";
+                RecordID = "FLT-Fuel & Maintenance Req.: " + DocNo;
+            }
+
+            if (TableID == "69055") {
+                url = "/DocumentApproval/TransferDocumentDetails";
+            }
+
+            if (TableID == "69217") {
+                url = "/DocumentApproval/LeavePlannerDocument";
+            }
+            if (TableID == "69011") {
+                url = "/DocumentApproval/LoanApprovalDocument";
+            }
+            if (TableID == "50110") {
+                url = "/DocumentApproval/ExpenseRequisitionDocument";
+            }
+
+
+            if (TableID == "69220") {
+                url = "/DocumentApproval/TrainingRequisitionDocument";
+            }
+
+            if (TableID == "50227") {
+                url = "/DocumentApproval/ViewLabSampleManagementDocument";
+            }
+            
+
+            $.ajax({
+                async: true,
+                type: "POST",
+                datatype: "json",
+                data: JSON.stringify({
+                    TableID: TableID,
+                    DocNo: DocNo,
+                    Sequence: Sequence,
+                    Title: Title
+                }),
+                contentType: "application/json; charset = utf-8",
+                processData: false,
+                url: url,
+                success: function (data) {
+                    HideProgress();
+                    LoadApprovalTrail(TableID, DocNo, DocType);
+                    $("#modalBody").html(data);
+                    $("#myModal").modal("show");
+                },
+                error: function (err) {
+                    HideProgress();
+                    Swal.fire('Warning', err, 'warning');
+                }
+            });
+        }
+    }
+    var LoadApprovalTrail = function (TableID, DocNo, DocType) {
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ TableID: TableID, DocNo: DocNo, DocType: DocType }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: "/DocumentApproval/PreviousApprovalTrail",
+            success: function (data) {
+                $("#divApprovalTrail").html(data);
+            },
+            error: function () {
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+    function sendOtp(documentNo, tableID) {
+        return new Promise(function (resolve, reject) {
+            $.ajax({
+                async: true,
+                type: "POST",
+                datatype: "json",
+                data: JSON.stringify({ DocNo: documentNo, tableId: tableID, otpType:2 }),
+                contentType: "application/json; charset=utf-8",
+                processData: false,
+                url: '/DocumentApproval/GenerateApprovalOtp',
+                success: function (data) {
+                    if (data.success) {
+                        $('#otpModal').modal('show');
+                        resolve();
+                    } else {
+                        reject(data.message);
+                    }
+                },
+                error: function (err) {
+                    reject(err);
+                }
+            });
+        });
+    }
+
+    // Function to validate OTP and return a Promise
+    function validateOtp(enteredOTP) {
+        return new Promise(function (resolve, reject) {
+            $.ajax({
+                async: true,
+                type: "POST",
+                datatype: "json",
+                data: JSON.stringify({ enteredOtp: enteredOTP }),
+                contentType: "application/json; charset=utf-8",
+                processData: false,
+                url: '/DocumentApproval/ValidateApprovalOtp',
+                success: function (otpData) {
+                    if (otpData.success) {
+                         resolve();
+                    } else {
+                        reject("Invalid OTP");
+                    }
+                },
+                error: function (err) {
+                    reject(err);
+                }
+            });
+        });
+    }
+
+
+    var approveComments = function () {
+        $("#myModal").modal("hide");
+        $("#myModalApproveComments").modal("show");
+    }
+
+
+
+
+    var ApproveDoc = function () {
+        var DocNo = $("#HiddenDocNo").val();
+        var entryNo = $("#HiddenEntryNo").val();
+        var SeqNo = $("#HiddenSequence").val();
+        var comments = $("#txtApproveComments").val();
+        var TBID = '@Model.TableID';
+
+
+
+        if (DocNo == "") {
+            Swal.fire('Warning', "Document Number cannot be empty", 'warning');
+            return;
+        }
+        if (entryNo == "") {
+            Swal.fire('Warning', "Document Entry Number cannot be empty", 'warning');
+            return;
+        }
+
+         Swal.fire({
+        title: 'Are you sure?',
+        text: "You want to approve this document!",
+        //icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, Approve it!'
+        }).then((result) => {
+            if (result.value) {
+                ShowProgress();
+
+               @* var handleOtpApproval = function () {
+                    sendOtp(DocNo,'@Model.TableID').then(function () {
+
+                    }).catch(function (error) {
+                        Swal.fire('Error', error, 'error');
+                    });
+                };*@
+
+                switch ('@Model.TableID') {
+                    case "59003":
+                        var driver = $("#ddlDriver").children("option:selected").val();
+                        var Vehicle = $("#ddlVehicle").children("option:selected").val();
+                        if (driver == "") {
+                            Swal.fire('Warning', "Select driver", 'warning');
+                            HideProgress();
+                            return;
+                        }
+                        if (Vehicle == "") {
+                            Swal.fire('Warning', "Select Vehicle", 'warning');
+                            HideProgress();
+                            return;
+                        }
+                        $.ajax({
+                            async: true,
+                            type: "POST",
+                            datatype: "json",
+                            data: JSON.stringify({ DocNo: DocNo, Driver: driver, Vehicle: Vehicle }),
+                            contentType: "application/json; charset=utf-8",
+                            processData: false,
+                            url: '/DocumentApproval/AssignDriverVehicle',
+                            success: function (data) {
+                                HideProgress();
+                                if (data.Redirect == true) {
+                                    if (data.success == false) {
+                                        Swal.fire('Error', data.message, 'error');
+                                    } else {
+                                        window.location = data.message;
+                                    }
+                                } else {
+                                    window.location = data.message;
+                                }
+                            },
+                            error: function (err) {
+                                HideProgress();
+                                Swal.fire('Warning', err, 'warning');
+                                
+                            }
+                        });
+                        break;
+                    /*case "57000":
+                    case "57018":
+                        $('#disclaimerModal').modal('show');
+
+                        // Handle disclaimer acceptance
+                        $('#acceptDisclaimerBtn').on('click', function () {
+                            // Close the disclaimer modal
+                            $('#disclaimerModal').modal('hide');
+
+                            // Proceed with OTP handling
+                            //handleOtpApproval();
+                        });
+                        break;*/
+                    case "69055":
+                        var HOSRecommend = $("#ddlHOSRecommend").children("option:selected").val();
+                        var HOSRemarks = $("#txtHOSRecommend").val();
+                        var MobHRecommend = $("#ddlHODRecommend").children("option:selected").val();
+                        var MobRecommend = $("#ddlMobilityRecommend").children("option:selected").val();
+                        var DirRecomend = $("#TxtDirectorRecommendation").children("option:selected").val();
+
+                        if (HOSRecommend == "") {
+                            Swal.fire('Warning', "Give HOS Recommendation", 'warning');
+                            HideProgress();
+                            return;
+                        }
+                        $.ajax({
+                            async: true,
+                            type: "POST",
+                            datatype: "json",
+                            data: JSON.stringify({ DocNo: DocNo, HOSRecommend: HOSRecommend, HOSComments: HOSRemarks, MobilityRecommend: MobRecommend, HODMobility: MobHRecommend, DirectorsComments: DirRecomend }),
+                            contentType: "application/json; charset=utf-8",
+                            processData: false,
+                            url: '/DocumentApproval/UpdateMobility',
+                            success: function (data) {
+                                HideProgress();
+                                if (data.Redirect == true) {
+                                    if (data.success == false) {
+                                        Swal.fire('Error', data.message, 'error');
+                                    } else {
+                                        window.location = data.message;
+                                    }
+                                } else {
+                                    window.location = data.message;
+                                }
+
+                            },
+                            error: function (err) {
+                                Swal.fire('Warning', err, 'warning');
+                                HideProgress();
+                            }
+                        });
+                        break;
+                    case "50029":
+                        var Days = $("#txtDaystoReimburse").val();
+                        if (Days == "") {
+                            Swal.fire('Warning', "Kindly Enter the Days Approved", 'warning');
+                            HideProgress();
+                            return;
+                        }
+                        $.ajax({
+                            async: true,
+                            type: "POST",
+                            datatype: "json",
+                            contentType: "application/json; charset=utf-8",
+                            processData: false,
+                            url: '/DocumentApproval/ApproveLeaveAllocationDays',
+                            success: function (data) {
+                                HideProgress();
+                                if (data.Redirect == true) {
+                                    if (data.success == false) {
+                                        Swal.fire('Error', data.message, 'error');
+                                    } else {
+                                        window.location = data.message;
+                                    }
+                                } else {
+                                    window.location = data.message;
+                                }
+                            },
+                            error: function (err) {
+                                Swal.fire('Warning', err, 'warning');
+                                HideProgress();
+                            }
+                        });
+                        break;
+                    case "69011":
+                        var HRComments = $("#txtHrComment").val();
+                        var DirectorsComments = $("#DirectorsComment").val();
+                        if (HRComments == "") {
+                            Swal.fire('Warning', "Kindly Enter the Salaries Comments", 'warning');
+                            HideProgress();
+                            return;
+                        }
+                        $.ajax({
+                            async: true,
+                            type: "POST",
+                            datatype: "json",
+                            data: JSON.stringify({ DocNo: DocNo, HRComments: HRComments, DirectorsComments: DirectorsComments }),
+                            contentType: "application/json; charset=utf-8",
+                            processData: false,
+                            url: '/DocumentApproval/AddLoanApprovalComments',
+                            success: function (data) {
+                                if (data.Redirect == true) {
+                                    if (data.success == false) {
+                                        Swal.fire('Error', data.message, 'error');
+                                    }
+                                }
+                                HideProgress();
+                            },
+                            error: function (err) {
+                                Swal.fire('Warning', err, 'warning');
+                                HideProgress();
+                            }
+                        });
+                        break;
+                    default:
+
+                        $.ajax({
+                            async: true,
+                            type: "POST",
+                            datatype: "json",
+                            data: JSON.stringify({ DocNo: DocNo, EntryNo: entryNo, TBID: TBID,  Comments: comments, SeqNo: SeqNo}),
+                            contentType: "application/json; charset=utf-8",
+                            processData: false,
+                            url: '/DocumentApproval/ApproveDocument',
+                            success: function (data) {
+                                HideProgress();
+                                if (data.success) {
+                                    if (data.Redirect == true) {
+                                        $("#myModal").modal("hide");
+                                        LoadDocumentApprovalList('@Model.TableID', 'Open');
+                                        Swal.fire('Success', "Document successfully approved", 'success')
+                                            .then((result) => {
+                                                if (result.isConfirmed) {
+                                                    window.location.reload();
+                                                }
+                                            });
+
+
+                                    } else {
+                                        window.location = data.message;
+                                    }
+                                } else {
+                                    Swal.fire('Error', data.message, 'error');
+                                }
+        
+                            },
+                            error: function (err) {
+                                Swal.fire('Warning', err, 'warning');
+                                HideProgress();
+                            }
+                        });
+                        break;
+                }
+            } else {
+                HideProgress();
+                Swal.fire('Cancelled', 'Document not approved', 'error');
+            }
+        });
+    }
+
+    function confirmOtpAndApproveDocument() {
+        var docNo = $("#HiddenDocNo").val();
+        var entryNo = $("#HiddenEntryNo").val();
+        // Get the entered OTP value
+        var enteredOtp = $('#otpInput').val();
+
+        // Check if the OTP is empty
+        if (enteredOtp === "") {
+            Swal.fire('Warning', "Please enter the OTP", 'warning');
+            return;
+        }
+
+        // Validate the OTP
+        validateOtp(enteredOtp).then(function () {
+            // If OTP is valid, proceed to approve the document
+            $.ajax({
+                async: true,
+                type: "POST",
+                datatype: "json",
+                data: JSON.stringify({ DocNo: docNo, EntryNo: entryNo }),
+                contentType: "application/json; charset=utf-8",
+                processData: false,
+                url: '/DocumentApproval/ApproveDocument',
+                success: function (data) {
+                    if (data.success) {
+                        // Hide the OTP modal and refresh the document approval list
+                        $("#otpModal").modal("hide");
+                        $("#myModal").modal("hide");
+                        LoadDocumentApprovalList('@Model.TableID', 'Open');
+                        Swal.fire('Success', data.message, 'success');
+                    } else {
+                        Swal.fire('Error', data.message, 'error');
+                    }
+                    //HideProgress();
+                },
+                error: function (err) {
+                    Swal.fire('Warning', err, 'warning');
+                    //HideProgress();
+                }
+            });
+        }).catch(function (error) {
+            Swal.fire('Error', error, 'error');
+            //HideProgress();
+        });
+    }
+
+
+    var rejectComments = function () {
+        $("#myModal").modal("hide");
+        $("#myModalRejectComments").modal("show");
+    }
+
+
+
+
+    var RejectedDoc = function () {
+
+        var DocNo = $("#HiddenDocNo").val();
+        var TbID = '@Model.TableID';
+        var comments = $("#txtComments").val();
+        var SeqNo = $("#HiddenSequence").val();
+        var entryNo = $("#HiddenEntryNo").val();
+        if (DocNo == "") {
+            Swal.fire('Warning', "Document Number cannot be empty", 'warning');
+            return;
+        }
+        else if (entryNo == "") {
+            Swal.fire('Warning', "Document Entry Number cannot be empty", 'warning');
+            return;
+        }
+        else if (comments == "") {
+            Swal.fire('Warning', 'Give reason for rejecting this document', 'warning');
+            return;
+        }
+        else {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You want to reject approval for this document!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Reject approval!'
+            }).then((result) => {
+                if (result.value) {
+                    ShowProgress();
+                    $.ajax({
+                        async: true,
+                        type: "POST",
+                        datatype: "json",
+                        data: JSON.stringify({ TBID: TbID, DocNo: DocNo, Comments: comments, SeqNo: SeqNo, EntryNo: entryNo }),
+                        contentType: "application/json; charset = utf-8",
+                        processData: false,
+                        url: '/DocumentApproval/RejectDocument',
+                        success: function (data) {
+                            if (data.success == true) {
+                                HideProgress();
+                                $("#txtComments").val("");
+                                $("#myModalRejectComments").modal("hide");
+                                LoadDocumentApprovalList('@Model.TableID', 'Open');
+                                swal.fire('Success', data.message, 'success');
+                            }
+                            else {
+                                HideProgress();
+                                Swal.fire('Error', data.message, 'error');
+                            }
+                        },
+                        error: function (err) {
+                            HideProgress();
+                            Swal.fire('Warning', err, 'warning');
+                        }
+                    });
+                }
+                else {
+                    Swal.fire('Cancelled', 'Document Rejection declined', 'error');
+                }
+            });
+        }
+    }
+    var BackToApprovalSummeryList = function () {
+        ShowProgress();
+        window.location = "/DocumentApproval/DocumentForApprovalSummery?rn="+'@Model.Status';
+    }
+    var showModal = function (DocNo) {
+        $("#labelZ").text("Voucher");
+        ShowProgress();
+        $.ajax({
+            url: '/DocumentApproval/GenerateVoucherReports',
+            datatype: "json",
+            type: "POST",
+            data: JSON.stringify({ documentNumber: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            success: function (data) {
+                if (data.success == true) {
+                    $('iframe').attr('src', "data:application/pdf;base64," + data.message);
+                    $("#myModalUnits").modal("show");
+                    HideProgress();
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var GetUtilizationReport = function (docNo) {
+        $("#labelZ").text("Voucher");
+        ShowProgress();
+        $.ajax({
+            url: '/Deposits/GenerateVoucherReports',
+            datatype: "json",
+            type: "POST",
+            data: JSON.stringify({ documentNumber: docNo }),
+            contentType: "application/json; charset = utf-8",
+            success: function (data) {
+                if (data.success == true) {
+                    $('iframe').attr('src', "data:application/pdf;base64," + data.message);
+                    $("#myModalUnits").modal("show");
+                    HideProgress();
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var GeneratePaymentsReport = function (docNo) {
+        $("#labelZ").text("Voucher");
+        ShowProgress();
+        $.ajax({
+            url: '/DocumentApproval/GenerateVoucherReports',
+            datatype: "json",
+            type: "POST",
+            data: JSON.stringify({ documentNumber: docNo }),
+            contentType: "application/json; charset = utf-8",
+            success: function (data) {
+                if (data.success == true) {
+                    $('iframe').attr('src', "data:application/pdf;base64," + data.message);
+                    $("#myModalUnits").modal("show");
+                    HideProgress();
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var GenerateExpenseRequisitionReport = function (docNo) {
+        $("#labelZ").text("Expense Requisition");
+	ShowProgress();
+	$.ajax({
+		async: true,
+		type: "POST",
+		datatype: "json",
+		data: JSON.stringify({ documentNumber: docNo }),
+		contentType: "application/json; charset=utf-8",
+		processData: false,
+		url: '/ExpenseRequisition/GenerateExpenseRequisitionReport',
+		success: function (data) {
+			if (data.success) {
+				$('iframe').attr('src', "data:application/pdf;base64," + data.message);
+				$("#myModalUnits").modal("show");
+				HideProgress();
+
+			} else {
+				Swal.fire('Error', data.message, 'error');
+				HideProgress();
+
+			}
+		},
+		error: function (err) {
+			HideProgress();
+			Swal.fire('Warning', err, 'warning');
+		}
+	});
+}
+    var GetFO22 = function (DocNo) {
+        $("#labelZ").text("F.O.22 Report");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/StaffClaim/GenerateFo22Report',
+            success: function (data) {
+                if (data.success == true) {
+                    $('iframe').attr('src', "data:application/pdf;base64," + data.message);
+                    $("#myModalUnits").modal("show");
+                    HideProgress();
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+
+    }
+    var GenerateWarrantReport = function (docNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ documentNumber: docNo }),
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            url: '/ExpenseRequisition/GenerateWarrantReport',
+            success: function (data) {
+                if (data.success) {
+                    $('iframe').attr('src', "data:application/pdf;base64," + data.message);
+                    $("#myModalUnits").modal("show");
+                    HideProgress();
+
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                    HideProgress();
+
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var GenerateLpoReport = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            url: '/Purchase/GenerateLpo',
+            success: function (data) {
+                if (data.success) {
+                    $('iframe').attr('src', "data:application/pdf;base64," + data.message);
+                    $("#myModalUnits").modal("show");
+                    HideProgress();
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                    HideProgress();
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+</script>

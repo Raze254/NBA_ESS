@@ -1,0 +1,652 @@
+﻿@model Latest_Staff_Portal.ViewModel.StoreRequisitions
+
+@{
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/StoreRequisition/StoreRequisitionList">Store Requisition List</a>
+                </li>
+                <li class="breadcrumb-item active">Store Requisition Document View (@Model.No)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<hr />
+<br />
+<div class="card">
+    <div class="card-header">
+        <h4>Store Requisition Document (@Model.No)</h4>
+        <div class="text-right">
+
+            @if (@Model.Status == "Open")
+            {
+                <button class="btn btn-primary action-buttons2" onclick="SendStoreReqDocForApproval('@Model.No');">
+                    <i class="fa fa-check" aria-hidden="true"></i> Send For Approval
+                </button>
+
+            }
+
+            @if (@Model.Status == "Pending Approval")
+            {
+                <button class="btn btn-danger btn-sm" onclick="CancelStoreReqApprovalRequest('@Model.No');">
+                    <i class="fa fa-times" aria-hidden="true"></i> Cancel Approval Request
+                </button>
+                <button class="btn btn-primary action-buttons2" onclick="ViewApprovalTrail('@Model.No');">
+                    <i class="fa fa-history" aria-hidden="true"></i> Approval Trail
+                </button>
+
+            }
+            <button class="btn btn-primary action-buttons2" onclick="ViewComments('@Model.No');">
+                <i class="fa fa-list" aria-hidden="true"></i> Approval / Rejection Comments
+            </button>
+
+            <button class="btn btn-primary action-buttons2" onclick="GenerateStoreRequisitionReport('@Model.No');">
+                <i class="fa fa-file-alt" aria-hidden="true"></i> Generate Report
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Document Type", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Document_Type, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Document_Type, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("No", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.No, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.No, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Requester ID", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Requester_ID, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Requester_ID, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Request By No", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Request_By_No, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Request_By_No, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Request By Name", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Request_By_Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Request_By_Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            @*  <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.HOD, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                        <div class="checkbox">
+                            @Html.EditorFor(model => model.HOD)
+                            @Html.ValidationMessageFor(model => model.HOD, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>*@
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Location Code", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Location_Code, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Location_Code, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Order_Date", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Order_Date, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Order_Date, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Requisition Type", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Requisition_Type, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Requisition_Type, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            @*<div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                        @Html.EditorFor(model => model.Status, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                        @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Shortcut Dimension 1 Code", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                        @Html.EditorFor(model => model.Shortcut_Dimension_1_Code, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                        @Html.ValidationMessageFor(model => model.Shortcut_Dimension_1_Code, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Department Name", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Department_Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Department_Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            @*  <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Shortcut Dimension 2 Code", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                        @Html.EditorFor(model => model.Shortcut_Dimension_2_Code, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                        @Html.ValidationMessageFor(model => model.Shortcut_Dimension_2_Code, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Project Name", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Project_Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Project_Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Status", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Status, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <hr style="border:1px solid black" />
+        <b>Store Requisition Lines</b>
+        <hr />
+        <div id="divSRLines"></div>
+        <hr style="border:1px solid black" />
+
+
+
+    </div>
+</div>
+
+
+
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">New Store Requisition Line</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-primary action-buttons" value="Submit" onclick="SubmitStoreRequisitionLine();" />
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="myModalUnits" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Store Requisition</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <iframe src="" frameborder="0" width="100%" height="600px"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*//////////////////////Modal////////////////////////////*@
+<div id="myModalApproval" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="labelF"></h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body p-4" id="modalBodyUnits">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*//////////////////////Modal View Doc////////////////////////////*@
+<div class="modal fade" id="myModalAttachment" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Attachment</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalAttachmentBody" style="width:100%;height:450px">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script src="~/assets/js/pdfobject.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadStoreRequisitionLines(`@Model.No`, `@Model.Status`);
+        var status = `@Model.Status`;
+        var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+        if (Successmsg != "") {
+            Swal.fire('Success', Successmsg, 'success');
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+    });
+
+    var LoadStoreRequisitionLines = function (Document_No, Status) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            data: JSON.stringify({ Document_No: Document_No, Status: Status }),
+            url: "/StoreRequisition/StoreRequisitionLinesPartialView",
+            success: function (data) {
+                $("#divSRLines").html(data);
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time", "", 'error');
+            }
+        });
+    };
+
+    var AddStoreRequisitionLine = function () {
+        var Document_No = '@Model.No';
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: "html",
+            url: '/StoreRequisition/NewStoreRequisitionLine',
+            data: {
+                Document_No: Document_No
+            },
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseText, 'warning');
+            }
+        });
+    };
+
+    function SubmitStoreRequisitionLine() {
+        var isValid = true;
+
+        // Collect data from the form
+        var formData = {
+            Document_No: $("#Document_No").val(),
+            Item_Category: $("#Item_Category").val(),
+            Service_Item_Code: $("#Service_Item_Code").val(),
+            Qty_Requested: $("#Qty_Requested").val(),
+        };
+
+        // Validation checks
+        if (!formData.Item_Category) {
+            Swal.fire('Warning', 'Select Item Category.', 'warning');
+            isValid = false;
+        }
+
+        if (!formData.Service_Item_Code) {
+            Swal.fire('Warning', 'Select Service Item.', 'warning');
+            isValid = false;
+        }
+
+        if (!formData.Qty_Requested || formData.Qty_Requested <= 0) {
+            Swal.fire('Warning', 'Enter a valid Qty Requested greater than 0.', 'warning');
+            isValid = false;
+        }
+
+        // Exit if validation fails
+        if (!isValid) {
+            return;
+        }
+
+        // Prepare data object
+        var newStoreRequisitionLine = formData;
+
+        // Show progress indicator
+        ShowProgress();
+
+        // Send data via AJAX
+        $.ajax({
+            type: "POST",
+            url: "/StoreRequisition/SubmitStoreRequisitionLine", // Change this to your actual endpoint
+            data: JSON.stringify(newStoreRequisitionLine),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                HideProgress();
+                if (data.success) {
+                    Swal.fire('Success', 'Stores Requisition line submitted successfully.', 'success')
+                        .then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.reload();
+                            }
+                        });
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Error', 'An error occurred while submitting the request.', 'error');
+            }
+        });
+    }
+
+    var EditItem = function (DocNo, LineNo, TransactionType, UnitofMeasure, UnitPrice) {
+
+        ShowProgress();
+
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: "html",
+            url: '/Imprest/NewImprestLine',
+            data: {
+                Document_No: DocNo,
+                Line_No: LineNo,
+                Transaction_Type: TransactionType,
+                Unit_of_Measure: UnitofMeasure,
+                Unit_Price: UnitPrice
+            },
+            success: function (data) {
+                $("#modalBody2").html(data);
+                HideProgress();
+                $("#myModal2").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseText || 'An error occurred while processing your request.', 'warning');
+            }
+        });
+    };
+
+    var RemoveItem = function (DocNo, LineNo) {
+
+        ShowProgress();
+
+        $.ajax({
+            type: "POST",
+            url: '/StoreRequisition/DeleteStoreRequisitionLine',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify({
+                Document_No: DocNo,
+                Line_No: LineNo
+            }),
+            success: function (data) {
+                HideProgress(); // Ensure progress is hidden on success
+                if (data.success) {
+                    Swal.fire('Success', 'Store Requisition line deleted successfully.', 'success')
+                        .then(() => {
+                            window.location.reload(); // Reload the page after user acknowledges
+                        });
+                } else {
+                    Swal.fire('Error', data.message || 'Failed to delete Store Requisition line.', 'error');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseJSON?.message || 'An error occurred while processing your request.', 'warning');
+            }
+        });
+    };
+
+    function SendStoreRequisitionDocForApproval(no) {
+        ShowProgress(); // Ensure this function is defined elsewhere
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            data: JSON.stringify({ Document_No: no }),
+            url: "/StoreRequisition/SendStoreRequisitionDocForApproval",
+            success: function (data) {
+                HideProgress(); // Ensure this function is defined elsewhere
+                if (data.success) {
+                    Swal.fire('Success', 'Store Requisition line successfully sent for approval.', 'success').then(() => {
+                        window.location.reload();
+                    });
+                } else {
+                    Swal.fire('Error', 'Unable to send Store Requisition for approval. Please try again.', 'error');
+                }
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire('Error', 'There is some problem processing your request. Please try after some time.', 'error');
+            }
+        });
+    }
+
+    function SendStoreReqDocForApproval(no) {
+        ShowProgress(); // Ensure this function is defined elsewhere
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            data: JSON.stringify({ Document_No: no }),
+            url: "/StoreRequisition/SendStoreReqDocForApproval",
+            beforeSend: function () {
+                ShowProgress(); // Show progress before the request is sent
+            },
+            success: function (data) {
+                if (data.success) {
+                    Swal.fire({
+                        title: 'Success',
+                        text: data.message,
+                        icon: 'success',
+                        showCancelButton: false,
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            ShowProgress(); // Show progress after user confirms Swal button
+                            window.location.reload(); // Reload the page
+                        }
+                    });
+                } else {
+                    HideProgress();
+                    Swal.fire({
+                        title: 'Error',
+                        text: data.message,
+                        icon: 'error'
+                    }).then(() => {
+                        // Reload the page when the alert is dismissed
+                        location.reload();
+                    });
+                }
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire('Error', 'There is some problem processing your request. Please try after some time.', 'error');
+            }
+        });
+
+    }
+
+    function CancelStoreReqApprovalRequest(no) {
+        ShowProgress(); // Ensure this function is defined elsewhere
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            data: JSON.stringify({ Document_No: no }),
+            url: "/StoreRequisition/CancelStoreReqApprovalRequest",
+            beforeSend: function () {
+                ShowProgress(); // Show progress before the request is sent
+            },
+            success: function (data) {
+                if (data.success) {
+                    Swal.fire({
+                        title: 'Success',
+                        text: data.message,
+                        icon: 'success',
+                        showCancelButton: false,
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            ShowProgress(); // Show progress after user confirms Swal button
+                            window.location.reload(); // Reload the page
+                        }
+                    });
+                } else {
+                    HideProgress();
+                    Swal.fire({
+                        title: 'Error',
+                        text: data.message,
+                        icon: 'error'
+                    }).then(() => {
+                        // Reload the page when the alert is dismissed
+                        location.reload();
+                    });
+                }
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire('Error', 'There is some problem processing your request. Please try after some time.', 'error');
+            }
+        });
+    }
+
+
+    var GenerateStoreRequisitionReport = function (docNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ Document_No: docNo }),
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            url: '/StoreRequisition/GenerateStoreRequisitionReport',
+            success: function (data) {
+                if (data.success) {
+                    $('iframe').attr('src', "data:application/pdf;base64," + data.message);
+                    $("#myModalUnits").modal("show");
+                    HideProgress();
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                    HideProgress();
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseText, 'warning');
+            }
+        });
+    };
+
+    var ViewApprovalTrail = function (DocNo) {
+        $("#labelF").text("Approval Trail");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/DocumentApprovalTrail',
+            success: function (data) {
+                $("#modalBodyUnits").html(data);
+                HideProgress();
+                $("#myModalApproval").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+
+    var ViewComments = function (DocNo) {
+
+        $('#myModalLabel').text("Document Comments");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            data: { DocNo: DocNo }, // no need to JSON.stringify for simple string
+            url: '/Common/DocumentApprovalComments',
+            success: function (data) {
+                $("#modalBody").html(data); // ✅ insert HTML
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (xhr, status, error) {
+                HideProgress();
+                Swal.fire('Warning', error || "An unexpected error occurred", 'warning');
+            }
+        });
+    };
+
+</script>

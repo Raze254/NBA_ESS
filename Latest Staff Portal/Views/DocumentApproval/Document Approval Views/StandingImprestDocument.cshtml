@@ -1,0 +1,212 @@
+﻿@using Latest_Staff_Portal.ViewModel
+@model Latest_Staff_Portal.ViewModel.StandingImprest
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    hr {
+        margin: 4px;
+    }
+
+    .BtnPadding {
+        padding: 7px;
+        font-size: 12px;
+    }
+</style>
+<div class="card">
+    <div class="card-body">
+        <div style="text-align:right; margin-bottom: 20px">
+            <button style="background: #162f25; color: whitesmoke; border-radius: 10px;" class="BtnPadding" onclick="GenerateWarrantReport('@Model.No')">
+                <i class="fas fa-print" aria-hidden="true"></i> Preview F.O.24
+            </button>
+        </div>
+        <hr />
+
+
+        <div class="text-center mt-5"><h4>Standing Imprest Document (@Model.No)</h4></div>
+        <br />
+
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Document no", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.No, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Date", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Date, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Posting Date", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.PostingDate, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Paying Bank Account", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.BankName, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Bank Name", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.BankName, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Payment Narration", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.PaymentNarration, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Court Station", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.CourtStation, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Administrative unit", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.AdminUnit, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Total Amount", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.TotalAmount, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", value = string.Format("KES {0:N2}", Model.TotalAmount) })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Status", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Status, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+
+        </div>
+
+
+        <hr style="border:1px solid black" />
+        <b>Standing Imprest Lines</b>
+        <div id="divLines"></div>
+        <hr />
+        @{
+            {
+                if (Model.Status == "Open")
+                {
+                    <div align="center">
+                        <input type="button" class="btn btn-primary waves-effect waves-light" value="Send (@Model.No) For Approval" onclick="SendDocForApproval('@Model.No');" />
+                    </div>
+                }
+            }
+        }
+    </div>
+
+</div>
+
+
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myModalLabel">
+                    <label id="labelF"></label>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script src="~/assets/js/pdfobject.min.js"></script>
+<script type="text/javascript">
+	$(document).ready(function () {
+		LoadStandingImprestLines(`@Model.No`);
+		var status = `@Model.Status`;
+	});
+	var LoadStandingImprestLines = function (DocNo) {
+		ShowProgress();
+		var status = `@Model.Status`;
+		$.ajax({
+			async: true,
+			type: "POST",
+			dataType: "html",
+			contentType: "application/json; charset=utf-8",
+			data: JSON.stringify({ docNo: DocNo, status:status }),
+			url: "/Imprest/StandingImprestLine",
+			success: function (data) {
+
+				$("#divLines").html(data);
+
+				HideProgress();
+			},
+			error: function () {
+
+				HideProgress();
+
+				Swal.fire("There is some problem to process your request. Please try after some time");
+			}
+		});
+	};
+
+    var GenerateWarrantReport = function (docNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ documentNumber: docNo }),
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            url: '/ExpenseRequisition/GenerateWarrantReport',
+            success: function (data) {
+                if (data.success) {
+                    $('iframe').attr('src', "data:application/pdf;base64," + data.message);
+                    $("#myModalUnits").modal("show");
+                    HideProgress();
+
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                    HideProgress();
+
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+</script>

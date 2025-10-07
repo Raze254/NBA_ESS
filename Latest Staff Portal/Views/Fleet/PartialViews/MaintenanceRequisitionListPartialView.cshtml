@@ -1,0 +1,164 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.MaintenanceRequest2>
+
+@{
+    ViewBag.Title = "MaintenanceRequisitionListPartialView";
+}
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead>
+
+            <tr>
+                <th>Action</th>
+                <th>Requisition No</th>
+                <th>Vehicle Reg No</th>
+               @* <th>Cost Center Name</th>*@
+                <th>Vehicle Location</th>
+                <th>Odometer Reading</th>
+               @* <th>Requested By</th>
+                <th>Department Name</th>*@
+               @* <th>Unit Name</th>
+                <th>Vendor Dealer</th>*@
+                <th>Vendor Name</th>
+               @* <th>Responsible Employee</th>
+                <th>Responsible Employee Name</th>*@
+                <th>Request Date</th>
+                <th>Description</th>
+                <th>Service Code</th>
+                <th>Service Name</th>
+                <th>Status</th>
+                <th>Make</th>
+                <th>Model</th>
+                <th>Driver</th>
+                <th>Driver Name</th>
+@*                <th>Prepared By</th>
+                <th>Closed By</th>
+                <th>Date Closed</th>*@
+        @*        <th>Vendor Invoice No</th>
+                <th>Project Number</th>
+                <th>Task Number</th>*@
+                <th>Maintenance Cost</th>
+              @*  <th>Comments/Remarks</th>
+                <th>Parts Changed</th>
+                <th>Pre-Repair Inspection</th>
+                <th>Post-Repair Inspection</th>*@
+               
+            </tr>
+        </thead>
+        <tbody>
+
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <input class="btn btn-primary btn-sm action-buttons3" type="button" onclick="ViewDoc('@item.Requisition_No');" value="Select" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Requisition_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Vehicle_Reg_No)
+                    </td>
+                    @*<td>
+                        @Html.DisplayFor(modelItem => item.Cost_Center_Name)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Vehicle_Location)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Odometer_Reading)
+                    </td>
+                   @* <td>
+                        @Html.DisplayFor(modelItem => item.Requested_By)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Department_Name)
+                    </td>*@
+                  @*  <td>
+                        @Html.DisplayFor(modelItem => item.Unit_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Vendor_Dealer)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Vendor_Name)
+                    </td>
+                   @* <td>
+                        @Html.DisplayFor(modelItem => item.Responsible_Employee)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Responsible_Employee_Name)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Request_Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Service_Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Service_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Make)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Model)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Driver)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Driver_Name)
+                    </td>
+@*                    <td>
+                        @Html.DisplayFor(modelItem => item.Prepared_By)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Closed_By)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date_Closed)
+                    </td>*@
+               @*     <td>
+                        @Html.DisplayFor(modelItem => item.Vendor_Invoice_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Project_Number)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Task_Number)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Maintenance_Cost)
+                    </td>
+                   @* <td>
+                        @Html.DisplayFor(modelItem => item.Comments_Remarks)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Parts_Changed)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Pre_Repair_Inspection)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Post_Repair_Inspection)
+                    </td>*@
+                   
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+$("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100] // Same options for the second table
+    });</script>

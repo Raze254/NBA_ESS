@@ -1,0 +1,182 @@
+﻿@{
+    ViewBag.Title = "DependantChangeRequests";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+<!--
+<link href="~/assets/css/Loader.css" rel="stylesheet" />
+<div class="loading" align="center" id="divLoader">
+    <br />
+    <img src="~/assets/images/ajax-loader.gif" alt="" />
+</div>
+-->
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#" onclick="HumanResourceLink();">Human Resource</a>
+                </li>
+                <li class="breadcrumb-item active">Dependants Change Requests</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="card-body">
+    <hr/>
+
+    <div style="text-align:right" id="HideEditButton">
+        <input type="button" style="background: #162f25; color:whitesmoke; border-radius:10px" id="btnEdit" value="New Dependants Change Request" onclick="NewDependantsChangeRequest();"/>
+    </div>
+
+    <hr/>
+    <div id="divDependantsChangeList"></div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">New Dependants Change Request</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal Links////////////////////////////*@
+<div class="modal fade" id="myModalLinks" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Actions</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodyLinks">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadDependantsChangeRequests ();
+        var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+        if (Successmsg != "") {
+            Swal.fire('Success', Successmsg, 'success', true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+    });
+    var LoadDependantsChangeRequests  = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: "/WelfareManagement/DependantsChangeRequestPartialView",
+            success: function (data) {
+                $("#divDependantsChangeList").empty().html(data);
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+    var NewDependantsChangeRequest = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: "/WelfareManagement/NewDependantsChangeRequest",
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+
+    var viewCard = function (DocNo) {
+        ShowProgress();
+        window.location = "/WelfareManagement/DependentsChangeDocumentView?documentNo=" + DocNo;
+    }
+    var SubmitDependantsChange = function () {
+        var reason = $("#txtReason").val();
+        var date = $("#txtDate").val();
+
+        if (reason === "") {
+            Swal.fire('Warning', "Input reason for application", 'warning');
+            return;
+        } else {
+            var DependantChangeRequest = {
+                Description: reason,
+                DocumentDate:date
+            };
+
+            ShowProgress();
+            $.ajax({
+                type: "POST",
+                url: "/WelfareManagement/SubmitDependantsChange",
+                data: JSON.stringify(DependantChangeRequest),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    if (data.success) {
+                        window.location = data.message;
+                    } else {
+                        Swal.fire('Warning', data.message, 'warning');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire('Error', xhr.responseText, 'error');
+                },
+                complete: function () {
+                    HideProgress();
+                }
+            });
+        }
+    };
+</script>

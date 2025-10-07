@@ -1,0 +1,54 @@
+﻿@model List<Latest_Staff_Portal.ViewModel.HrWelfareIncidenceCard>
+
+<div class="table-responsive">
+    <table class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+        <tr>
+            <th>Action</th>
+            <th>Incidence No</th>
+            <th>Incidence Date</th>
+            <th>Incidence Time</th>
+            <th>Incidence Type</th>
+            <th>Incidence</th>
+            <th>Affected Employee</th>
+            <th>Employee Name</th>
+            <th>Duty Station</th>
+            <th>Action Taken</th>
+            <th>Incidence Status</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        @if (Model.Count() > 0)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <input type="button" style="background: #162f25; color:whitesmoke; border-radius:10px" onclick="viewIncidence('@item.Incidence_No');" value="View"/>
+                    </td>
+                    <td>@item.Incidence_No</td>
+                    <td>@item.Incidence_Date</td>
+                    <td>@item.Incidence_Time</td>
+                    <td>@item.Incidence_Type</td>
+                    <td>@item.Incidence</td>
+                    <td>@item.Affected_Employee</td>
+                    <td>@item.Employee_Name</td>
+                    <td>@item.Duty_Station</td>
+                    <td>@item.Action_Taken</td>
+                    <td>@item.Incidence_Status</td>
+
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="11" style="color:red">
+                    No Records Found
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

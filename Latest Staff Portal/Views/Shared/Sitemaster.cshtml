@@ -1,0 +1,1380 @@
+﻿@using Latest_Staff_Portal.Models
+@using Latest_Staff_Portal.ViewModel
+@{
+
+    string imgSrc = "", gender = "", Name = "";
+    var IsICT = false;
+    var employee = Session["EmployeeData"] as EmployeeView;
+    /* var essRole = Session["ESSRoleSetup"] as ESSRoleSetup;*/
+
+
+    var fname = employee?.FirstName;
+    var mname = employee?.MiddleName;
+    var sname = employee?.LastName;
+    var EmpNo = employee?.No;
+
+    //char firstInitial = fname.Length > 0 ? char.ToUpper(fname[0]) : ' ';
+
+    //char middleInitial = mname.Length > 0 ? char.ToUpper(mname[0]) : ' ';
+    //char lastInitial = sname.Length > 0 ? char.ToUpper(sname[0]) : ' ';
+
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NBA | Staff Portal</title>
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="~/assets/img/logo2.png">
+    <meta content="NBA Staff Portal" name="description" />
+    @*<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />*@
+    @*<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />*@
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.css" />
+
+    <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-datetimepicker@2.5.20/build/jquery.datetimepicker.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/jquery-datetimepicker@2.5.20/build/jquery.datetimepicker.full.min.js"></script>
+
+
+    <link href="~/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/css/hr-styles.css" rel="stylesheet" type="text/css" />
+
+    <!-- Data table CSS -->
+    <link href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+    <link href="//cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="~/assets/css/bootstrap.min.css">
+
+    <!-- Fontawesome CSS -->
+    <link rel="stylesheet" href="~/assets/css/font-awesome.min.css">
+
+    <!-- Feathericon CSS -->
+    <link rel="stylesheet" href="~/assets/css/feathericon.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="~/assets/css/custom.css">
+
+    <link href="~/assets/select2/css/select2.min.css" rel="stylesheet" />
+    @*<link href="~/assets/css/sweetalert2.min.css" rel="stylesheet" />*@
+
+    <!-- Data table CSS -->
+    <link href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+    <link href="//cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
+    <script src="~/assets/js/jquery-3.2.1.min.js"></script>
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="~/assets/css/style.css">
+    <style>
+
+
+
+
+
+        :root {
+            --purple: #9a6cac;
+            --deep-purple: #f9ad55;
+            --black: #373637;
+            --white: #ffffff;
+            --light-gray: #f4f4f4;
+            --dark-gray: #555555;
+            --medium-gray: #e0e0e0;
+            --transition-speed: 0.3s;
+            --sidebar-bg: #ffffff;
+            --active-link-bg: #5c8a64; /*#f7921f*/
+            --active-link-color: #ffffff;
+        }
+
+        /* Dark mode variables */
+        [data-theme="dark"] {
+            --sky-blue: #04acec;
+            --sky-blue-light: #36c7f0;
+            --sky-blue-lighter: #68dcf5;
+            --sky-blue-dark: #038bb8;
+            --sky-blue-darker: #026a85;
+            --black: #e0e0e0;
+            --white: #2d2d2d;
+            --light-gray: #1a1a1a;
+            --dark-gray: #b0b0b0;
+            --medium-gray: #404040;
+            --light-sky-blue: #0a2a3d;
+            --sidebar-bg: #2d2d2d;
+            --active-link-bg: #404040;
+            --active-link-color: #ccc;
+        }
+
+        /* Add theme toggle button styles */
+        .theme-toggle {
+            border: none;
+            background: none;
+            font-size: 1.2rem;
+            margin-right: 1rem;
+            color: var(--dark-gray);
+            transition: all 0.3s ease;
+        }
+
+            .theme-toggle:hover {
+                color: var(--black);
+                transform: rotate(20deg);
+            }
+
+        [data-theme="dark"] .theme-toggle {
+            color: var(--dark-gray);
+        }
+
+            [data-theme="dark"] .theme-toggle:hover {
+                color: var(--black);
+            }
+
+
+
+
+        body {
+            background-color: var(--light-gray);
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+        }
+
+        #sidebar {
+            min-height: 100vh;
+            background-color: var(--sidebar-bg);
+            color: var(--black);
+            transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+            border-right: 1px solid var(--medium-gray);
+            width: 270px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 999;
+            overflow-x: hidden;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .menu-title {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .menu-subtitle {
+            font-size: 14px;
+        }
+
+        #sidebar.collapsed {
+            width: 70px;
+        }
+
+            #sidebar.collapsed:hover {
+                width: 250px;
+            }
+
+        #sidebar .logo-container {
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--medium-gray);
+            margin-left: 20px !important
+        }
+
+        #sidebar.collapsed .logo-container {
+            justify-content: center;
+        }
+
+        #sidebar.collapsed:hover .logo-container {
+            justify-content: space-between;
+        }
+
+        #sidebar .logo {
+            font-size: 22px;
+            font-weight: bold;
+            color: var(--black);
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+        }
+
+            #sidebar .logo i {
+                color: var(--purple);
+                margin-right: 10px;
+                font-size: 24px;
+                transition: all var(--transition-speed);
+            }
+
+        #sidebar.collapsed .logo span {
+            opacity: 0;
+            width: 0;
+            transition: opacity var(--transition-speed);
+        }
+
+        #sidebar.collapsed:hover .logo span {
+            opacity: 1;
+            width: auto;
+        }
+
+        #sidebar.collapsed .logo i {
+            margin-right: 0;
+        }
+
+        .logo-image {
+            width: 50px;
+            height: auto;
+        }
+
+        #sidebar.collapsed:hover .logo i {
+            margin-right: 10px;
+        }
+
+        #toggle-btn {
+            cursor: pointer;
+            color: var(--dark-gray);
+            background: transparent;
+            border: none;
+            font-size: 20px;
+            transition: transform var(--transition-speed);
+        }
+
+            #toggle-btn:hover {
+                color: var(--deep-purple);
+            }
+
+        #sidebar.collapsed #toggle-btn {
+            transform: rotate(180deg);
+        }
+
+        #sidebar .nav-item {
+            margin: 5px 10px;
+            border-radius: 5px;
+            transition: all var(--transition-speed);
+            overflow: hidden;
+            position: relative;
+        }
+
+            #sidebar .nav-item:hover {
+                background-color: var(--light-gray);
+            }
+
+            #sidebar .nav-item.active {
+                background-color: var(--active-link-bg);
+            }
+
+                #sidebar .nav-item.active > a {
+                    color: var(--active-link-color) !important;
+                }
+
+        #sidebar .nav-link {
+            color: var(--black);
+            padding: 5px 10px;
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+            overflow: hidden;
+            justify-content: space-between;
+            transition: all var(--transition-speed);
+        }
+
+            #sidebar .nav-link:hover {
+                color: var(--deep-purple);
+            }
+
+        #sidebar .nav-link-simple {
+            justify-content: flex-start;
+        }
+
+        #sidebar .nav-link i.menu-icon {
+            min-width: 25px;
+            margin-right: 7px;
+            font-size: 16px;
+            transition: all var(--transition-speed);
+        }
+
+        #sidebar.collapsed .nav-link span,
+        #sidebar.collapsed .nav-link i:not(.menu-icon) {
+            opacity: 0;
+            width: 0;
+            transition: opacity var(--transition-speed), width var(--transition-speed);
+        }
+
+        #sidebar.collapsed:hover .nav-link span,
+        #sidebar.collapsed:hover .nav-link i:not(.menu-icon) {
+            opacity: 1;
+            width: auto;
+        }
+
+        #sidebar.collapsed .nav-link i.menu-icon {
+            margin-right: 0;
+        }
+
+        #sidebar.collapsed:hover .nav-link i.menu-icon {
+            margin-right: 10px;
+        }
+
+        #sidebar .submenu {
+            list-style: none;
+            padding-left: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0, 1, 0, 1);
+            margin-left: 0;
+        }
+
+            #sidebar .submenu.show {
+                max-height: 1000px;
+                transition: max-height 0.4s ease-in-out;
+            }
+
+            #sidebar .submenu .nav-item {
+                margin: 5px 0 5px 35px;
+                width: calc(100% - 45px);
+            }
+
+        #sidebar.collapsed .submenu .nav-item {
+            margin: 5px 0 5px 5px;
+            width: calc(100% - 15px);
+        }
+
+        #sidebar.collapsed:hover .submenu .nav-item {
+            margin: 5px 0 5px 35px;
+            width: calc(100% - 45px);
+        }
+
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        #content {
+            margin-left: 270px;
+            padding: 15px;
+            transition: margin-left var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+            /*min-height: 100vh;*/
+            flex: 1;
+            /*margin-bottom: 30px;*/
+        }
+
+        .footer {
+            padding-top: 10px;
+            /* padding-bottom: 10px;*/
+            text-align: center;
+            margin-left: 250px;
+            margin-bottom: -15px
+        }
+
+        #content.expanded {
+            margin-left: 70px;
+        }
+
+        .navbar {
+            background-color: var(--white);
+            border-bottom: 1px solid var(--medium-gray);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            transition: all var(--transition-speed);
+        }
+
+        .avatar-dropdown .dropdown-toggle {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            background-color: var(--white);
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+            .avatar-dropdown .dropdown-toggle::after {
+                display: none;
+            }
+
+        .avatar-dropdown .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 10px;
+            background-color: var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: var(--black);
+            font-weight: bold;
+            transition: all var(--transition-speed);
+        }
+
+            .avatar-dropdown .avatar:hover {
+                transform: scale(1.05);
+            }
+
+        .avatar-dropdown .dropdown-menu {
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: none;
+            padding: 10px 0;
+            min-width: 200px;
+            animation: fadeInDown 0.3s;
+        }
+
+        @@keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .avatar-dropdown .dropdown-item {
+            padding: 8px 20px;
+            color: var(--black);
+            transition: all 0.2s;
+        }
+
+            .avatar-dropdown .dropdown-item:hover {
+                background-color: var(--light-gray);
+                transform: translateX(5px);
+            }
+
+            .avatar-dropdown .dropdown-item i {
+                margin-right: 10px;
+                width: 16px;
+            }
+
+        .navbar-toggler {
+            display: none;
+            border: none;
+            color: var(--black);
+            font-size: 22px;
+            transition: transform 0.2s;
+        }
+
+            .navbar-toggler:hover {
+                transform: scale(1.1);
+            }
+
+        /* Animation classes */
+        .animate-spin {
+            animation: spin 0.5s;
+        }
+
+        @@keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .pulse {
+            animation: pulse 1s;
+        }
+
+        @@keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .slide-in {
+            animation: slideIn 0.3s;
+        }
+
+        @@keyframes slideIn {
+            from {
+                transform: translateX(-20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Mobile styles */
+        @@media (max-width: 768px) {
+            #sidebar {
+                margin-left: -250px;
+                width: 250px;
+            }
+
+                #sidebar.mobile-active {
+                    margin-left: 0;
+                    width: 250px;
+                }
+
+                #sidebar.collapsed {
+                    margin-left: -70px;
+                    width: 70px;
+                }
+
+                    #sidebar.collapsed.mobile-active {
+                        margin-left: 0;
+                        width: 250px;
+                    }
+
+            #content {
+                margin-left: 0;
+            }
+
+                #content.expanded {
+                    margin-left: 0;
+                }
+
+            .footer {
+                margin-left: 0px;
+            }
+
+            .navbar-toggler {
+                display: block;
+            }
+            /* Overlay when mobile sidebar is active */
+            .sidebar-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 998;
+                display: none;
+                animation: fadeIn 0.3s;
+            }
+
+                .sidebar-overlay.active {
+                    display: block;
+                }
+
+            @@keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+
+                to {
+                    opacity: 1;
+                }
+            }
+        }
+
+        .logo-image {
+            height: 80px;
+            width: 150px;
+            object-fit: contain; /* maintains aspect ratio */
+        }
+        /* Default styles */
+        .logo2 span {
+            display: none;
+        }
+
+        #sidebar.collapsed .logo span {
+            display: none;
+        }
+
+        #sidebar.collapsed .logo2 span {
+            display: block;
+        }
+
+        .logo-image {
+            width: 150px;
+            max-width: 100%;
+            height: auto;
+            transition: width 0.3s ease;
+        }
+
+        /* Optional: Resize image when collapsed */
+        #sidebar.collapsed .logo-image {
+            width: 150px;
+        }
+
+        .avatar-dropdown .dropdown-menu {
+            left: auto !important;
+            right: 0 !important;
+            transform: none !important;
+            z-index: 1100;
+            min-width: 200px;
+        }
+    </style>
+    @RenderSection("Styles", required: false)
+</head>
+<body>
+
+    <!--Loader-->
+    <link href="~/assets/css/Loader.css" rel="stylesheet" />
+    <div class="loading" align="center" id="divLoader">
+        <div class="loader-container">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="sidebar-overlay"></div>
+
+    <!-- Sidebar -->
+    <div id="sidebar" style="z-index:9999">
+        <div class="logo-container text-center">
+            <div class="logo">
+                <span><img src="/assets/img/logo.png" alt="Logo" class="logo-image" /></span>
+            </div>
+            <div class="logo2">
+                <span><img src="/assets/img/logo.png" alt="Logo Collapsed" class="logo-image" /></span>
+            </div>
+            <button id="toggle-btn">
+                <i class="fas fa-angle-left"></i>
+            </button>
+        </div>
+        <ul class="nav flex-column mt-3">
+            @{
+                var currentPath = ViewContext.HttpContext.Request.Path;
+                var isDashboardActive = currentPath.Contains("/Dashboard/Dashboard");
+                var isLeavePlannerActive = currentPath.Contains("/Leave/LeavePlanner");
+                var isLeaveApplicationActive = currentPath.Contains("/Leave/LeaveRequisitionList");
+                var isPerformanceAppraisalActive = currentPath.Contains("/PerformanceAppraisal/HRAppraisalsList") || currentPath.Contains("/PerformanceAppraisal/HRAppraisalDocumentView");
+
+
+                var isImprestActive = currentPath.Contains("/Imprest/ImprestList") || currentPath.Contains("/Imprest/ImprestDocumentView");
+                var isImprestMemoActive = currentPath.Contains("/ImprestMemo/ImprestMemoRequisitionList") || currentPath.Contains("/ImprestMemo/ImprestMemoDocumentView");
+                var isStandingImprestActive = currentPath.Contains("/Imprest/StandingImprest") || currentPath.Contains("/Imprest/StandingImprestDocument");
+                var isSafariImprestWarrant = currentPath.Contains("/Imprest/ApprovedSafariImprestWarrant") || currentPath.Contains("/Imprest/SafariImprestWarrant") || currentPath.Contains("/Imprest/SafariImprestDocument");
+                var isClaimRefundsActive = currentPath.Contains("/ClaimRefunds/ClaimRefundsList") || currentPath.Contains("/ClaimRefunds/ClaimRefundsDocumentView");
+                var isImprestSurrenderActive = currentPath.Contains("/ImprestSurrender/ImprestSurrender") || currentPath.Contains("/ImprestSurrender/ImprestSurrenderDocumentView");
+                var isStaffClaim = currentPath.Contains("/StaffClaim/StaffClaims") || currentPath.Contains("/StaffClaim/StaffClaimDocumentView");
+                var isPettyCashActive = currentPath.Contains("/PettyCash/PettyCashVouchersList") || currentPath.Contains("/PettyCash/PettyCashVouchersDocumentView");
+                var isPettyCashSurrenderActive = currentPath.Contains("/PettyCash/PettyCashSurrenderList") || currentPath.Contains("/PettyCash/PettyCashSurrenderDocumentView");
+                var isImprestWarrantActive = currentPath.Contains("/ImprestWarrant/ImprestWarrantRequisitionList") || currentPath.Contains("/ImprestWarrant/ImprestWarrantDocumentView");
+
+
+                var isStaffClearanceActive = currentPath.Contains("/StaffClearance/StaffClearance");
+                var isPayslipsActive = currentPath.Contains("/ViewDocument/DocumentViewPayslip");
+                var isP9Active = currentPath.Contains("/ViewDocument/DocumentViewp9");
+
+                var isPurchaseRequisitionActive = currentPath.Contains("/Purchase/PurchaseRequisitionList") || currentPath.Contains("/Purchase/PurchaseRequisitionsDocumentView");
+                var isStoreRequisitionActive = currentPath.Contains("/StoreRequisition/StoreRequisitionList") || currentPath.Contains("/StoreRequisition/StoreRequisitionsDocumentView");
+
+                var isTrainingRequisitionActive = currentPath.Contains("/Training/TrainingRequisitionList") || currentPath.Contains("/Training/TrainingRequisitionDocumentView");
+                var isTrainingNeedsActive = currentPath.Contains("/Training/TrainingNeeds") || currentPath.Contains("/Training/TrainingNeedsDocumentView");
+                var isTrainingApplicationActive = currentPath.Contains("/Training/TrainingRequisition");
+                var isTrainingAssesmentActive = currentPath.Contains("/Training/TrainingEvaluationRequisitionList") || currentPath.Contains("/Training/TrainingEvaluationDocumentView");
+
+
+
+                var isTransportRequisitionActive = currentPath.Contains("/Fleet/TransportRequisitionList") || currentPath.Contains("/Fleet/TransportRequisitionDocumentView");
+                var isMaintenanceRequisitionActive = currentPath.Contains("/Fleet/MaintenanceRequisitionList") || currentPath.Contains("/Fleet/MaintenanceRequisitionDocumentView");
+                var isWorkTicketActive = currentPath.Contains("/Fleet/WorkTicketList") || currentPath.Contains("/Fleet/WorkTicketDocumentView");
+                var isFuelRequisitionActive = currentPath.Contains("/Fleet/FuelRequisitionList") || currentPath.Contains("/Fleet/FuelRequisitionDocumentView");
+
+                var isPendingApprovalsActive = currentPath.Contains("/Approvals/PendingApprovals");
+                var isApprovedDocumentsActive = currentPath.Contains("/Approvals/ApprovedDocuments");
+                var isRejectedApprovalsActive = currentPath.Contains("/Approvals/RejectedApprovals");
+                var isChangePassswordActive = currentPath.Contains("/Settings/ChangePassword");
+                var isICTHelpDeskActive = currentPath.Contains("/ICT/ICTHelpDeskList") || currentPath.Contains("/ICT/ICTHelpDeskDocumentView");
+
+                var isLabSampleManagementActive = currentPath.Contains("/Technical/LabSampleManagementList") || currentPath.Contains("/Technical/LabSampleManagementDocumentView");
+
+                var isIssuanceVoucherActive = currentPath.Contains("/ICT/IssuanceVoucherList") || currentPath.Contains("/ICT/IssuanceVoucherDocumentView");
+                var isFixedAssetsActive = currentPath.Contains("/ICT/FixedAssetsList") || currentPath.Contains("/ICT/FixedAssetsDocumentView");
+                var isExitVouchersActive = currentPath.Contains("/EmployeeExit/EmployeeExitVoucherList") || currentPath.Contains("/EmployeeExit/EmployeeExitVoucherDocumentView");
+            }
+
+            <!-- Dashboard -->
+            <li class="nav-item @(isDashboardActive ? "active" : "")">
+                <a class="nav-link nav-link-simple slide-in" href="/Dashboard/Dashboard">
+                    <i class="fa fa-tachometer menu-icon"></i>
+                    <span class="menu-title">Dashboard</span>
+                </a>
+            </li>
+
+            <!-- Human Resource -->
+            <li class="nav-item">
+                <a class="nav-link slide-in @(isLeavePlannerActive || isLeaveApplicationActive ? "active" : "")"
+                   href="#hr-submenu"
+                   data-bs-toggle="collapse">
+                    <div>
+                        <i class="fas fa-users menu-icon"></i>
+                        <span class="menu-title">Human Resource</span>
+                    </div>
+                    <i class="fas fa-chevron-down"></i>
+                </a>
+                <ul class="submenu collapse @(isLeavePlannerActive || isLeaveApplicationActive ? "active" : "")"
+                    id="hr-submenu">
+
+                    <li class="nav-item @(isLeaveApplicationActive ? "active" : "")">
+                        <a class="nav-link nav-link-simple" href="/Leave/LeaveRequisitionList">
+                            <i class="fas fa-file-alt menu-icon"></i>
+                            <span class="menu-subtitle">Leave Applications</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item @(isPayslipsActive ? "active" : "")">
+                        <a class="nav-link nav-link-simple" href="/ViewDocument/DocumentViewPayslip">
+                            <i class="fas fa-file-invoice-dollar menu-icon"></i>
+                            <span class="menu-subtitle">Payslips</span>
+                        </a>
+                    </li>
+                    <li class="nav-item @(isP9Active ? "active" : "")">
+                        <a class="nav-link nav-link-simple" href="/ViewDocument/DocumentViewp9">
+                            <i class="fas fa-file-contract menu-icon"></i>
+                            <span class="menu-subtitle">P9 Forms</span>
+                        </a>
+                    </li>
+                    <li class="nav-item @(isExitVouchersActive ? "active" : "")">
+                        <a class="nav-link nav-link-simple" href="/EmployeeExit/EmployeeExitVoucherList">
+                            <i class="fas fa-file-export menu-icon"></i>
+                            <span class="menu-subtitle">Exit Vouchers</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item @(isPerformanceAppraisalActive ? "active" : "")">
+                    <a class="nav-link nav-link-simple" href="/PerformanceAppraisal/HRAppraisalsList">
+                        <i class="fas fa-user-check menu-icon"></i>
+                        <span class="menu-subtitle">Performance Appraisal</span>
+                    </a>
+                </li>
+                     <li class="nav-item @(isTrainingNeedsActive ? "active" : "")">
+                    <a class="nav-link nav-link-simple" href="/Training/TrainingNeeds">
+                        <i class="fas fa-bullseye menu-icon"></i>
+                        <span class="menu-subtitle">Training Need Request</span>
+                    </a>
+                </li>
+                <li class="nav-item @(isTrainingRequisitionActive ? "active" : "")">
+                    <a class="nav-link nav-link-simple" href="/Training/TrainingRequisitionList">
+                        <i class="fas fa-file-signature menu-icon"></i>
+                        <span class="menu-subtitle">Training Requisition</span>
+                    </a>
+                </li>
+
+                <li class="nav-item @(isTrainingAssesmentActive ? "active" : "")">
+                    <a class="nav-link nav-link-simple" href="/Training/TrainingEvaluationRequisitionList">
+                        <i class="fas fa-clipboard-check menu-icon"></i>
+                        <span class="menu-subtitle">Training Assesment</span>
+                    </a>
+                </li>
+                </ul>
+            </li>
+
+            <!-- Finance -->
+            <li class="nav-item">
+                <a class="nav-link slide-in @(isImprestActive || isImprestSurrenderActive ? "active" : "")"
+                   href="#finance-submenu"
+                   data-bs-toggle="collapse">
+                    <div>
+                        <i class="fas fa-coins menu-icon"></i>
+                        <span class="menu-title">Finance</span>
+                    </div>
+                    <i class="fas fa-chevron-down"></i>
+                </a>
+                <ul class="submenu collapse @(isImprestActive || isImprestSurrenderActive ? "show" : "")"
+                    id="finance-submenu">
+
+                    <li class="nav-item @(isImprestMemoActive ? "active" : "")">
+                        <a class="nav-link nav-link-simple" href="/ImprestMemo/ImprestMemoRequisitionList">
+                            <i class="fas fa-money-bill-wave menu-icon"></i>
+                            <span class="menu-subtitle">Imprest Memo</span>
+                        </a>
+                    </li>
+                    <li class="nav-item @(isImprestWarrantActive ? "active" : "")">
+                        <a class="nav-link nav-link-simple" href="/ImprestWarrant/ImprestWarrantRequisitionList">
+                            <i class="fas fa-file-contract menu-icon"></i>
+                            <span class="menu-subtitle">Imprest warrant</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item @(isImprestSurrenderActive ? "active" : "")">
+                        <a class="nav-link nav-link-simple" href="/ImprestSurrender/ImprestSurrender">
+                            <i class="fas fa-hand-holding-usd menu-icon"></i>
+                            <span class="menu-subtitle">Imprest Surrender</span>
+                        </a>
+                    </li>
+                    <li class="nav-item @(isPettyCashActive ? "active" : "")">
+                        <a class="nav-link nav-link-simple" href="/PettyCash/PettyCashVouchersList">
+                            <i class="fas fa-money-bill-wave menu-icon"></i>
+                            <span>Petty Cash</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item @(isPettyCashSurrenderActive ? "active" : "")">
+                        <a class="nav-link nav-link-simple" href="/PettyCash/PettyCashSurrenderList">
+                            <i class="fas fa-hand-holding-usd menu-icon"></i>
+                            <span>Petty Cash Surrender</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item @(isStaffClaim ? "active" : "")">
+                        <a class="nav-link nav-link-simple" href="/StaffClaim/StaffClaims">
+                            <i class="fas fa-money-check-alt menu-icon"></i>
+                            <span class="menu-subtitle">Staff Claims</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
+
+            <!-- Requisitions -->
+            <li class="nav-item">
+                <a class="nav-link slide-in @(isPurchaseRequisitionActive || isStoreRequisitionActive ? "active" : "")"
+                   href="#requisitions-submenu"
+                   data-bs-toggle="collapse">
+                    <div>
+                        <i class="fas fa-file-alt menu-icon"></i>
+                        <span class="menu-title">Requisitions</span>
+                    </div>
+                    <i class="fas fa-chevron-down"></i>
+                </a>
+
+                <ul class="submenu collapse @(isPurchaseRequisitionActive || isStoreRequisitionActive ? "show" : "")"
+                    id="requisitions-submenu">
+
+                    <li class="nav-item @(isPurchaseRequisitionActive ? "active" : "")">
+                        <a class="nav-link nav-link-simple" href="/Purchase/PurchaseRequisitionList">
+                            <i class="fas fa-shopping-cart menu-icon"></i>
+                            <span class="menu-subtitle">Purchase Requisition</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item @(isStoreRequisitionActive ? "active" : "")">
+                        <a class="nav-link nav-link-simple" href="/StoreRequisition/StoreRequisitionList">
+                            <i class="fas fa-boxes menu-icon"></i>
+                            <span class="menu-subtitle">Store Requisition</span>
+                        </a>
+                    </li>
+                    @*
+                <li class="nav-item @(isTrainingNeedsActive ? "active" : "")">
+                    <a class="nav-link nav-link-simple" href="/Training/TrainingNeeds">
+                        <i class="fas fa-chalkboard-teacher menu-icon"></i>
+                        <span class="menu-subtitle">Training Needs</span>
+                    </a>
+                </li>
+
+                <li class="nav-item @(isTrainingRequisitionActive ? "active" : "")">
+                    <a class="nav-link nav-link-simple" href="/Training/TrainingRequisitionList">
+                        <i class="fas fa-chalkboard-teacher menu-icon"></i>
+                        <span class="menu-subtitle">Training Requisition</span>
+                    </a>
+                </li>*@
+
+
+
+                </ul>
+
+            </li>
+
+            <!-- Training Management -->
+            <!--<li class="nav-item">
+    <a class="nav-link slide-in @(isPurchaseRequisitionActive || isStoreRequisitionActive ? "active" : "")"
+       href="#training-submenu"
+       data-bs-toggle="collapse">
+        <div>
+            <i class="fas fa-graduation-cap menu-icon"></i>-->
+            <!-- Updated Icon -->
+            <!--<span class="menu-title">Training Management</span>
+        </div>
+        <i class="fas fa-chevron-down"></i>
+    </a>
+
+    <ul class="submenu collapse @(isPurchaseRequisitionActive || isStoreRequisitionActive ? "show" : "")"
+        id="training-submenu">
+
+        <li class="nav-item @(isTrainingNeedsActive ? "active" : "")">
+            <a class="nav-link nav-link-simple" href="/Training/TrainingNeeds">
+                <i class="fas fa-bullseye menu-icon"></i>-->
+            <!-- Updated Icon -->
+            <!--<span class="menu-subtitle">Training Needs</span>
+        </a>
+    </li>
+
+    <li class="nav-item @(isTrainingRequisitionActive ? "active" : "")">
+        <a class="nav-link nav-link-simple" href="/Training/TrainingRequisitionList">
+            <i class="fas fa-file-signature menu-icon"></i>-->
+            <!-- Updated Icon -->
+            <!--<span class="menu-subtitle">Training Requisition</span>
+                </a>
+            </li>
+        </ul>
+    </li>-->
+            <!-- Fleet Management -->
+            <li class="nav-item">
+                <a class="nav-link slide-in @(isTransportRequisitionActive || isMaintenanceRequisitionActive || isWorkTicketActive ? "active" : "")"
+                   href="#fleet-Management-submenu"
+                   data-bs-toggle="collapse">
+                    <div>
+                        <i class="fas fa-truck-moving menu-icon"></i>
+                        <span class="menu-title">Fleet Management</span>
+                    </div>
+                    <i class="fas fa-chevron-down"></i>
+                </a>
+
+                <ul class="submenu collapse @(isTransportRequisitionActive ? "show" : "")" id="fleet-Management-submenu">
+                    <li class="nav-item @(isTransportRequisitionActive ? "active" : "")">
+                        <a class="nav-link nav-link-simple" href="/Fleet/TransportRequisitionList">
+                            <i class="fas fa-truck-moving menu-icon"></i>
+                            <span class="menu-subtitle">Transport Requisition</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item @(isMaintenanceRequisitionActive ? "active" : "")">
+                        <a class="nav-link nav-link-simple" href="/Fleet/MaintenanceRequisitionList">
+                            <i class="fas fa-tools menu-icon"></i>
+                            <span class="menu-subtitle">Maintenance Requisition</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item @(isFuelRequisitionActive ? "active" : "")">
+                        <a class="nav-link nav-link-simple" href="/Fleet/FuelRequisitionList">
+                            <i class="fas fa-gas-pump menu-icon"></i>
+                            <span class="menu-subtitle">Fuel Requisition</span>
+                        </a>
+                    </li>
+                    <li class="nav-item @(isWorkTicketActive ? "active" : "")">
+                        <a class="nav-link nav-link-simple" href="/Fleet/WorkTicketList">
+                            <i class="fas fa-ticket-alt menu-icon"></i>
+                            <span class="menu-subtitle">Work Ticket</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+
+
+            <!-- ICT -->
+            <li class="nav-item">
+                <a class="nav-link slide-in @(isICTHelpDeskActive || isIssuanceVoucherActive ? "active" : "")"
+                   href="#ict-submenu"
+                   data-bs-toggle="collapse">
+                    <div>
+                        <i class="fas fa-desktop menu-icon"></i>
+                        <span class="menu-title">ICT</span>
+                    </div>
+                    <i class="fas fa-chevron-down"></i>
+                </a>
+                <ul class="submenu collapse @(isICTHelpDeskActive || isIssuanceVoucherActive ? "show" : "")"
+                    id="ict-submenu">
+                    <li class="nav-item @(isICTHelpDeskActive ? "active" : "")">
+                        <a class="nav-link nav-link-simple" href="/ICT/ICTHelpDeskList">
+                            <i class="fas fa-laptop-code menu-icon"></i>
+                            <span class="menu-subtitle">ICT HelpDesk</span>
+                        </a>
+                    </li>
+
+                    @*  <li class="nav-item @(isIssuanceVoucherActive ? "active" : "")">
+                    <a class="nav-link nav-link-simple" href="/ICT/IssuanceVoucherList">
+                        <i class="fas fa-file-invoice menu-icon"></i>
+                        <span class="menu-subtitle">Issuance Voucher</span>
+                    </a>
+                </li>*@
+                    @*<li class="nav-item @(isFixedAssetsActive ? "active" : "")">
+                    <a class="nav-link nav-link-simple" href="/ICT/FixedAssetsList">
+                        <i class="fas fa-laptop-house menu-icon"></i>
+                        <span>Allocated Assets</span>
+                    </a>
+                </li>*@
+                </ul>
+            </li>
+
+
+            <!-- Technical -->
+            <li class="nav-item">
+                <a class="nav-link slide-in @(isLabSampleManagementActive ? "active" : "")"
+                   href="#tehnical-submenu"
+                   data-bs-toggle="collapse">
+                    <div>
+                        <i class="fas fa-tools menu-icon"></i>
+                        <span class="menu-title">Technical</span>
+                    </div>
+                    <i class="fas fa-chevron-down"></i>
+                </a>
+                <ul class="submenu collapse @(isLabSampleManagementActive  ? "show" : "")"
+                    id="tehnical-submenu">
+                    <li class="nav-item @(isLabSampleManagementActive ? "active" : "")">
+                        <a class="nav-link nav-link-simple" href="/Technical/LabSampleManagementList">
+                            <i class="fas fa-vials menu-icon"></i>
+                            <span class="menu-subtitle">Lab Sample Management</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+
+
+            <!-- Employee Exit -->
+            @*<li class="nav-item">
+            <a class="nav-link slide-in @(isExitVouchersActive ? "active" : "")"
+               href="#exit-submenu"
+               data-bs-toggle="collapse">
+                <div>
+                    <i class="fas fa-sign-out-alt menu-icon"></i>
+                    <span class="menu-title">Employee Exit</span>
+                </div>
+                <i class="fas fa-chevron-down"></i>
+            </a>
+            <ul class="submenu collapse @(isExitVouchersActive ? "show" : "")"
+                id="exit-submenu">
+                <li class="nav-item @(isExitVouchersActive ? "active" : "")">
+                    <a class="nav-link nav-link-simple" href="/EmployeeExit/EmployeeExitVoucherList">
+                        <i class="fas fa-file-export menu-icon"></i>
+                        <span class="menu-subtitle">Exit Vouchers</span>
+                    </a>
+                </li>
+            </ul>
+        </li>*@
+
+            <!-- Approvals -->
+            <li class="nav-item">
+                <a class="nav-link slide-in @(isPendingApprovalsActive || isApprovedDocumentsActive || isRejectedApprovalsActive ? "active" : "")"
+                   href="#approvals-submenu"
+                   data-bs-toggle="collapse">
+                    <div>
+                        <i class="fas fa-check-circle menu-icon"></i>
+                        <span class="menu-title">Approvals</span>
+                    </div>
+                    <i class="fas fa-chevron-down"></i>
+                </a>
+                <ul class="submenu collapse @(isPendingApprovalsActive || isApprovedDocumentsActive || isRejectedApprovalsActive ? "show" : "")"
+                    id="approvals-submenu">
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-simple" href="/DocumentApproval/DocumentForApprovalSummery?rn=Open">
+                            <i class="fas fa-clock menu-icon"></i>
+                            <span class="menu-subtitle">Pending Approvals</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-simple" href="/DocumentApproval/DocumentForApprovalSummery?rn=Approved">
+                            <i class="fas fa-check menu-icon"></i>
+                            <span class="menu-subtitle">Approved Documents</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-simple" href="/DocumentApproval/DocumentForApprovalSummery?rn=Rejected">
+                            <i class="fas fa-times menu-icon"></i>
+                            <span class="menu-subtitle">Rejected Documents</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <!-- Reports -->
+            @*<li class="nav-item">
+            <a class="nav-link slide-in @(isPayslipsActive || isP9Active ? "active" : "")"
+               href="#reports-submenu"
+               data-bs-toggle="collapse">
+                <div>
+                    <i class="fas fa-chart-bar menu-icon"></i>
+                    <span class="menu-title">Reports</span>
+                </div>
+                <i class="fas fa-chevron-down"></i>
+            </a>
+            <ul class="submenu collapse @(isPayslipsActive || isP9Active ? "show" : "")"
+                id="reports-submenu">
+                <li class="nav-item @(isPayslipsActive ? "active" : "")">
+                    <a class="nav-link nav-link-simple" href="/ViewDocument/DocumentViewPayslip">
+                        <i class="fas fa-file-invoice-dollar menu-icon"></i>
+                        <span class="menu-subtitle">Payslips</span>
+                    </a>
+                </li>
+                <li class="nav-item @(isP9Active ? "active" : "")">
+                    <a class="nav-link nav-link-simple" href="/ViewDocument/DocumentViewp9">
+                        <i class="fas fa-file-contract menu-icon"></i>
+                        <span class="menu-subtitle">P9 Forms</span>
+                    </a>
+                </li>
+            </ul>
+        </li>*@
+
+            <!-- Settings -->
+            <li class="nav-item">
+                <a class="nav-link slide-in @(isChangePassswordActive ? "active" : "")"
+                   href="#settings-submenu"
+                   data-bs-toggle="collapse">
+                    <div>
+                        <i class="fas fa-cog menu-icon"></i>
+                        <span class="menu-title">Settings</span>
+                    </div>
+                    <i class="fas fa-chevron-down"></i>
+                </a>
+                <ul class="submenu collapse @(isChangePassswordActive ? "show" : "")"
+                    id="settings-submenu">
+                    <li class="nav-item @(isChangePassswordActive ? "active" : "")">
+                        <a class="nav-link nav-link-simple" href="/Settings/ChangePassword">
+                            <i class="fas fa-lock menu-icon"></i>
+                            <span class="menu-subtitle">Change Password</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+        </ul>
+    </div>
+
+    <!-- Content Area -->
+    <div class="wrapper">
+        <div id="content">
+            <nav class="navbar navbar-expand-lg mb-5" style="position: fixed; left: 0px;  top: 0px; width: 100%; z-index: 999">
+                <div class="container-fluid">
+                    <button class="navbar-toggler" type="button" id="mobile-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-end">
+                        <button id="themeToggle" class="btn btn-outline-secondary mr-3">
+                            <i class="fas fa-moon"></i>
+                        </button>
+
+
+                        <div class="avatar-dropdown dropdown position-relative">
+                            <a class="dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <div class="d-flex align-items-right">
+                                    <div class="avatar text-right">
+                                        <button class="btn btn-secondary">
+                                            <i class="fas fa-user"></i>
+                                        </button>
+                                    </div>
+                                    <!--<div class="d-none d-sm-block">
+                                    <div class="fw-bold" style="width: 80px">-->
+                                    @*@fname @sname*@<!--</div>-->
+                                    @*<div class="small text-muted">Administrator</div>*@
+                                    <!--</div>-->
+                                </div>
+                            </a>
+
+                            <ul class="dropdown-menu dropdown-menu-start w-auto" aria-labelledby="userDropdown">
+
+                                <span class=" user-title p-3 text-center w-auto"> @fname @sname </span>
+                                <span class=" user-title p-3 text-center w-auto">(@EmpNo) </span>
+                                <hr />
+                                <li>
+                                    <a class="dropdown-item" href="/Dashboard/PersonalProfile"><i class="fas fa-user"></i> Profile</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/Settings/ChangePassword"><i class="fas fa-cog"></i> Settings</a>
+                                </li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li>
+                                    <a class="dropdown-item" href="@Url.Action("Login", "Login")"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <div class="container-fluid" style="margin-top: 80px">
+                @RenderBody()
+            </div>
+        </div>
+        @*Footer*@
+        <div class="footer" style="position: relative; bottom: 0px">
+            <div class="col-sm-12 text-center mb-0 pb-0 pt-0 mt-0" id="footer">
+                <a class="text-center" style="" href="/Dashboard/Dashboard">NBA Portal</a> <br />
+                <a target="_blank" href="https://greencom.co.ke/"><p style=" ">Developed by <span>Greencom Enterprise Solution</span></p> </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Single open collapsible implementation
+            $('.nav-link[data-bs-toggle="collapse"]').on('click', function () {
+                var target = $(this).attr('href');
+                var isTargetShown = $(target).hasClass('show');
+
+                // Close all other collapsibles
+                $('.submenu.collapse.show').each(function () {
+                    if (this.id !== target.substring(1)) {
+                        $(this).collapse('hide');
+                        $(this).prev('.nav-link').find('.fa-chevron-down').removeClass('fa-rotate-180');
+                    }
+                });
+
+                // Toggle current
+                if (!isTargetShown) {
+                    $(target).collapse('show');
+                    $(this).find('.fa-chevron-down').addClass('fa-rotate-180');
+                }
+            });
+
+
+
+        });
+
+        // Update Bootstrap collapse to close others when one opens
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.submenu.collapse').forEach(collapse => {
+                collapse.addEventListener('show.bs.collapse', function () {
+                    const openCollapses = document.querySelectorAll('.submenu.collapse.show');
+                    openCollapses.forEach(openCollapse => {
+                        if (openCollapse !== collapse) {
+                            bootstrap.Collapse.getInstance(openCollapse).hide();
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            // Toggle sidebar
+            $("#toggle-btn").click(function () {
+                $("#sidebar").toggleClass("collapsed");
+                $("#content").toggleClass("expanded");
+                $("#toggle-btn i").addClass("animate-spin");
+                setTimeout(function () {
+                    $("#toggle-btn i").removeClass("animate-spin");
+                }, 500);
+            });
+
+            // Mobile toggle with overlay
+            $("#mobile-toggle").click(function () {
+                $("#sidebar").toggleClass("mobile-active");
+                $(".sidebar-overlay").toggleClass("active");
+                $("#mobile-toggle i").addClass("pulse");
+                setTimeout(function () {
+                    $("#mobile-toggle i").removeClass("pulse");
+                }, 1000);
+            });
+
+            // Close sidebar when clicking overlay
+            $(".sidebar-overlay").click(function () {
+                $("#sidebar").removeClass("mobile-active");
+                $(".sidebar-overlay").removeClass("active");
+            });
+
+            // Add active class to nav items on click
+            $(".nav-item a").click(function () {
+                if (!$(this).attr("data-bs-toggle")) {
+                    $(".nav-item").removeClass("active");
+                    $(this).closest(".nav-item").addClass("active");
+
+                    // Add pulse animation to active item
+                    $(this).addClass("pulse");
+                    setTimeout(function () {
+                        $(".nav-link").removeClass("pulse");
+                    }, 1000);
+                }
+            });
+
+            // Ensure submenu stays open when child item is active
+            $(".submenu .nav-item.active").each(function () {
+                $(this).closest(".submenu").addClass("show");
+                $(this).closest(".submenu").prev(".nav-link").attr("aria-expanded", "true");
+            });
+
+            // Toggle chevron icon on collapse
+            $('.nav-link[data-bs-toggle="collapse"]').on("click", function () {
+                $(this).find(".fa-chevron-down").toggleClass("fa-rotate-180");
+            });
+
+            // Adds a slight delay to hover state for better UX
+            let hoverTimeout;
+            $("#sidebar.collapsed").hover(
+                function () {
+                    clearTimeout(hoverTimeout);
+                    hoverTimeout = setTimeout(function () {
+                        if (!$("#sidebar").hasClass("mobile-active")) {
+                            $("#sidebar").addClass("hover-expanded");
+                        }
+                    }, 200);
+                },
+                function () {
+                    clearTimeout(hoverTimeout);
+                    hoverTimeout = setTimeout(function () {
+                        $("#sidebar").removeClass("hover-expanded");
+                    }, 200);
+                }
+            );
+
+            // Add slide-in animation to nav items on load
+            $(".nav-item").each(function (index) {
+                const $item = $(this);
+                setTimeout(function () {
+                    $item.find(".slide-in").addClass("active");
+                }, index * 100);
+            });
+
+            // If using modals, re-initialize Select2 when the modal is shown
+            $('#myModal').on('shown.bs.modal', function () {
+                setTimeout(function () {
+                    $('.select2').select2({
+                        dropdownParent: $('#myModal')
+                    });
+                }, 200); // Slight delay to ensure modal is fully loaded
+            });
+
+
+
+
+
+
+
+
+
+        });
+    </script>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const themeToggle = document.getElementById('themeToggle');
+            const savedTheme = localStorage.getItem('theme') || 'light';
+
+            function setTheme(theme) {
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+                themeToggle.innerHTML = theme === 'dark'
+                    ? '<i class="fas fa-sun"></i>'
+                    : '<i class="fas fa-moon"></i>';
+            }
+
+            setTheme(savedTheme);
+
+            themeToggle.addEventListener('click', function () {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                setTheme(newTheme);
+            });
+        });
+    </script>
+
+
+
+
+    <!-- Bootstrap Core JS -->
+    <script src="~/assets/js/popper.min.js"></script>
+    <script src="~/assets/js/bootstrap.min.js"></script>
+    <!-- Slimscroll JS -->
+    <script src="~/assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <!-- Custom JS -->
+    <script src="~/assets/js/script.js"></script>
+
+    @*<script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>*@
+    <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
+    <script src="//cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="//cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+    <script src="//cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+    <script src="~/DatePicker/jquery-ui.min.js"></script>
+    <link href="~/DatePicker/jquery-ui.min.css" rel="stylesheet" />
+    <script src="~/assets/js/ShowProgression.js"></script>
+    <script src="~/assets/select2/js/select2.min.js"></script>
+    @*<script src="~/assets/js/sweetalert2.min.js"></script>*@
+    <script src="~/SiteJS/SideBarLink.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="~/SiteJS/SearchLinks.js"></script>
+</body>
+</html>

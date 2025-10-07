@@ -1,0 +1,79 @@
+﻿@model Latest_Staff_Portal.ViewModel.IndividualScoreCard
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Directorate/Department", htmlAttributes: new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(m => m.Department, new SelectList(Model.ListOfDepartment, "Value", "Text", Model.Department), "--Select Directorate--", new { @id = "ddlDim2", @class = "form-control", @readonly = "readonly", @style = "background-color:var(--sky-blue-verylight)" })
+                @Html.ValidationMessageFor(model => model.Department, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("PMMU", htmlAttributes: new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(m => m.Strategy_Plan_ID, new SelectList(Model.ListOfPMMU, "Value", "Text", Model.Strategy_Plan_ID), "--Select PMMU--", new { @id = "ddlPMMU", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Strategy_Plan_ID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("From Date", htmlAttributes: new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="text" class="form-control" placeholder="dd/mm/yyyy" id="dtFrom" onkeydown="return false;" autocomplete="off" />
+                <div class='a'></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("To Date", htmlAttributes: new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="text" class="form-control" placeholder="dd/mm/yyyy" id="dtTo" onkeydown="return false;" autocomplete="off" />
+                <div class='a'></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr />
+<div align="center">
+    <input type="button" class="btn btn-primary waves-effect waves-light" value="Submit Request" onclick="SubmitPMMUInitiative();" />
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#dtFrom,#dtTo').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-0:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy',
+            minDate: 0
+        });
+        $("#dtFrom,#dtTo").focus(function () {
+            $("#ui-datepicker-div").position({
+                my: "left top",
+                at: "left bottom",
+                of: $(this)
+            });
+        });
+        $("#ddlDim2,#ddlDim1,#ddlDim3,#ddlCourse,#ddlTrainer").select2({
+            width: '100%'
+        });
+        //document.getElementById("ddlDim2").disabled = true;
+        //document.getElementById("ddlDim1").disabled = true;
+        //document.getElementById("ddlDim3").disabled = true;
+    });
+        
+       
+</script>

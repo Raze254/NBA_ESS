@@ -1,0 +1,337 @@
+﻿@{
+    ViewBag.Title = "PCAApprovedList";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+
+<style>
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#" onclick="DashBoardLink();">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active">Pay Change Advice List</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<hr/>
+<div class="card-body">
+    <div style="text-align:right">
+        <input type="button" style="background: #162f25; color:whitesmoke; border-radius:10px" id="btnEdit" value="New PCA" onclick="NewPCA();"/>
+    </div>
+    @*<a href="#" onclick="NewPCARequisition();" class="btn btn-primary BtnPadding">New Request</a>*@
+    <hr/>
+    <div id="divPcaList"></div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">New Paychange Advice Requisition</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal Links////////////////////////////*@
+<div class="modal fade" id="myModalLinks" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Actions</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodyLinks">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadPCAList();
+    });
+    var LoadPCAList = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: "/PCA/PCAListPartialView",
+            success: function (data) {
+                $("#divPcaList").html(data);
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+    var NewPCA = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: "/PCA/NewPCA",
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    function SubmitPCARequisition() {
+        var employeeCode = $("#ddlpjNo").val();
+        var payrollPeriod = $("#ddlPrd").val(); // Adjust the ID based on your actual ID for Payroll Period dropdown
+        var effectiveDate = $("#txtDate").val();
+        var comments = $("#txtSubject").val();
+        var sourceDocument = $("#ddlSource").val();
+        var description = $("#txtDescription").val();
+
+        if (employeeCode == "") {
+            Swal.fire('Warning', 'Please select an employee PJ No.', 'warning');
+            return;
+        }
+        if (payrollPeriod == "") {
+            Swal.fire('Warning', 'Please select a payroll period.', 'warning');
+            return;
+        }
+        if (effectiveDate == "") {
+            Swal.fire('Warning', 'Effective Date should have a value', 'warning');
+            return;
+        }
+        if (comments == "") {
+            Swal.fire('Warning', 'Please enter a subject.', 'warning');
+            return;
+        }
+        if (sourceDocument == "") {
+            Swal.fire('Warning', 'Please select a source document.', 'warning');
+            return;
+        }
+        if (description == "") {
+            Swal.fire('Warning', 'Please enter a description.', 'warning');
+            return;
+        }
+
+        var newApp = {
+            EmployeeCode: employeeCode,
+            PayrollPeriod: payrollPeriod,
+            Effective_Date: effectiveDate,
+            Comments: comments,
+            Source_Document: sourceDocument,
+            Description: description
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/PCA/SubmitPCAFrom",
+            data: JSON.stringify(newApp),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.success) {
+                    window.location.href = response.message;
+                } else {
+                    Swal.fire('Error', response.message, 'error');
+                }
+            },
+            error: function (xhr, status, error) {
+                Swal.fire('Error', 'An error occurred while submitting the form. Please try again.', 'error');
+            }
+        });
+    }
+    //var SelectedRow = function (DocNo, Status) {
+    //    ShowProgress();
+    //    $.ajax({
+    //        async: true,
+    //        type: "POST",
+    //        datatype: "json",
+    //        data: JSON.stringify({ DocNo: DocNo, Status: Status, DocType:'CLM' }),
+    //        contentType: "application/json; charset = utf-8",
+    //        processData: false,
+    //        url: '/Common/CommonActions',
+    //        success: function (data) {
+    //            $("#modalBodyLinks").html(data);
+    //            HideProgress();
+    //            $("#myModalLinks").modal("show");
+    //        },
+    //        error: function (err) {
+    //            HideProgress();
+    //            Swal.fire('Warning', err, 'warning');
+    //        }
+    //    });
+    //}
+    var ViewDoc = function (DocNo) {
+        ShowProgress();
+        window.location = "/PCA/PCADocumentView?DocNo=" + DocNo;
+    }
+    var SendDocForApproval = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/PCA/SendPCAAppForApproval',
+            success: function (data) {
+                if (data.success == true) {
+                    HideProgress();
+                    LoadPCAList();
+                    $("#myModalLinks").modal("hide");
+                    Swal.fire('Success', data.message, 'success');
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var DelegateDocForApproval = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/DelegateApproval',
+            success: function (data) {
+                if (data.success == true) {
+                    HideProgress();
+                    LoadPCAList();
+                    $("#myModalLinks").modal("hide");
+                    Swal.fire('Success', data.message, 'success');
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var CancelDocForApproval = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/PCA/CancelPCAAppForApproval',
+            success: function (data) {
+                HideProgress();
+                LoadPCAList();
+                if (data.success == true) {
+                    $("#myModalLinks").modal("hide");
+                    Swal.fire('Success', data.message, 'success');
+                }
+                else {
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+
+    }
+    var ViewApprovalTrail = function (DocNo) {
+        $("#labelF").text("Document Approval Trail");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo, RecID: "Staff Claims Header: " + DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/DocumentApprovalTrail',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModalLinks").modal("hide");
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var ViewDocComments = function (documentNumber) {
+        $("#labelF").text("Document Comments");
+        ShowProgress();
+        var RecordID = "Staff Claims Header: " + DocNo;
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ docNo: documentNumber }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/DocumentApprovalComments',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModalLinks").modal("hide");
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+
+</script>

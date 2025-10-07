@@ -1,0 +1,281 @@
+﻿@model Latest_Staff_Portal.ViewModel.ANUPEAisalCardList
+@{
+    ViewBag.Title = "ApprisalReviewDocument";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+<!--
+<link href="~/assets/css/Loader.css" rel="stylesheet" />
+<div class="loading" align="center" id="divLoader">
+    <br />
+    <img src="~/assets/images/ajax-loader.gif" alt="" />
+</div>
+-->
+<div style="background-color: black;">
+    <a href="#" onclick="AppRequisitionLink();" style="color:yellow"><<< Back To ANUPEAisal Review List</a>
+</div>
+<div class="card">
+    <div class="card-title">ANUPEAisal Document(Document No : @Request.QueryString["AppDoc"])</div>
+    <div class="card-body">
+        <div id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="card mb-1 shadow-none">
+                <div class="card-header" id="headingOne" aria-controls="collapseOne" aria-expanded="true" data-toggle="collapse" href="#collapseOne">
+                    <h6 class="m-0">
+                        <span class="fa fa-arrow-up"></span>Section 1 : EMPLOYEE IDENTIFICATION INFORMATION
+                    </h6>
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+                        <div class="row" style="padding: 2px">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label style="font-size: 12px; font-weight: bold">Apprisal Code</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <span class="label label-warning" id="DocNo">@Model.ApprisalCode</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label style="font-size: 12px; font-weight: bold">ANUPEAisal Date</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <span class="label label-warning">@Model.ANUPEAisalDate</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="padding: 2px">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label style="font-size: 12px; font-weight: bold">Staff Number</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <span class="label label-warning">@Model.StaffNo</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label style="font-size: 12px; font-weight: bold">Staff Name</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <span class="label label-warning">@Model.StaffName</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="padding: 2px">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label style="font-size: 12px; font-weight: bold">Job Group</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <span class="label label-warning" id="AppPeriod">@Model.Job_Group</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label style="font-size: 12px; font-weight: bold">Job Title</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <span class="label label-warning">@Model.Job_Title</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="padding: 2px">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label style="font-size: 12px; font-weight: bold">Responsibility Center</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <span class="label label-warning" id="AppPeriod">@Model.RespCenter</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label style="font-size: 12px; font-weight: bold">ANUPEAisal Period</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <span class="label label-warning">@Model.ApprisalPeriod</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="padding: 2px">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label style="font-size: 12px; font-weight: bold">ANUPEAisal Stage</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <span class="label label-warning" id="AppPeriod">@Model.ANUPEAisalStage</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            <div class="row">
+                <div class="col-md-3">
+                    <input type="button" value="Quarter 1 >>>" class="btn btn-primary form-control" id="btnAppQ1" onclick="Q1ANUPEAisal();"/>
+                    <hr/>
+                </div>
+                <div class="col-md-3">
+                    <input type="button" value="Quarter 2 >>>" class="btn btn-danger form-control" id="btnAppQ2" onclick="Q2ANUPEAisal();"/>
+                    <hr/>
+                </div>
+                <div class="col-md-3">
+                    <input type="button" value="Quarter 3 >>>" class="btn btn-primary form-control" id="btnAppQ3" onclick="Q3ANUPEAisal();"/>
+                    <hr/>
+                </div>
+                <div class="col-md-3">
+                    <input type="button" value="Quarter 4 >>>" class="btn btn-danger form-control" id="btnAppQ4" onclick="Q4ANUPEAisal();"/>
+                    <hr/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <label id="labelF"></label>
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal fade" id="myModalRev" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <label id="labelEva"></label>
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodyRev">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.shadow-none').on('shown.bs.collapse', function () {
+            $(this).find('.fa-arrow-down').removeClass('fa-arrow-down').addClass('fa-arrow-up');
+        }).on('hidden.bs.collapse', function () {
+            $(this).find('.fa-arrow-up').removeClass('fa-arrow-up').addClass('fa-arrow-down');
+        });
+        $("#ddlPeer").select2({
+            width: '100%'
+        });
+
+        if (`@Model.Qt_Setup.Q1` == "False") {
+            $('#btnAppQ1').prop('disabled', true);
+        }
+        if (`@Model.Qt_Setup.Q2` == "False") {
+            $('#btnAppQ2').prop('disabled', true);
+        }
+        if (`@Model.Qt_Setup.Q3` == "False") {
+            $('#btnAppQ3').prop('disabled', true);
+        }
+        if (`@Model.Qt_Setup.Q4` == "False") {
+            $('#btnAppQ4').prop('disabled', true);
+        }
+    });
+    var Q1ANUPEAisal = function () {
+        var DocNo = $("#DocNo").html();
+        ShowProgress();
+        window.location = "/ANUPEAisal/Sup_Quarter1_Card?AppDoc=" + DocNo;
+    };
+    var Q2ANUPEAisal = function () {
+        var DocNo = $("#DocNo").html();
+        ShowProgress();
+        window.location = "/ANUPEAisal/Sup_Quarter2_Card?AppDoc=" + DocNo;
+    };
+    var Q3ANUPEAisal = function () {
+        var DocNo = $("#DocNo").html();
+        ShowProgress();
+        window.location = "/ANUPEAisal/Sup_Quarter3_Card?AppDoc=" + DocNo;
+    };
+    var Q4ANUPEAisal = function () {
+        var DocNo = $("#DocNo").html();
+        ShowProgress();
+        window.location = "/ANUPEAisal/Sup_Quarter4_Card?AppDoc=" + DocNo;
+    };
+    var AppRequisitionLink = function () {
+        ShowProgress();
+        window.location = "MyReviewANUPEAisalList";
+    };
+    var SendDocTo = function () {
+        var DocNo = $("#DocNo").html();
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo, SendTo: "0" }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: 'SendDocumentTo',
+            success: function (data) {
+                if (data.success == true) {
+                    ShowProgress();
+                    window.location = "MyReviewANUPEAisalList";
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+</script>

@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.LeaveBalView>
+
+<div class="pre-scrollable">
+    <table id="datatable-buttons" class="table table-hover" style="border-collapse: collapse; padding:0; font-size:smaller; width: 100%;">
+        <thead style="background-color: #2F463D; color: white ">
+        <tr style="padding:0; border-spacing:0">
+            <th>Leave Type</th>
+            <th style="text-align:center">Days CF</th>
+            <th style="text-align:center">Annual Entitlement</th>
+            <th style="text-align:center">Earned To Date</th>
+            <th style="text-align:center">Taken</th>
+            <th style="text-align:center">Available Days</th>
+        </tr>
+        </thead>
+        <tbody>
+        @{
+            if (Model != null && Model.Count() > 0)
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td style="padding:0; border-spacing:0; text-align:left">
+                            @Html.DisplayFor(modelItem => item.LeaveType)
+                        </td>
+                        <td style="padding:0; border-spacing:0; text-align:center">
+                            @Html.DisplayFor(modelItem => item.CarryForward)
+                        </td>
+                        <td style="padding: 0; border-spacing: 0; text-align:center ">
+                            @Html.DisplayFor(modelItem => item.Allocated)
+                        </td>
+                        <td style="padding: 0; border-spacing: 0; text-align:center ">
+                            @Html.DisplayFor(modelItem => item.Earned)
+                        </td>
+                        <td style="padding: 0; border-spacing: 0; text-align:center ">
+                            @Html.DisplayFor(modelItem => item.LeaveTaken)
+                        </td>
+                        <td style="padding: 0; border-spacing: 0; text-align: center">
+                            @Html.DisplayFor(modelItem => item.Available)
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="9" style="color:red">
+                        No Records Found
+                    </td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>

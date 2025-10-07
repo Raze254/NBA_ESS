@@ -1,0 +1,89 @@
+/*Custom stylings*/
+
+body {
+    font-family: "Lexend", sans-serif !important;
+}
+
+/*Data tables custom styles*/
+.pagination > li > a, .pagination > li > span {
+    color: #162f25 !important;
+}
+.page-item.active .page-link {
+    background-color: #162f25 !important;
+    border-color: #162f25 !important;
+    color: #fff !important;
+   
+}
+
+.page-item .page-link:hover {
+    background-color: #b8a603 !important;
+    border-color: #b8a603 !important;
+    color: #fff;
+}
+
+
+
+.custom-btn {
+    border: none !important;
+    color: #fff !important;
+    border-radius: 5px !important;
+    background-color: #2F463D !important;
+    padding: 5px 10px;
+}
+
+    .custom-btn:hover {
+        background-color: #b8a603 !important;
+    }
+table.dataTable {
+    border-collapse: collapse !important;
+}
+
+.row-border tbody tr {
+    border-bottom: 1px solid #ddd !important;
+    margin: 5px;
+}
+
+    .row-border tbody tr:last-child {
+        border-bottom: 0 !important;
+    }
+
+#datatable-buttons tbody td:not(:first-child) {
+    cursor: pointer;
+}
+
+#datatable-buttons tbody tr:hover {
+    background-color: #f5f5f5 !important;
+}
+
+    table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > td:first-child:before, table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > th:first-child:before {
+        position: unset !important;
+        margin-left: -2rem !important;
+    }
+
+.table td {
+    border: 1px solid #808080 !important;
+}
+
+.swal2-styled.swal2-confirm {
+    background-color: #162f25 !important;
+}
+
+.swal2-styled.swal2-confirm:hover {
+    background-color: #b8a603 !important;
+}
+
+    /*end of custom stylings*/
+
+.sidebar-menu a {
+    display: flex;
+    align-items: center !important;
+    .menu-arrow {
+                    display: flex !important;
+                    align-content: center;
+                    margin-top: -5px;
+                }
+}
+
+.footer {
+    padding: 0.5rem !important;
+}

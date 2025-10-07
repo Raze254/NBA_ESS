@@ -1,0 +1,127 @@
+﻿@model Latest_Staff_Portal.ViewModel.ExpenseRequisitionLineList
+
+<div class="table-responsive">
+    <table class="datatable table table-stripped" id="datatable-buttons">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th>Activity</th>
+                <th>G/L Account</th>
+                <th>G/L Account Name</th>
+                <th>Budget Allocation</th>
+                <th>Budget Balance</th>
+                <th>Total Commitments</th>
+                <th>Total Amount</th>
+                <th>Total Allocation</th>
+                @if (Model.Status == "Open")
+                {
+                    <th class="actionHeader">Action</th>
+                    <th class="addHeader">Add</th>
+                    <th class="viewAction">View</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.ListOfExpenseRequisitionLine != null && Model.ListOfExpenseRequisitionLine.Any())
+            {
+                foreach (var item in Model.ListOfExpenseRequisitionLine)
+                {
+                    <tr>
+                        <td>@item.ActivityId</td>
+                        <td>@item.GLAccount</td>
+                        <td>@item.GLAccountName</td>
+                        <td>@item.BudgetAllocation.ToString("N0")</td>
+                        <td>@item.BudgetBalance.ToString("N0")</td>
+                        <td>@item.TotalCommitments.ToString("N0")</td>
+                        <td>@item.TotalAmount.ToString("N0")</td>
+                        <td>@item.TotalAllocation.ToString("N0")</td>
+                        @if (Model.Status == "Open")
+                        {
+                            <td style="text-align:right" class="tdAction">
+                                <button class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Edit"
+                                        onclick="EditItem('@item.DocumentNo', '@item.LineNo', '@item.ResourceReqNo');">
+                                    Edit
+                                </button>
+                                <button class="btn btn-danger ml-3" data-toggle="tooltip" data-placement="top" title="Delete" onclick="RemoveItem('@item.DocumentNo', '@item.LineNo');">Delete</button>
+                            </td>
+                            <td style="text-align:right" class="addAction">
+                                @{
+                                    if (Model.RequiresImprest)
+                                    {
+                                        <button class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Add Imprest" onclick="AddImprestLine('@item.GLAccount', '@item.LineNo');">Add Imprest</button>
+                                    }
+                                    if (Model.RequiresPRN)
+                                    {
+                                        <button class="btn btn-success ml-3" data-toggle="tooltip" data-placement="top" title="Add PRN" onclick="AddPrnLine('@item.GLAccount', @item.LineNo, @Model.GlobalDimension1Code, @Model.GlobalDimension2Code);">Add PRN</button>
+
+                                    }
+
+                                    if (Model.RequiresDirectPay && Model.DirectPayType == "Staff Claim")
+                                    {
+                                        <button class="btn btn-success ml-3" data-toggle="tooltip" data-placement="top" title="Add Staff Claim" onclick="AddStaffClaimLine('@item.GLAccount', @item.LineNo);">Add Staff Claim</button>
+                                    }
+                                    else if (Model.RequiresDirectPay && Model.DirectPayType == "Non Staff Claim")
+                                    {
+                                        <button class="btn btn-success ml-3" title="Add Non Staff Claim" onclick="AddNonStaffClaimLine('@item.GLAccount', @item.LineNo);">Add Direct Expense </button>
+                                    }
+                                    else if (Model.RequiresDirectPay && Model.DirectPayType == "Contract Payment")
+                                    {
+                                        <button class="btn btn-success ml-3" title="Add Contract Payment" onclick="AddContractPayment('@item.GLAccount', @item.LineNo);">Add Contract Payment </button>
+                                    }
+                                }
+
+                            </td>
+                            <td style="text-align:right" class="viewAction">
+                                @{
+                                    if (Model.RequiresImprest)
+                                    {
+                                        <button class="btn btn-success" data-toggle="tooltip" data-placement="top" title="View Imprest Line" onclick="ViewImprestLine('@item.GLAccount', @item.LineNo);">View Imprest Line</button>
+                                    }
+
+                                    if (Model.RequiresPRN)
+                                    {
+                                        <button class="btn btn-success ml-3" data-toggle="tooltip" data-placement="top" title="View PRN Line" onclick="ViewPRNLine('@item.GLAccount', @item.LineNo);">View PRN Line</button>
+                                    }
+
+                                    if (Model.RequiresDirectPay && Model.DirectPayType == "Staff Claim")
+                                    {
+                                        <button class="btn btn-success ml-3" data-toggle="tooltip" data-placement="top" title="View Non Staff Claim Line" onclick="ViewStaffClaim('@item.GLAccount', @item.LineNo);">View Staff Claim Line</button>
+                                    }
+                                    else if (Model.RequiresDirectPay && Model.DirectPayType == "Non Staff Claim")
+                                    {
+                                        <button class="btn btn-success ml-3" data-toggle="tooltip" data-placement="top" title="View Non-Staff Claim Line" onclick="ViewNonStaffClaim('@item.GLAccount', @item.LineNo);">View Direct Expense Line</button>
+                                    }
+                                    else if (Model.RequiresDirectPay && Model.DirectPayType == "Contract Payment")
+                                    {
+                                        <button class="btn btn-success ml-3" data-toggle="tooltip" data-placement="top" title="View Contract Payment" onclick="ViewContractPayment('@item.GLAccount', @item.LineNo);">View Contract Payment</button>
+                                    }
+                                }
+                            </td>
+                        }
+                    </tr>
+                }
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                @{
+                    if (Model.Status == "Open")
+                    {
+                        <div style="text-align:right">
+                            <button class="btn btn-primary action-buttons2" onclick="AddExpenseRequisitionLine();">
+                                <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Line
+                            </button>
+                        </div>
+                    }
+                }
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+<script>
+    $("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100],
+        "bDestroy": true
+    });
+</script>

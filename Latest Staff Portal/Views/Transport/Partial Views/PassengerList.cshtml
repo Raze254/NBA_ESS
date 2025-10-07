@@ -1,0 +1,59 @@
+﻿@model List<Latest_Staff_Portal.ViewModel.TravellingStaff>
+<div class="table-responsive">
+    <table id="ExtPassengerLines" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+        <tr>
+            <th>Action</th>
+            <th>Req No</th>
+            <th>Employee No</th>
+            <th>Employee Name</th>
+            <th>Date of Trip</th>
+            <th>No of Days Requested</th>
+            <th>Trip End Date</th>
+            <th>Trip End Time</th>
+        </tr>
+        </thead>
+        <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var staff in Model)
+            {
+                <tr>
+                    <td>
+                        <input type="button" onclick="removeStaffFromTravelRequisition('@staff.Req_No','@staff.Employee_No');" class="btn btn-sm btn-danger" value="Remove"/>
+                    </td>
+                    <td>@staff.Req_No</td>
+                    <td>@staff.Employee_No</td>
+                    <td>@staff.Employee_Name</td>
+                    <td>@staff.Date_of_Trip.ToShortDateString()</td>
+                    <td>@staff.No_of_Days_Requested</td>
+                    <td>@staff.Trip_End_Date.ToShortDateString()</td>
+                    <td>@staff.Trip_End_Time.ToShortDateString()</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="7" style="color:red">No Records Found</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+<div align="right" class="HideLineButton">
+    <input type="button" value="Add Traveling Staff Line" class="btn btn-danger BtnPadding" onclick="AddPassengerLines();"/>
+</div>
+<script type="text/javascript">
+    @*$(document).ready(function () {
+        var status = '@Model.Status';
+        if (status == "Open") {
+            $(".tdAction").show();
+            $(".HideLineButton").show();
+        }
+        else {
+            $(".tdAction").hide();
+            $(".HideLineButton").hide();
+        }
+    });*@
+</script>

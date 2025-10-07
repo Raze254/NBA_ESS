@@ -1,0 +1,87 @@
+﻿@model Latest_Staff_Portal.ViewModel.ImprestMemoItemDetails
+<style>
+    .ui-front {
+        z-index: 2000 !important;
+    }
+</style>
+<div class="bg-soft-dark" style="color:black">
+    <div class="row">
+        <div class="col-md-6">
+            Imprest Type
+            @Html.DropDownListFor(model => model.ItemDetails.AdvanceType, Model.ListOfImprestTypes, "--select ImprestMemo Type--", new { @class = "form-control", id = "ddlImpType" })
+        </div>
+        <div class="col-md-6">
+            No of Days
+            <input type="text" class="form-control" id="txtQuanity" onkeypress="return functionDecimal(event,this.value)"/>
+        </div>
+    </div>
+    <hr/>
+    @*<div class="row">
+            <div class="col-md-6">
+                Unit Amount
+                <input type="text" class="form-control" id="txtAmount" onkeypress="return functionDecimal(event,this.value)" />
+            </div>
+            <div class="col-md-6">
+                Unit of Measure
+                @Html.DropDownListFor(model => model.ItemDetails.DocNo, Model.ListOfUoM, "--select Unit of Measure--", new { @class = "form-control", @id = "ddlUoM" })
+            </div>
+        </div>*@
+    <div class="row">
+        <div class="col-md-6">
+            Destination
+            @Html.DropDownListFor(model => model.Code, Model.ListOfDestination, "--select Destination--", new { @class = "form-control", id = "ddlDestination" })
+        </div>
+        <div class="col-md-6">
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-md-12">
+            Item Description(150 Characters)
+            <textarea id="txtDescription" class="form-control" maxlength="150"></textarea>
+        </div>
+    </div>
+    <hr/>
+    <div align="center">
+        <input type="button" class="btn btn-primary waves-effect waves-light" value="Edit Line" onclick="UpdateLineItem('@Model.ItemDetails.DocNo', '@Model.ItemDetails.LnNo', '@Model.ItemDetails.Item');"/>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        document.getElementById("ddlImpType").disabled = true;
+        $("#ddlImpType").select2({
+            width: '100%',
+            placeholder: 'Search...'
+        });
+        $('#txtQuanity').val(`@Model.ItemDetails.Quantity`);
+        ////$('#txtAmount').val(`@Model.ItemDetails.UnitAmount`);
+        $('#txtDescription').val(`@Model.ItemDetails.ItemDesc2`);
+    });
+    function functionDecimal(evt, val) {
+        try {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+
+            if (charCode == 46) {
+                if (!(val.indexOf(".") > -1)) {
+                    return true;
+                }
+                else {
+                    Swal.fire('Warning', 'Kindly ensure to specify decimals only', 'warning');
+                }
+            }
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                Swal.fire('Warning', 'Kindly ensure to specify decimals only', 'warning');
+                return false;
+            }
+            return true;
+        } catch (w) {
+            Swal.fire(w);
+        }
+    }
+    function functionx(evt) {
+        if (evt.charCode > 31 && (evt.charCode < 48 || evt.charCode > 57)) {
+            Swal.fire("Error", "Please enter only numeric characters in the text box", "error");
+            return false;
+        }
+    }
+</script>

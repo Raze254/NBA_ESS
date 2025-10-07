@@ -1,0 +1,160 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.PettyCashVoucherLines>
+
+@{
+    ViewBag.Title = "PettyCashVouchersLines";
+    var DocNo = ViewBag.DocNo;
+    var Status = ViewBag.Status;
+}
+
+
+<div class="table-responsive">
+    <table id="datatable-pettyCashVoucherLines" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead >
+            <tr>
+               @* <th>No</th>
+                <th>Line No</th>
+                <th>Bounced Pv No</th>
+                <th>Type</th>*@
+                <th>Account Type</th>
+                <th>Account No</th>
+                <th>Account Name</th>
+                <th>Amount</th>
+                <th>Net Amount</th>
+               @* <th>Remaining Amount</th>
+                <th>VAT Rate</th>
+                <th>VAT Six Percent Rate</th>
+                <th>VAT Withheld Code</th>
+                <th>VAT Withheld Amount</th>
+                <th>Budgetary Control A/C</th>
+                <th>Advance Recovery</th>
+                <th>Retention Amount</th>*@
+                <th>Shortcut Dimension 1 Code</th>
+                <th>Shortcut Dimension 2 Code</th>
+               @* <th>Claim Doc No</th>
+                <th>VAT Code</th>
+                <th>W Tax Code</th>
+                <th>W T VAT Code</th>
+                <th>VAT Amount</th>
+                <th>W Tax Amount</th>
+                <th>Total Net Pay</th>*@
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    @*<td>
+                        @Html.DisplayFor(modelItem => item.No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Line_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Bounced_Pv_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Type)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Account_Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Account_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Account_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Amount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Net_Amount)
+                    </td>
+                   @* <td>
+                        @Html.DisplayFor(modelItem => item.Remaining_Amount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.VAT_Rate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.VAT_Six_Percent_Rate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.VAT_Withheld_Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.VAT_Withheld_Amount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Budgetary_Control_A_C)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Advance_Recovery)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Retention_Amount)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Shortcut_Dimension_1_Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Shortcut_Dimension_2_Code)
+                    </td>
+                   @* <td>
+                        @Html.DisplayFor(modelItem => item.Claim_Doc_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.VAT_Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.W_Tax_Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.W_T_VAT_Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.VAT_Amount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.W_Tax_Amount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Total_Net_Pay)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @if (Status == "Open")
+                        {
+                            <button class="btn btn-danger btn-sm" onclick="DeletePettycCashLine('@item.No', `@item.Line_No` );">
+                                <i class="fa fa-plus-circle" aria-hidden="true"></i> Delete Line
+                            </button>
+                        }
+                        </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div style="text-align:right">
+    @if (Status == "Open")
+    {
+        <button class="btn btn-primary btn-sm action-buttons2" onclick="AddPettyCashLine('@DocNo');">
+            <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Line
+        </button>
+    }
+
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#datatable").DataTable(), $("#datatable-pettyCashVoucherLines").DataTable({
+            lengthChange: !1
+        }).buttons().container().appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)")
+    });
+</script>

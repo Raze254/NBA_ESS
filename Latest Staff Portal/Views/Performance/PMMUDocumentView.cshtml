@@ -1,0 +1,1725 @@
+﻿@model Latest_Staff_Portal.ViewModel.PMMUCard
+
+
+
+@{
+
+    var TotalWeight2 = ViewBag.TotalWeight2;
+
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    hr {
+        margin: 4px;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#" onclick="PMMULink();">PMMU</a></li>
+                <li class="breadcrumb-item active">PMMU Document (@Model.No)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<hr />
+<br />
+
+
+@{
+    // Example ID to check
+    string LoggedInUSerID2 = Model.Responsible_Employee_No;
+
+    // Check if the ID exists in the list
+    bool idExists2 = Model.ListOfNegotiationCommitteeMembers.Any(member => member.Value == LoggedInUSerID2);
+
+    @* if (idExists2)
+        {
+            <p>The ID {@LoggedInUSerID2} exists in the list.</p>
+        }
+        else
+        {
+            <p>The ID {@LoggedInUSerID2} does not exist in the list.</p>
+        }*@
+}
+
+<div class="card">
+
+    <div class="card-body">
+
+        <div style="text-align:right; margin-bottom: 20px">
+            <button style="background: #162f25; color: whitesmoke; border-radius: 10px" onclick="GeneratePMMUReport('@Model.No');">
+                <i class="fa fa-print" aria-hidden="true"></i> Print Report
+            </button>
+
+
+            @if (Model.PMMU_Document_Stage == " ")
+            {
+                if (Model.Change_Status == "Open" && Model.Approval_Status == "Open")
+                {
+                    if (@TotalWeight2 >= 100)
+                    {
+                        <button style="background: #162f25; color: whitesmoke; border-radius: 10px" onclick="SubmitDraftPMMU('@Model.No');">
+                            <i class="fa fa-history" aria-hidden="true"></i> Submit Draft PMMU
+                        </button>
+                    }
+                }
+            }
+
+            @if (Model.PMMU_Document_Stage == "Negotiation" || Model.PMMU_Document_Stage == "Evaluation")
+            {
+                if (Model.Approval_Status == "Open")
+                {
+                    if (@TotalWeight2 >= 100)
+                    {
+                        <button style="background: #162f25; color: whitesmoke; border-radius: 10px" onclick="SendPMMUForApproval('@Model.No');">
+                            <i class="fa fa-history" aria-hidden="true"></i> Send For Approval
+                        </button>
+                    }
+                }
+
+                if (Model.Approval_Status == "Pending Approval")
+                {
+                    <button style="background: #162f25; color: whitesmoke; border-radius: 10px" onclick="CancelPMMUApproval('@Model.No');">
+                        <i class="fa fa-history" aria-hidden="true"></i> Cancel Approval
+                    </button>
+                }
+            }
+
+
+
+            @if (Model.PMMU_Document_Stage == "Evaluation")
+            {
+                if (Model.Approval_Status == "Released")
+                {
+                    <button style="background: #162f25; color: whitesmoke; border-radius: 10px" onclick="StartEvaluation('@Model.No');">
+                        <i class="fa fa-history" aria-hidden="true"></i> Start Evaluation
+                    </button>
+                }
+            }
+        </div>
+
+
+        <div class="text-center mt-5"><h4>PMMU Document (@Model.No)</h4></div>
+        <hr /><br />
+
+        <div class="row">
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Contract No", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.No, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.No, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Head Of Admin Unit No", htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.Responsible_Employee_No, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.Responsible_Employee_No, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Head Of Admin Unit Name", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.Employee_Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.Employee_Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Strategy Plan ID", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.Strategy_Plan_ID, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.Strategy_Plan_ID, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            @*For Negotiation status*@
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Negotiation Panel", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.Target_Setting_Commitee, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;", @id = "Target_Setting_Commitee5" } })
+                    @Html.ValidationMessageFor(model => model.Target_Setting_Commitee, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            @*For Evaluation status*@
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Evaluation Panel", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.Evaluation_Committee, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;", @id = "Evaluation_Committee5" } })
+                    @Html.ValidationMessageFor(model => model.Evaluation_Committee, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Approval Status", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.Approval_Status, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.Approval_Status, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Date Approved", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.Date_Approved, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.Date_Approved, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Start Date", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.Start_Date, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.Start_Date, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("End Date", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.End_Date, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.End_Date, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Admin Unit Code", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Admin_Unit, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.Admin_Unit, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Admin Unit Name", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Admin_Unit_Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.Admin_Unit_Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Created By", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.Created_By, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.Created_By, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <hr />
+    @{
+        if (Model.Approval_Status != "Pending Approval")
+        {
+            <div align="center" id="DivUpdateButton">
+                <input type="button" class="btn btn-primary waves-effect waves-light" value="Update Header" onclick="UpdatePMMUHeader();" />
+            </div>
+        }
+    }
+    <div id="DivPurchaseRegLines" style="margin: 10px 20px">
+        <hr style="border:1px solid black" />
+        <b>PMMU Lines</b>
+        <hr />
+        <div id="divPMMULines"></div>
+        <hr style="border:1px solid black" />
+    </div>
+</div>
+
+
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">New PMMU Line</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*//////////////////////Modal View Doc////////////////////////////*@
+<div class="modal fade" id="myModalAttachment" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Attachment</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalAttachmentBody" style="width:100%;height:450px">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*//////////////////////Document Rejection Modal////////////////////////////*@
+<div class="modal fade" id="myModalComments" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Rejection Comments</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalCommentBody">
+                <div id="divDocComments"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*//////////////////////Update PMMU header Modal////////////////////////////*@
+<div class="modal fade" id="updateHeader" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Update Document</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody2">
+                <!-- Content injected here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="SubmitUpdatedPMMUHeader();">Update</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*//////////////////////Update PMMU line Modal////////////////////////////*@
+<div class="modal fade" id="updateLineNo" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Update PMMU Line</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="docNo2">Doc No:</label>
+                            <input type="text" id="docNo2" class="form-control" readonly>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="lineNo2">Line No:</label>
+                            <input type="text" id="lineNo2" class="form-control" readonly>
+                        </div>
+                        @if (Model.PMMU_Document_Stage == " ")
+                        {
+
+                            <div class="form-group col-md-6" hidden>
+                                <label for="Outcome2">Outcome:</label>
+                                <input type="text" id="Outcome2" class="form-control" readonly>
+                            </div>
+                            <div class="form-group col-md-6" hidden>
+                                <label for="Strategic_Objective2">Strategic Objective</label>
+                                <input type="text" id="Strategic_Objective2" class="form-control" readonly>
+                            </div>
+                            <div class="form-group col-md-6" hidden>
+                                <label for="Strategies2">Strategies:</label>
+                                <input type="text" id="Strategies2" class="form-control" readonly>
+                            </div>
+
+                            <div class="form-group col-md-6" hidden>
+                                <label for="Perspectives2">Perspectives:</label>
+                                <input type="text" id="Perspectives2" class="form-control" readonly>
+                            </div>
+                            <div class="form-group col-md-6" hidden>
+                                <label for="Strategy_Output_Code2">Strategy Output Code:</label>
+                                <input type="text" id="Strategy_Output_Code2" class="form-control" readonly>
+                            </div>
+                            <div class="form-group col-md-6" hidden>
+                                <label for="Outputs2">Outputs:</label>
+                                <input type="text" id="Outputs2" class="form-control" readonly>
+                            </div>
+                            <div class="form-group col-md-6" hidden>
+                                <label for="Output_Indicators2">Output Indicators:</label>
+                                <input type="text" id="Output_Indicators2" class="form-control" readonly>
+                            </div>
+                            <div class="form-group col-md-6" hidden>
+                                <label for="Activities2">Activities:</label>
+                                <input type="text" id="Activities2" class="form-control" readonly>
+                            </div>
+                            <div class="form-group col-md-6" hidden>
+                                <label for="Unit_of_Measure2">UOM:</label>
+                                <input type="text" id="Unit_of_Measure2" class="form-control" readonly>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="National_Average2">National Average:</label>
+                                <input type="number" id="National_Average2" class="form-control" >
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="Best_Achievement2">Best Achievement:</label>
+                                <input type="number" id="Best_Achievement2" class="form-control" >
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="Baseline_Target">Baseline Target:</label>
+                                <input type="text" id="Baseline_Target2" class="form-control">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="Weight">Weight:</label>
+                                <input type="number" id="Weight2" class="form-control">
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="Target">Target:</label>
+                                <input type="number" id="Target2" class="form-control">
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="AchievedTarget">Achieved Target:</label>
+                                <input type="number" id="Achieved_Target2" class="form-control" readonly>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="Net_Weight">Net Weight:</label>
+                                <input type="number" id="Net_Weight2" class="form-control" readonly>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="Comments">Comments:</label>
+                                <input type="text" id="Comments2" class="form-control" readonly>
+                            </div>
+
+                        }
+
+
+                        @if (Model.PMMU_Document_Stage == "Negotiation")
+                        {
+
+                            <div class="form-group col-md-6" hidden>
+                                <label for="Outcome2">Outcome:</label>
+                                <input type="text" id="Outcome2" class="form-control" readonly>
+                            </div>
+                            <div class="form-group col-md-6" hidden>
+                                <label for="Strategic_Objective2">Strategic Objective</label>
+                                <input type="text" id="Strategic_Objective2" class="form-control" readonly>
+                            </div>
+                            <div class="form-group col-md-6" hidden>
+                                <label for="Strategies2">Strategies:</label>
+                                <input type="text" id="Strategies2" class="form-control" readonly>
+                            </div>
+
+                            <div class="form-group col-md-6" hidden>
+                                <label for="Perspectives2">Perspectives:</label>
+                                <input type="text" id="Perspectives2" class="form-control" readonly>
+                            </div>
+                            <div class="form-group col-md-6" hidden>
+                                <label for="Strategy_Output_Code2">Strategy Output Code:</label>
+                                <input type="text" id="Strategy_Output_Code2" class="form-control" readonly>
+                            </div>
+                            <div class="form-group col-md-6" hidden>
+                                <label for="Outputs2">Outputs:</label>
+                                <input type="text" id="Outputs2" class="form-control" readonly>
+                            </div>
+                            <div class="form-group col-md-6" hidden>
+                                <label for="Output_Indicators2">Output Indicators:</label>
+                                <input type="text" id="Output_Indicators2" class="form-control" readonly>
+                            </div>
+                            <div class="form-group col-md-6" hidden>
+                                <label for="Activities2">Activities:</label>
+                                <input type="text" id="Activities2" class="form-control" readonly>
+                            </div>
+                            <div class="form-group col-md-6" hidden>
+                                <label for="Unit_of_Measure2">UOM:</label>
+                                <input type="text" id="Unit_of_Measure2" class="form-control" readonly>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="Unit_of_Measure2">National Average:</label>
+                                <input type="number" id="National_Average2" class="form-control">
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="Unit_of_Measure2">Best Achievement:</label>
+                                <input type="number" id="Best_Achievement2" class="form-control">
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="Baseline_Target">Baseline Target:</label>
+                                <input type="text" id="Baseline_Target2" class="form-control" readonly>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="Weight">Weight:</label>
+                                <input type="number" id="Weight2" class="form-control" readonly>
+                            </div>
+                            {
+                                // Example ID to check
+                                string LoggedInUSerID = Model.Responsible_Employee_No;
+
+                                // Check if the ID exists in the list
+                                bool idExists = Model.ListOfNegotiationCommitteeMembers.Any(member => member.Value == LoggedInUSerID);
+
+                                if (idExists)
+                                {
+                                    <div class="form-group col-md-6">
+                                        <label for="Target">Target:</label>
+                                        <input type="number" id="Target2" class="form-control">
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label for="AchievedTarget">Achieved Target:</label>
+                                        <input type="number" id="Achieved_Target2" class="form-control" readonly>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="form-group col-md-6">
+                                        <label for="Target">Target:</label>
+                                        <input type="number" id="Target2" class="form-control" readonly>
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label for="AchievedTarget">Achieved Target:</label>
+                                        <input type="number" id="Achieved_Target2" class="form-control" readonly>
+                                    </div>
+                                }
+                            }
+
+
+                            <div class="form-group col-md-6">
+                                <label for="Net_Weight">Net Weight:</label>
+                                <input type="number" id="Net_Weight2" class="form-control" readonly>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="Comments">Comments:</label>
+                                <input type="text" id="Comments2" class="form-control" readonly>
+                            </div>
+                        }
+
+                        @if (Model.PMMU_Document_Stage == "Evaluation")
+                        {
+                            <div class="form-group col-md-6">
+                                <label for="Unit_of_Measure2">National Average:</label>
+                                <input type="number" id="National_Average2" class="form-control">
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="Unit_of_Measure2">Best Achievement:</label>
+                                <input type="number" id="Best_Achievement2" class="form-control">
+                            </div>
+
+                            <div class="form-group col-md-6" hidden>
+                                <label for="Outcome2">Outcome:</label>
+                                <input type="text" id="Outcome2" class="form-control" readonly>
+                            </div>
+                            <div class="form-group col-md-6" hidden>
+                                <label for="Strategic_Objective2">Strategic Objective</label>
+                                <input type="text" id="Strategic_Objective2" class="form-control" readonly>
+                            </div>
+                            <div class="form-group col-md-6" hidden>
+                                <label for="Strategies2">Strategies:</label>
+                                <input type="text" id="Strategies2" class="form-control" readonly>
+                            </div>
+
+                            <div class="form-group col-md-6" hidden>
+                                <label for="Perspectives2">Perspectives:</label>
+                                <input type="text" id="Perspectives2" class="form-control" readonly>
+                            </div>
+                            <div class="form-group col-md-6" hidden>
+                                <label for="Strategy_Output_Code2">Strategy Output Code:</label>
+                                <input type="text" id="Strategy_Output_Code2" class="form-control" readonly>
+                            </div>
+                            <div class="form-group col-md-6" hidden>
+                                <label for="Outputs2">Outputs:</label>
+                                <input type="text" id="Outputs2" class="form-control" readonly>
+                            </div>
+                            <div class="form-group col-md-6" hidden>
+                                <label for="Output_Indicators2">Output Indicators:</label>
+                                <input type="text" id="Output_Indicators2" class="form-control" readonly>
+                            </div>
+                            <div class="form-group col-md-6" hidden>
+                                <label for="Activities2">Activities:</label>
+                                <input type="text" id="Activities2" class="form-control" readonly>
+                            </div>
+                            <div class="form-group col-md-6" hidden>
+                                <label for="Unit_of_Measure2">UOM:</label>
+                                <input type="text" id="Unit_of_Measure2" class="form-control" readonly>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="Baseline_Target">Baseline Target:</label>
+                                <input type="text" id="Baseline_Target2" class="form-control" readonly>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="Weight">Weight:</label>
+                                <input type="number" id="Weight2" class="form-control" readonly>
+                            </div>
+                            // Example ID to check
+                            string LoggedInUSerID = Model.Responsible_Employee_No;
+
+                            // Check if the ID exists in the list
+                            bool idExists = Model.ListOfNegotiationCommitteeMembers.Any(member => member.Value == LoggedInUSerID);
+
+                            if (idExists)
+                            {
+                                <div class="form-group col-md-6">
+                                    <label for="Target">Target:</label>
+                                    <input type="number" id="Target2" class="form-control" readonly>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label for="Achieved_Target2">Achieved Target:</label>
+                                    <input type="number" id="Achieved_Target2" class="form-control">
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label for="Net_Weight">Net Weight:</label>
+                                    <input type="number" id="Net_Weight2" class="form-control" readonly>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label for="Comments">Comments:</label>
+                                    <input type="text" id="Comments2" class="form-control">
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="form-group col-md-6">
+                                    <label for="Target">Target:</label>
+                                    <input type="number" id="Target2" class="form-control" readonly>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label for="Achieved_Target2">Achieved Target:</label>
+                                    <input type="number" id="Achieved_Target2" class="form-control" readonly>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label for="Net_Weight">Net Weight:</label>
+                                    <input type="number" id="Net_Weight2" class="form-control" readonly>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label for="Comments">Comments:</label>
+                                    <input type="text" id="Comments2" class="form-control" readonly>
+                                </div>
+                            }
+
+
+                        }
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="UpdatePMMULine();">Update Line</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*//////////////////////Show Activities////////////////////////////*@
+<div class="modal fade" id="showActivities" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Activities</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="post" action="/YourActionUrl">
+                <div class="modal-body" id="modalBody3">
+                    <!-- Content injected here -->
+                </div>
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-primary" id="submitButton" onclick="SubmitUpdatedActivities();">Update</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Add Activities Modal -->
+<div class="modal fade" id="addActivitiesModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Add New Activity</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Activities Container -->
+                <div id="activitiesContainer">
+                    <div class="row">
+                        <div class="col-md-3 form-group" hidden>
+                            <input type="hidden" id="entryNoInput" name="Entry_No">
+                        </div>
+                        <div class="col-md-3 form-group" hidden>
+                            <input id="WeightInput" name="Weight">
+                        </div>
+                        <div class="col-md-3 form-group" hidden>
+                            <input id="SubWeightSumInput" name="SubWeightSum">
+                        </div>
+                        <div class="col-md-3 form-group">
+                            <input type="text" class="form-control" placeholder="Activity" name="Activity[]">
+                        </div>
+                        <div class="col-md-3 form-group">
+                            <input type="number" class="form-control" placeholder="0" name="SubWeight[]">
+                        </div>
+                        <div class="col-md-3 form-group">
+                            <input type="number" class="form-control" placeholder="0" name="Achievedtarget[]" readonly>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="button" class="btn btn-secondary btn-sm" onclick="removeActivity(this)" disabled>Remove</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Button to Add More Activities -->
+                <button type="button" class="btn btn-primary btn-sm mt-2" onclick="addMoreActivities()">
+                    <i class="fas fa-plus"></i> Add Activity
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="SubmitActivities()">Submit</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@*//////////////////////Generate PMMU Report////////////////////////////*@
+<div id="myModalUnits" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">PMMU Report</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <iframe src="" frameborder="0" width="100%" height="600px"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script src="~/assets/js/pdfobject.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadPMMULines(`@Model.No`);
+        var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+        if (Successmsg != "") {
+            Swal.fire('Success', Successmsg, 'success', true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+
+
+        //SetNegotiationCommitteVoucher(`@Model.Target_Setting_Commitee`)
+    });
+
+    var ViewDoc = function (No) {
+        ShowProgress();
+        var form = $('<form>', {
+            action: '/Performance/PMMUDocumentView',
+            method: 'POST'
+        }).append($('<input>', {
+            type: 'hidden',
+            name: 'No',
+            value: No
+        }));
+        form.appendTo('body').submit();
+    };
+
+    var LoadPMMULines = function (No) {
+        var Approval_Status = '@Model.Approval_Status';
+        var Strategy_Plan_ID = '@Model.Strategy_Plan_ID';
+        var PMMU_Document_Stage = '@Model.PMMU_Document_Stage';
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "html",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ No: No, Approval_Status: Approval_Status, PMMU_Document_Stage: PMMU_Document_Stage, Strategy_Plan_ID: Strategy_Plan_ID }),
+            url: "/Performance/PMMULines",
+            success: function (data) {
+                $("#divPMMULines").html(data);
+                HideProgress();
+                //GetDocumentAttachments();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    };
+
+    function GetActivities(Contract_No, Entry_No, Strategy_Output_Code, Weight) {
+        // Show progress/loading indicator here if needed
+        ShowProgress();
+         var Document_Stage = '@Model.PMMU_Document_Stage';
+
+
+        $.ajax({
+            async: true,
+            type: "POST",
+            url: '/Performance/PmmuActivities',
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            dataType: "html", // Expecting an HTML response
+            data: JSON.stringify({
+                Contract_No: Contract_No,
+                Entry_No: Entry_No,
+                Strategy_Output_Code: Strategy_Output_Code,
+                Weight: Weight,
+                Document_Stage: Document_Stage
+            }),
+
+
+
+            success: function (data) {
+                $("#modalBody3").html(data);
+                HideProgress();
+                $("#showActivities").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', 'An error occurred while loading Line Activities. Please try again.', 'warning');
+            }
+        });
+    }
+
+    function addActivities(Entry_No, Weight, SubWeightSum) {
+        // Close the current 'showActivities' modal
+        $('#showActivities').modal('hide');
+
+        $('#entryNoInput').val(Entry_No); // Optionally store it in a hidden input
+        $('#SubWeightSumInput').val(SubWeightSum); // Optionally store it in a hidden input
+        $('#WeightInput').val(Weight); // Optionally store it in a hidden input
+
+        // After hiding the first modal, open the 'addActivitiesModal'
+        $('#addActivitiesModal').modal('show');
+
+    }
+
+    let activityCount = 0;
+
+    function addMoreActivities() {
+        // Create a new row for additional activity fields
+        const newActivityRow = `
+            <div class="row mt-2">
+                <div class="col-md-3 form-group">
+                    <input type="text" class="form-control" placeholder="Activity" name="Activity[]">
+                </div>
+                <div class="col-md-3 form-group">
+                    <input type="number" class="form-control" placeholder="0" name="SubWeight[]">
+                </div>
+                <div class="col-md-3 form-group">
+                    <input type="number" class="form-control" placeholder="0" name="Achievedtarget[]" readonly>
+                </div>
+                <div class="col-md-3">
+                    <button type="button" class="btn btn-danger btn-sm" onclick="removeActivity(this)">Remove</button>
+                </div>
+            </div>
+        `;
+
+        // Append the new row to the activities container
+        document.getElementById('activitiesContainer').insertAdjacentHTML('beforeend', newActivityRow);
+    }
+
+    // Function to remove an activity row
+    function removeActivity(button) {
+        button.closest('.row').remove();
+    }
+
+
+  function SubmitActivities() {
+    ShowProgress();
+
+    // Capture values from the model
+    var Contract_No = '@Model.No';
+    var Strategy_Plan_ID = '@Model.Strategy_Plan_ID';
+    var Entry_No = $("#entryNoInput").val();
+    var Weight = parseFloat($("#WeightInput").val()) || 0;  // Ensure numeric value
+    var SubWeightSum = parseFloat($("#SubWeightSumInput").val()) || 0; // Ensure numeric value
+
+    let activities = [];
+    let subWeights = [];
+    let achievedTargets = [];
+
+    // Get input elements
+    let activityInputs = document.querySelectorAll('input[name="Activity[]"]');
+    let subWeightInputs = document.querySelectorAll('input[name="SubWeight[]"]');
+    let achievedTargetInputs = document.querySelectorAll('input[name="Achievedtarget[]"]');
+
+    // Collect values from the input fields
+    activityInputs.forEach((input, index) => {
+        activities.push(input.value);
+        subWeights.push(parseFloat(subWeightInputs[index].value) || 0); // Ensure numeric values
+        achievedTargets.push(parseFloat(achievedTargetInputs[index].value) || 0); // Ensure numeric values
+    });
+
+    let AdditionalSubWeightSum = 0;
+    subWeights.forEach((sw) => {
+        AdditionalSubWeightSum += sw;
+    });
+
+    // Calculate total sum of weights
+    var AllSubWeightsSum = SubWeightSum + AdditionalSubWeightSum;
+
+    var isValid = true;
+
+    // Validate the sum of sub-weights
+      if (AllSubWeightsSum > Weight) {
+          HideProgress();
+        Swal.fire('Warning', 'The sum of activities Sub-weights cannot exceed the total weight.', 'warning');
+        isValid = false;
+    }
+
+    // If form is invalid, prevent further action
+     if (!isValid) {
+
+        // You can stop form submission or further action here
+        return;
+
+    }
+
+    // Prepare the data object
+    let data = {
+        Contract_No: Contract_No,
+        Strategy_Plan_ID: Strategy_Plan_ID,
+        Entry_No: Entry_No,
+        ActivitiesArray: activities, // Make sure this matches the expected property name
+        SubWeightsArray: subWeights,  // Same here
+        AchievedTargetsArray: achievedTargets // And here
+    };
+
+    // AJAX request
+    $.ajax({
+        url: '/Performance/AddActivities',
+        method: 'POST',
+        data: JSON.stringify(data),
+        contentType: 'application/json',
+        success: function (response) {
+            $('#addActivitiesModal').modal('hide');
+            Swal.fire('Success', 'Activities submitted successfully.', 'success');
+
+            console.log(response.message);
+            location.reload();
+            HideProgress();
+        },
+        error: function (error) {
+            Swal.fire('Warning', 'Error submitting activities. Try again.', 'warning');
+            HideProgress();
+            // Handle error response
+        }
+    });
+}
+
+    function SubmitUpdatedActivities() {
+        var isValid = true;
+
+        const activitiesData = [];
+        const rows = document.querySelectorAll('#activitiesTable tbody tr'); // Get all rows from the table's tbody
+        const rowCount = rows.length; // Get the number of rows
+        console.log("Row count: ", rowCount);
+        let subWeightSum = 0;
+        rows.forEach(row => {
+            // Safely get the entry number
+            const entryNoField = row.querySelector('input[name^="Entry_No"]');
+            const entryNo = entryNoField ? entryNoField.value : null;
+            console.log("Entry No: ", entryNo);
+            if (!entryNo) {
+                console.warn("Entry_No field not found in row");
+                return;
+            }
+
+            // Collect other fields using the entry number
+            const contractNoField = row.querySelector(`input[name="Contract_No_${entryNo}"]`).value;
+            const strategyPlanIDField = row.querySelector(`input[name="Strategy_Plan_ID_${entryNo}"]`).value;
+            const WeightField = row.querySelector(`input[name="Weight_${entryNo}"]`).value;
+            const entryField = row.querySelector(`input[name="Entry_${entryNo}"]`).value;
+            const strategyOutputCodeField = row.querySelector(`input[name="Strategy_Output_Code_${entryNo}"]`).value;
+            const activitiesField = row.querySelector(`input[name="Activities_${entryNo}"]`).value;
+            const subWeightField = row.querySelector(`input[name="Sub_Weights_${entryNo}"]`).value;
+            const achievedTargetsField = row.querySelector(`input[name="AchievedTargets_${entryNo}"]`).value;
+
+            const subWeight = parseFloat(subWeightField) || 0; // Default to 0 if the value is not a valid number
+            subWeightSum += subWeight;
+
+            // Ensure all fields are found before proceeding
+            if (!contractNoField || !strategyPlanIDField || !strategyOutputCodeField || !activitiesField || !subWeightField || !achievedTargetsField) {
+                console.warn(`Some fields are missing for entry number: ${entryNo}`);
+                return;
+            }
+
+            // Collect the data into an object
+            activitiesData.push({
+                Contract_No: contractNoField,
+                Strategy_Plan_ID: strategyPlanIDField,
+                Weight: WeightField,
+                Strategy_Output_Code: strategyOutputCodeField,
+                Entry_No: entryNo,
+                Entry: entryField,
+                Activities: activitiesField,
+                SubWeights: subWeightField,
+                AchievedTargets: achievedTargetsField
+            });
+        });
+
+        if (subWeightSum > activitiesData[0].Weight) {
+            Swal.fire('Warning', 'The sum of activities Sub-weights cannot exceed the total weight.', 'warning');
+            isValid = false;
+        }
+
+
+        // Exit if validation fails
+        if (!isValid) {
+            return;
+        }
+
+        console.log("Collected Activities Data: ", activitiesData);
+        ShowProgress(); // Show loading spinner or progress
+
+        $.ajax({
+            type: "POST",
+            url: '/performance/SubmitUpdatedActivities',
+            contentType: "application/json",
+            data: JSON.stringify(activitiesData),
+            success: function (response) {
+                HideProgress(); // Hide loading spinner or progress
+                if (response.success) {
+                    // Close the modal and redirect if needed
+                    $('#showActivities').modal('hide');
+                    ViewDoc(response.message);
+                    Swal.fire('Success', 'PMMU line updated successfully.', 'success');
+                } else {
+                    Swal.fire('Warning', response.message, 'warning');
+                }
+            },
+            error: function (err) {
+                // Handle error
+                HideProgress();
+                Swal.fire('Error', 'An error occurred while submitting the request.', 'error');
+            }
+        });
+    }
+
+    var AddPMMULine = function () {
+        var Strategy_Plan_ID = '@Model.Strategy_Plan_ID';
+        var Contract_No = '@Model.No';
+
+        ShowProgress();
+
+        $.ajax({
+        async: true,
+        type: "GET",
+        dataType: "html",
+        url: '/Performance/NewPMMULine',
+        data: {
+        Strategy_Plan_ID: Strategy_Plan_ID,
+        Contract_No, Contract_No
+        },
+        success: function (data) {
+        $("#modalBody").html(data);
+        HideProgress();
+        $("#myModal").modal("show");
+        },
+        error: function (err) {
+        HideProgress();
+        Swal.fire('Warning', err.responseText, 'warning');
+        }
+        });
+    }
+
+    function SubmitPMMULine(TotalWeight3) {
+        var isValid = true;
+
+        // Collect data from the form
+        var Contract_No = `@Model.No`;
+        var TotalWeight = TotalWeight3;
+
+        var Theme_ID = $("#Outcome option:selected").text();
+        var Outcome = $("#Outcome").val();
+        var Strategic_Objective = $("#Strategic_Objective").val();
+        var Strategies = $("#Strategies").val();
+        var Perspectives = $("#Perspectives").val();
+        var Strategy_Output_Code = $("#Strategy_Output_Code").val();
+        var Outputs = $("#Outputs").val();
+        var Output_Indicators = $("#Output_Indicators").val();
+        var National_Average = $("#National_Average").val();
+        var Best_Achievement = $("#Best_Achievement").val();
+
+        var activities = [];
+        $("input[name='Activities[]']").each(function () {
+        activities.push($(this).val());
+        });
+
+        var SubWeights = [];
+        var SubWeightsSum = 0;
+        $("input[name='SubWeights[]']").each(function () {
+        var val = parseFloat($(this).val()) || 0; // Convert to a number, or default to 0
+        SubWeights.push(val);
+        SubWeightsSum += val; // Add value to the sum
+        });
+
+        // Combine activities and SubWeights into an array of arrays
+        var activitiesAndSubWeights = activities.map(function (activity, index) {
+        return [activity, SubWeights[index]]; // Create a pair of [activity, correspondingSubWeight]
+        });
+
+        // Now you have an array of arrays in `activitiesAndSubWeights`
+        console.log(activitiesAndSubWeights); // For debugging purposes
+
+        var Unit_of_Measure = $("#Unit_of_Measure").val();
+        var Baseline_Target = parseFloat($("#Baseline_Target").val()) || 0;
+        var Weight = parseFloat($("#Weight").val()) || 0;
+        var Target = parseFloat($("#Target").val()) || 0;
+        var Achieved_Target = parseFloat($("#Achieved_Target").val()) || 0;
+        var Comments = $("#Comments").val();
+
+        // Validation: SubWeightsSum should not exceed Weight
+        if (SubWeightsSum > Weight) {
+        Swal.fire('Warning', 'The sum of activities Sub-weights cannot exceed the total weight.', 'warning');
+        isValid = false;
+        }
+
+        // Validation checks
+        if (!Outcome) {
+        Swal.fire('Warning', 'Select Outcome.', 'warning');
+        isValid = false;
+        }
+        if (!Strategic_Objective) {
+        Swal.fire('Warning', 'Select a Strategic Objective.', 'warning');
+        isValid = false;
+        }
+        if (!Strategies) {
+        Swal.fire('Warning', 'Please select Strategies.', 'warning');
+        isValid = false;
+        }
+        if (!Perspectives) {
+        Swal.fire('Warning', 'Please select a Perspective.', 'warning');
+        isValid = false;
+        }
+        if (!Strategy_Output_Code) {
+        Swal.fire('Warning', 'Please select a Strategy Output Code.', 'warning');
+        isValid = false;
+        }
+        if (!activities.length) {
+        Swal.fire('Warning', 'Enter at least one Activity.', 'warning');
+        isValid = false;
+        }
+        if (!Unit_of_Measure) {
+        Swal.fire('Warning', 'Select Unit Of Measure.', 'warning');
+        isValid = false;
+        }
+        if (Baseline_Target === 0) {
+        Swal.fire('Warning', 'Enter Baseline Target.', 'warning');
+        isValid = false;
+        }
+
+        // Perspective-based weight validation
+        if (Perspectives === "CORE MANDATE" && Weight > 70 ) {
+        Swal.fire('Warning', 'Invalid weight for the selected perspective.', 'warning');
+        isValid = false;
+        }
+        if (Perspectives === "CUSTOMER PERSPECTIVES" && Weight > 10) {
+        Swal.fire('Warning', 'Invalid weight for the selected perspective.', 'warning');
+        isValid = false;
+        }
+        if (Perspectives === "FINANCIAL PERSPECTIVES" && Weight > 10) {
+        Swal.fire('Warning', 'Invalid weight for the selected perspective.', 'warning');
+        isValid = false;
+        }
+        if (Perspectives === "INNOVATION AND LEARNING" && Weight > 5) {
+        Swal.fire('Warning', 'Invalid weight for the selected perspective.', 'warning');
+        isValid = false;
+        }
+        if (Perspectives === "INTERNAL PROCESSES" && Weight > 5) {
+        Swal.fire('Warning', 'Invalid weight for the selected perspective.', 'warning');
+        isValid = false;
+        }
+
+        // // Validation:  total weight should not exceed 100
+        if ( (TotalWeight3+Weight) > 100) {
+            Swal.fire('Warning', 'Total Weight cannot be more than 100.', 'warning');
+            isValid = false;
+        }
+
+
+        // Exit if validation fails
+        if (!isValid) {
+        return;
+        }
+
+        // Prepare data object
+        var newPMMULine = {
+            Contract_No: Contract_No,
+            Theme_ID: Theme_ID,
+            Outcome: Outcome,
+            Strategic_Objective: Strategic_Objective,
+            Strategies: Strategies,
+            Perspectives: Perspectives,
+            Strategy_Output_Code: Strategy_Output_Code,
+            Outputs: Outputs,
+            Output_Indicators: Output_Indicators,
+            ActivitiesArray: activities,
+            SubWeightsArray: SubWeights,
+            Unit_of_Measure: Unit_of_Measure,
+            National_Average: National_Average,
+            Best_Achievement: Best_Achievement,
+            Baseline_Target: Baseline_Target,
+            Weight: Weight,
+            Target: Target,
+            Achieved_Target: Achieved_Target,
+            Comments: Comments,
+        };
+
+
+        // Show progress indicator
+        ShowProgress();
+
+        // Send data via AJAX
+        $.ajax({
+        type: "POST",
+        url: "/Performance/SubmitPMMULine", // Change this to your actual endpoint
+        data: JSON.stringify(newPMMULine),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (data) {
+        HideProgress();
+        if (data.success) {
+        ViewDoc(data.message);
+        Swal.fire('Success', 'PMMU line submitted successfully.', 'success');
+        } else {
+        Swal.fire('Warning', data.message, 'warning');
+        }
+        },
+        error: function (err) {
+        HideProgress();
+        Swal.fire('Error', 'An error occurred while submitting the request.', 'error');
+        }
+        });
+    }
+
+    function UpdatePMMUHeader() {
+                ShowProgress();
+                var No = '@Model.No';
+                var Description = '@Model.Description';
+                var Strategy_Plan_ID = '@Model.Strategy_Plan_ID';
+                var Approval_Status = '@Model.Approval_Status';
+                var Admin_Unit = '@Model.Admin_Unit';
+                var Admin_Unit_Name = '@Model.Admin_Unit_Name';
+                var Target_Setting_Commitee = '@Model.Target_Setting_Commitee';
+                var Evaluation_Committee = '@Model.Evaluation_Committee';
+
+                //alert(Admin_Unit_Name);
+
+                $.ajax({
+                async: true,
+                type: "POST",
+                url: "/Performance/UpdatePMMUHeader",
+                data: {
+                No: No,
+                Description: Description,
+                Strategy_Plan_ID: Strategy_Plan_ID,
+                Admin_Unit_Name: Admin_Unit_Name,
+                Target_Setting_Commitee: Target_Setting_Commitee,
+                Evaluation_Committee: Evaluation_Committee,
+                Approval_Status: Approval_Status
+                },
+                //data: JSON.stringify({record: data }),
+                dataType: "html", // Expecting an HTML response
+                success: function (data) {
+                $("#modalBody2").html(data);
+                HideProgress();
+                $("#updateHeader").modal("show");
+                },
+                error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', 'An error occurred while loading the PMMU update form. Please try again.', 'warning');
+                }
+                });
+        }
+
+    function SubmitUpdatedPMMUHeader() {
+        var isValid = true;
+
+        //get form details
+        var No = $("#Contract_No").val();
+        var Description = $("#Description2").val();
+        var Strategy_Plan_ID = $("#Strategy_Plan_ID2").val();
+
+        var Target_Setting_Commitee = $("#Target_Setting_Committee2").val();
+        var Evaluation_Committee = $("#Evaluation_Committee2").val();
+
+        //alert(Evaluation_Committee);
+
+        if (Target_Setting_Commitee == null) { Target_Setting_Commitee = 'N/a' }
+        if (Evaluation_Committee == null) { Evaluation_Committee = 'N/a' }
+
+        if (!Strategy_Plan_ID) {
+            Swal.fire('Warning', 'Please select a Strategy Plan ID.', 'warning');
+            isValid = false;
+        }
+
+        if (!Description) {
+            Swal.fire('Warning', 'Description field is required.', 'warning');
+            isValid = false;
+        }
+
+        if (!isValid) {
+            return;
+        }
+
+        var UpdatedPMMU = {
+            No: No,
+            Description: Description,
+            Strategy_Plan_ID: Strategy_Plan_ID,
+
+            Target_Setting_Commitee: Target_Setting_Commitee,
+            Evaluation_Committee: Evaluation_Committee
+        };
+        ShowProgress();
+        $.ajax({
+            type: "POST",
+            url: "/Performance/SubmitUpdatedPMMU",
+            data: JSON.stringify(UpdatedPMMU),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                HideProgress();
+                if (data.success) {
+                    Swal.fire('Success', 'PMMU update successful', 'success');
+                    ViewDoc(data.message);
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseText, 'warning');
+            }
+        });
+    }
+
+    var PMMULink = function () {
+        ShowProgress();
+        window.location = "/Performance/PMMU";
+    }
+
+    function EditItem (
+        Contract_No,
+        Entry_No,
+        Outcome,
+        Strategic_Objective,
+        Strategies,
+        Perspectives,
+        Strategy_Output_Code,
+        Outputs,
+        Output_Indicators,
+        Activities,
+        Unit_of_Measure,
+        Baseline_Target,
+        Weight,
+        Target,
+        Achieved_Target,
+        Comments)
+
+        {
+        document.getElementById('docNo2').value = Contract_No;
+        document.getElementById('lineNo2').value = Entry_No;
+        document.getElementById('Outcome2').value = Outcome;
+        document.getElementById('Strategic_Objective2').value = Strategic_Objective;
+        document.getElementById('Strategies2').value = Strategies;
+        document.getElementById('Perspectives2').value = Perspectives;
+        document.getElementById('Strategy_Output_Code2').value = Strategy_Output_Code;
+        document.getElementById('Outputs2').value = Outputs;
+        document.getElementById('Output_Indicators2').value = Output_Indicators;
+        document.getElementById('Activities2').value = Activities;
+        document.getElementById('Unit_of_Measure2').value = Unit_of_Measure;
+        document.getElementById('Baseline_Target2').value = Baseline_Target;
+        document.getElementById('Weight2').value = Weight;
+        document.getElementById('Target2').value = Target;
+        document.getElementById('Achieved_Target2').value = Achieved_Target;
+        document.getElementById('Comments2').value = Comments;
+
+        var NW = (Achieved_Target / Target) * Weight
+        NW = NW.toFixed(2);
+        document.getElementById('Net_Weight2').value = NW;
+        $('#updateLineNo').modal('show');
+    }
+
+    var UpdatePMMULine = function () {
+        var isValid = true;
+
+        var docNo = $('#docNo2').val();
+        var lineNo = $('#lineNo2').val();
+        var Strategy_Plan_ID = '@Model.Strategy_Plan_ID';
+        var Theme_ID = $('#Outcome2').val() //OUTCOME 1, OUTCOME 2,...
+        var Outcome = $('#Outcome2').val() //OUTCOME 1, OUTCOME 2,...
+        var Strategic_Objective = $('#Strategic_Objective2').val(); //CSP-000002
+        var Strategies = $('#Strategies2').val();
+        var Perspectives = $('#Perspectives2').val();
+        var Strategy_Output_Code = $('#Strategy_Output_Code2').val();
+        var Outputs = $('#Outputs2').val();
+        var Output_Indicators = $('#Output_Indicators2').val();
+        var Activities = $('#Activities2').val();
+        var Unit_of_Measure = $('#Unit_of_Measure2').val();
+
+        var National_Average = $('#National_Average2').val();
+        var Best_Achievement = $('#Best_Achievement2').val();
+
+        var Baseline_Target = $('#Baseline_Target2').val();
+        var Weight = $('#Weight2').val();
+        var Target = $('#Target2').val();
+        var Achieved_Target = $('#Achieved_Target2').val();
+        var Comments = $('#Comments2').val();
+
+        //validate weights for the selected perspective
+        if (Perspectives == "CORE MANDATE") {
+            if (Weight > 70) {
+                Swal.fire('Warning', 'Invalid weight for the perspective selected', 'warning');
+                isValid = false;
+            }
+        }
+
+        if (Perspectives == "CUSTOMER PERSPECTIVES") {
+            if (Weight > 10) {
+                Swal.fire('Warning', 'Invalid weight for the perspective selected', 'warning');
+                isValid = false;
+            }
+        }
+
+        if (Perspectives == "FINANCIAL PERSPECTIVES") {
+            if (Weight > 10) {
+                Swal.fire('Warning', 'Invalid weight for the perspective selected', 'warning');
+                isValid = false;
+            }
+        }
+
+        if (Perspectives == "INNOVATION AND LEARNING") {
+            if (Weight > 5) {
+                Swal.fire('Warning', 'Invalid weight for the perspective selected', 'warning');
+                isValid = false;
+            }
+        }
+
+        if (Perspectives == "INTERNAL PROCESSES") {
+            if (Weight > 5) {
+                Swal.fire('Warning', 'Invalid weight for the perspective selected', 'warning');
+                isValid = false;
+            }
+        }
+
+        // Exit if validation fails
+        if (!isValid) {
+            return;
+        }
+
+
+        $.ajax({
+            async: true,
+            type: "POST",
+            dataType: "json",
+            data: JSON.stringify({
+                Contract_No: docNo,
+                Entry_No: lineNo,
+                Theme_ID: Theme_ID,
+                Strategy_Plan_ID: Strategy_Plan_ID,
+                Outcome: Outcome,
+                Strategic_Objective: Strategic_Objective,
+                Strategies: Strategies,
+                Perspectives: Perspectives,
+                Strategy_Output_Code: Strategy_Output_Code,
+                Outputs: Outputs,
+                Output_Indicators: Output_Indicators,
+                Activities: Activities,
+                Unit_of_Measure: Unit_of_Measure,
+                National_Average: National_Average,
+                Best_Achievement: Best_Achievement,
+                Baseline_Target: parseFloat(Baseline_Target),
+                Weight: parseFloat(Weight),
+                Target: parseFloat(Target),
+                Achieved_Target: Achieved_Target,
+                //Score: parseFloat(Score),
+                Comments: Comments,
+
+            }),
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            url: '/Performance/UpdatePMMULine',
+            success: function (data) {
+                HideProgress();
+                if (data.success === true) {
+                    Swal.fire('Success', 'PMMU Line updated successfully', 'success');
+                    ViewDoc(docNo);
+                } else {
+                Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseText, 'warning');
+            }
+        });
+    };
+
+    var SubmitDraftPMMU = function (DocNo) {
+
+        //alert(DocNo)
+        ShowProgress();
+
+        $.ajax({
+        async: true,
+        type: "POST",
+        datatype: "json",
+        data: JSON.stringify({ DocNo: DocNo }),
+        contentType: "application/json; charset = utf-8",
+        processData: false,
+        url: '/Performance/SubmitDraftPMMU',
+        success: function (data) {
+        if (data.success == true) {
+        HideProgress();
+        //LoadPurchaseRequisition();
+        //$("#myModalLinks").modal("hide");
+        Swal.fire('Success', data.message, 'success').then(() => {
+        ViewDoc(DocNo);
+        });
+        } else {
+        HideProgress();
+        Swal.fire('Error', data.message, 'error');
+        }
+        },
+        error: function (err) {
+        HideProgress();
+        Swal.fire('Warning', err, 'warning');
+        }
+        });
+    }
+
+    var CancelSubmitDraftPMMU = function (DocNo) {
+
+        //alert(DocNo)
+        ShowProgress();
+
+        $.ajax({
+        async: true,
+        type: "POST",
+        datatype: "json",
+        data: JSON.stringify({ DocNo: DocNo }),
+        contentType: "application/json; charset = utf-8",
+        processData: false,
+        url: '/Performance/SubmitDraftPMMU',
+        success: function (data) {
+        if (data.success == true) {
+        HideProgress();
+        //LoadPurchaseRequisition();
+        //$("#myModalLinks").modal("hide");
+        Swal.fire('Success', data.message, 'success').then(() => {
+        ViewDoc(DocNo);
+        });
+        } else {
+        HideProgress();
+        Swal.fire('Error', data.message, 'error');
+        }
+        },
+        error: function (err) {
+        HideProgress();
+        Swal.fire('Warning', err, 'warning');
+        }
+        });
+    }
+
+    var SendPMMUForApproval = function (DocNo) {
+        //alert(DocNo)
+        ShowProgress();
+
+        $.ajax({
+        async: true,
+        type: "POST",
+        datatype: "json",
+        data: JSON.stringify({ DocNo: DocNo }),
+        contentType: "application/json; charset = utf-8",
+        processData: false,
+        url: '/Performance/SendPMMUAppForApproval',
+        success: function (data) {
+        if (data.success == true) {
+        HideProgress();
+        Swal.fire('Success', data.message, 'success').then(() => {
+        ViewDoc(DocNo);
+        });
+        } else {
+        HideProgress();
+        Swal.fire('Error', data.message, 'error');
+        }
+        },
+        error: function (err) {
+        HideProgress();
+        Swal.fire('Warning', err, 'warning');
+        }
+        });
+    }
+
+    var CancelPMMUApproval = function (DocNo) {
+
+        //alert(DocNo)
+        ShowProgress();
+
+        $.ajax({
+        async: true,
+        type: "POST",
+        datatype: "json",
+        data: JSON.stringify({ DocNo: DocNo }),
+        contentType: "application/json; charset = utf-8",
+        processData: false,
+        url: '/Performance/CancelPMMUApproval',
+        success: function (data) {
+        if (data.success == true) {
+        HideProgress();
+        Swal.fire('Success', data.message, 'success').then(() => {
+        window.location.href = 'PMMUDocumentView?No=' + DocNo;
+        });
+        } else {
+        HideProgress();
+        Swal.fire('Error', data.message, 'error');
+        }
+        },
+        error: function (err) {
+        HideProgress();
+        Swal.fire('Warning', err, 'warning');
+        }
+        });
+    }
+
+
+    var StartEvaluation = function (DocNo) {
+        //alert(DocNo)
+        ShowProgress();
+
+        $.ajax({
+        async: true,
+        type: "POST",
+        datatype: "json",
+        data: JSON.stringify({ DocNo: DocNo }),
+        contentType: "application/json; charset = utf-8",
+        processData: false,
+        url: '/Performance/StartEvaluation',
+        success: function (data) {
+        if (data.success == true) {
+        HideProgress();
+        Swal.fire('Success', data.message, 'success').then(() => {
+        ViewDoc(DocNo);
+        });
+        } else {
+        HideProgress();
+        Swal.fire('Error', data.message, 'error');
+        }
+        },
+        error: function (err) {
+        HideProgress();
+        Swal.fire('Warning', err, 'warning');
+        }
+        });
+    }
+
+    var GeneratePMMUReport = function (DocNo) {
+
+        var DocNo = '@Model.No';
+
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            url: '/Performance/GeneratePMMUReport',
+            success: function (data) {
+                if (data.success) {
+                    $('iframe').attr('src', "data:application/pdf;base64," + data.message);
+                    $("#myModalUnits").modal("show");
+                    HideProgress();
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                    HideProgress();
+
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+
+
+</script>
+
+
+
+
+

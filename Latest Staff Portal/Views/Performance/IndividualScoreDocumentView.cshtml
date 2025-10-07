@@ -1,0 +1,174 @@
+﻿@model Latest_Staff_Portal.ViewModel.IndividualScoreCard
+
+@{
+    ViewBag.Title = "IndividualScoreDocumentView";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+
+<div class="card">
+    <div class="card-header">
+        <h4>
+            @Model.DocNo
+            IndividualScoreDocumentView
+        </h4>
+    </div>
+    <div class="card-body">
+        <h4>IndividualScoreCard</h4>
+        <hr />
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Contract No", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.DisplayNameFor(model => model.DocNo)
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Employee Number", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.DisplayNameFor(model => model.Responsible_Employee_No)
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Employee Name", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.DisplayNameFor(model => model.Employee_Name)
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Responsible Employee Number", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.DisplayNameFor(model => model.Responsible_Employee_No)
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Contract Year", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.DisplayNameFor(model => model.Contract_Year)
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Approval Status", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.DisplayNameFor(model => model.Approval_Status)
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Status", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.DisplayNameFor(model => model.Status)
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Approval Status", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.DisplayNameFor(model => model.Approval_Status)
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Change Status", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.DisplayNameFor(model => model.Change_Status)
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Start_Date", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.DisplayNameFor(model => model.Start_Date)
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("End Date", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.DisplayNameFor(model => model.End_Date)
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Designation", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.DisplayNameFor(model => model.Designation)
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Grade", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.DisplayNameFor(model => model.Grade)
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Designation", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.DisplayNameFor(model => model.Designation)
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Responsibility Center", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.DisplayNameFor(model => model.Responsibility_Center_Name)
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Total Assigned Weight Percent", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.DisplayNameFor(model => model.Total_Assigned_Weight_Percent)
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Grade", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.DisplayNameFor(model => model.Grade)
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Secondary Assigned Weight Percent", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.DisplayNameFor(model => model.Secondary_Assigned_Weight_Percent)
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("JD Assigned Weight Percent", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.DisplayNameFor(model => model.JD_Assigned_Weight_Percent)
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Directorate", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.DisplayNameFor(model => model.Directorate)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

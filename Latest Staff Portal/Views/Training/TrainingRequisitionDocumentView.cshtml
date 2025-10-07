@@ -1,0 +1,499 @@
+﻿@model Latest_Staff_Portal.ViewModel.TrainingRequisition
+
+@{
+    ViewBag.Title = "TrainingRequisitionDocumentView";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 7px;
+        font-size: 12px;
+    }
+</style>
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#" onclick="TrainingRequisitionListLink();">Training Requisition List</a>
+                </li>
+                <li class="breadcrumb-item active">Training Requisition Document (@Model.Code)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-header">
+        <h4>Training Requisition Document(@Model.Code)</h4>
+
+
+        <div style="text-align: right">
+            @{
+
+                if (Model.Status == "Open")
+                {
+                  
+                        <input type="button" class="btn btn-primary action-buttons2" value="Send (@Model.Code) For Approval" onclick="SendDocForApproval('@Model.Code');" />
+                 
+                }
+
+                if (Model.Status == "Pending Approval")
+                {
+                 
+                        <input type="button" class="btn btn-primary action-buttons2" style="background-color: red" value="Cancel (@Model.Code) Approval" onclick="CancelDocApproval('@Model.Code');" />
+                    
+                }
+            }
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Code", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Code, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Training Plan No", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Training_Plan_No, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Training_Plan_No, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Employee Department", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Employee_Department, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Employee_Department, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Course Title", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Course_Title, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Course_Title, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Start Date", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Start_DateTime, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Start_DateTime, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("End Date", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.End_DateTime, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.End_DateTime, "", new { @class = "text-danger" })
+                </div>
+            </div>
+           
+           
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Training Region", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Training_Region, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Training_Region, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Training Venue", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Training_Venue_Region_Code, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Training_Venue_Region_Code, "", new { @class = "text-danger" })
+                </div>
+            </div>
+           
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Training Responsibility",htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Training_Responsibility_Code, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Training_Responsibility_Code, "", new { @class = "text-danger" })
+                </div>
+            </div>
+           
+         
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Provider", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Provider, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Provider, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Provider Name", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Provider_Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Provider_Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+          
+     
+          
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Total Procurement Cost", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Total_Procurement_Cost, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Total_Procurement_Cost, "", new { @class = "text-danger" })
+                </div>
+            </div>
+           
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Employee No", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Employee_No, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Employee_No, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Employee Name", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Employee_Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Employee_Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Created By", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Created_By, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Created_By, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Created On", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Created_On, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Created_On, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Status", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Status, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color: #f2f2f2;" } })
+                    @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                </div>
+            </div>
+          
+            
+        </div>
+
+
+
+        <div id="divDepositLines">
+            <hr style="border:1px solid black" />
+            <b>Training Participants List</b>
+            <hr />
+            <div id="divLines"></div>
+
+        </div>
+
+    </div>
+</div>
+
+
+
+@*//////////////////////Modal////////////////////////////*@
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myModalLabel"><label id="labelF"></label></h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script src="~/assets/js/pdfobject.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadTrainingRequestLines();
+
+    $('.select2').select2();
+});
+
+    var LoadTrainingRequestLines = function () {
+        var DocNo = `@Model.Code`;
+        var status = '@Model.Status';
+        var Training_Venue_Region_Code = `@Model.Training_Venue_Region_Code`;
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            dataType: "html",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({
+                DocNo: DocNo,
+                status: status,
+                Training_Venue_Region_Code: Training_Venue_Region_Code
+
+
+            }),
+            url: "/Training/TrainingRequisitionLinesPartialView",
+            success: function (data) {
+                $("#divLines").html(data);
+                HideProgress();
+
+            },
+            error: function () {
+                HideProgress();
+
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    };
+
+
+
+    var AddTrainingRequisitionLine = function (TrainingVenue) {
+        var docNo = '@Model.Code';
+
+        alert(TrainingVenue)
+
+        $("#labelF").text("Add Training Participant");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: "html",
+            url: '/Training/NewTrainingRequisitionLine',
+            data: {
+                docNo: docNo,
+                TrainingVenue: TrainingVenue
+
+            },
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseText, 'warning');
+            }
+        });
+    };
+
+    function SubmitTrainingRequisitionLine() {
+        var isValid = true;
+         var docNo = '@Model.Code';
+        var Employee_No = $("#Employee_No").val();
+
+        var Type = $("#Type").val();
+        var Destination = $("#Destination").val();
+        var No_of_Days = $("#No_of_Days").val();
+        var Total_Amount = $("#Total_Amount").val();
+        var Training_Responsibility = $("#Training_Responsibility").val();
+        var Global_Dimension_1_Code = $("#Global_Dimension_1_Code").val();
+        var Witness = $("#Witness").val();
+
+
+
+        if (!docNo) {
+            Swal.fire('Warning', 'Document No field is required.', 'warning');
+            isValid = false;
+        }
+
+        if (!Employee_No) {
+            Swal.fire('Warning', 'Please select a Employee.', 'warning');
+            isValid = false;
+        }
+
+        if (!Type) {
+            Swal.fire('Warning', 'Type is required', 'warning');
+            isValid = false;
+        }
+        if (!Destination) {
+            Swal.fire('Warning', 'Destination is required', 'warning');
+            isValid = false;
+        }
+        if (No_of_Days<=0) {
+            Swal.fire('Warning', 'Invalid Number Of Days', 'warning');
+            isValid = false;
+        }
+        if (Total_Amount<0) {
+            Swal.fire('Warning', 'Invalid Total Amount', 'warning');
+            isValid = false;
+        }
+
+        if (!Global_Dimension_1_Code) {
+            Swal.fire('Warning', 'Region is required', 'warning');
+            isValid = false;
+        }
+
+
+
+
+
+
+        // Exit if validation fails
+        if (!isValid) {
+            return;
+        }
+
+        // Prepare data object
+        var data = {
+            Training_Code: docNo,
+            Employee_Code: Employee_No,
+            Type: Type,
+            Destination: Destination,
+            No_of_Days: No_of_Days,
+            Total_Amount: Total_Amount,
+            Training_Responsibility: Training_Responsibility,
+            Global_Dimension_1_Code: Global_Dimension_1_Code,
+            Witness: Witness
+
+        };
+        // Show progress indicator
+        ShowProgress();
+
+        // Send data via AJAX
+        $.ajax({
+            type: "POST",
+            url: "/Training/SubmitTrainingRequisitionLine",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                HideProgress();
+                if (data.success) {
+                    var form = $('<form>', {
+                        action: '/Training/TrainingRequisitionDocumentView',
+                        method: 'POST'
+                    }).append($('<input>', {
+                        type: 'hidden',
+                        name: 'DocNo',
+                        value: data.message
+                    }));
+                    form.appendTo('body').submit();
+                    Swal.fire('Success', 'Training Participant successfully added.', 'success');
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Error', 'An error occurred while submitting the request.', 'error');
+            }
+        });
+    }
+
+    function SendDocForApproval(DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: "/Training/SendTrainingReqDocForApproval",
+            success: function (data) {
+                HideProgress();
+                if (data.success) {
+                    
+                    Swal.fire('Success', 'Document successfully sent for approval.', 'success');
+                    window.location.reload();
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Error', 'An error occurred while submitting the request.', 'error');
+            }
+        });
+    }
+    function CancelDocApproval(DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: "/Training/CancelTrainingReqApproval",
+            success: function (data) {
+                HideProgress();
+                if (data.success) {
+                    var form = $('<form>', {
+                        action: '/Training/TrainingRequisitionDocumentView',
+                        method: 'POST'
+                    }).append($('<input>', {
+                        type: 'hidden',
+                        name: 'DocNo',
+                        value: data.message
+                    }));
+                    form.appendTo('body').submit();
+                    Swal.fire('Success', 'Document approval request cancelled.', 'success');
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Error', 'An error occurred while submitting the request.', 'error');
+            }
+        });
+    }
+
+
+    function TrainingRequisitionListLink() {
+        window.location.href ="/Training/TrainingRequisitionList"
+    }
+</script>
+
+
+

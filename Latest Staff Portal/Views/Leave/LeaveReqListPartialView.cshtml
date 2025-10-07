@@ -1,0 +1,65 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.LeaveReqList>
+
+<div class="table-responsive bs-example widget-shadow">
+    <table id="datatable-buttons" class="row-border">
+        <thead>
+            <tr>
+                <th>Action</th>
+                <th>No</th>
+                <th>Leave Type</th>
+                <th>Days</th>
+                <th>Date</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Return Date</th>
+                @*<th>Reliever</th>*@
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody id="table-body">
+            @{
+                if (Model != null && Model.Count() > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr data-no="@item.No" data-status="@item.Status">
+                            <td class="">
+                                <button class="btn btn-primary btn-sm action-buttons3" onclick="ViewDoc('@item.No','@item.Status');">SELECT</button>
+                            </td>
+                            <td>@Html.DisplayFor(modelItem => item.No)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Leave_Type)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Applied_Days)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Date)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Starting_Date)</td>
+                            <td>@Html.DisplayFor(modelItem => item.End_Date)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Return_Date)</td>
+                            @*<td>@Html.DisplayFor(modelItem => item.Reliever)</td>*@
+                            <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                        </tr>
+                    }
+                }
+
+                /* <tr>
+                        <td colspan="9" style="color:red">
+                            No Records Found
+                        </td>
+                    </tr>*/
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#datatable-buttons').DataTable({
+            responsive: true
+        });
+
+        $('#table-body').on('click', 'tr td:not(:first-child)', function () {
+            var $row = $(this).closest('tr');
+            var docNo = $row.data('no');
+            var status = $row.data('status');
+            SelectedRow(docNo, status);
+        });
+    });
+</script>

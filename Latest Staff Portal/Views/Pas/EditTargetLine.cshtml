@@ -1,0 +1,76 @@
+﻿@model Latest_Staff_Portal.ViewModel.PerformanceTargetLines
+
+<div class="form-horizontal">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="row">
+        <div class="form-group">
+            @Html.Label("Activity", htmlAttributes: new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(model => model.Activity, new SelectList(Model.ListOfActivity, "Value", "Text", Model.Activity),  new { @id = "activity", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Activity, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-md-6">
+            @Html.Label("Appraisee Duty", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div>
+                @Html.EditorFor(model => model.PAS_Activity, new { htmlAttributes = new { @id = "pas_activity", @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.PAS_Activity, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.Label("Individual Target", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div>
+                @Html.EditorFor(model => model.Individual_Target, new { htmlAttributes = new { @id = "individual_target", @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Individual_Target, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-md-6">
+            @Html.Label("Performance Indicator", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div>
+                @Html.EditorFor(model => model.Performance_Indicator, new { htmlAttributes = new { @id = "performance_indicator", @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Performance_Indicator, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.Label("Weight", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div>
+                @Html.EditorFor(model => model.Weight, new { htmlAttributes = new { @id = "weight", @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Weight, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-md-6">
+            @Html.Label("Target", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div>
+                @Html.EditorFor(model => model.Target, new { htmlAttributes = new { @id = "target", @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Target, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-md-12 text-center">
+            <input type="submit" value="Update" onclick="SubmitEditTargetLine()" class="btn btn-primary" />
+        </div>
+    </div>
+</div>
+
+
+    <script type="text/javascript">
+        function SubmitEditTargetLine() {
+            // JavaScript function to handle form submission for updating
+            // Perform any necessary validation or processing before submission
+        }
+    </script>
+}

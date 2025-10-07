@@ -1,0 +1,214 @@
+﻿
+@using Latest_Staff_Portal.Models
+@{
+    ViewBag.Title = "ImprestSurrenderList";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+
+}
+
+
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/Dashboard/Dashboard">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active">Imprest Surrender List</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<hr />
+<br />
+<div class="card">
+    <div class="card-header">
+        <div style="text-align:right">
+            <button class="btn btn-primary action-buttons" onclick="NewImprestSurrender();">
+                <i class="fa fa-plus-circle" aria-hidden="true"></i> New Imprest Surrender
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+        <div id="divImprestSurrenderList"></div>
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">New Imprest Surrender</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-primary action-buttons" value="Submit" onclick="SubmitImprestSurrender();" />
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal Links////////////////////////////*@
+<div class="modal fade" id="myModalLinks" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Actions</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodyLinks">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadImprestSurrenderList();
+        var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+        if (Successmsg != "") {
+            Swal.fire('Success', Successmsg, 'success', true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+    });
+
+    var LoadImprestSurrenderList = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: "/ImprestSurrender/ImprestSurrenderListPartialView",
+            success: function (data) {
+                $("#divImprestSurrenderList").empty().html(data);
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+
+    var ViewDoc = function (No) {
+        ShowProgress();
+        var form = $('<form>', {
+            action: '/ImprestSurrender/ViewSurrenderDocument',
+            method: 'POST'
+        }).append($('<input>', {
+            type: 'hidden',
+            name: 'No',
+            value: No
+        }));
+        form.appendTo('body').submit();
+    };
+
+    var ViewDoc2 = function (No) {
+        ShowProgress();
+        window.location = "/ImprestSurrender/ImprestSUrrenderDocumentView?No=" + No;
+    }
+
+    var NewImprestSurrender = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            url: "/ImprestSurrender/NewImprestSurrender",
+            dataType: "html",
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', 'An error occurred while loading the form. Please try again.', 'warning');
+            }
+        });
+    };
+
+    function SubmitImprestSurrender() {
+        var isValid = true;
+
+        //get form details
+        var SurrenderDate = $("#SurrenderDate").val();
+        var ImprestAdvanceNo = $("#ImprestAdvanceNo").val();
+        var DeadlineforImprestReturn = $("#DeadlineforImprestReturn").val();
+        var AppliestoDocNo = $("#AppliestoDocNo").val();
+        var TotalAmountRequested = $("#TotalAmountRequested").val();
+
+
+
+    
+        if (!ImprestAdvanceNo) { Swal.fire('Warning', 'Select  Imprest Advance No.', 'warning'); isValid = false; }
+       
+
+        if (!isValid) {
+            return;
+        }
+
+        var ImprestSurrender = {
+            SurrenderDate: SurrenderDate,
+            ImprestAdvanceNo: ImprestAdvanceNo,
+            DeadlineforImprestReturn: DeadlineforImprestReturn,
+            AppliestoDocNo: AppliestoDocNo,
+            TotalAmountRequested: TotalAmountRequested,
+           
+        };
+
+        ShowProgress();
+
+        $.ajax({
+            type: "POST",
+            url: "/ImprestSurrender/SubmitImprestSurrender",
+            data: JSON.stringify(ImprestSurrender),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                HideProgress();
+                if (data.success) {
+                    Swal.fire('Success', 'Imprest Surrender created', 'success');
+                    ViewDoc(data.message)
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseText, 'warning');
+            }
+        });
+    }
+
+</script>

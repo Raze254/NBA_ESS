@@ -1,0 +1,105 @@
+﻿@model Latest_Staff_Portal.ViewModel.PerformanceIndicator
+<div class="bg-soft-dark" style="color:black">
+    <div class="row">
+        <div class="col-md-6">
+            <span style="font-weight: bold">Objective</span>
+            @Html.TextAreaFor(model => model.Objective, new { @class = "form-control", id = "txtObj", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+        <div class="col-md-6">
+            <span style="font-weight: bold">KRA</span>
+            @Html.TextAreaFor(model => model.KRA, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <span style="font-weight: bold">KPI</span>
+            @Html.TextAreaFor(model => model.KPI, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+        <div class="col-md-6">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <span style="font-weight: bold">Target</span>
+            @Html.TextAreaFor(model => model.Target, new { @class = "form-control", id = "txtWeight", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+        <div class="col-md-6">
+            <span style="font-weight: bold">Weight(%)</span>
+            @Html.TextBoxFor(model => model.Weight, new { @class = "form-control", id = "txtWeight", onkeypress = "return functionDecimal(event,this.value)", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <span style="font-weight: bold">Self Score</span>
+            @if (ViewBag.Assessment != null && ViewBag.Assessment.Count > 0)
+            {
+                @Html.DropDownListFor(m => m.Self_Score, new SelectList(ViewBag.Assessment, "Value", "Text", Model.Self_Score), "----", new { id = "ddlSelfScore", @class = "form-control" })
+            }
+        </div>
+        <div class="col-md-6">
+
+        </div>
+    </div>
+    <div id="divComments">
+        <div class="row">
+            <div class="col-md-12">
+                <span style="font-weight: bold">ANUPEAissee Comments</span>
+                @Html.TextAreaFor(model => model.ANUPEAisee_Comments, new { @class = "form-control", id = "txtAppComments" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <span style="font-weight: bold">Supervisor Comments</span>
+                @Html.TextAreaFor(model => model.Supervisor_Comments, new { @class = "form-control", id = "txtSupComments", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <div align="center">
+        <input type="button" class="btn btn-primary" value="Update Record" onclick="SaveKPIReviewRecord('@Model.ANUPEAisal_No', '@Model.Line_No');"/>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#ddlUnit").val(`@Model.Unit`).change();
+        $("#ddlQs").val(`@Model.TimeFrame`).change();
+    });
+    var QuartersChanged = function () {
+        var Qs = $("#ddlQs").children("option:selected").val();
+        if (Qs == `@Model.TimeFrame`) {
+            $("#divScore").show();
+            $("#divComments").show();
+        }
+        else {
+            $("#divScore").hide();
+            $("#divComments").hide();
+        }
+    }
+    function functionDecimal(evt, val) {
+        try {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+
+            if (charCode == 46) {
+                if (!(val.indexOf(".") > -1)) {
+                    return true;
+                }
+                else {
+                    Swal.fire('Warning', 'Kindly ensure to specify decimals only', 'warning');
+                }
+            }
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                Swal.fire('Warning', 'Kindly ensure to specify decimals only', 'warning');
+                return false;
+            }
+            return true;
+        } catch (w) {
+            Swal.fire(w);
+        }
+    }
+    function functionx(evt) {
+        if (evt.charCode > 31 && (evt.charCode < 48 || evt.charCode > 57)) {
+            Swal.fire("Error", "Please enter only numeric characters in the text box", "error");
+            return false;
+        }
+    }
+</script>

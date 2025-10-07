@@ -1,0 +1,55 @@
+﻿@model Latest_Staff_Portal.ViewModel.DocumentNumber
+<div>
+    <b>Document Number =></b> @Model.Code
+</div>
+<hr/>
+<ol class="list-group">
+    <li class="list-group-item">
+        <a href="#" onclick="ViewDoc('@Model.Code');" class="btn btn-primary form-control" style="padding: .5rem .5rem; color: whitesmoke;">View Document</a>
+    </li>
+    @if (Model.Status == "Open" || Model.Status == "Pending" || Model.Status == "New")
+    {
+        <li class="list-group-item">
+            <a href="#" onclick="SendDocForApproval('@Model.Code');" class="btn btn-primary form-control" style="padding: .5rem .5rem; color: whitesmoke;">Send Approval Request</a>
+        </li>
+    }
+    @if (Model.DocType == "LV")
+    {
+        @*<li class="list-group-item"><a href="#" onclick="RecallDocForApproval('@Model.Code');" class="btn btn-primary form-control" style="padding: .5rem .5rem">Recall Approval</a></li>
+            if ((Model.Status == "Posted") || (Model.Status == "Approved"))
+            {
+                <li class="list-group-item"><a href="#" onclick="PrintLeave('@Model.Code');" class="btn btn-primary form-control" style="padding: .5rem .5rem">Print leave</a></li>
+
+            }*@
+        <li class="list-group-item">
+            <a href="#" onclick="CancelDocForApproval('@Model.Code');" class="btn btn-primary form-control" style="padding: .5rem .5rem; color: whitesmoke; ">Cancel Approal Request</a>
+        </li>
+        <li class="list-group-item">
+            <a href="#" onclick="DelegateDocForApproval('@Model.Code');" class="btn btn-primary form-control" style="padding: .5rem .5rem; color: whitesmoke;">Delegate Approval</a>
+        </li>
+    }
+    @if (Model.Status == "Pending Approval" && Model.DocType != "LV")
+    {
+        <li class="list-group-item">
+            <a href="#" onclick="CancelDocForApproval('@Model.Code');" class="btn btn-primary form-control" style="padding: .5rem .5rem; color: whitesmoke;">Cancel Approval Request</a>
+        </li>
+        <li class="list-group-item">
+            <a href="#" onclick="DelegateDocForApproval('@Model.Code');" class="btn btn-primary form-control" style="padding: .5rem .5rem; color: whitesmoke;">Delegate Approval</a>
+        </li>
+    }
+    @if (Model.DocType == "TimeSheet")
+    {
+        <li class="list-group-item">
+            <a href="#" onclick="PrintReport('@Model.Code');" class="btn btn-primary form-control" style="padding: .5rem .5rem; color: whitesmoke;">Print Timesheet</a>
+        </li>
+    }
+    @if (Model.Status != "Open" && Model.Status != "Pending" && Model.Status != "New")
+    {
+        <li class="list-group-item">
+            <a href="#" onclick="ViewApprovalTrail('@Model.Code');" class="btn btn-primary form-control" style="padding: .5rem .5rem; color: whitesmoke;">Document Approval Trail</a>
+        </li>
+    }
+    <li class="list-group-item">
+        <a href="#" onclick="ViewDocComments('@Model.Code');" class="btn btn-primary form-control" style="padding: .5rem .5rem; color: whitesmoke;">Document Comments</a>
+    </li>
+</ol>

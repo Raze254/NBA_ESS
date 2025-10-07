@@ -1,0 +1,562 @@
+﻿﻿@model Latest_Staff_Portal.ViewModel.NewLeaveApplication
+@{
+    var Mobile_Phone_No = ViewBag.Phone;
+    var Email = ViewBag.Email;
+}
+
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Leave Type", new { @class = "control-label col-md-12" })
+            @Html.DropDownListFor(model => model.Leave_Type, Model.ListOfLeaveTypes, "--select Leave Type--", new { @class = "form-control", id = "ddlLeaveType", onchange = "GetLeaveBalance()", required = "required" })
+            @Html.ValidationMessageFor(model => model.Leave_Type, "", new { @class = "text-danger" })
+
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Applied Days", new { @class = "control-label col-md-12" })
+            <input type="number" min="1" class="form-control" id="ddlNoDays" value="0" required autocomplete="off" onblur="GetEndReturnDate(this)" />
+        </div>
+    </div>
+
+
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Start Date", new { @class = "control-label col-md-12" })
+            <input type="text"
+                   required
+                   class="form-control"
+                   placeholder="dd/mm/yyyy"
+                   id="dtPicker"
+                   autocomplete="off"
+                   onchange="GetEndReturnDate(this)" />
+        </div>
+    </div>
+
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("End Date", new { @class = "control-label col-md-12" })
+            @*     <label id="EndDate" style="color:#6B6A03"></label>*@
+            <input type="text" required class="form-control" placeholder="dd/mm/yyyy" id="endDate" readonly />
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Return Date", new { @class = "control-label col-md-12" })
+            @*<label id="ReturnDate" style="color:#6B6A03"></label>*@
+            <input type="text" required class="form-control" id="returnDate" placeholder="dd/mm/yyyy" readonly />
+        </div>
+    </div>
+
+    @* <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Reliever PJ No", new { @class = "control-label col-md-12" })
+                <input type="text" class="form-control" name="name" id="txtRelieverName" readonly style="background-color: #f2f2f2" />
+
+            </div>
+        </div>*@
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Reliever", new { @class = "control-label col-md-12" })
+            @Html.DropDownListFor(model => model.Reliever, Model.ListOfRelievers, "--select Reliever--", new { @class = "form-control select2", id = "ddlReliever2" })
+            @Html.ValidationMessageFor(model => model.AppliedDays, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Supervisor Name", new { @class = "control-label col-md-12" })
+            @*@Html.DisplayFor(m => m.SupervisorName, new { @id = "txtSupervisorNames"   })*@
+            <input type="text" class="form-control readonly-input" id="txtSupervisorName" readonly />
+            @Html.ValidationMessageFor(model => model.SupervisorName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-12">
+        <hr />
+        <h5>More Leave Details</h5>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Phone", new { @class = "control-label col-md-12" })
+            @*@Html.DisplayFor(m => m.SupervisorName, new { @id = "txtSupervisorNames"   })*@
+            <input type="text" class="form-control readonly-input" id="phone" value="@Mobile_Phone_No" readonly />
+        </div>
+    </div>
+
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Email", new { @class = "control-label col-md-12" })
+            <input type="email" class="form-control readonly-input" id="email" value="@Email" readonly />
+        </div>
+    </div>
+    @* <div class="col-md-12">
+            <h5>Adoption</h5>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Childs Age", new { @class = "control-label col-md-12" })
+                <input type="number" class="form-control readonly-input" id="childAge" />
+            </div>
+        </div>
+    *@
+
+
+
+    <div class="col-md-12 mt-3" id="leaveBalanceDetails">
+        <h5>Leave Balance Details</h5><hr />
+        <div class="form-group">
+            <table class="table table-striped">
+                <tr>
+                    <th>Annual Leave Entitlement</th>
+                    <td id="lblAllD">@Model.AllocatedDays</td>
+                </tr>
+                <tr>
+                    <th>Leave carried forward from previous Year</th>
+                    <td id="lblCarrF">@Model.CarryForawrd</td>
+                </tr>
+                <tr>
+                    <th>Reimbursed Days</th>
+                    <td id="lblReimbD">@Model.ReimbDays</td>
+                </tr>
+                <tr>
+                    <th>Leave Taken</th>
+                    <td id="lblLvTaken">@Model.LeaveTaken</td>
+                </tr>
+                <tr>
+                    <th>Earned Days</th>
+                    <td id="lblEarnedDays">@Model.EarnedLeaveDays</td>
+                </tr>
+                <tr>
+                    <th>Leave Balance</th>
+                    <td id="lblBalance">@Model.LeaveBal</td>
+                </tr>
+            </table>
+
+        </div>
+    </div>
+
+</div>
+
+<hr />
+<div align="center">
+    <input type="button" class="btn btn-primary action-buttons" value="Submit Request" onclick="SubmitLeaveRequisition();" />
+</div>
+<script>
+    $(document).ready(function () {
+        // If using modals, re-initialize Select2 when the modal is shown
+        $('#myModal').on('shown.bs.modal', function () {
+            setTimeout(function () {
+                $('.select2').select2({
+                    dropdownParent: $('#myModal')
+                });
+            }, 200); // Slight delay to ensure modal is fully loaded
+        });
+    });
+</script>
+
+<script type="text/javascript">
+   $(document).ready(function () {
+    $('#EndDate').html("dd/mm/yyyy");
+    $('#ReturnDate').html("dd/mm/yyyy");
+    getSupervisorName();
+    getRelieverName();
+
+    // Initialize datepicker and set default to today
+    $('#dtPicker').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        autoclose: true,
+        yearRange: '-0:+2',
+        showOtherMonths: true,
+        dateFormat: 'dd/mm/yy',
+        minDate: 0
+    });
+
+
+       var today = new Date();
+       $('#dtPicker').datepicker("setDate", today);
+
+    $('#dtPicker').change(function () {
+        var StartDate = $('#dtPicker').val();
+        var days = $("#ddlNoDays").val();
+        var LvType = $("#ddlLeaveType").children("option:selected").val();
+
+        if (LvType == "") {
+            $("#ddlNoDays").val('');
+            Swal.fire('Warning', 'Select Leave Type', 'warning');
+            $('#dtPicker').val("");
+            return;
+        } else if (days == "0") {
+            Swal.fire('Warning', 'Select Number of days', 'warning');
+            $('#dtPicker').val("");
+            return;
+        } else if (StartDate == "") {
+            Swal.fire('Warning', 'Select Leave Start Date', 'warning');
+            $('#dtPicker').val("");
+            return;
+        } else {
+            ShowProgress();
+            $.getJSON("/Leave/End_ReturnDates", { startDate: StartDate, days: days, LvType: LvType },
+                function (data) {
+                    if (data.success == true) {
+                        $('#EndDate').html(data.ERDate.EndDate);
+                        $('#ReturnDate').html(data.ERDate.ReturnDate);
+                        HideProgress();
+                    } else {
+                        Swal.fire('Warning', data.message, 'warning');
+                        $('#dtPicker').val("");
+                        HideProgress();
+                    }
+                });
+        }
+    });
+
+    $('#addRow').click(function () {
+        $('#handoverTable tbody').append('<tr><td><input type="text" name="activity" style="width: 300px;" /></td><td><input type="text" name="status" /></td><td><input type="text" name="reason" style="width: 280px;" /></td></tr>');
+    });
+
+    $('#addRow2').click(function () {
+        $('#RelevantFilesTable tbody').append('<tr><td><input type="text" name="activity" style="width: 250px;" /></td><td><input type="text" name="status" style="width: 250px;" /></td></tr>');
+    });
+
+    $('#handoverForm').submit(function (event) {
+        event.preventDefault();
+
+        var tableData = [];
+        $('#handoverTable tbody tr').each(function () {
+            var row = {
+                activity: $(this).find('input[name="activity"]').val(),
+                status: $(this).find('input[name="status"]').val(),
+                reason: $(this).find('input[name="reason"]').val()
+            };
+            tableData.push(row);
+        });
+
+        $.ajax({
+            url: '@Url.Action("SubmitHandoverTasks", "Handover")',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ tasks: tableData }),
+            success: function (response) {
+                alert(response.message);
+            }
+        });
+    });
+
+    $("#ddlLeaveType").change(function () {
+        var selectedValue = $(this).val();
+
+        if (selectedValue === "ADOPTION") {
+            $("#childsAgeSection").show();
+            $("#ddlNoDays").css("background-color", "#ccc");
+            $("#ddlNoDays").prop("disabled", true);
+        } else {
+            $("#childsAgeSection").hide();
+            $("#ddlNoDays").css("background-color", "");
+            $("#ddlNoDays").val("");
+            $("#ddlNoDays").prop("disabled", false);
+        }
+    });
+
+    GetLeaveBalance();
+});
+
+    function GetEndReturnDate() {
+        let startDateInput = document.getElementById("dtPicker").value;
+        
+        let noOfDays = document.getElementById("ddlNoDays").value;
+        let endDateInput = document.getElementById("endDate");
+        let returnDateInput = document.getElementById("returnDate");
+
+        var LeaveType = $("#ddlLeaveType").children("option:selected").val();
+
+        var Leavebal = $("#lblBalance").text();
+
+        if (LeaveType == "") {
+            Swal.fire('Warning', 'Select Leave type', 'warning');
+            $('#ddlNoDays').val("0");
+            return;
+        }
+
+        if (noOfDays == "") {
+            /*Swal.fire('Warning', 'Enter Number of days', 'warning');
+            return;*/
+            noOfDays = "1";
+
+        }
+
+        if (startDateInput == "") {
+            //Swal.fire('Warning', 'Select Start Date', 'warning');
+            return;
+        }
+
+        if (parseFloat(noOfDays) > parseFloat(Leavebal)) {
+            Swal.fire('Warning', 'Number of days (' + noOfDays + ') cannot be more than the balance (' + Leavebal + ')', 'warning');
+            $('#ddlNoDays').val("0");
+            return;
+        }
+
+        //get end date and return date here
+
+        ShowProgress();
+        $.getJSON("/Leave/End_ReturnDates", { startDate: startDateInput, days: noOfDays, LvType: LeaveType },
+            function (data) {
+                if (data.success == true) {
+                    $('#endDate').val(data.ERDate.EndDate);
+                    $('#returnDate').val(data.ERDate.ReturnDate);
+                    HideProgress();
+                }
+                else {
+                    Swal.fire('Warning', data.message, 'warning');
+                    $('#dtPicker').val("");
+                    HideProgress();
+                }
+            });
+
+
+
+        /*
+        if (!startDateInput || !noOfDays || isNaN(noOfDays) || noOfDays < 1) {
+            endDateInput.value = "";
+            returnDateInput.value = "";
+            return;
+        }
+
+        // Convert dd/mm/yyyy to a Date object
+        let dateParts = startDateInput.split("/");
+        if (dateParts.length !== 3) {
+            endDateInput.value = "";
+            returnDateInput.value = "";
+            return;
+        }
+
+        let day = parseInt(dateParts[0], 10);
+        let month = parseInt(dateParts[1], 10) - 1; // JavaScript months are 0-based (0 = Jan)
+        let year = parseInt(dateParts[2], 10);
+
+        let startDate = new Date(year, month, day);
+        if (isNaN(startDate.getTime())) {
+            endDateInput.value = "";
+            returnDateInput.value = "";
+            return;
+        }
+
+        // Function to check if a date is a weekend (Saturday or Sunday)
+        function isWeekend(date) {
+            return date.getDay() === 6 || date.getDay() === 0; // 6 = Saturday, 0 = Sunday
+        }
+
+        // Add the number of days to get the End Date, excluding weekends
+        let daysAdded = 0;
+        while (daysAdded < parseInt(noOfDays, 10)) {
+            startDate.setDate(startDate.getDate() + 1);
+            if (!isWeekend(startDate)) {
+                daysAdded++;
+            }
+        }
+
+        // Format the end date back to dd/mm/yyyy
+        let formattedEndDate =
+            ("0" + startDate.getDate()).slice(-2) + "/" +
+            ("0" + (startDate.getMonth() + 1)).slice(-2) + "/" +
+            startDate.getFullYear();
+
+        // Set End Date input field
+        endDateInput.value = formattedEndDate;
+
+        // Calculate Return Date (next day after End Date, excluding weekends)
+        startDate.setDate(startDate.getDate() + 1);
+        while (isWeekend(startDate)) {
+            startDate.setDate(startDate.getDate() + 1); // Skip weekend days
+        }
+
+        // Format the return date back to dd/mm/yyyy
+        let formattedReturnDate =
+            ("0" + startDate.getDate()).slice(-2) + "/" +
+            ("0" + (startDate.getMonth() + 1)).slice(-2) + "/" +
+            startDate.getFullYear();
+
+        // Set Return Date input field
+        returnDateInput.value = formattedReturnDate;*/
+    }
+
+    var GetLeaveBalance = function () {
+        var LeaveType = $("#ddlLeaveType").children("option:selected").val();
+
+        // Hide leave balance details initially
+        $("#leaveBalanceDetails").hide();
+
+        // Reset all fields
+        $("#lblAllD").text("0");
+        $("#lblCarrF").text("0");
+        $("#lblReimbD").text("0");
+        $("#lblLvTaken").text("0");
+        $("#lblBalance").text("0");
+        $("#lblEarnedDays").text("0");
+        $('#dtPicker').val("");
+        $('#EndDate').val("dd/mm/yyyy");
+        $('#ReturnDate').val("dd/mm/yyyy");
+
+        // Check if leave type is selected
+        if (LeaveType == "") {
+            return;
+        } else {
+            ShowProgress();
+            $.getJSON("/Leave/GetLeaveBalance", { LvType: LeaveType },
+                function (data) {
+                    if (data.success == true) {
+                        // Populate leave balance details
+                        $("#lblAllD").text(data.newBal.AllocatedDays);
+                        $("#lblCarrF").text(data.newBal.CarryForawrd);
+                        $("#lblReimbD").text(data.newBal.ReimbDays);
+                        $("#lblLvTaken").text(data.newBal.LeaveTaken);
+                        $("#lblBalance").text(data.newBal.Balance);
+                        $("#lblEarnedDays").text(data.newBal.EarnedLeaveDays);
+
+                        // Show the leave balance details section
+                        console.log("Showing leave balance details.");
+                        $("#leaveBalanceDetails").show();
+                        /*$('#ddlNoDays').val("0");*/
+                    } else {
+                        Swal.fire('Warning', data.message, 'warning');
+                    }
+                    HideProgress();
+                });
+        }
+    }
+
+    function functionDecimal(evt, val) {
+        try {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+
+            if (charCode == 46) {
+                if (!(val.indexOf(".") > -1)) {
+                    return true;
+                }
+                else {
+                    Swal.fire('Warning', 'Kindly ensure to specify decimals only', 'warning');
+                }
+            }
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                Swal.fire('Warning', 'Kindly ensure to specify decimals only', 'warning');
+                return false;
+            }
+            return true;
+        } catch (w) {
+            Swal.fire(w);
+        }
+    }
+    function functionx(evt) {
+        if (evt.charCode > 31 && (evt.charCode < 48 || evt.charCode > 57)) {
+            Swal.fire("Error", "Please enter only numeric characters in the text box", "error");
+            return false;
+        }
+    }
+
+
+    function getRelieverName() {
+        $.ajax({
+            url: '/Leave/GetRelieverName',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                if (data.success) {
+
+                    $('#txtRelieverName').val(data.NewAppl.RelieverName);
+                    GetLeaveRelievers(data.NewAppl.RelieverName)
+
+
+                } else {
+                    console.error(data.message);
+                    //alert('Failed to retrieve supervisor name and cost center.');
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                console.error(xhr.responseText);
+                alert('An error occurred while making the AJAX request.');
+            }
+        });
+    }
+    function GetLeaveRelievers(preselectedRelieverName) {
+        var Department = $("#ddlImplementingUnit").children("option:selected").val();
+        if (Department == "") {
+            return;
+        } else {
+            ShowProgress();
+            $.getJSON("/Leave/GetLeaveRelievers", { Department: Department },
+                function (data) {
+                    if (data.success == true) {
+                        $("#ddlReliever").empty().append('<option selected="selected">--select Relievers--</option>');
+
+                        $.each(data.NewAppl.ListOfRelievers, function () {
+                            var option = $("<option></option>")
+                                .val(this['Value'])
+                                .html(this['Text']);
+
+                            // Compare the reliever's name and set as selected if it matches
+                            if (this['Value'] === preselectedRelieverName) {
+                                option.attr('selected', 'selected');
+                            }
+
+                            $("#ddlReliever").append(option);
+                        });
+                    } else {
+                        Swal.fire('Warning', data.message, 'warning');
+                    }
+                    HideProgress();
+                });
+        }
+    }
+
+    function getNumberOfDays(selectedValue) {
+        console.log("Selected Child's Age: " + selectedValue);
+
+        if (selectedValue !== 0) {
+            ShowProgress();
+            $.getJSON("/Leave/GetLeaveDays", { code: selectedValue },
+                function (data) {
+                    HideProgress();
+                    if (data.success === true) {
+                        var ddlNoDaysInput = $("#ddlNoDays");
+
+                        ddlNoDaysInput.val(data.noOfDays);
+
+                    } else {
+                        Swal.fire('Warning', data.message, 'warning');
+                    }
+                });
+        }
+    }
+
+    function getSupervisorName() {
+        $.ajax({
+            url: '/Leave/GetSupervisorName',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                if (data.success) {
+
+                    $('#txtSupervisorName').val(data.NewAppl.SupervisorName);
+                } else {
+                    console.error(data.message);
+                    //alert('Failed to retrieve supervisor name and cost center.');
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                console.error(xhr.responseText);
+                alert('An error occurred while making the AJAX request.');
+            }
+        });
+    }
+
+
+
+
+</script>

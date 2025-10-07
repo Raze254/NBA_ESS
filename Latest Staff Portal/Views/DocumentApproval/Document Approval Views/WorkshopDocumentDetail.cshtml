@@ -1,0 +1,186 @@
+﻿@model Latest_Staff_Portal.ViewModel.ImprestHeader
+<div class="card-body">
+    <div class="row">
+        <div class="col-md-6">
+            <b>Document No</b>
+            @Html.TextBoxFor(m => m.No, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+        <div class="col-md-6">
+            <b>Date Needed</b>
+            @Html.TextBoxFor(m => m.DateNeeded, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "dtPicker", onkeydown = "return false;", autocomplete = "off" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <b>Account</b>
+            @Html.TextBoxFor(m => m.AccountNo, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtAccountNo" })
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <b>Donor Code</b>
+            @Html.DropDownListFor(m => m.Dim1, new SelectList(Model.DocD.ListOfDim1, "Value", "Text", Model.Dim1), "--Select Donor--", new { id = "ddlDim1", @class = "form-control", @readonly = "readonly", onchange = "FilterDimension2()", style = "background-color:#dedebd" })
+        </div>
+        <div class="col-md-6">
+            <b>Donor Name</b>
+            <label id="txtDim1" class="form-control" style="background-color: #dedebd">@Model.Dim1Name</label><br/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <b>Project Code</b>
+            @Html.DropDownListFor(m => m.Dim2, new SelectList(Model.DocD.ListOfDim2, "Value", "Text", Model.Dim2), "--Select Project--", new { id = "ddlDim2", @class = "form-control", @readonly = "readonly", onchange = "FilterDimension3()", style = "background-color:#dedebd" })
+        </div>
+        <div class="col-md-6">
+            <b>Project Name</b>
+            <label id="txtDim2" class="form-control" style="background-color: #dedebd">@Model.Dim2Name</label><br/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <b>Program Area Code</b>
+            @Html.DropDownListFor(m => m.Dim3, new SelectList(Model.DocD.ListOfDim3, "Value", "Text", Model.Dim3), "--Select Program--", new { id = "ddlDim3", @class = "form-control", onchange = "FilterDimension4()", style = "background-color:#dedebd", @readonly = "readonly" })
+        </div>
+        <div class="col-md-6">
+            <b>Program Area Name</b>
+            <label id="txtDim3" class="form-control" style="background-color: #dedebd">@Model.Dim3Name</label><br/>
+        </div>
+    </div>
+    <div class="row" id="DivSubprogram">
+        <div class="col-md-6">
+            <b>Sub Program Code</b>
+            @Html.DropDownListFor(m => m.DocD.Dim7, new SelectList(Model.DocD.ListOfDim7, "Value", "Text", Model.DocD.Dim7), "--Select Sub Program--", new { id = "ddlDim7", @class = "form-control", style = "background-color:#dedebd", @readonly = "readonly" })
+        </div>
+        <div class="col-md-6">
+            <b>Sub Program Name</b>
+            <label id="txtDim7" class="form-control" style="background-color: #dedebd">@Model.Dim7Name</label><br/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <b>Activity/ Beneficiary Code</b>
+            @Html.DropDownListFor(m => m.DocD.Dim4, new SelectList(Model.DocD.ListOfDim4, "Value", "Text", Model.DocD.Dim4), "--Select Activity/ Beneficiary--", new { id = "ddlDim4", @class = "form-control", style = "background-color:#dedebd", @readonly = "readonly" })
+        </div>
+        <div class="col-md-6">
+            <b>Activity/ Beneficiary Name</b>
+            <label id="txtDim4" class="form-control" style="background-color: #dedebd">@Model.Dim4Name</label><br/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <b>County Code</b>
+            @Html.DropDownListFor(m => m.DocD.Dim5, new SelectList(Model.DocD.ListOfDim5, "Value", "Text", Model.Dim5), "--Select Project--", new { id = "ddlDim5", @class = "form-control", style = "background-color:#dedebd", @readonly = "readonly" })
+        </div>
+        <div class="col-md-6">
+            <b>County Name</b>
+            <label id="txtDim5" class="form-control" style="background-color: #dedebd">@Model.Dim5Name</label><br/>
+        </div>
+    </div>
+    <div class="row" id="DivMCC">
+        <div class="col-md-6">
+            <b>Major Cost Category</b>
+            @Html.DropDownListFor(m => m.DocD.Dim6, new SelectList(Model.DocD.ListOfDim6, "Value", "Text", Model.Dim4), "--Select Major Cost Category--", new { id = "ddlDim6", @class = "form-control", style = "background-color:#dedebd", @readonly = "readonly" })
+        </div>
+        <div class="col-md-6">
+            <b>Major Cost Category Name</b>
+            <label id="txtDim6" class="form-control" style="background-color: #dedebd">@Model.Dim6Name</label><br/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <b>Responsibility Centre</b>
+            @Html.DropDownListFor(m => m.RespC, new SelectList(Model.DocD.ListOfResponsibility, "Value", "Text", Model.RespC), "--Select Responsibility--", new { id = "ddlRespC", @class = "form-control", style = "background-color:#dedebd", @readonly = "readonly" })
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <b>Total Net Amount</b>
+            @Html.TextBoxFor(m => m.TotalAmount, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtNetAmount" })
+        </div>
+
+        <div class="col-md-6">
+            <b>Status</b>
+            @Html.TextBoxFor(m => m.Status, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtStatus" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <b>Purpose</b>
+            @Html.TextAreaFor(m => m.Remarks, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", rows = 5, id = "txtPurpose" })
+        </div>
+    </div>
+    <hr/>
+    <div align="center" id="DivUpdateButton">
+        <input type="button" class="btn btn-primary waves-effect waves-light" value="Update Header" onclick="UpdateImprestHeader();"/>
+    </div>
+    <div id="DivImpLines">
+        <hr style="border:1px solid black"/>
+        <b>WorkShop Advance Lines</b>
+        <hr/>
+        <div id="divImpLines"></div>
+        <hr style="border:1px solid black"/>
+        <div class="row">
+            <div class="col-md-12">
+                <b>Attachments</b>
+                <div id="divAttachDocs"></div>
+            </div>
+        </div>
+        <hr style="border:1px solid black"/>
+        <div align="right" id="DivSendForApproval">
+            <input type="button" class="btn btn-danger BtnPadding" value="send for approval >>>" onclick="SendDocForApproval();"/>
+        </div>
+        <hr/>
+    </div>
+</div>
+<hr/>
+<div class="table-responsive">
+    <table class="table table-centered table-nowrap" id="ImpLines">
+        <thead>
+        <tr>
+            <th>Advance Type</th>
+            <th>Account No</th>
+            <th>Account Name</th>
+            <th>Description</th>
+            <th style="text-align:center">Total Amount</th>
+            <th class="tdAction">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        @{
+            if (Model.ListOfWorkshopLines != null && Model.ListOfWorkshopLines.Count() > 0)
+            {
+                foreach (var item in Model.ListOfWorkshopLines)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AdvanceType)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Item)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ItemDesc)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ItemDesc2)
+                        </td>
+                        <td style="text-align:center">
+                            @Html.DisplayFor(modelItem => item.Amount)
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="8" style="color:red">
+                        No Records Found
+                    </td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>

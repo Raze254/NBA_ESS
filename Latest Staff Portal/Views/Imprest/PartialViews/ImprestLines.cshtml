@@ -1,0 +1,56 @@
+﻿@model Latest_Staff_Portal.ViewModel.ImprestLinesList
+
+<div class="table-responsive">
+    <table id="imprestLines" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color: black; color: white;">
+            <tr>
+                <th>Payee</th>
+                <th>Employee No</th>
+                <th>Employee Name</th>
+                <th>Job Group</th>
+                <th>G/L Account</th>
+                <th>Destination</th>
+                <th>Vote Item</th>
+                <th>Quantity</th>
+                <th>Rate</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th class="tdAction">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.ListOfImprestLines != null && Model.ListOfImprestLines.Any())
+            {
+                foreach (var item in Model.ListOfImprestLines)
+                {
+                    <tr>
+                        <td>@item.Payee</td>
+                        <td>@item.EmployeeNo</td>
+                        <td>@item.EmployeeName</td>
+                        <td>@item.JobGroup</td>
+                        <td>@item.GLAccount</td>
+                        <td>@item.Destination</td>
+                        <td>@item.VoteItem</td>
+                        <td>@item.Quantity</td>
+                        <td>@item.Rate</td>
+                        <td>@item.Total</td>
+                        <td>@item.Status</td>
+                        <td class="tdAction">
+                            <button class="btn btn-danger ml-3" data-toggle="tooltip" data-placement="top" title="Delete" onclick="DeleteAllocationLines('@item.DocumentNo', '@item.LineNo','@item.SourceLineNo');">Delete</button>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    $("#imprestLines").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100]
+    });
+</script>

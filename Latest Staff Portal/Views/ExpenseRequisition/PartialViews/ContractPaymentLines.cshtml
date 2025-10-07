@@ -1,0 +1,49 @@
+﻿@model Latest_Staff_Portal.ViewModel.ClaimLineList
+<div class="table-responsive">
+    <table id="claimlines" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color: black; color: white;">
+        <tr>
+            <th>Supplier</th>
+            <th>Contract No.</th>
+            <th>LPO No.</th>
+            <th>Item No. </th>
+            <th>Expense Description</th>
+            <th>Supplier Invoice No.</th>
+            <th>Supplier Invoice Date</th>
+            <th>GL Account</th>
+            <th>Quantity</th>
+            <th class="tdAction">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        @if (Model.ListOfCLaimLines != null && Model.ListOfCLaimLines.Any())
+        {
+            foreach (var item in Model.ListOfCLaimLines)
+            {
+                <tr>
+                    <td>@item.Supplier</td>
+                    <td>@item.ContractNo</td>
+                    <td>@item.LpoNo</td>
+                    <td>@item.ItemNo</td>
+                    <td>@item.ExpenseDescription</td>
+                    <td>@item.SupplierInvoiceNo</td>
+                    <td>@item.SupplierInvoiceDate</td>
+                    <td>@item.G_L_Account</td>
+                    <td>@item.Quantity</td>
+                    <td class="tdAction">
+                        <button class="btn btn-danger ml-3" data-toggle="tooltip" data-placement="top" title="Delete" onclick="DeleteAllocationLines('@item.Document_No', '@item.Line_No','@item.Source_Line_No');">Delete</button>
+                    </td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>
+<script>
+    $("#claimlines").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100],
+        "bDestroy": true
+    });
+</script>
+

@@ -1,0 +1,25 @@
+﻿@model Latest_Staff_Portal.ViewModel.TrainingEvaluationViewModel
+
+<style>
+    .select2-container.custom-select .select2-selection {
+        background-color: white !important;
+        border: 1px solid #ccc;
+    }
+
+    .select2-container.custom-select .select2-selection--single {
+        background-color: white !important;
+    }
+</style>
+
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Training Application", htmlAttributes: new { @class = "control-label col-md-12" })
+            @Html.DropDownListFor(m => m.TrainingApplicationCode, Model.trainigApplicationList, "--Select Training Application--", new { @id = "applicationCode", @class = "form-control select2 custom-select"})
+        </div>
+    </div>
+</div>
+<div align="center">
+    <input type="button" class="btn btn-primary waves-effect waves-light" value="Create Training Evaluation" onclick="CreateTrainingEvaluation();" />
+</div>

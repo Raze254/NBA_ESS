@@ -1,0 +1,70 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.KpiAppraisal>
+
+@{
+    ViewBag.Title = "KPIs";
+    var Appraisal_No = ViewBag.Appraisal_No;
+    var Line_No = ViewBag.Line_No;
+    var Perfomance_Goals_and_Targets = ViewBag.Perfomance_Goals_and_Targets;
+    var Appraisal_Stage = ViewBag.Appraisal_Stage;
+    var LoggedInUserID = ViewBag.LoggedInUserID;
+    var SupervisorID = ViewBag.SupervisorID;
+
+    // ✅ Calculate total weight before rendering
+    decimal totalWeight = Model.Sum(x => x.Weight);
+}
+
+<div class="text-end" style="text-align: right">
+    @if (Appraisal_Stage == "Target Setting")
+    {
+        <button class="btn btn-primary action-buttons2"
+                onclick="AddKPI(`@Appraisal_No`,`@Line_No`,`@Perfomance_Goals_and_Targets`,`@totalWeight`)">
+            <i class="fas fa-plus" aria-hidden="true"></i> Add KPI
+        </button>
+    }
+</div>
+
+<div class="table-responsive">
+    <table id="datatable-buttonsKPI" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead>
+            <tr>
+                <th>Appraisal No</th>
+                <th>KPI</th>
+                <th>Weight</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Appraisal_No)</td>
+                    <td>@Html.DisplayFor(modelItem => item.KPI)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Weight)</td>
+                    <td>
+                        @if (Appraisal_Stage == "Target Setting")
+                        {
+                            <button class="btn btn-danger btn-sm" onclick="DeleteKPILine(`@item.Appraisal_No`,`@item.Entry_No`);">
+                                <i class="fas fa-trash" aria-hidden="true"></i> Delete
+                            </button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr style="font-weight: bold;">
+                <td>Total Weight</td>
+                <td></td>
+                <td>@totalWeight</td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+<script>
+    $("#datatable-buttonsKPI").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100]
+    });
+</script>

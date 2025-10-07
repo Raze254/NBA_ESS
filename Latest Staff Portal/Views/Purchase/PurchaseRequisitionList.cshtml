@@ -1,0 +1,236 @@
+﻿@using Latest_Staff_Portal.Models
+@{
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/Dashboard/Dashboard">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active">Purchase Requisition List</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<hr />
+<br />
+<div class="card">
+
+     <div class="card-header"> 
+         <div style="text-align:right"> 
+             <button class="btn btn-primary action-buttons2" onclick="NewPurchaseRequisition();"> 
+                 <i class="fa fa-plus-circle" aria-hidden="true"></i> New Purchase Requisition 
+             </button> 
+         </div> 
+     </div> 
+    <div class="card-body">
+        <div id="divPurchaseRequisitionList"></div>
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">New Purchase Requsition</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                @*<div class="text-center">
+                    <input type="button" class="btn btn-primary action-buttons" value="Submit" onclick="SubmitPurchaseRequisition();" />
+                </div>*@
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal Links////////////////////////////*@
+<div class="modal fade" id="myModalLinks" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Actions</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodyLinks">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadPurchaseRequisitionList();
+        var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+        if (Successmsg != "") {
+            Swal.fire('Success', Successmsg, 'success', true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+    });
+
+    var LoadPurchaseRequisitionList = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: "/Purchase/PurchaseRequisitionListPartialView",
+            success: function (data) {
+                $("#divPurchaseRequisitionList").empty().html(data);
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+
+    var ViewDoc = function (No) {
+        ShowProgress();
+        var form = $('<form>', {
+            action: '/Purchase/PurchaseRequisitionsDocumentView',
+            method: 'POST'
+        }).append($('<input>', {
+            type: 'hidden',
+            name: 'No',
+            value: No
+        }));
+        form.appendTo('body').submit();
+    }; 
+
+    var ViewDoc2 = function (No) {
+        ShowProgress();
+        window.location = "/Purchase/PurchaseRequisitionsDocumentView?No=" + No;
+    }
+
+    var NewPurchaseRequisition = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            url: "/Purchase/NewPurchaseRequisition",
+            dataType: "html",
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', 'An error occurred while loading the form. Please try again.', 'warning');
+            }
+        });
+    };
+
+    function SubmitPurchaseRequisition() {
+        var isValid = true;
+        var budgetValue = $("#Job2").val();
+        alert(budgetValue)
+
+        var formDetails = {
+            PRN_Type: $("#PRN_Type").val(),
+            Location_Code: $("#Location_Code").val(),
+            Requisition_Product_Group: $("#Requisition_Product_Group").val(),
+            PP_Planning_Category: $("#ItemCategoryCode").val(),
+            Description: $("#Description").val(),
+            Job: $("#Job2").val(),
+        };
+
+        // Validation checks
+        if (!formDetails.PRN_Type) {
+            Swal.fire('Warning', 'Please select PRN Type.', 'warning');
+            isValid = false;
+        }
+
+
+
+        if (!formDetails.Location_Code) {
+            Swal.fire('Warning', 'Please Select Location.', 'warning');
+            isValid = false;
+        }
+
+        if (!formDetails.Requisition_Product_Group) {
+            Swal.fire('Warning', 'Please enter Requisition Product Group.', 'warning');
+            isValid = false;
+        }
+
+
+
+        if (!formDetails.PP_Planning_Category) {
+            Swal.fire('Warning', 'Please Select Item.', 'warning');
+            isValid = false;
+        }
+
+        if (!formDetails.Job) {
+            Swal.fire('Warning', 'Budget Required.', 'warning');
+            isValid = false;
+        }
+
+        if (!isValid) {
+            return;
+        }
+
+        var purchaseRequisition = formDetails;
+
+        ShowProgress();
+
+        $.ajax({
+            type: "POST",
+            url: "/Purchase/SubmitPurchaseRequisition",
+            data: JSON.stringify(purchaseRequisition),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                HideProgress();
+                if (data.success) {
+                    Swal.fire('Success', 'Purchase Requisition created', 'success');
+                    ViewDoc(data.message);
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseText, 'warning');
+            }
+        });
+    }
+
+
+</script>

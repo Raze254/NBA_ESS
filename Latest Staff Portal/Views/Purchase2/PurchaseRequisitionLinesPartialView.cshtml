@@ -1,0 +1,81 @@
+﻿@model Latest_Staff_Portal.ViewModel.PurchaseRequisitionLinesList
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th>Document Type</th>
+                <th>Document No</th>           
+                <th>No</th>
+                <th>Description</th>
+                
+                <th>Unit of Measure Code</th> 
+                <th>Quantity</th>        
+                <th>Amount</th>              
+                <th>Action</th>
+            </tr>
+
+        </thead>
+        <tbody>
+            @if (Model.ListOfPurchaseRequisitionLines != null && Model.ListOfPurchaseRequisitionLines.Any())
+            {
+                foreach (var item in Model.ListOfPurchaseRequisitionLines)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DocumentType)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DocumentNo)
+                        </td>
+                      
+                        <td>
+                            @Html.DisplayFor(modelItem => item.No)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                      
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UnitOfMeasureCode)
+                        </td>
+                       
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Quantity)
+                        </td>
+                    
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Amount)
+                        </td>
+                                              <td>
+                            <button class="btn btn-success  btn-sm" data-toggle="tooltip" data-placement="top" title="Edit"
+                                    onclick="EditItem('@item.DocumentNo');">
+                                Edit Line
+                            </button>
+
+                            <button class="btn btn-danger  btn-sm ml-3" data-toggle="tooltip" data-placement="top" title="Delete" onclick="RemoveItem('@item.DocumentNo');">Delete</button>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+
+            }
+        </tbody>
+    </table>
+</div>
+<div style="text-align:right">
+    <button class="btn btn-primary action-buttons" onclick="AddPurchaseRequisitionLine();">
+        <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Line
+    </button>
+</div>
+
+
+
+<script>
+    $("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100] // Same options for the second table
+    });
+</script>

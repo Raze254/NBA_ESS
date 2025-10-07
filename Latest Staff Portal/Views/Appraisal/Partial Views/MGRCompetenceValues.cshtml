@@ -1,0 +1,64 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.CompetenceValues>
+<style>
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+<div class="pre-scrollable">
+    <table id="tableScoreCard" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead>
+        <tr>
+            <th>Description</th>
+            <th>Self Score</th>
+            <th>Supervisor Score</th>
+            <th>Agreed Score</th>
+            <th width="5%" style="text-align:right">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        @{
+            if (Model != null)
+            {
+                {
+                    if (Model.Count() > 0)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Description)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Score)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Sup_Score)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Agreed_Score)
+                                </td>
+                                <td style="text-align:right">
+                                    <a href="javascript:void(0);" class="text-success" onclick="EvalCompValueItem('@item.ANUPEAisal_No', '@item.Code','@item.Line_No','3');">Evaluate</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4" style="color:red">
+                                No Records Found
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+        }
+        </tbody>
+    </table>
+</div>
+<hr/>
+<div align="right">
+    <button class="btn btn-success waves-effect waves-light BtnPadding" onclick="UploadMGRCompetenceValues();">Load Manager's Values</button>
+</div>

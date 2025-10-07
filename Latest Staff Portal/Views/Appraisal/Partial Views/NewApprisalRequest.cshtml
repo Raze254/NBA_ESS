@@ -1,0 +1,85 @@
+﻿@model Latest_Staff_Portal.ViewModel.NewApprisalRequest
+<div class="card-body">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Apprisal Period", new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    @Html.DropDownListFor(model => model.ANUPEAisalPeriod, Model.ListOfApprisalPeriods, "--select ANUPEAisal Period--", new { @class = "form-control", id = "ddlApprPeriod" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Corporate Strategic Plan", new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    @Html.DropDownListFor(model => model.CSP, Model.ListOfCSP, "--select CSP--", new { @class = "form-control", id = "ddlCSP" })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Performance Management Plan", new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    @Html.DropDownListFor(model => model.PMMP, Model.ListOfPMMU, "--select Performance Management Plan--", new { @class = "form-control", id = "ddlPMMP" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Performance Task", new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    @Html.DropDownListFor(model => model.PerformanceTas, Model.ListOfPerformanceTask, "--select Performance Task--", new { @class = "form-control", id = "ddlPerformanceTask" })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Performance Contract", new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    @Html.DropDownListFor(model => model.PerformanceContract, Model.ListOfPerformanceContract, "--select Performance Contract--", new { @class = "form-control", id = "ddlPerformanceContract" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Performance Score Card", new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    @Html.DropDownListFor(model => model.ScoreCard, Model.ListOfScoreCard, "--select Score Card--", new { @class = "form-control", id = "ddlScoreCard" })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Supervisor", new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    @Html.DropDownListFor(model => model.No, Model.ListOfEmpList, "--select Supervisor--", new { @class = "form-control", id = "ddlSup" })
+                    @Html.ValidationMessageFor(model => model.No, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <b>ANUPEAisee Comments</b>
+            @Html.TextAreaFor(m => m.Comments, new { @class = "form-control", rows = "3", id = "txtComments" })
+        </div>
+    </div>
+    <hr/>
+    <div align="center">
+        <input type="button" class="btn btn-primary waves-effect waves-light" value="Create ANUPEAisal Document" onclick="SubmitANUPEAisalRequisition();"/>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#ddlSup,#ddlApprPeriod").select2({
+            width: '100%'
+        });
+    });
+ </script>

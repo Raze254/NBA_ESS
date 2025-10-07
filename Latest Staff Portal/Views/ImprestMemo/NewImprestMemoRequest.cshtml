@@ -1,0 +1,288 @@
+﻿@model Latest_Staff_Portal.ViewModel.NewImprestMemoRequisition
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+
+    .NoRecords {
+        background-color: #dedbdb
+    }
+</style>
+<!--
+<link href="~/assets/css/Loader.css" rel="stylesheet" />
+<div class="loading" align="center" id="divLoader">
+    <br />
+    <img src="~/assets/images/ajax-loader.gif" alt="" />
+</div>
+-->
+
+        <div class="row">
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Station", new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.DropDownListFor(model => model.Dim1, Model.ListOfDim1, "--Select Donor--", new { @class = "form-control", id = "ddlDim1", @readonly = "readonly", style = "background-color:#dedebd" })
+                        @Html.ValidationMessageFor(model => model.Dim1, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Project", new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.DropDownListFor(model => model.Dim2, Model.ListOfDim2, "--Select Project--", new { @class = "form-control", id = "ddlDim2", @readonly = "readonly", style = "background-color:#dedebd", onchange = "FilterDimension3()" })
+                        @Html.ValidationMessageFor(model => model.Dim2, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("ImprestMemo Type", new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.DropDownListFor(model => model.ImprestDueType, Model.ListOfImprestDue, "--select Imprest Type--", new { @class = "form-control", id = "ddlImprestDueType" })
+                        @Html.ValidationMessageFor(model => model.ImprestDueType, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Date of Memo:", new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        <input type="datetime" class="form-control" placeholder="dd/mm/yyyy" id="TxtTravelDate" onkeydown="return false;" autocomplete="off"/>
+                        <div class="a"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("To:", new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.DropDownListFor(model => model.To, Model.ListOfEmployeeList, "--select Employee--", new { @class = "form-control", id = "DdlEmployee" })
+                        @Html.ValidationMessageFor(model => model.To, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("From:", new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @*<input type="text" class="form-control" id="TxtFrom" autocomplete="off" />
+        <div class='a'></div>*@
+                        @Html.DropDownListFor(model => model.From, Model.ListOfEmployeeList, "--select Employee--", new { @class = "form-control", id = "TxtFrom" })
+                        @Html.ValidationMessageFor(model => model.From, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Date:", new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        <input type="datetime" class="form-control" placeholder="dd/mm/yyyy" id="dtPicker" onkeydown="return false;" autocomplete="off"/>
+                        <div class="a"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Source of Funds", new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.DropDownListFor(model => model.Dim3, Model.ListOfDim3, "--select Source of Fund--", new { @class = "form-control", id = "ddlDim3" })
+                        @Html.ValidationMessageFor(model => model.Dim3, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    @Html.Label("Subject Of Memo:", new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        <input type="text" class="form-control" id="TxtSubject" autocomplete="off"/>
+                        <div class="a"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    @Html.Label("Body(Purpose:(2000 Characters)", new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        <textarea id="txtRemarks" class="form-control" style="height:140px" maxlength="2000"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row" hidden="hidden">
+
+
+        </div>
+        <div class="row" hidden="hidden">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Donor", new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.DropDownListFor(model => model.Dim4, Model.ListOfDim4, "--select Donor--", new { @class = "form-control", id = "ddlDim4" })
+                        @Html.ValidationMessageFor(model => model.Dim4, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Project", new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.DropDownListFor(model => model.Dim5, Model.ListOfDim5, "--select Project--", new { @class = "form-control", id = "ddlDim5" })
+                        @Html.ValidationMessageFor(model => model.Dim5, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr style="border:1px solid black"/>
+        <div align="center">
+            <input type="button" class="btn btn-primary waves-effect waves-light" value="Create Document" onclick="SubmitImprestMemoRequisition();"/>
+        </div>
+
+@*//////////////////////Modal////////////////////////////*@
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" ke aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myModalLabel">New ImprestMemo Line</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#dtPicker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-0:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy',
+            minDate: 0
+        });
+        $('#TxtTravelDate').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-0:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy',
+            minDate: 0
+        });
+        $(window).resize(function () {
+            $('#dtPicker').datepicker('hide');
+            $('#dtPicker').blur();
+            $('#TxtTravelDate').datepicker('hide');
+            $('#TxtTravelDate').blur();
+
+        });
+        $("#ddlDim1,#ddlDim2,#ddlDim3,#ddlDim4,#ddlDim5,#ddlRespC,#ddlImprestDueType").select2({
+            width: '100%'
+        });
+        $("#DdlEmployee").select2();
+        $("#TxtFrom").select2();
+      //  $("#ddlImprestDueType").val('IMPREST');
+        document.getElementById("ddlDim1").disabled = true;
+        document.getElementById("ddlDim2").disabled = true;
+      //  document.getElementById("ddlImprestDueType").disabled = true;
+
+    });
+    var FilterDimension2 = function () {
+        var Dim1 = $("#ddlDim1").children("option:selected").val();
+
+        if (Dim1 == "") {
+            $("#ddlDim2 option").remove();
+            $('#ddlDim2').empty().append('<option selected="selected" value="">--Select Project--</option>');
+        }
+        else {
+            ShowProgress();
+            $("#ddlDim2 option").remove();
+            $('#ddlDim2').empty().append('<option selected="selected" value="">--Select Project---</option>');
+
+            $.getJSON("/Common/FilterDimension2", { Dim1: Dim1 },
+                function (data) {
+                    $('#ddlDim2').empty().append('<option selected="selected" value="">--Select Project--</option>');
+                    $.each(data.ListOfDim2, function () {
+                        $("#ddlDim2").append($("<option></option>").val(this['Value']).html(this['Text']));
+                    });
+                    HideProgress();
+                });
+        }
+    }
+    var FilterDimension3 = function () {
+        var Dim1 = $("#ddlDim1").children("option:selected").val();
+        var Dim2 = $("#ddlDim2").children("option:selected").val();
+        if (Dim1 == "") {
+            $("#ddlDim3 option").remove();
+            $('#ddlDim3').empty().append('<option selected="selected" value="">--Select Project--</option>');
+        }
+        else {
+            ShowProgress();
+            $("#ddlDim3 option").remove();
+            $('#ddlDim3').empty().append('<option selected="selected" value="">--Select Programme Area---</option>');
+
+            $.getJSON("/Common/FilterDimension3", { Dim1: Dim1, Dim2: Dim2 },
+                function (data) {
+                    $('#ddlDim3').empty().append('<option selected="selected" value="">--Select Programme Area--</option>');
+                    $.each(data.ListOfDim3, function () {
+                        $("#ddlDim3").append($("<option></option>").val(this['Value']).html(this['Text']));
+                    });
+                    HideProgress();
+                });
+        }
+    }
+    var FilterDimension4 = function () {
+        var Dim1 = $("#ddlDim1").children("option:selected").val();
+        var Dim2 = $("#ddlDim2").children("option:selected").val();
+        var Dim3 = $("#ddlDim3").children("option:selected").val();
+        if (Dim1 == "") {
+            $("#ddlDim4 option").remove();
+            $('#ddlDim4').empty().append('<option selected="selected" value="">--Select Activity--</option>');
+        }
+        else {
+            ShowProgress();
+            $("#ddlDim4 option").remove();
+            $('#ddlDim4').empty().append('<option selected="selected" value="">--Select Activity---</option>');
+
+            $.getJSON("/Common/FilterDimension4", { Dim1: Dim1, Dim2: Dim2, Dim3: Dim3 },
+                function (data) {
+                    $('#ddlDim4').empty().append('<option selected="selected" value="">--Select Activity--</option>');
+                    $.each(data.ListOfDim4, function () {
+                        $("#ddlDim4").append($("<option></option>").val(this['Value']).html(this['Text']));
+                    });
+                    HideProgress();
+                });
+        }
+    }
+</script>

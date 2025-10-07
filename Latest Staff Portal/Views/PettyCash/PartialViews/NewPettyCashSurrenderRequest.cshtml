@@ -1,0 +1,108 @@
+﻿@model Latest_Staff_Portal.ViewModel.PettyCashSurrender
+
+
+<div class="row">
+
+
+
+    @*<div class="form-group">
+            @Html.LabelFor(model => model.Job, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Job, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Job, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Job_Task_No, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Job_Task_No, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Job_Task_No, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Job_Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Job_Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Job_Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Project_Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Project_Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Project_Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Pay_Mode, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Pay_Mode, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Pay_Mode, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Paying_Bank_Account, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Paying_Bank_Account, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Paying_Bank_Account, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    *@
+
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Account Type", htmlAttributes: new { @class = "control-label col-md-2" })
+            <select class="form-control" id="Account_Type" readonly>
+                <option value="1" selected>Customer</option>
+            </select>
+
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Account", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.Account_No, new { htmlAttributes = new { @class = "form-control", @id = "Account_No", @readonly="readonly" } })
+         @*   @Html.DropDownListFor(model => model.Account_No, Model.ListOfEmployees, "Select Option", new { @class = "form-control", @id = "Account_No" })*@
+
+        </div>
+    </div>
+
+    @*<div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Account Name", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.DropDownListFor(model => model.Account_Name, Model.ListOfEmployees, "Select Option", new { @class = "form-control", @id = "Account_Name" })
+            @Html.ValidationMessageFor(model => model.Account_No, "", new { @class = "text-danger" })
+        </div>
+    </div>*@
+
+
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Petty Cash No", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.DropDownListFor(model => model.Petty_Cash_No, Model.ListOfPettyCash, " Select Option", new { @class = "form-control", @id = "Petty_Cash_No" })
+            @Html.ValidationMessageFor(model => model.Petty_Cash_No, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>
+
+
+<div align="center">
+    <input type="button" class="btn btn-primary action-buttons" value="Create" onclick="SubmitPettyCashSurrenderRequest();" />
+</div>
+

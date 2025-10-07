@@ -1,0 +1,63 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.EmpTransferReqList>
+<style>
+    .btnPadding {
+        padding: 5px;
+        font-size: 10px;
+    }
+</style>
+<table class="table table-bordered table-hover" id="EmpTransferHistory">
+    <thead>
+    <tr>
+        <th>
+            Original Station
+        </th>
+        <th>
+            New Station
+        </th>
+        <th>
+            Transfer Date
+        </th>
+        <th>
+            Document No
+        </th>
+        <th>
+            To Hardship Area?
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    @{
+        if (Model != null && Model.Count() > 0)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Original_Station_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.New_Sattion_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Transfer_Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Document_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.To_Hardship_Area_x003F_)
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4" style="color:red">
+                    No Transfer Records Found
+                </td>
+            </tr>
+        }
+    }
+    </tbody>
+</table>

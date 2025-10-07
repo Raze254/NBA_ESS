@@ -1,0 +1,299 @@
+﻿@{
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 7px;
+        font-size: 12px;
+    }
+</style>
+
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#" onclick="DashboardLink();">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active">Transport Requisition</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <div style="text-align:right">
+            <button class="btn btn-primary action-buttons2" onclick="NewTransportRequisition();">
+                <i class="fa fa-plus-circle" aria-hidden="true"></i> New Transport Requisition
+            </button>
+        </div>
+        <hr />
+        <div id="divResourceRequirements"></div>
+    </div>
+</div>
+
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">New Transport Requisition</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal Links////////////////////////////*@
+<div class="modal fade" id="myModalLinks" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Actions</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodyLinks">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#myModal').on('shown.bs.modal', function () {
+            setTimeout(function () {
+                $('.select2').select2({
+                    dropdownParent: $('#myModal')
+                });
+            }, 200);
+        });
+    });</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadTransportRequisitionList();
+        var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+        if (Successmsg != "") {
+            Swal.fire('Success', Successmsg, 'success', true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+
+
+        flatpickr("#Date_of_Trip", {
+            dateFormat: "d/m/Y",
+            minDate: "today",
+            allowInput: true
+        });
+
+        // Time picker only
+        flatpickr("#Time_Requested", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            time_24hr: true,
+            allowInput: true
+        });
+sss
+
+
+
+
+
+    });
+    var LoadTransportRequisitionList = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: "/Fleet/TransportRequisitionListPartialView",
+            success: function (data) {
+                $("#divResourceRequirements").empty().html(data);
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+
+    var NewTransportRequisition = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+			url: "/Fleet/NewTransportRequisition",
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+
+
+    function SubmitTransportRequisition() {
+
+        var isValid = true;
+
+      /*  var Requested_By = $("#Requested_By").val();*/
+        var Approved_Imprest_Memo = $("#Approved_Imprest_Memo").val();
+        var From = $("#From").val();
+        var Destination = $("#Destination").val();
+        var Route_Description = $("#Route_Description").val();
+        var Date_of_Trip = $("#Date_of_Trip").val();
+        var Time_Requested = $("#Time_Requested").val();
+        var No_of_Days_Requested = $("#No_of_Days_Requested").val();
+        var Number_of_Hours_Requested = $("#Number_of_Hours_Requested").val();
+        var Trip_End_Date = $("#Trip_End_Date").val();
+        var Trip_End_Time = $("#Trip_End_Time").val();
+        var Capacity = $("#Capacity").val();
+        var Responsibility_Center = $("#Responsibility_Center").val();
+
+
+      /*  if (!Approved_Imprest_Memo) {
+            Swal.fire('Warning', 'Imprest Memo field is required.', 'warning');
+             isValid = false;
+        }*/
+        if (!From) {
+            Swal.fire('Warning', 'Commencement is required.', 'warning');
+             isValid = false;
+        }
+        if (!Destination) {
+            Swal.fire('Warning', 'Destination is required.', 'warning');
+            isValid = false;
+        }
+        if (!Route_Description) {
+            Swal.fire('Warning', 'Route Description required', 'warning');
+            isValid = false;
+        }
+        if (!Date_of_Trip) {
+            Swal.fire('Warning', 'Date Of Trip is required.', 'warning');
+            isValid = false;
+        }
+        if (!Time_Requested) {
+            Swal.fire('Warning', 'Time Of Trip is required.', 'warning');
+            isValid = false;
+        }
+        if (No_of_Days_Requested<=0) {
+            Swal.fire('Warning', 'Invalid No of Days requested.', 'warning');
+            isValid = false;
+        }
+        if (Number_of_Hours_Requested <= 0) {
+            Swal.fire('Warning', 'Invalid No of Hours requested.', 'warning');
+            isValid = false;
+        }
+        if (Responsibility_Center <= 0) {
+            Swal.fire('Warning', 'Select Responsibility Center', 'warning');
+            isValid = false;
+        }
+
+
+         // Exit if validation fails
+         if (!isValid) {
+             return;
+         }
+
+         // Prepare data object
+         var data = {
+             Approved_Imprest_Memo: Approved_Imprest_Memo,
+             From: From,
+             Destination: Destination,
+             Route_Description: Route_Description,
+             Date_of_Trip: Date_of_Trip,
+             Time_Requested: Time_Requested,
+             No_of_Days_Requested: No_of_Days_Requested,
+             Number_of_Hours_Requested: Number_of_Hours_Requested,
+             Trip_End_Date: Trip_End_Date,
+             Trip_End_Time: Trip_End_Time,
+             Responsibility_Center: Responsibility_Center,
+             Capacity: Capacity
+
+         };
+         // Show progress indicator
+         ShowProgress();
+
+         // Send data via AJAX
+         $.ajax({
+             type: "POST",
+             url: "/Fleet/SubmitTransportRequisition",
+             data: JSON.stringify(data),
+             contentType: "application/json; charset=utf-8",
+             dataType: "json",
+             success: function (data) {
+                 HideProgress();
+                 if (data.success) {
+                     var form = $('<form>', {
+                         action: '/Fleet/TransportRequisitionDocumentView',
+                         method: 'POST'
+                     }).append($('<input>', {
+                         type: 'hidden',
+                         name: 'DocNo',
+                         value: data.message
+                     }));
+                     form.appendTo('body').submit();
+                     Swal.fire('Success', 'Fleet requisition successfully created.', 'success');
+                 } else {
+                     Swal.fire('Warning', data.message, 'warning');
+                 }
+             },
+             error: function (err) {
+                 HideProgress();
+                 Swal.fire('Error', 'An error occurred while submitting the request.', 'error');
+             }
+         });
+    }
+
+
+    var ViewDoc = function (DocNo) {
+        ShowProgress();
+        var form = $('<form>', {
+            action: '/Fleet/TransportRequisitionDocumentView',
+            method: 'POST'
+        }).append($('<input>', {
+            type: 'hidden',
+            name: 'DocNo',
+            value: DocNo
+        }));
+        form.appendTo('body').submit();
+    }
+
+
+
+
+</script>

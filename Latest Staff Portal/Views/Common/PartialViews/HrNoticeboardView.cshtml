@@ -1,0 +1,22 @@
+﻿@*@model Latest_Staff_Portal.ViewModel.NoticeBoard
+
+<div class="pre-scrollable">
+    <div class="row">
+        <div class="col-md-6">
+            <b>Document No</b>
+            @Html.TextBoxFor(m => m.DocumentNo, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+        </div>
+        <div class="col-md-6">
+            <b>Date</b>
+            @Html.TextBoxFor(m => m.Date, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <b>Description</b>
+            @Html.TextBoxFor(m => m.Description, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+        </div>
+    </div>
+</div>
+<script>
+</script>*@

@@ -1,0 +1,464 @@
+﻿@model Latest_Staff_Portal.ViewModel.PMMULines
+@{
+    int totalWeight3 = @ViewBag.TotalWeight3;
+}
+
+
+
+<style>
+    .form-group {
+        margin-bottom: 10px; /* Adjust margin between fields if needed */
+    }
+
+    .form-control {
+        flex-grow: 1; /* Make the input field take up available space */
+    }
+
+    .ml-2 {
+        margin-left: 10px; /* Space between input and remove button */
+    }
+</style>
+
+<div class="card-body">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Contract Number", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.EditorFor(model => model.Contract_No, new { htmlAttributes = new { @class = "form-control", @Id = "Contract_No", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                @Html.ValidationMessageFor(model => model.Contract_No, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Outcome", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.DropDownListFor(m => m.Outcome, Model.ListOfOutcomes, "--Select Option--", new { @class = "form-control", @id = "Outcome", onchange = "GetStrategicObjectives(this.value, this.options[this.selectedIndex].text)" })
+                @Html.ValidationMessageFor(model => model.Outcome, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Strategic Objective", htmlAttributes: new { @class = "control-label col-md-2" })
+                <select id="Strategic_Objective" class="form-control" onchange="GetStrategies(this.value)">
+                    <option value="">--Select Strategic Objective--</option>
+                </select>
+                @Html.ValidationMessageFor(model => model.Strategic_Objective, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Strategy", htmlAttributes: new { @class = "control-label col-md-2" })
+                <select id="Strategies" class="form-control" onchange="GetStrategyOutputCode(this.value)">
+                    <option value="">--Select Strategy--</option>
+                </select>
+                @Html.ValidationMessageFor(model => model.Strategies, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Perspectives", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.DropDownListFor(m => m.Perspectives, Model.ListOfPerspectives, "--Select Option--", new { @class = "form-control", @id = "Perspectives" })
+                @Html.ValidationMessageFor(model => model.Perspectives, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Strategy Output Code", htmlAttributes: new { @class = "control-label col-md-2" })
+                <select id="Strategy_Output_Code" class="form-control" onchange="GetOutputs(this.value)">
+                    <option value="">--Select Strategies Output Code--</option>
+                </select>
+                @Html.ValidationMessageFor(model => model.Strategy_Output_Code, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Outputs", htmlAttributes: new { @class = "control-label col-md-2" })
+                <select id="Outputs" class="form-control" style="background: #dedebd"></select>
+                @Html.ValidationMessageFor(model => model.Outputs, "", new { @class = "text-danger" })
+            </div>
+
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Output Indicators", htmlAttributes: new { @class = "control-label col-md-2" })
+                <select id="Output_Indicators" class="form-control" style="background: #dedebd"></select>
+                @Html.ValidationMessageFor(model => model.Output_Indicators, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Unit of Measure", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.DropDownListFor(m => m.Unit_of_Measure, Model.ListOfUOM, "--Select Option--", new { @class = "form-control", @id = "Unit_of_Measure", onchange = "GetGlAccounts(this.value)" })
+                @Html.ValidationMessageFor(model => model.Unit_of_Measure, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("National Average", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.EditorFor(model => model.National_Average, new { htmlAttributes = new { @class = "form-control", @Id = "National_Average" } })
+                @Html.ValidationMessageFor(model => model.National_Average, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Best Achievement", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.EditorFor(model => model.Best_Achievement, new { htmlAttributes = new { @class = "form-control", @Id = "Best_Achievement" } })
+                @Html.ValidationMessageFor(model => model.Best_Achievement, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Baseline Target", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.EditorFor(model => model.Baseline_Target, new { htmlAttributes = new { @class = "form-control", @Id = "Baseline_Target" } })
+                @Html.ValidationMessageFor(model => model.Baseline_Target, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Weight", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.EditorFor(model => model.Weight, new { htmlAttributes = new { @class = "form-control", @Id = "Weight" } })
+                @Html.ValidationMessageFor(model => model.Weight, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Target", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.EditorFor(model => model.Target, new { htmlAttributes = new { @class = "form-control", @Id = "Target" } })
+                @Html.ValidationMessageFor(model => model.Target, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Achieved Target", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.EditorFor(model => model.Achieved_Target, new { htmlAttributes = new { @class = "form-control", @ID = "Achieved_Target", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                @Html.ValidationMessageFor(model => model.Achieved_Target, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Net Weight", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.EditorFor(model => model.Score, new { htmlAttributes = new { @class = "form-control", @Id = "Score", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                @Html.ValidationMessageFor(model => model.Score, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            @Html.Label("Comments", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="form-group" style="width: 100%;">
+                @Html.TextAreaFor(model => model.Comments, new { @class = "form-control", @Id = "Comments", @readonly = "readonly", @style = "background-color: #dedebd;" })
+                @Html.ValidationMessageFor(model => model.Comments, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="col-md-12">
+            @Html.Label("Activities", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div id="activitiesContainer">
+                <div class="form-group d-flex align-items-center">
+                    <input type="text" name="Activities[]" class="form-control mr-2" placeholder="Enter activity" />
+                    @Html.ValidationMessageFor(model => model.Activities, "", new { @class = "text-danger" })
+                    <input type="number" name="SubWeights[]" class="form-control mr-2" placeholder="Enter Sub-Weight" />
+                    @Html.ValidationMessageFor(model => model.ActivitySubWeight, "", new { @class = "text-danger" })
+                    <input type="number" name="AchievedTargets[]" class="form-control" placeholder="0" readonly style="background-color: #dedebd" />
+                    @Html.ValidationMessageFor(model => model.ActivitiesAchievedtarget, "", new { @class = "text-danger" })
+                </div>
+
+            </div>
+
+            <div class="form-group text-left">
+                <button type="button" class="btn btn-primary" onclick="addActivities()">Add Activities</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr />
+<div align="center">
+    <input type="button" class="btn btn-primary waves-effect waves-light" value="Submit Request" onclick="SubmitPMMULine(@totalWeight3);" />
+</div>
+
+
+
+@*//////////////////////Update PMMU line Modal////////////////////////////*@
+<div class="modal fade" id="addActivitiesPopup" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Update PMMU Line</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div>
+                <div class="modal-body">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="UpdatePMMULine();">Update Line</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        // When the Outcome dropdown changes, populate the Strategic_Objective dropdown
+        $("#Outcome").change(function () {
+            var Strategic_Plan_ID = $(this).val();
+
+            var OutcomeAndDescription = $(this).find("option:selected").text();
+            var Outcome = OutcomeAndDescription.split("-")[0];
+
+            GetStrategicObjectives(Strategic_Plan_ID, Outcome);
+        });
+
+        // When the Strategic_Objective dropdown changes, populate the Strategies dropdown
+        $("#Strategic_Objective").change(function () {
+            var Objective_ID = $(this).val();
+            var Outcome = $("#Outcome").find("option:selected").text();
+
+            GetStrategies(Objective_ID);
+        });
+
+        // When the Strategies dropdown changes, populate the Strategy Output Code dropdown
+        $("#Strategies").change(function () {
+            var Strategy_ID = $(this).val(); // Added missing parentheses
+            GetStrategyOutputCode(Strategy_ID);
+        });
+
+        // When the Strategy Output Code dropdown changes, populate the output field
+        $("#Strategy_Output_Code").change(function () {
+            var Strategy_ID = $(this).val(); // Added missing parentheses
+            GetOutputs(Strategy_ID);
+            // GetOutputIndicators(Strategy_ID); // This is commented out, you can enable it if needed
+        });
+    });
+
+
+    function GetStrategicObjectives(Strategic_Plan_ID, Outcome) {
+        if (Outcome) {
+            //alert(Outcome)
+            ShowProgress();
+            $.ajax({
+                url: '@Url.Action("GetStrategicObjectives", "Performance")',
+                type: 'GET',
+                data: { Strategic_Plan_ID: Strategic_Plan_ID, Outcome: Outcome },
+                success: function (response) {
+                    populateDropdown("#Strategic_Objective", response.ListOfStrategicObjectives, "Select Strategic Objective");
+                    HideProgress();
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error occurred: ' + error);
+                    HideProgress();
+                }
+            });
+        } else {
+            $("#Strategic_Objective").html('<option value="">-- Select Strategic Objective --</option>');
+            $("#Strategies").html('<option value="">-- Select Strategy --</option>'); // Reset strategies if objectives are cleared
+            HideProgress();
+        }
+    }
+    function GetStrategies(Objective_ID) {
+        var Strategic_Plan_ID = $("#Outcome").val();
+        //alert(Strategic_Plan_ID)
+        ShowProgress();
+        if (Objective_ID) {
+            $.ajax({
+                url: '@Url.Action("GetStrategies", "Performance")',
+                type: 'GET',
+                data: { Objective_ID: Objective_ID, Strategic_Plan_ID: Strategic_Plan_ID },
+                success: function (response) {
+                    populateDropdown("#Strategies", response.ListOfStrategies, "Select Strategy");
+                    HideProgress();
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error occurred: ' + error);
+                    HideProgress();
+                }
+            });
+        } else {
+            $("#Strategies").html('<option value="">-- Select Strategy --</option>');
+            HideProgress();
+        }
+    }
+    function GetStrategyOutputCode(Strategy_ID) {
+        var Strategic_Plan_ID = $("#Outcome").val();
+        if (Strategy_ID) {
+            ShowProgress();
+        $.ajax({
+            url: '@Url.Action("GetStrategyOutputCodes", "Performance")',
+            type: 'GET',
+            data: { Strategy_ID: Strategy_ID, Strategic_Plan_ID: Strategic_Plan_ID },
+            success: function (response) {
+                populateDropdown("#Strategy_Output_Code", response.ListOfStrategyOutputCodes, "Select Output Code");
+                HideProgress();
+            },
+            error: function (xhr, status, error) {
+                console.error('Error occurred: ' + error);
+                HideProgress();
+            }
+        });
+        } else {
+            $("#Strategies").html('<option value="">-- Select Output Code --</option>');
+            HideProgress();
+        }
+    }
+    function GetOutputs(Stategy_Output_Code) {
+        var Strategic_Plan_ID = $("#Outcome").val();
+        if (Stategy_Output_Code) {
+            ShowProgress();
+            $.ajax({
+                url: '@Url.Action("GetOutputs", "Performance")',
+                type: 'GET',
+                data: {
+                    Stategy_Output_Code: Stategy_Output_Code,
+                    Strategic_Plan_ID: Strategic_Plan_ID
+                },
+                success: function (response) {
+                    var dropdown = $("#Outputs");
+                    dropdown.empty(); // Clear existing options
+                    if (response.ListOfOutputs && response.ListOfOutputs.length > 0) {
+                        $.each(response.ListOfOutputs, function (index, item) {
+                            var option = document.createElement('option');
+                            option.value = item.Value;
+                            option.text = item.Text;
+                            dropdown.append(option);
+                        });
+                    } else {
+                        dropdown.append($("<option></option>").val("").text("No Records Found"));
+                    }
+                    var dropdown2 = $("#Output_Indicators");
+                    dropdown2.empty(); // Clear existing options
+                    if (response.ListOfOutputIndicators && response.ListOfOutputIndicators.length > 0) {
+                        $.each(response.ListOfOutputIndicators, function (index, item) {
+                            var option = document.createElement('option');
+                            option.value = item.Value;
+                            option.text = item.Text;
+                            dropdown2.append(option);
+                        });
+                    } else {
+                        dropdown2.append($("<option></option>").val("").text("No Records Found"));
+                    }
+                    HideProgress();
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error occurred: ' + error);
+                    HideProgress();
+                }
+            });
+        } else {
+            $("#Outputs").html('<option value=""></option>');
+            $("#Output_Indicators").html('<option value=""></option>');
+            HideProgress();
+        }
+    }
+    function populateDropdown(dropdownSelector, items, defaultText) {
+        var dropdown = $(dropdownSelector);
+        dropdown.empty(); // Clear existing options
+        if (items && items.length > 0) {
+            dropdown.append($("<option></option>").val("").text("-- " + defaultText + " --")); // Default option
+            $.each(items, function (index, item) {
+                var option = document.createElement('option');
+                option.value = item.Value;
+                option.text = item.Text;
+                dropdown.append(option);
+            });
+        } else {
+            dropdown.append($("<option></option>").val("").text("No Records Found"));
+        }
+    }
+
+
+    function addActivities(){
+        $('#addActivitiesPopup').modal('show');
+    }
+
+
+    //Disable some select dropdowns
+    document.getElementById("Output_Indicators").addEventListener("mousedown", function (e) {
+        e.preventDefault();
+    });
+    document.getElementById("Outputs").addEventListener("mousedown", function (e) {
+        e.preventDefault();
+    });
+
+
+    function addActivities() {
+        const container = document.getElementById('activitiesContainer');
+
+        // Create a new div for the activity input fields with flexbox layout
+        const activityDiv = document.createElement('div');
+        activityDiv.classList.add('form-group', 'd-flex', 'align-items-center', 'mb-2');
+
+        // Create the activity input field
+        const activityInput = document.createElement('input');
+        activityInput.type = 'text';
+        activityInput.name = 'Activities[]';  // Name it as an array to submit all activity fields
+        activityInput.classList.add('form-control', 'mr-2'); // Added margin-right for spacing
+        activityInput.placeholder = 'Enter activity';
+
+        // Create the weight input field
+        const weightInput = document.createElement('input');
+        weightInput.type = 'number';
+        weightInput.name = 'SubWeights[]';  // Name it as an array to submit all weight fields
+        weightInput.classList.add('form-control', 'mr-2'); // Added margin-right for spacing
+        weightInput.placeholder = 'Enter Sub weight';
+
+        // Create the achieved target input field
+        const targetInput = document.createElement('input');
+        targetInput.type = 'number';
+        targetInput.name = 'AchievedTargets[]';  // Name it as an array to submit all achieved target fields
+        targetInput.classList.add('form-control', 'mr-2'); // Added margin-right for spacing
+        targetInput.placeholder = '0';
+        targetInput.readOnly = true;  // Set the readonly attribute properly
+        targetInput.style.background = "#dedebd";
+
+        // Create the remove button
+        const removeButton = document.createElement('button');
+        removeButton.type = 'button';
+        removeButton.classList.add('btn', 'btn-danger', 'remove-btn'); // No margin-right for the last item
+
+        // Create the icon element for the remove button
+        const icon = document.createElement('i');
+        icon.classList.add('fas', 'fa-trash'); // FontAwesome trash icon
+
+        // Append the icon to the button
+        removeButton.appendChild(icon);
+
+        // Add event listener to remove the field when the button is clicked
+        removeButton.onclick = function () {
+            container.removeChild(activityDiv);
+        };
+
+        // Append the input fields and remove button to the div
+        activityDiv.appendChild(activityInput);
+        activityDiv.appendChild(weightInput);
+        activityDiv.appendChild(targetInput);
+        activityDiv.appendChild(removeButton);
+
+        // Append the div to the container
+        container.appendChild(activityDiv);
+    }
+
+
+</script>
+
+

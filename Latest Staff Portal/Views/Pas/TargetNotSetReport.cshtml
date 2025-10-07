@@ -1,0 +1,186 @@
+﻿@{
+    ViewBag.Title = "Employee PAS Report";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+<style>
+    .ratio-16x9 {
+        position: relative;
+        padding-top: 56.25%;
+        height: 0;
+        overflow: hidden;
+    }
+
+        .ratio-16x9 iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+    #reportFrame {
+        width: 100%;
+        height: 100vh !important; /* Full viewport height */
+        min-height: 80vh; /* Ensures it's at least a reasonable height */
+        border: none;
+    }
+</style>
+
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#" onclick="HumanResourceLink();">Dashboard</a></li>
+                <li class="breadcrumb-item active">Target Not Set Report</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="container card mt-4 col-md-12 px-4" style="min-height: 100vh">
+    <div class="row">
+        <div class="col text-left pt-4">
+            <h2 class="mb-4">Target Not Set Report</h2>
+        </div>
+    </div>
+    <span class="text-muted">Select filter options for your report</span>
+    <div class="row">
+        <div class="dropDown col-md-5">
+            <label>Geographical Location</label>
+            @Html.DropDownList("DimensionValuesDropdown", (List<SelectListItem>)ViewBag.DimensionValuesDropdown, "Select Geographical Location", new { @class = "form-control select2", id = "dimension2Dropdown" })
+        </div>
+        <div class="dropDown col-md-4">
+            <label>Administrative Unit</label>
+            @Html.DropDownList("Dimensions", ViewBag.DimensionDropdown as List<SelectListItem>, "Select Administrative Unit", new { @class = "form-control select2", id = "dimension1Dropdown" })
+        </div>
+
+        <div class="col-md-3 d-flex justify-content-between align-items-end">
+            <button class="btn py-2 px-3 btn-primary d-flex align-items-center justify-content-center" style="color: white !important;" id="getReportButton" data-toggle="tooltip" title="Download report as PDF">
+                <img src="~/assets/images/pdf.png" class="w-25 mr-1" /> PDF
+            </button>
+            <button class="btn py-2 px-3 btn-primary d-flex align-items-center justify-content-center" style="color: white !important;" data-toggle="tooltip" title="Download report as Excel" onclick="ExportAsExcel();">
+                <img src="~/assets/images/excel.svg" class="w-25 mr-1" /> Excel
+            </button>
+        </div>
+    </div>
+
+
+    <div class="ratio ratio-16x9 mt-3">
+        <iframe id="reportFrame" class="w-100" src="" frameborder="0" title="Report Viewer"></iframe>
+        <div id="placeholder" class="d-flex flex-column align-items-center justify-content-center h-100"
+             style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: white;">
+            <i class="fas fa-binoculars fa-3x text-muted"></i>
+            <p class="mt-2 text-muted">No Report filter selected! Please choose a Geo Location or Admin Unit.</p>
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.select2').select2();
+        $('[data-toggle="tooltip"]').tooltip();
+
+        $('#getReportButton').on('click', function () {
+            let dimension2 = $('#dimension1Dropdown').val() || '';
+            let dimension1 = $('#dimension2Dropdown').val() || '';
+            generateReport(dimension1, dimension2);
+        });
+    });
+
+    function ExportAsExcel() {
+        ShowProgress();
+        let dimension2 = $('#dimension1Dropdown').val() || '';
+        let dimension1 = $('#dimension2Dropdown').val() || '';
+
+        $('#placeholder').removeClass('d-none').addClass('d-flex');
+        $('#placeholder i').removeClass('fa-binoculars').addClass('fa-file-excel');
+        $('#placeholder p').text('Generating Excel report...');
+
+        $.ajax({
+            async: true,
+            type: "POST",
+            url: '/Pas/GenerateTargetNotSetReport',
+            data: JSON.stringify({ Dimension1: dimension1, Dimension2: dimension2, type: 1 }),
+            contentType: "application/json; charset=utf-8",
+            xhrFields: {
+                responseType: 'blob'
+            },
+            success: function (data, status, xhr) {
+                let contentType = xhr.getResponseHeader("content-type");
+
+                if (contentType.includes("application/json")) {
+                    let reader = new FileReader();
+                    reader.onload = function () {
+                        let jsonResponse = JSON.parse(reader.result);
+                        Swal.fire('Error', jsonResponse.message, 'error');
+                    };
+                    reader.readAsText(data);
+                } else {
+                    const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'TargetNotSetReport.xlsx';
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                }
+            },
+            error: function (xhr, status, error) {
+                Swal.fire('Error', 'Failed to generate Excel report', 'error');
+            },
+            complete: function () {
+                HideProgress();
+                $('#placeholder i').removeClass('fa-file-excel').addClass('fa fa-check');
+                $('#placeholder p').text('Target Not Set Report Excel file Downloaded.');
+            }
+        });
+    }
+
+    function generateReport(dimension1, dimension2) {
+        ShowProgress();
+
+        $.ajax({
+            async: true,
+            type: "POST",
+            url: '/Pas/GenerateTargetNotSetReport',
+            data: JSON.stringify({ Dimension1: dimension1, Dimension2: dimension2, type: 0 }),
+            contentType: "application/json; charset=utf-8",
+            xhrFields: {
+                responseType: 'blob'
+            },
+            success: function (data, status, xhr) {
+                $('#placeholder').removeClass('d-flex');
+                $('#placeholder').hide();
+                $('#reportFrame').removeClass('d-none');
+                let contentType = xhr.getResponseHeader("content-type");
+
+                if (contentType.includes("application/json")) {
+                    let reader = new FileReader();
+                    reader.onload = function () {
+                        let jsonResponse = JSON.parse(reader.result);
+                        Swal.fire('Error', jsonResponse.message, 'error');
+                    };
+                    reader.readAsText(data);
+                } else {
+                    const blob = new Blob([data], { type: 'application/pdf' });
+                    const url = window.URL.createObjectURL(blob);
+
+
+                    setTimeout(() => {
+                        document.getElementById('reportFrame').src = url;
+                        $("#placeholder").hide();
+                    }, 100);
+
+                }
+            },
+            complete: function () {
+                HideProgress();
+            }
+        });
+    }
+    
+</script>

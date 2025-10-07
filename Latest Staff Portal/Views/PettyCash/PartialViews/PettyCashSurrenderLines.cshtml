@@ -1,0 +1,91 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.PettyCashSurrenderLines>
+
+@{
+    ViewBag.Title = "PettyCashSurrenderLines";
+    var DocNo = ViewBag.DocNo;
+    var Status = ViewBag.Status;
+}
+
+<div class="table-responsive">
+    <table id="datatable-pettyCashSurrLines" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead >
+            <tr>
+                <th>No</th>
+                <th>Line No</th>
+                <th>Account Type</th>
+                <th>Account No</th>
+                <th>Account Name</th>
+              @*  <th>Description</th>*@
+                <th>Amount</th>
+                <th>Actual Spent</th>
+                @*<th>Receipt No</th>
+                <th>Cash Receipt Amount</th>*@
+                <th>Remaining Amount</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Line_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Account_Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Account_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Account_Name)
+                    </td>
+                   @* <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>*@
+                <td class="text-center">
+                 @*   @Html.DisplayFor(modelItem => item.Amount)*@
+                    <input type="text" name="Amount" value="@item.Amount" class="form-control"
+                           id="amount-@item.Line_No" style="text-align:center" readonly/>
+                </td>
+                    <td class="text-center">  
+                        <input type="text" name="Actual_Spent" value="@item.Actual_Spent" class="form-control"
+                               id="actualSpent-@item.Line_No" style="text-align:center" />
+                    </td>
+                   @* <td>
+                        @Html.DisplayFor(modelItem => item.Receipt_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Cash_Receipt_Amount)
+                    </td>*@
+                    <td class="text-center">
+                        @Html.DisplayFor(modelItem => item.Remaining_Amount)
+                    </td>
+                    <td >
+                        @if (Status == "Open")
+                        {
+                            <button class="btn btn-primary action-buttons2" onclick="UpdatePettyCashSurrenderLine('@item.No', `@item.Line_No` );">
+                                <i class="fa fa-pencil" aria-hidden="true"></i> Update Line
+                            </button>
+                           
+                        }
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#datatable").DataTable(), $("#datatable-pettyCashSurrLines").DataTable({
+            lengthChange: !1
+        }).buttons().container().appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)")
+    });
+</script>
+

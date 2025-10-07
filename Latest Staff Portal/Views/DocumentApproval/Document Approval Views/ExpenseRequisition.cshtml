@@ -1,0 +1,446 @@
+﻿﻿﻿@model Latest_Staff_Portal.ViewModel.ExpenseRequisition
+<div class="card">
+    <div class="card-body">
+        <div style="text-align:right">
+            <button style="background: #162f25; color: whitesmoke; border-radius: 10px" onclick="GenerateExpenseRequisitionReport('@Model.No');">
+                <i class="fa fa-print" aria-hidden="true"></i> Print Report
+            </button>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Document no", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.No, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Description, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Corporate Strategy", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.CorporateStrategy, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Reporting Period", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.ReportingPeriod, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Budget Code", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.BudgetCode, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Date", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Date, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Geographical Location", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.GlobalDimension1Code, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Administrative Unit", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.GlobalDimension2Code, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Workplan", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Workplan, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                </div>
+            </div>
+        </div>
+        @{
+            if (Model.RequiresImprest)
+            {
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.Label("Requires Imprest", htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.TextBoxFor(m => m.RequiresImprest, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.Label("Imprest Type", htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.TextBoxFor(m => m.ImprestType, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.Label("Imprest Type", htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.TextBoxFor(m => m.ImprestType, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.Label("Start Date", htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.TextBoxFor(m => m.StartDate, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.Label("No Of Days", htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.TextBoxFor(m => m.NoOfDays, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.Label("End Date", htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.TextBoxFor(m => m.EndDate, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.Label("Subject", htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.TextBoxFor(m => m.Subject, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.Label("Objective", htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.TextBoxFor(m => m.Objective, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                        </div>
+                    </div>
+                </div>
+            }
+
+
+        }
+
+        <div class="row">
+            @{
+                if (Model.RequiresDirectPayment)
+                {
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.Label("Requires Direct Payment", htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.TextBoxFor(m => m.RequiresDirectPayment, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.Label("Direct Payment TypeS", htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.TextBoxFor(m => m.DirectPay, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                        </div>
+                    </div>
+                }
+            }
+
+
+
+        </div>
+        @{
+            if (Model.RequiresPRN)
+            {
+
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.Label("Requires PRN", htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.TextBoxFor(m => m.RequiresPRN, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.Label("PRN Type", htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.TextBoxFor(m => m.PRNType, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.Label("Procurement Plan ID", htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.TextBoxFor(m => m.ProcurementPlanID, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.Label("PRN Type", htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.TextBoxFor(m => m.PRNType, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.Label("Geographical Location", htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.TextBoxFor(m => m.GeographicalLocationName, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.Label("Requisition Product Group", htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.TextBoxFor(m => m.RequisitionProductGroup, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.Label("PP Plan Category", htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.TextBoxFor(m => m.PPPlanCategory, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.Label("Approval Status", htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.TextBoxFor(m => m.ApprovalStatus, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        <div>
+            <hr />
+            <b>Expense Requisition Line</b>
+            <div id="divLines"></div>
+        </div>
+    </div>
+</div>
+
+@*//////////////////////Modal////////////////////////////*@
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <!-- Add the 'modal-lg' class for a larger modal -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myModalLabel"><label id="labelF"></label></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Content goes here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="updateLineNo" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Update Expense Line</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="docNo">Document No:</label>
+                        <input type="text" id="docNo" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="lineNo">Line No:</label>
+                        <input type="text" id="lineNo" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="resourceNo">Resource No:</label>
+                        <input type="text" id="resourceNo" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="amount">Amount:</label>
+                        <input type="number" id="amount" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="UpdateLine();">Update Line</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script src="~/assets/js/pdfobject.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#myModal').on('shown.bs.modal', function () {
+            setTimeout(function () {
+                $('.select2').select2({
+                    dropdownParent: $('#myModal')
+                });
+            }, 200);
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+		LoadExpenseRequisitionLine(`@Model.No`);
+    });
+var LoadExpenseRequisitionLine = function (DocNo) {
+    var status = '@Model.ApprovalStatus';
+    var reqImprest = '@Model.RequiresImprest';
+    var reqPRN = '@Model.RequiresPRN';
+    var reqDirPay = '@Model.RequiresDirectPayment';
+    var dirPayType = '@Model.DirectPay';
+
+    ShowProgress();
+
+    $.ajax({
+        async: true,
+        type: "POST",
+        dataType: "html",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify({
+            DocNo: DocNo,
+            status: status,
+            reqImprest: reqImprest,
+            reqPrn: reqPRN,
+            dirPay: reqDirPay,
+            dirPayType: dirPayType
+        }),
+        url: "/ExpenseRequisition/ExpenseRequisitionLine",
+        success: function (data) {
+            $("#divLines").html(data);
+            GetDocumentAttachments();
+            HideProgress();
+        },
+        error: function () {
+            HideProgress();
+            Swal.fire("There is some problem to process your request. Please try after some time");
+        }
+    });
+};
+    var GetDocumentAttachments = function () {
+	var DocNo = `@Model.No`;
+	$.ajax({
+		async: true,
+		type: "POST",
+		datatype: "json",
+		contentType: "application/json; charset = utf-8",
+		processData: false,
+        data: JSON.stringify({ DocNo: DocNo}),
+        url: "/Common/EdmsDocumentAttachmentList",
+		success: function (data) {
+			$("#divAttachDocs").html(data);
+		},
+		error: function () {
+			Swal.fire("There is some problem to process your request. Please try after some time");
+		}
+	});
+};
+    var ViewAttachment = function (moduleCheck, docNo, docId) {
+        $.ajaxSetup({ cache: false });
+        ShowProgress();
+        var viewer = $("#modalUnitsBody");
+        viewer.empty();
+
+        $.ajax({
+            url: '/Common/GetEdmsDocuments',
+            type: "GET",
+            datatype: "json",
+            cache: false,
+            contentType: "application/json; charset=utf-8",
+            data: {
+                module: moduleCheck,
+                documentNo: docNo,
+                documentType: "Expenditure Requisition",
+                documentId: docId
+            },
+            success: function (data) {
+                if (data.success) {
+                    if (data.base64) {
+                        var mimeType = data.mimeType || 'application/pdf';
+
+                        if (mimeType.startsWith('application/pdf')) {
+                          
+                            var byteCharacters = atob(data.base64);
+                            var byteNumbers = new Array(byteCharacters.length);
+                            for (var i = 0; i < byteCharacters.length; i++) {
+                                byteNumbers[i] = byteCharacters.charCodeAt(i);
+                            }
+                            var byteArray = new Uint8Array(byteNumbers);
+                            var blob = new Blob([byteArray], { type: mimeType });
+                            var blobUrl = URL.createObjectURL(blob);
+
+                            
+                            viewer.html('<iframe src="' + blobUrl + '" style="width:100%; height:500px;" frameborder="0"></iframe>');
+                        } else if (mimeType.startsWith('image/')) {
+                        
+                            viewer.html('<img src="data:' + mimeType + ';base64,' + data.base64 + '" style="width:100%;"/>');
+                        } else {
+                
+                            var blob = b64toBlob(data.base64, mimeType);
+                            var url = window.URL.createObjectURL(blob);
+                            window.open(url, '_blank');
+                        }
+                        $("#myModalUnits").modal("show");
+                    } else {
+  
+                        window.location = '/Common/AttachmentDownload?fileName=' + data.message;
+                        Swal.fire('Success', 'Document Downloaded successfully', 'success');
+                    }
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+                HideProgress();
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Error', err.responseText || 'An error occurred', 'error');
+            }
+        });
+    };
+    function b64toBlob(base64, contentType) {
+        var byteCharacters = atob(base64);
+        var byteArrays = [];
+
+        for (var offset = 0; offset < byteCharacters.length; offset += 512) {
+            var slice = byteCharacters.slice(offset, offset + 512);
+
+            var byteNumbers = new Array(slice.length);
+            for (var i = 0; i < slice.length; i++) {
+                byteNumbers[i] = slice.charCodeAt(i);
+            }
+
+            var byteArray = new Uint8Array(byteNumbers);
+            byteArrays.push(byteArray);
+        }
+
+        return new Blob(byteArrays, { type: contentType });
+    }
+
+</script>

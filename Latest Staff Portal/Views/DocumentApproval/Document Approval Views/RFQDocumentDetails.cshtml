@@ -1,0 +1,482 @@
+﻿@model Latest_Staff_Portal.ViewModel.RequestForQuotationCard
+
+
+<style>
+	thead {
+		background-color: black;
+		color: white;
+	}
+
+	hr {
+		margin: 4px;
+	}
+
+	.BtnPadding {
+		padding: 1px;
+		font-size: 12px;
+	}
+</style>
+<div style="text-align:right">
+	@*<button style="background: #162f25; color: whitesmoke; border-radius: 10px" onclick="GenerateExpenseRequisitionReport('@Model.No');">
+			<i class="fa fa-print" aria-hidden="true"></i> Print Report
+		</button>*@
+
+
+	<button style="background: #162f25; color: whitesmoke; border-radius: 10px" onclick="ViewApprovalTrail('@Model.Code');">
+		<i class="fa fa-history" aria-hidden="true"></i> Approval Trail
+	</button>
+
+</div>
+<div class="card">
+
+
+	<div class="card-body">
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Code ", new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Document Date ", new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Document_Date, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("External Document No ", new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.External_Document_No, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("PRN_No ", new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.PRN_No, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Location Code ", new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Location_Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Description ", new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Description, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+				</div>
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Procurement Type ", new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Procurement_Type, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Requisition Product Group ", new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Requisition_Product_Group, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+				</div>
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Procurement Category ID ", new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Procurement_Category_ID, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Target Bidder Group ", new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Target_Bidder_Group, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Solicitation Type ", new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Solicitation_Type, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Bid Submission Method ", new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Bid_Submission_Method, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+				</div>
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Procurement Method ", new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Procurement_Method, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Sealed Bids ", new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Sealed_Bids, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+				</div>
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Purchaser Code ", new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Purchaser_Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Purchaser Name ", new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Purchaser_Name, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Mandatory Special Group Reservr ", new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Mandatory_Special_Group_Reserv, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Appointer of Bid Arbitrator ", new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Appointer_of_Bid_Arbitrator, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+				</div>
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Published ", new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Published, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Date Time Published ", new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Date_Time_Published, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+				</div>
+			</div>
+		</div>
+
+
+		
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Created Date Time ", new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Created_Date_Time, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Created by ", new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Created_by, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Procurement Plan ID ", new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Procurement_Plan_ID, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Procurement Plan Entry No ", new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Procurement_Plan_Entry_No, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+				</div>
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("PP Planning Category ", new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.PP_Planning_Category, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("PP Funding Source ID ", new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.PP_Funding_Source_ID, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Bid Opening Date", new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Bid_Opening_Date, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Bid Opening Time", new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Bid_Opening_Time, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Submission End Date", new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Submission_End_Date, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Submission End Time", new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Submission_End_Time, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Bid Scoring Template", new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Bid_Scoring_Template, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Bid Opening Committee", new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Bid_Opening_Committe, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Bid Evaluation Committee", new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Bid_Evaluation_Committe, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					@Html.Label("Tender Validity Expiry Date", new { @class = "control-label col-md-12" })
+					@Html.TextBoxFor(m => m.Tender_Validity_Expiry_Date, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+				</div>
+			</div>
+		</div>
+
+
+		
+		<div id="DivPurchaseRegLines">
+			<hr style="border:1px solid black" />
+			<b>RFQ Lines</b>
+			<hr />
+			<div id="divRequestForQuotationsLines"></div>
+			<hr style="border:1px solid black" />
+		</div>
+		<div id="DivPurchaseRegLines">
+			<hr style="border:1px solid black" />
+			<b>Invited Biders</b>
+			<hr />
+			<div id="divBiders"></div>
+			<hr style="border:1px solid black" />
+		</div>
+	</div>
+
+</div>
+
+
+
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content bg-white">
+			<div class="modal-header">
+				<h4 class="modal-title">
+					<label id="labelF"></label>
+				</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body" id="modalBody">
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+@*//////////////////////Modal View Doc////////////////////////////*@
+<div class="modal fade" id="myModalAttachment" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content bg-white">
+			<div class="modal-header">
+				<h4 class="modal-title">Attachment</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body" id="modalAttachmentBody" style="width:100%;height:450px">
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+@*//////////////////////Document Rejection Modal////////////////////////////*@
+<div class="modal fade" id="myModalComments" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content bg-white">
+			<div class="modal-header">
+				<h4 class="modal-title">Rejection Comments</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body" id="modalCommentBody">
+				<div id="divDocComments"></div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="addBider" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-sm" role="document">
+		<div class="modal-content bg-white">
+			<div class="modal-header">
+				<h4 class="modal-title">Add Bidder</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label for="docNo">Document No:</label>
+					<input type="text" id="docNo" class="form-control" readonly value="@Model.Code">
+				</div>
+				<div class="form-group">
+					<label for="category">Category:</label>
+					@Html.TextBoxFor(m => m.PP_Planning_Category, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+				</div>
+				<div class="form-group">
+					<label for="vendor">Vendor:</label>
+					<select id="vendorDropdown" name="vendor" class="form-control"></select>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" onclick="submitBidder();">Submit Bider</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script src="~/assets/js/pdfobject.min.js"></script>
+<script type="text/javascript">
+	$(document).ready(function () {
+		
+		LoadRequestForQuotationsDocumentLines(`@Model.Code`, `@Model.Status`);
+		LoadInvitedBiders('@Model.Code');
+
+
+        var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+        if (Successmsg != "") {
+            Swal.fire('Success', Successmsg, 'success', true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+
+
+	
+    });
+
+    var LoadRequestForQuotationsDocumentLines = function (DocNo, Status) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+			data: JSON.stringify({ DocNo: DocNo, Status: Status }),
+            url: "/Purchase/RequestForQuotationsLines",
+            success: function (data) {
+                $("#divRequestForQuotationsLines").html(data);
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+	};
+	var LoadInvitedBiders = function (DocNo) {
+		$.ajax({
+			async: true,
+			type: "POST",
+			datatype: "json",
+			contentType: "application/json; charset = utf-8",
+			processData: false,
+			data: JSON.stringify({ DocNo: DocNo}),
+			url: "/Purchase/InvitedBiders",
+			success: function (data) {
+				$("#divBiders").html(data);
+			},
+			error: function () {
+				HideProgress();
+				Swal.fire("There is some problem to process your request. Please try after some time");
+			}
+		});
+	};
+
+
+  
+	
+	
+	
+
+	
+
+</script>

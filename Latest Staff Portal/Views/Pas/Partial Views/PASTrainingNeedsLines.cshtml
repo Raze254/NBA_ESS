@@ -1,0 +1,146 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.PASTrainingNeedsLine>
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    .table th, .table td {
+        vertical-align: middle;
+    }
+
+    .text-end {
+        text-align: right;
+    }
+
+    .btn-spinner .spinner-border {
+        display: none;
+    }
+
+    .btn-spinner.loading .spinner-border {
+        display: inline-block;
+    }
+</style>
+<div class="col-xl-12 col-sm-12 col-12">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="">
+                    <div class="table-responsive">
+                        
+                        <table class="datatable table table-striped table-bordered" id="datatable-buttons">
+                            <thead>
+                            <tr style="background-color: black;">
+                                <th>No</th>
+                                <th>Training Need</th>
+                                <th>Supervisor Remarks</th>
+                            @if (ViewBag.stage != "Evaluated and Agreed")
+                                {
+                                    if (!ViewBag.Hide)
+                                    {
+                                        <th></th>
+                                    }
+                                }
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            @foreach (var (item, index) in Model.Select((value, i) => (value, i + 1)))
+                            {
+                                <tr>
+                                    <td>
+                                        @index
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Training_Need)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Supervisors_Remarks)
+                                    </td>
+                                    <td class="text-end">
+                                @if (ViewBag.stage != "Evaluated and Agreed")
+                                {
+                                    if (!ViewBag.Hide)
+                                    {
+                                        <div class="d-inline-block">
+                                            @*<a class="btn btn-success BtnPadding btn-spinner" onclick="EditTraining('@item.Line_No', '@item.Training_Need', '@item.Supervisors_Remarks', '@item.DocNo')" href="#"
+                title="Edit" aria-label="Edit">*@
+                                            <a class="btn btn-success BtnPadding btn-spinner" onclick="UpdateTraining('@item.Line_No', '@item.Training_Need', '@item.Supervisors_Remarks', '@item.DocNo');" href="#"
+                                               title="Edit" aria-label="Edit">
+                                                <i class="fas fa-edit"></i> Edit
+                                                <div class="spinner-border text-light" role="status"></div>
+                                            </a>
+                                        </div>
+                                        <div class="d-inline-block ms-2">
+                                            <a class="btn btn-danger BtnPadding btn-spinner" href="#"
+                                               onclick="DeleteTraining('@item.DocNo', '@item.Line_No')"
+                                               title="Delete" aria-label="Delete">
+                                                <i class="fas fa-trash-alt"></i> Delete
+                                                <div class="spinner-border text-light" role="status"></div>
+                                            </a>
+                                        </div>
+                                    }
+                                }
+                                    </td>
+                                </tr>
+                            }
+                                
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script>
+    function DeleteTraining(docNo, lineNo) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                ShowProgress();
+                $.ajax({
+                    type: 'POST',
+                    contentType: 'application/json; charset=utf-8',
+                    url: "DeleteTrainingNeed",
+                    data: JSON.stringify({ DocNo: docNo, Line_No: lineNo }),
+                    success: function (response) {
+                        if (response.success) {
+                            HideProgress();
+                            Swal.fire({
+                                title: 'Deleted!',
+                                text: 'Record has been deleted successfully.',
+                                icon: 'success',
+                                timer: 2000,
+                                timerProgressBar: true,
+                                willClose: () => {
+                                    location.reload();
+                                }
+                            });
+
+                        } else {
+                            HideProgress();
+                            Swal.fire('Error', response.message, 'error');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        HideProgress();
+                        Swal.fire('Error', 'Failed to submit data. Please try again.', 'error');
+                    }
+                });
+            }
+        });
+    }
+</script>
+

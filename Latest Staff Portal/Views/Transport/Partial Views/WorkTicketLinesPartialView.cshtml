@@ -1,0 +1,152 @@
+﻿@model List<Latest_Staff_Portal.ViewModel.WorkTicketLines>
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+        <tr>
+            <th>Action</th>
+            <th>Action</th>
+            <th>Transport Requisition No</th>
+            <th>Commencement</th>
+            <th>Route Code</th>
+            <th>Route Description</th>
+            <th>Date</th>
+            <th>Driver No</th>
+            <th>Driver Name</th>
+            <th>Details of Journey and Route</th>
+            <th>Oil Draw (Litres)</th>
+            <th>Fuel Drawn (Litres)</th>
+            <th>Receipt No</th>
+            <th>Time Out</th>
+            <th>Time In</th>
+            <th>Opening Odometer Reading</th>
+            <th>Closing Odometer Reading</th>
+            <th>Total Kilometers</th>
+            <th>Total Miles Per Litre</th>
+            <th>Total Miles Per Litre (Oil)</th>
+            <th>Fuel Carried Forward</th>
+            <th>Authorized By</th>
+            <th>Authorized by other GOK Officer</th>
+            <th>Designation</th>
+            <th>Defect Date</th>
+            <th>Defect</th>
+            <th>Action Taken/Reported</th>
+        </tr>
+        </thead>
+        <tbody>
+        @if (Model.Count() > 0)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <input type="button" onclick="editWorkTicketLine('@item.TransportRequisitionNo');" class="btn btn-sm btn-danger" value="Edit"/>
+                    </td>
+                    <td>
+                        <input type="button" onclick="DeleteAttachment('@item.TransportRequisitionNo');" class="btn btn-sm btn-danger" value="Delete"/>
+                    </td>
+                    <td>
+                        @item.TransportRequisitionNo
+                    </td>
+                    <td>
+                        @item.Commencement
+                    </td>
+                    <td>
+                        @item.RouteCode
+                    </td>
+                    <td>
+                        @item.RouteDescription
+                    </td>
+                    <td>
+                        @item.Date
+                    </td>
+                    <td>
+                        @item.DriverNo
+                    </td>
+                    <td>
+                        @item.DriverName
+                    </td>
+                    <td>
+                        @item.DetailsofJourneyandRoute
+                    </td>
+                    <td>
+                        @item.OilDraw_Litres
+                    </td>
+                    <td>
+                        @item.FuelDrawn_Litres
+                    </td>
+                    <td>
+                        @item.ReceiptNo
+                    </td>
+                    <td>
+                        @item.TimeOut
+                    </td>
+                    <td>
+                        @item.TimeIn
+                    </td>
+                    <td>
+                        @item.OpeningOdometerReading
+                    </td>
+                    <td>
+                        @item.ClosingOdometerReading
+                    </td>
+                    <td>
+                        @item.TotalKilometers
+                    </td>
+                    <td>
+                        @item.TotalMilesPerLitre
+                    </td>
+                    <td>
+                        @item.TotalMilesPerLtr_Oil
+                    </td>
+                    <td>
+                        @item.FuelCarriedForward
+                    </td>
+                    <td>
+                        @item.AuthorizedBy
+                    </td>
+                    <td>
+                        @item.AuthorizedbyotherGOKOfficer
+                    </td>
+                    <td>
+                        @item.Designation
+                    </td>
+                    <td>
+                        @item.DefectDate
+                    </td>
+                    <td>
+                        @item.Defect
+                    </td>
+                    <th>
+                        @item.ActionTakenReported
+                    </th>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="17" style="color:red">
+                    No Records Found
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+<div align="right" class="HideLineButton">
+    <input type="button" value="Add Work Ticket Line" class="btn btn-danger BtnPadding" onclick="AddWorkTicketLines();"/>
+</div>
+<script type="text/javascript">
+    @*$(document).ready(function () {
+        var status = '@Model.Status';
+        if (status == "Open") {
+            $(".tdAction").show();
+            $(".HideLineButton").show();
+        }
+        else {
+            $(".tdAction").hide();
+            $(".HideLineButton").hide();
+        }
+    });*@
+</script>

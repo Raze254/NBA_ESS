@@ -1,0 +1,41 @@
+﻿@model Latest_Staff_Portal.ViewModel.ICTHelpDesk
+
+@{
+    ViewBag.Title = "NewICTHelpDeskRequest";
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Helpdesk Category", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.DropDownListFor(m => m.HelpDesk_Category, Model.ListOfCategories, "Select Option--", new { @class = "form-control", @id = "HelpDesk_Category" })
+            @Html.ValidationMessageFor(model => model.HelpDesk_Category, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Helpdesk Subcategory", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.DropDownListFor(m => m.ICT_Inventory, Model.ListOfSubCategories, "Select Option--", new { @class = "form-control", @id = "Helpdesk_subcategory" })
+            @Html.ValidationMessageFor(model => model.Helpdesk_subcategory, "", new { @class = "text-danger" })
+        </div>
+    </div>
+   @* <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Asset Involved", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.DropDownListFor(m => m.ICT_Inventory, Model.ListOfInventory, "Select Option--", new { @class = "form-control", @id = "ICT_Inventory" })
+            @Html.ValidationMessageFor(model => model.ICT_Inventory, "", new { @class = "text-danger" })
+        </div>
+    </div>*@
+   
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Description Of The Issue", htmlAttributes: new { @class = "control-label col-md-2" })
+            <textarea class="form-control" rows="3" id="Issue_Description"></textarea>
+           @* @Html.EditorFor(model => model.Description_of_the_issue, new { htmlAttributes = new { @class = "form-control", @id = "Issue_Description" } })*@
+            @Html.ValidationMessageFor(model => model.Description_of_the_issue, "", new { @class = "text-danger" })
+        </div>
+    </div>
+   
+
+</div>

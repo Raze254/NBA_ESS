@@ -1,0 +1,142 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.PurchaseRequisitionLines>
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th>Document Type</th>
+                <th>Document No</th>
+                <th>Line No</th>
+                <th>Type</th>
+                <th>Procurement Plan ID</th>
+                <th>Budget</th>
+                <th>Budget Line</th>
+                <th>Status</th>
+                <th>Procurement Plan Entry No</th>
+                <th>Item Description</th>
+                <th>PP Solicitation Type</th>
+                <th>PP Procurement Method</th>
+                <th>Other Procurement Methods</th>
+                <th>PP Preference Reservation Code</th>
+                <th>Item Category Code</th>
+                <th>No</th>
+                <th>Description</th>
+                <th>Unit of Measure Code</th>
+                <th>Quantity</th>
+                <th>Direct Unit Cost</th>
+                <th>Amount</th>
+                <th>Amount Including VAT</th>
+                <th>Currency Code</th>
+                <th>Location Code</th>
+                <th>Unit Cost LCY</th>
+                <th></th>
+            </tr>
+
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Document_Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Document_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Line_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Procurement_Plan_ID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Budget)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Budget_Line)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Procurement_Plan_Entry_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Item_Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PP_Solicitation_Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PP_Procurement_Method)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Other_Procurement_Methods)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PP_Preference_Reservation_Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Item_Category_Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Unit_of_Measure_Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Quantity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Direct_Unit_Cost)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Amount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Amount_Including_VAT)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Currency_Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Location_Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Unit_Cost_LCY)
+                    </td>
+                    <td>
+                        <button class="btn btn-success  btn-sm" data-toggle="tooltip" data-placement="top" title="Edit"
+                                onclick="EditItem('@item.Document_No');">
+                            Edit Line
+                        </button>
+
+                        <button class="btn btn-danger  btn-sm ml-3" data-toggle="tooltip" data-placement="top" title="Delete" onclick="RemoveItem('@item.Document_No');">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div style="text-align:right">
+    <button class="btn btn-primary btn-sm" style=" background: green; color: whitesmoke; border: none" onclick="AddPurchaseRequisitionLine();">
+        <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Line
+    </button>
+</div>
+
+
+
+<script>
+    $("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100] // Same options for the second table
+    });
+</script>

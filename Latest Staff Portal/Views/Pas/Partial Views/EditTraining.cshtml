@@ -1,0 +1,107 @@
+﻿@model Latest_Staff_Portal.ViewModel.PASTrainingNeedsLine
+
+@{
+    var isCapable = ViewBag.capable;
+}
+
+<div class="form-horizontal">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            @Html.LabelFor(model => model.Training_Need, "Training Need", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.TextBoxFor(model => model.Training_Need, new
+                {
+                    @class = "form-control",
+                    @id = "Training_Need",
+                })
+                @Html.ValidationMessageFor(model => model.Training_Need, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+
+    @if (isCapable)
+    {
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                @Html.Label("Supervisors Remarks", htmlAttributes: new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    @Html.TextAreaFor(model => model.Supervisors_Remarks, new { @class = "form-control", @id = "Supervisors_Remarks" })
+                    @Html.ValidationMessageFor(model => model.Supervisors_Remarks, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    }
+
+    @Html.HiddenFor(model => model.Line_No)
+    @Html.HiddenFor(model => model.DocNo)
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" onclick="UpdateTraining();" value="Save" class="btn btn-primary" />
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content bg-white">
+                <div class="modal-header">
+                    <h4 class="modal-title"><label id="labelF"></label></h4>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modalBody"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script>
+    function UpdateTraining() {
+        var trainingNeed = $("#Training_Need").val();
+        var supervisorsRemarks = $("#Supervisors_Remarks").val();
+        var docNo = '@Model.DocNo';
+        var lineNo = '@Model.Line_No';
+
+        var updateTraining = {
+            DocNo: docNo,
+            Line_No: lineNo,
+            Training_Need: trainingNeed,
+            Supervisors_Remarks: supervisorsRemarks
+        };
+
+
+        ShowProgress();
+
+        $.ajax({
+            url: '/Pas/UpdateTrainingLines',
+            type: 'POST',
+            data: updateTraining,
+            success: function (data) {
+                if (data.success) {
+                    $("#myModal").modal("hide");
+                    HideProgress();
+                    LoadLines();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Training need updated successfully!'
+                    });
+                    
+
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Something went wrong!'
+                    });
+                }
+            }
+        });
+    }
+</script>

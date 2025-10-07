@@ -1,0 +1,40 @@
+﻿@model Latest_Staff_Portal.ViewModel.OtherDuties
+
+@{
+    ViewBag.Title = "NewOtherDuty";
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Appraisal No", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Appraisal_No, new { htmlAttributes = new { @class = "form-control", @id = "Appraisal_No2", @readonly="readonly"} })
+            @Html.ValidationMessageFor(model => model.Appraisal_No, "", new { @class = "text-danger" })
+        </div>
+    </div>
+   
+
+    <div class="col-md-12" hidden>
+        <div class="form-group">
+            @Html.Label("Appraisal Period", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Appraisal_Period, new { htmlAttributes = new { @class = "form-control", @id = "Appraisal_Period2", @readonly = "readonly" } })
+            @Html.ValidationMessageFor(model => model.Appraisal_Period, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Additional Duty", htmlAttributes: new { @class = "control-label col-md-2" })
+            <textarea class="form-control" id="Duties2" rows="2"></textarea>
+            @*@Html.EditorFor(model => model.Duties, new { htmlAttributes = new { @class = "form-control",@id= "Duties2" } })*@
+            @Html.ValidationMessageFor(model => model.Duties, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>
+
+<div align="center">
+    <input type="button" class="btn btn-primary action-buttons" value="Submit Record" onclick="SubmitOtherDuty();" />
+</div>

@@ -1,0 +1,141 @@
+﻿@model Latest_Staff_Portal.ViewModel.CommitteeAppointmentLines
+
+
+<div class="card-body">
+
+    
+    <div class="row">
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Document No", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.EditorFor(model => model.Document_No, new { htmlAttributes = new { @class = "form-control", @id = "Document_No", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                @Html.ValidationMessageFor(model => model.Document_No, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Document Type", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.EditorFor(model => model.Document_Type, new { htmlAttributes = new { @class = "form-control", @id = "Document_Type", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                @Html.ValidationMessageFor(model => model.Document_Type, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Member No", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.DropDownListFor(m => m.Member_No, Model.ListOfMembers, "--Select Option--",
+                    new { @class = "form-control select2", @id = "Member_No", onchange = "GetMemberDetails(this.value)" })
+                @Html.ValidationMessageFor(model => model.Member_No, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Member Name", htmlAttributes: new { @class = "control-label col-md-2" })
+                <select id="Member_Name" class="form-control" style="background: #dedebd"> </select>
+                @Html.ValidationMessageFor(model => model.Member_Name, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+        @*<div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Member Email", htmlAttributes: new { @class = "control-label col-md-2" })
+                <select id="Member_Email" class="form-control" style="background: #dedebd"> </select>
+                @Html.ValidationMessageFor(model => model.Member_Email, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Role", htmlAttributes: new { @class = "control-label col-md-2" })
+                <select id="Role" class="form-control select2">
+                    <option value="" selected hidden>--Select Role--</option>
+                    <option value="1">Member</option>
+                    <option value="2">Chairperson</option>
+                    <option value="3">Sectretary</option>
+                    <option value="4">Consultant</option>
+                    <option value="5">Joint Secretary</option>
+                    <option value="6">Sectretariat Support</option>
+                    <option value="7">Sectretariat</option>
+                    <option value="8">In  Advance</option>
+                    <option value="9">Alternate Chairperson</option>
+                    <option value="10">Alternate Sectretary</option>
+                </select>
+                @Html.ValidationMessageFor(model => model.Role, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+</div>
+<hr />
+<div align="center">
+    <input type="button" class="btn btn-primary waves-effect waves-light" value="Submit Request" onclick="SubmitAppointmentCommitteeLine();" />
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+      
+        // When the member_No dropdown changes, populate the member_name dropdown
+        $("#Member_No").change(function () {
+            var Member_No = $(this).val();
+            GetMemberDetails(Member_No);
+        });
+
+        $("#Member_No", "#Role").select2({
+            width: '100%'
+        });
+
+
+    });
+    function GetMemberDetails(Member_No) {
+        if (Member_No) {
+            $.ajax({
+                url: '@Url.Action("GetMemberDetails", "Performance")',
+                type: 'GET',
+                data: { Member_No: Member_No },
+                success: function (response) {
+
+                    //populate the name  dropdown
+                    var nameDropdown = $("#Member_Name");
+                    nameDropdown.empty(); // Clear existing options
+                    if (response.ListOfMemberNames && response.ListOfMemberNames.length > 0) {
+                        $.each(response.ListOfMemberNames, function (index, item) {
+                            var option = document.createElement('option');
+                            option.value = item.Value;
+                            option.text = item.Text;
+                            nameDropdown.append(option);
+                        });
+                    } else {
+                        nameDropdown.append($("<option></option>").val("").text("No Records Found"));
+                    }
+
+                    //populate the email dropdown
+                    var emailDropdown = $("#Member_Email");
+                    emailDropdown.empty(); // Clear existing options
+                    if (response.ListOfMemberEmail && response.ListOfMemberEmail.length > 0) {
+                        $.each(response.ListOfMemberEmail, function (index, item) {
+                            var option = document.createElement('option');
+                            option.value = item.Value;
+                            option.text = item.Text;
+                            emailDropdown.append(option);
+                        });
+                    } else {
+                        emailDropdown.append($("<option></option>").val("").text("No Records Found"));
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error occurred: ' + error);
+                }
+            });
+        } else {
+            $("#Member_Name").html('<option value="">-- Select Member Name --</option>');// Reset Name if Member_No are cleared
+        }
+    }
+
+
+
+  
+</script>
+
+

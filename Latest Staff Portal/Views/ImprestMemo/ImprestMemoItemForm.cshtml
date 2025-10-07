@@ -1,0 +1,119 @@
+﻿@model Latest_Staff_Portal.ViewModel.ImprestMemoTypesList
+<style>
+    .ui-front {
+        z-index: 2000 !important;
+    }
+</style>
+
+<div class="bg-soft-dark" style="color:black">
+    <div class="row">
+        <div class="col-md-6" id="Div2" runat="server">
+            <span style="font-weight: bold">Expense Type</span>
+            <select class="form-control" id="PRVType" name="PRVType" onchange="ShowRequiredDiv()">
+                <option value="">--Select Type--</option>
+                <option value="1">DSA</option>
+                <option value="2">Other</option>
+
+            </select>
+        </div> 
+    </div>
+    
+    </div>
+
+    <div id="DivOtherImprest">
+        <div class="row" id="DivService">
+            <div class="col-md-6">
+                Imprest Type
+                @Html.DropDownListFor(model => model.Code2, Model.ListOfImprestTypes2, "--select Imprest Type--", new { @class = "form-control", id = "ddlImpType2" })
+            </div>
+            <div class="col-md-6">
+                Unit Amount
+                <input type="text" class="form-control" id="txtAmount" onkeypress="return functionDecimal(event,this.value)"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                Quantity
+                <input type="text" class="form-control" id="txtQuantity" onkeypress="return functionx(event)"/>
+            </div>
+
+        </div>
+    </div>
+
+    <hr/>
+    <div class="row">
+        <div class="col-md-12">
+            Item Description(150 Characters)
+            <textarea id="txtDescription" class="form-control" maxlength="150"></textarea>
+        </div>
+    </div>
+    <hr/>
+
+    <div align="center">
+        <input type="button" class="btn btn-primary action-buttons" value="Add Line" onclick="AddLineItem();"/>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#ddlImpType,#ddlDestination,#DdlEmployee,#ddlImpType2").select2({
+            width: '100%'
+        });
+        $("#DivDSA").hide();
+        $("#DivOtherImprest").hide();
+        $("#DdlEmployeeMemo").select2();
+    });
+    var ShowRequiredDiv = function () {
+        var PRVType = $("#PRVType").children("option:selected").val();
+        if (PRVType == "") {
+            $("#DivDSA").hide();
+            $("#DivOtherImprest").hide();
+        }
+        else {
+            ShowProgress();
+            var url;
+            if (PRVType == "1") {
+                $("#DivDSA").show();
+                $("#DivOtherImprest").hide();
+            }
+            else if (PRVType == "2") {
+                $("#DivOtherImprest").show();
+                $("#DivDSA").hide();
+            }
+
+            else {
+                return;
+            }
+            HideProgress();
+
+        }
+    }
+
+
+    function functionDecimal(evt, val) {
+        try {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+
+            if (charCode == 46) {
+                if (!(val.indexOf(".") > -1)) {
+                    return true;
+                }
+                else {
+                    Swal.fire('Warning', 'Kindly ensure to specify decimals only', 'warning');
+                }
+            }
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                Swal.fire('Warning', 'Kindly ensure to specify decimals only', 'warning');
+                return false;
+            }
+            return true;
+        } catch (w) {
+            Swal.fire(w);
+        }
+    }
+    function functionx(evt) {
+        if (evt.charCode > 31 && (evt.charCode < 48 || evt.charCode > 57)) {
+            Swal.fire("Error", "Please enter only numeric characters in the text box", "error");
+            return false;
+        }
+    }
+</script>

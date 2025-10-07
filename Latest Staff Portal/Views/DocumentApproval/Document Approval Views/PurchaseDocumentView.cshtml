@@ -1,0 +1,855 @@
+﻿@model Latest_Staff_Portal.ViewModel.PurchaseRequisition
+
+
+<style>
+	thead {
+		background-color: black;
+		color: white;
+	}
+
+	hr {
+		margin: 4px;
+	}
+
+	.BtnPadding {
+		padding: 1px;
+		font-size: 12px;
+	}
+</style>
+
+<div class="card">
+    <hr/>
+    <div style="text-align:right" id="HideEditButton">
+        @*@{
+			if (@Model.Status == "Open")
+			{
+				<div style="text-align:right" id="HideEditButton">
+					<input type="button" style="background: #162f25; color:whitesmoke; border-radius:10px" id="btnEdit" value="Edit Header" onclick="EditDocument();" />
+				</div>
+			}
+		}*@
+
+
+        <hr/>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <span style="font-weight: bold">PRN Type</span>
+                    @*<select class="form-control" id="ddlPrnType">
+							<option value="">--Select PRN Type--</option>
+							<option value="1">Standard</option>
+							<option value="2">Project Works</option>
+						</select>*@
+                    @Html.TextBoxFor(m => m.PRN_Type, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Date ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Document_Date, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+                    @*<input type="text" class="form-control" placeholder="dd/mm/yyyy" id="txtDate" onkeydown="return false;" autocomplete="off" />
+						<div class='a'></div>*@
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Location Code:", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Location_Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+                    @*@Html.DropDownListFor(model => model.Location_Code, Model.ListOfLocations, "--select Donor--", new { @class = "form-control", @id = "ddlLocationCode" })
+						@Html.ValidationMessageFor(model => model.Location_Code, "", new { @class = "text-danger" })*@
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <span style="font-weight: bold">Product Requisition Group</span>
+                    @Html.TextBoxFor(m => m.Requisition_Product_Group, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+                    @*<select class="form-control" id="ddlPrnType">
+							<option value="">--Select Product Product Group--</option>
+							<option value="1">Goods</option>
+							<option value="2">Services</option>
+							<option value="3">Workks</option>
+							<option value="4">Assets</option>
+						</select>*@
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Geographical Code", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Shortcut_Dimension_1_Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+                    @*@Html.DropDownListFor(model => model.Shortcut_Dimension_1_Code, Model.ListOfDim1, "--select Geographical Code--", new { @class = "form-control", @id = "ddlDim1" })
+						@Html.ValidationMessageFor(model => model.Shortcut_Dimension_1_Code, "", new { @class = "text-danger" })*@
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Administrative unit Code", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Shortcut_Dimension_2_Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+                    @*@Html.DropDownListFor(model => model.Shortcut_Dimension_2_Code, Model.ListOfDim2, "--select Activity--", new { @class = "form-control", @id = "ddlDim2", @onchange = "GetDimension4Name()" })
+						@Html.ValidationMessageFor(model => model.Shortcut_Dimension_2_Code, "", new { @class = "text-danger" })*@
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Planning Category", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.PP_Planning_Category, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+                    @*@Html.DropDownListFor(model => model.PP_Planning_Category, Model.ListOfPlanningCategories, "--select County--", new { @class = "form-control", @id = "ddlPlanningCategory", @onchange = "GetDimension5Name()" })
+						@Html.ValidationMessageFor(model => model.PP_Planning_Category, "", new { @class = "text-danger" })*@
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <span style="font-weight: bold">Priority Level</span>
+                    @Html.TextBoxFor(m => m.Priority_Level, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+                    @*<select class="form-control" id="ddlPriority">
+							<option value="">--Select Priority--</option>
+							<option value="1">Low</option>
+							<option value="2">Normal</option>
+							<option value="3">High</option>
+							<option value="4">Critical</option>
+						</select>*@
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    @Html.Label("Description", new { @class = "control-label col-md-12" })
+                    @Html.TextAreaFor(m => m.Description, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+                    @*<textarea class="form-control" id="txtDescription"></textarea>*@
+                </div>
+            </div>
+
+        </div>
+        <hr/>
+        <div align="center" id="DivUpdateButton">
+            <input type="button" class="btn btn-primary waves-effect waves-light" value="Update Header" onclick="UpdatePurchaseHeader();"/>
+        </div>
+        <div id="DivPurchaseRegLines">
+            <hr style="border:1px solid black"/>
+            <b>Purchase Lines</b>
+            <hr/>
+            <div id="divPurchaseLines"></div>
+            <hr style="border:1px solid black"/>
+            @*<div class="row">
+					<div class="col-md-12">
+						<b>Attachments</b>
+						<div id="divAttachDocs"></div>
+					</div>
+				</div>*@
+            @*<hr style="border:1px solid black" />*@
+
+        </div>
+    </div>
+
+    @{
+        if (Model.Status == "Open")
+        {
+            <div align="center">
+                <input type="button" class="btn btn-primary waves-effect waves-light" value="Send (@Model.No) For Approval" onclick="SendDocForApproval('@Model.No');"/>
+            </div>
+        }
+    }
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <label id="labelF"></label>
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal View Doc////////////////////////////*@
+<div class="modal fade" id="myModalAttachment" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Attachment</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalAttachmentBody" style="width:100%;height:450px">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Document Rejection Modal////////////////////////////*@
+<div class="modal fade" id="myModalComments" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Rejection Comments</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalCommentBody">
+                <div id="divDocComments"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script src="~/assets/js/pdfobject.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadPurchaseDocumentLines(`@Model.No`, `@Model.Status`);
+        var status = `@Model.Status`;
+        HideHeaderEditInput(status);
+
+        var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+        if (Successmsg != "") {
+            Swal.fire('Success', Successmsg, 'success', true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+        var Dim1 = `@Model.Shortcut_Dimension_1_Code`;
+        var Dim2 = `@Model.Shortcut_Dimension_2_Code`;
+        if (Dim1 != "CDC") {
+            $("#DivSubprogram").hide();
+            $("#DivMCC").hide();
+
+        }
+        else {
+            $("#DivSubprogram").show();
+            $("#DivMCC").show();
+        }
+
+
+    });
+    var LoadPurchaseDocumentLines = function (DocNo, Status) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ DocNo: DocNo, Status: Status }),
+			url: "/Purchase/PurchaseDocumentLines",
+            success: function (data) {
+                $("#divPurchaseLines").html(data);
+                HideProgress();
+                GetDocumentAttachments();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    };
+    var GetDocumentAttachments = function () {
+        ShowProgress();
+        var DocNo = `@Model.No`;
+        var Status = `@Model.Status`;
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ DocNo: DocNo, TableID: 38, Status: Status}),
+            url: "/Common/DocumentAttachments",
+            success: function (data) {
+                HideProgress();
+                $("#divAttachDocs").html(data);
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    };
+    var PurchaseRequisitionLink = function () {
+        ShowProgress();
+        window.location = "/Purchase/PurchaseRequisitionList";
+    }
+    var EditDocument = function () {
+         var status = `@Model.Status`;
+        if ($("#btnEdit").val() == "Edit Header") {
+            $("#btnEdit").val("Clear Header Edit");
+            $("#ddlDim2,#ddlDim1,#ddlDim3,#ddlDim4,#ddlDim5,#ddlDim6,#ddlRespC").select2({
+                width: '100%'
+            })
+            ShowHeaderEditInput();
+        }
+        else {
+            HideHeaderEditInput(status);
+            $("#btnEdit").val("Edit Header");
+        }
+    }
+    var HideHeaderEditInput = function (Status) {
+        if (Status == "Open") {
+            $("#HideEditButton").show();
+            $("#HideLineButton").show();
+            $("#DivSendForApproval").show();
+        }
+        else {
+            $("#HideEditButton").hide();
+            $("#HideLineButton").hide();
+            $("#DivSendForApproval").hide();
+        }
+        $("#DivUpdateButton").hide();
+        $("#dtPicker,#txtPurpose,#ddlDim2,#ddlDim1,#ddlDim3,#DdlRequisitionType,#ddlDim4,#ddlDim5,#ddlDim6,#ddlDim7,#ddlRespC").css("background-color", "#dedebd");
+        $("#txtPurpose,#dtPicker,#txtPurpose,#ddlDim2,#ddlDim1,#ddlDim3,#DdlRequisitionType,#ddlDim4,#ddlDim5,#ddlDim6,#ddlDim7,#ddlRespC").attr("readonly", true);
+
+    }
+    var ShowHeaderEditInput = function () {
+        $("#DivUpdateButton").show();
+        $("#dtPicker,#txtPurpose,#ddlDim2,#ddlDim1,#ddlDim3,#ddlDim3,#ddlDim4,#ddlDim5,#ddlDim6,#ddlDim7,#ddlRespC,#DdlRequisitionType").css("background-color", "white");
+        $("#txtPurpose,#dtPicker,#txtPurpose,#ddlDim2,#ddlDim1,#ddlDim3,#ddlDim3,#ddlDim4,#ddlDim5,#ddlDim6,#ddlDim7,#ddlRespC,#DdlRequisitionType").attr("readonly", false);
+    }
+    var UpdatePurchaseHeader = function () {
+        var DocNo = `@Model.No`;
+        var Dim1 = $("#ddlDim1").children("option:selected").val();
+        var Dim2 = $("#ddlDim2").children("option:selected").val();
+        var Dim3 = $("#ddlDim3").children("option:selected").val();
+        var Dim4 = $("#ddlDim4").children("option:selected").val();
+        var Dim5 = $("#ddlDim5").children("option:selected").val();
+        var Dim6 = $("#ddlDim6").children("option:selected").val();
+        var Dim6 = $("#ddlDim6").children("option:selected").val();
+        var Dim7 = $("#ddlDim7").children("option:selected").val();
+        var Remarks = $("#txtPurpose").val().replace(/(\r\n|\n|\r)/gm, " ");
+        var RespC = $("#ddlRespC").children("option:selected").val();
+        var RequisitionType = $("#DdlRequisitionType").children("option:selected").val();
+
+        if (RequisitionType == "") {
+            Swal.fire('Warning', "Select Requisition Type", 'warning');
+            return;
+        }
+        if (RequisitionType == "General") {
+            RequisitionType = "0";
+        }
+        if (RequisitionType == "Operations") {
+            RequisitionType = "1";
+        }
+        if (RequisitionType == "Printing and Branding") {
+            RequisitionType = "2";
+        }
+        if (Dim1 == "") {
+            Swal.fire('Warning', "Select Donor", 'warning');
+            return;
+        }
+        else if (Dim2 == "") {
+            Swal.fire('Warning', "Select Project", 'warning');
+            return;
+        }
+        else if (Dim3 == "") {
+            Swal.fire('Warning', "Select Pogram", 'warning');
+            return;
+        }
+        else if (Dim4 == "") {
+            Swal.fire('Warning', "Select Activity", 'warning');
+            return;
+        }
+        else if (Dim5 == "") {
+            Swal.fire('Warning', "Select County", 'warning');
+            return;
+        }
+        else if ((Dim6 == "") && (Dim1 == "CDC")) {
+            Swal.fire('Warning', "Select Major Cost Category", 'warning');
+            return;
+        }
+        else if (RespC == "") {
+            Swal.fire('Warning', "Select Responsibility Centre", 'warning');
+            return;
+        }
+        else if (Remarks == "") {
+            Swal.fire('Warning', "Enter purpose for the purchase", 'warning');
+            return;
+        }
+        else if (Remarks.length > 1000) {
+            Swal.fire('Warning', "Your Reason should have a maximum of 1000 characters", 'warning');
+            return;
+        }
+        else {
+            var PRVHeader = {};
+            var DocD = {};
+            PRVHeader.Dim1 = Dim1;
+            PRVHeader.Dim2 = Dim2;
+            PRVHeader.Dim3 = Dim3;
+            PRVHeader.Dim4 = Dim4;
+            PRVHeader.Dim5 = Dim5;
+            PRVHeader.Dim6 = Dim6;
+            PRVHeader.Dim7 = Dim7;
+            PRVHeader.RespC = RespC;
+            PRVHeader.Remarks = Remarks;
+            PRVHeader.RequisitionType = RequisitionType;
+            PRVHeader.DocD = DocD;
+
+            ShowProgress();
+            //Send the JSON array to Controller using AJAX.
+            $.ajax({
+                type: "POST",
+                url: "/Purchase/UpdatePurchaseHeader",
+                data: JSON.stringify({ DocNo: DocNo, prvHeader: PRVHeader }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    if (data.success) {
+                        HideProgress();
+                        HideHeaderEditInput("Open");
+                        $("#btnEdit").val("Edit Header");
+                        $("#txtPurpose").val(Remarks);
+                        Swal.fire('Success', data.message, 'success');
+                    }
+                    else {
+                        Swal.fire('Warning', data.message, 'warning');
+                        HideProgress();
+                    }
+                },
+                error: function (err) {
+                    HideProgress();
+                    Swal.fire('Warning', err, 'warning');
+                }
+            });
+        };
+    }
+    var AddAttachment = function () {
+        $("#lblTitl").text("File Upload");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            datatype: "html",
+            url: '/Purchase/FileUploadForm',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    };
+    var SaveAttachmentFile = function () {
+        var DocNo = `@Model.No`;
+        var filename; var base64String; var filetype;
+        var files = document.getElementById('PurchasefileAttachment').files;
+        if (files.length) {
+            var file = files[0];
+            if (file.size > 10000000) {
+                Swal.fire('Warning', 'Please only files less than 10MB allowed. Thanks!!', 'warning');
+            }
+            else {
+                var blob = file.slice();
+                filetype = file.type;
+                filename = file.name;
+                var reader = new FileReader();
+                reader.onloadend = function (evt) {
+                    if (evt.target.readyState == FileReader.DONE) { // DONE == 2
+                        var cont = evt.target.result
+                        base64String = getB64Str(cont);
+                        ShowProgress();
+                        //Send the JSON array to Controller using AJAX.
+                        $.ajax({
+                            type: "POST",
+                            url: "/Common/SaveAttachedFile",
+                            data: JSON.stringify({ DocNo: DocNo, base64Upload: base64String, fileName: filename, Extn: filetype, TableID: 38 }),
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (data) {
+                                if (data.success) {
+                                    HideProgress();
+                                    GetDocumentAttachments();
+                                    $("#myModal").modal("hide");
+                                    Swal.fire('Success', data.message, 'success');
+                                }
+                                else {
+                                    Swal.fire('Warning', data.message, 'warning');
+                                    HideProgress();
+                                }
+                            },
+                            error: function (err) {
+                                HideProgress();
+                                Swal.fire('Warning', err, 'warning');
+                            }
+                        });
+                    }
+                };
+                reader.readAsArrayBuffer(blob);
+            }
+        }
+    };
+    function getB64Str(buffer) {
+        var binary = '';
+        var bytes = new Uint8Array(buffer);
+        var len = bytes.byteLength;
+        for (var i = 0; i < len; i++) {
+            binary += String.fromCharCode(bytes[i]);
+        }
+        return window.btoa(binary);
+    }
+    var ViewAttachment = function (tbl, No, Id, fName, ext) {
+        $.ajaxSetup({ cache: false });
+        ShowProgress();
+        $.ajax({
+            cache: false,
+            url: '/Common/DocumentAttachmentview',
+            type: "POST",
+            datatype: "json",
+            cache: false,
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ tblID: tbl, No: No, ID: Id, fileName: fName, ext: ext }),
+            success: function (data) {
+                if (data.success == true) {
+                    if (data.view == true) {
+                        var viewer = $("#modalAttachmentBody");
+                        if (ext == "pdf") {
+                            PDFObject.embed("data:application/" + ext + ";base64," + data.message + "", viewer);
+                        }
+                        if (ext == "png" || ext == "jpg") {
+                            PDFObject.embed("data:image/" + ext + ";base64," + data.message + "", viewer);
+                        }
+                        $("#myModalAttachment").modal("show");
+                        HideProgress();
+                    }
+                    else {
+                        window.location = '/Common/AttachmentDownload?fileName=' + data.message;
+                        Swal.fire('Success', 'Document Downloaded successfully', 'success');
+                        HideProgress();
+                    }
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    };
+    var DeleteAttachment = function (tbl, No, Id) {
+        $.ajaxSetup({ cache: false });
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.value) {
+                ShowProgress();
+                $.ajax({
+                    cache: false,
+                    url: '/Common/DeleteAttachedDocument',
+                    datatype: "json",
+                    type: "POST",
+                    data: JSON.stringify({ DocNo: No, tblID: tbl, DocID: Id }),
+                    contentType: "application/json; charset = utf-8",
+                    success: function (data) {
+                        if (data.success == true) {
+                            HideProgress();
+                            GetDocumentAttachments();
+                            Swal.fire('Success', 'File Deleted Successfully', 'success');
+                        }
+                        else {
+                            HideProgress();
+                            Swal.fire('Warning', data.message, 'warning');
+                        }
+                    },
+                    error: function (err) {
+                        HideProgress();
+                        Swal.fire('Warning', err, 'warning');
+                    }
+                });
+            }
+            else {
+                Swal.fire('Cancelled', 'Attachment File has not been deleted', 'error');
+            }
+        });
+    };
+    var EditItem = function (DocNo, LnNo) {
+        $("#lblTitl").text("New Purchase Line");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ LnNo: LnNo, DocNo: DocNo }),
+            url: '/Purchase/EditPurchaseLine',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    };
+    var AddPurchaseRequisitionLine = function () {
+        ShowProgress();
+        var DocNo = `@Model.No`;
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+           // processData: false,
+            url: '/Purchase/NewPurchaseLine',
+            data: JSON.stringify({ DocNo: DocNo }),
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    };
+var SubmitItemLine = function () {
+    var DocNo = `@Model.No`;
+    var planId = `@Model.Procurement_Plan_ID`;
+    var itemno = $("#ddProcPlanItemNo").children("option:selected").val();
+    var Qnty = $("#txtQuantity").val();
+	alert(planId);
+
+    if (itemno === "") {
+        Swal.fire('Warning', "Select Item", 'warning');
+        return;
+    } else if (Qnty === "") {
+        Swal.fire('Warning', "Enter Quantity", 'warning');
+        return;
+    } else {
+        ShowProgress();
+
+        var formData = {
+            DocNo: DocNo,
+			ProcurementPlanID: planId, 
+            ProcurementPlanItemNo: itemno,
+            Quantity: Qnty
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/Purchase/SubmitPurchaseLine",
+            data: JSON.stringify(formData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+                    HideProgress();
+                    $("#txtNetAmount").val(data.NetAmout);
+                    $("#myModal").modal("hide");
+                    Swal.fire('Success', data.message, 'success');
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                    HideProgress();
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Error', 'An error occurred while processing your request.', 'error');
+                console.error(err);
+            }
+        });
+    }
+};
+    var RemoveItem = function (DocNo, LnNo) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.value) {
+                ShowProgress();
+                $.ajax({
+                    type: "POST",
+                    url: "/Purchase/RemovePurchaseLine",
+                    data: JSON.stringify({ DocNo: DocNo, LnNo: LnNo }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.success) {
+                            HideProgress();
+                            LoadPurchaseDocumentLines(DocNo, 'Open');
+                            $("#myModal").modal("hide");
+                            $("#txtNetAmount").val(data.NetAmout);
+                            Swal.fire('Success', data.message, 'success');
+                        }
+                        else {
+                            Swal.fire('Warning', data.message, 'warning');
+                            HideProgress();
+                        }
+                    },
+                    error: function (err) {
+                        HideProgress();
+                        Swal.fire('Warning', err, 'warning');
+                    }
+                });
+            }
+            else {
+                Swal.fire('Cancelled', 'Purchase line has not been deleted', 'error');
+            }
+        });
+    };
+    var UpdateLineItem = function (DocNo, LnNo) {
+        var Amount = $("#txtAmount").val();
+        var Qnty = $("#txtQuantity").val();
+        var Location = $("#ddlLocation").children("option:selected").val();
+        var ItemDescription = $("#txtDescription").val().replace(/(\r\n|\n|\r)/gm, " ");
+        var NoofDays = $("#txtNoofDays").val();
+        if (NoofDays == "") {
+            NoofDays = "1";
+        }
+        if (Amount == "") {
+            Swal.fire('Warning', "Enter Amount", 'warning');
+            return;
+        }
+        else if (Qnty == "") {
+            Swal.fire('Warning', "Enter Quantity", 'warning');
+            return;
+        }
+        //else if (Location == "") {
+        //    Swal.fire('Warning', "Select the Location needed", 'warning');
+        //    return;
+        //}
+        else if (ItemDescription == "") {
+            Swal.fire('Warning', "Give brief description of the item", 'warning');
+            return;
+        }
+        else if (ItemDescription.length > 1000) {
+            Swal.fire('Warning', "Item description should not exceed 1000 characters", 'warning');
+            return;
+        }
+        else {
+            ShowProgress();
+            var PRVLine = {};
+            PRVLine.DocNo = DocNo;
+            PRVLine.Description2 = ItemDescription;
+            PRVLine.Qnty = Qnty;
+            PRVLine.Amount = Amount;
+            PRVLine.Location = Location;
+            PRVLine.LnNo = LnNo;
+            PRVLine.NoofDays = NoofDays;
+
+            $.ajax({
+                type: "POST",
+                url: "/Purchase/UpdatePurchaseLine",
+                data: JSON.stringify({ prvLine: PRVLine }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    if (data.success) {
+                        HideProgress();
+                        LoadPurchaseDocumentLines(DocNo, 'Open');
+                        $("#txtNetAmount").val(data.NetAmout);
+                        $("#myModal").modal("hide");
+                        Swal.fire('Success', data.message, 'success');
+                    }
+                    else {
+                        Swal.fire('Warning', data.message, 'warning');
+                        HideProgress();
+                    }
+                },
+                error: function (err) {
+                    HideProgress();
+                    Swal.fire('Warning', err, 'warning');
+                }
+            });
+        }
+    }
+	var SendDocForApproval = function (DocNo) {
+        //var rowCount1 = $('#DocumentAttachmnts').length;
+        //if (rowCount1 == 0) {
+        //    Swal.fire('Warning', 'Document should have an attachment before sending for approval', 'warning');
+        //    return;
+        //}
+		var rowCount = $('#PurchaseRequisitionLine1 tr').length;
+        if (rowCount < 1)
+        {
+            rowCount = $('#PurchaseRequisitionLine1 tr').length;
+        }
+        if (rowCount < 1) {
+            Swal.fire('Warning', 'You have not Added any Purchase Requisition line(s)', 'warning');
+            return;
+        }
+        else {
+            ShowProgress();
+            $.ajax({
+                async: true,
+                type: "POST",
+                datatype: "json",
+                data: JSON.stringify({ DocNo: DocNo }),
+                contentType: "application/json; charset = utf-8",
+                processData: false,
+                url: '/Purchase/SendPurchaseAppForApproval',
+                success: function (data) {
+                    if (data.success == true) {
+                        HideProgress();
+                        window.location = "/Purchase/PurchaseRequisitionList";
+                    }
+                    else {
+                        HideProgress();
+                        Swal.fire('Error', data.message, 'error');
+                    }
+                },
+                error: function (err) {
+                    HideProgress();
+                    Swal.fire('Warning', err, 'warning');
+                }
+            });
+        }
+    }
+
+
+
+</script>

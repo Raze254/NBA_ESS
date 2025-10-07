@@ -1,0 +1,57 @@
+﻿@model Latest_Staff_Portal.ViewModel.OtherCosts
+
+@{
+    ViewBag.Title = "NewCostLine";
+}
+
+    
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Vote Item", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.DropDownListFor(model => model.Type_of_Expense, Model.ListOfVoteItems, "Select Option", new { @class = "form-control", @id = "Type_of_Expense" })
+            @Html.ValidationMessageFor(model => model.Type_of_Expense, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("No of Days", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.No_of_Days, new { htmlAttributes = new { @class = "form-control", @id = "No_of_Days" } })
+            @Html.ValidationMessageFor(model => model.No_of_Days, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+    <div class="col-md-12" hidden>
+        <div class="form-group">
+            @Html.Label("Quantity Required", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Quantity_Required, new { htmlAttributes = new { @class = "form-control", @id = "Quantity_Required" } })
+            @Html.ValidationMessageFor(model => model.Quantity_Required, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Rate", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Unit_Cost, new { htmlAttributes = new { @class = "form-control", @id = "Unit_Cost" } })
+            @Html.ValidationMessageFor(model => model.Unit_Cost, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Required For", htmlAttributes: new { @class = "control-label col-md-2" })
+            <textarea class="form-control" rows="3" id="Required_For"></textarea>
+ 
+        </div>
+    </div>
+
+
+</div>
+
+<div align="center">
+    <input type="button" class="btn btn-primary action-buttons" value="Submit Record" onclick="SubmitMemoCost();" />
+</div>

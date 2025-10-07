@@ -1,0 +1,165 @@
+﻿@model Latest_Staff_Portal.ViewModel.LeaveReqList
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Leave Application No", new { @class = "control-label col-md-12", style = "font-weight:bold;" })
+            <div class="col-md-12">
+
+                @Html.TextBoxFor(m => m.No, new { @class = "form-control", id = "txtLeaveNo", @readonly = "readonly" })
+
+                @Html.ValidationMessageFor(model => model.No, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Employee Names", new { @class = "control-label col-md-12", style = "font-weight:bold;" })
+            <div class="col-md-12">
+                @Html.TextBoxFor(m => m.EmpNo, new { @class = "form-control", id = "txtEmpNo", @readonly = "readonly" })
+                @Html.DisplayFor(m => m.EmpName, new { id = "txtEmpName" })
+                @Html.ValidationMessageFor(model => model.EmpName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Leave Type", new { @class = "control-label col-md-12", style = "font-weight:bold;" })
+            <div class="col-md-12">
+                @Html.DisplayFor(m => m.Leave_Type, new { id = "txtLeaveType" })
+                @Html.ValidationMessageFor(model => model.Leave_Type, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Days Applied", new { @class = "control-label col-md-12", style = "font-weight:bold;" })
+            <div class="col-md-12">
+                @Html.DisplayFor(m => m.Applied_Days, new { id = "txtLeaveType" })
+                @Html.ValidationMessageFor(model => model.Leave_Type, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row justify-content-center pt-4">
+    <div class="col-md-4">
+        <div class="form-group">
+            @Html.Label("Start Date", new { @class = "control-label col-md-12", style = "font-weight:bold;" })
+            <div class="col-md-12">
+                @Html.DisplayFor(m => m.Starting_Date, new { id = "txtStartDate" })
+
+                <div class="a"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            @Html.Label("End Date", new { @class = "control-label col-md-12", style = "font-weight:bold;" })
+            <div class="col-md-12">
+                @Html.DisplayFor(m => m.End_Date, new { id = "txtEndDate" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            @Html.Label("Return Date", new { @class = "control-label col-md-12", style = "font-weight:bold;" })
+            <div class="col-md-12">
+                @Html.DisplayFor(m => m.Return_Date, new { id = "txtReturnDate" })
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Recalled Days", new { @class = "control-label col-md-12", style = "font-weight:bold;" })
+            <div class="col-md-12">
+                <input type="text" class="form-control" id="ddlNoDays" required onkeypress="return functionDecimal(event,this.value)"/>
+                <span class="text-danger">*</span>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            @Html.Label("Recall Effective Date", new { @class = "control-label col-md-12", style = "font-weight:bold;" })
+            <div class="col-md-12">
+                <input type="datetime" required class="form-control" placeholder="dd/mm/yyyy" id="dtPicker" onkeydown="return false;" autocomplete="off"/>
+                <span class="text-danger">*</span>
+                <div class="a"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Recall Reason", new { @class = "control-label col-md-12", style = "font-weight:bold;" })
+            <div class="col-md-12">
+                <textarea id="txtRemarks" class="form-control"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+<hr/>
+<div align="center">
+    <input type="button" class="btn btn-primary waves-effect waves-light" value="Submit Recall" onclick="SubmitLeaveRecall();"/>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        // $('#ddlNoDays').empty().append('<option selected="selected--No of Days--</option>');
+        $('#EndDate').html("dd/mm/yyyy");
+        $('#ReturnDate').html("dd/mm/yyyy");
+       
+        $('#dtPicker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-0:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy',
+            minDate: 0
+        });
+        $(window).resize(function () {
+            $('#dtPicker').datepicker('hide');
+            $('#dtPicker').blur();
+        });
+    });       
+    function functionDecimal(evt, val) {
+        try {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+
+            if (charCode == 46) {
+                if (!(val.indexOf(".") > -1)) {
+                    return true;
+                }
+                else {
+                    Swal.fire('Warning', 'Kindly ensure to specify decimals only', 'warning');
+                }
+            }
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                Swal.fire('Warning', 'Kindly ensure to specify decimals only', 'warning');
+                return false;
+            }
+            return true;
+        } catch (w) {
+            Swal.fire(w);
+        }
+    }
+    function functionx(evt) {
+        if (evt.charCode > 31 && (evt.charCode < 48 || evt.charCode > 57)) {
+            Swal.fire("Error", "Please enter only numeric characters in the text box", "error");
+            return false;
+        }
+    }
+    
+   
+
+    
+
+    
+    </script>

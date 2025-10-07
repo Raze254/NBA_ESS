@@ -1,0 +1,108 @@
+﻿@model Latest_Staff_Portal.ViewModel.NewWorkTicket
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Directorate/Department", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(m => m.Dim1, new SelectList(Model.ListOfDim1, "Value", "Text", Model.Dim1), "--Select Directorate--", new { id = "ddlDim1", @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                @Html.ValidationMessageFor(model => model.Dim1, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Vehicle Registration", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(m => m.Vehicle, new SelectList(Model.ListOfVehicles, "Value", "Text", Model.Vehicle), "--Select Vehicle--", new { id = "ddlVehicles", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Vehicle, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <div class="form-group">
+                @Html.Label("GOK Work Ticket Number", new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    <input type="text" class="form-control" id="txtGokTicket"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <div class="form-group">
+                @Html.Label("Previous Work Ticket", new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    <input type="text" class="form-control" id="txtprvsWorkTicket"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Authorized By", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(m => m.AuthName, new SelectList(Model.ListOfAuths, "Value", "Text", Model.AuthName), "--Select Auth--", new { id = "ddlAuthorizedBy", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.AuthName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Cost Center", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(m => m.CostCentreCode, new SelectList(Model.ListOfCostCentreCodes, "Value", "Text", Model.CostCentreCode), "--Select Cost Centre--", new { id = "ddlCostCentre", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CostCentreCode, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Date ", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="text" class="form-control" placeholder="dd/mm/yyyy" id="txtDate" onkeydown="return false;" autocomplete="off"/>
+                <div class="a"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<hr/>
+<div align="center">
+    <input type="button" class="btn btn-primary waves-effect waves-light" value="Submit Request" onclick="SubmitWorkTicket();"/>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#txtDate').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-1:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy'
+        });
+        $("#txtDate").focus(function () {
+            $("#ui-datepicker-div").position({
+                my: "left top",
+                at: "left bottom",
+                of: $(this)
+            });
+        });
+        $("#ddlDim1,#ddlVehicles,#ddlAuthorizedBy,#ddlCostCentre").select2({
+            width: '100%'
+        });
+        //document.getElementById("ddlDim2").disabled = true;
+        //document.getElementById("ddlDim1").disabled = true;
+        //document.getElementById("ddlDim3").disabled = true;
+    });
+</script>

@@ -1,0 +1,86 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.OtherCosts>
+
+@{
+    ViewBag.Title = "OtherCosts";
+    var Status = ViewBag.Status;
+    var DocNo = ViewBag.DocNo;
+}
+
+<div class="table-responsive">
+    <table id="Lines" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead>
+            <tr>
+
+                <th>Type of Expense</th>
+                <th>Description</th>
+                @*<th>No</th>*@
+                <th>Required For</th>
+                @*<th>Quantity Required</th>*@
+                <th>No of Days</th>
+                <th>Unit Cost</th>
+                <th>Line Amount</th>
+
+                <th></th>
+            </tr>
+
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Type_of_Expense)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    @*<td>
+                        @Html.DisplayFor(modelItem => item.No)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Required_For)
+                    </td>
+                    @*<td>
+                        @Html.DisplayFor(modelItem => item.Quantity_Required)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.No_of_Days)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Unit_Cost)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Line_Amount)
+                    </td>
+
+                    <td>
+                        @if (Status == "Open") {
+                        <button class="btn btn-danger btn-sm" onclick="DeleteCost(`@DocNo`, `@item.Line_No`);">Delete</button>
+                        }
+                        
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div style="text-align:right; margin-top: 20px">
+    @if (Status == "Open")
+    {
+        <button class="btn btn-primary action-buttons2" onclick="AddCost(`@DocNo`);">
+            <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Line
+        </button>
+    }
+
+</div>
+
+
+<script>
+    $("#Lines").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100] // Same options for the second table
+    });</script>
+

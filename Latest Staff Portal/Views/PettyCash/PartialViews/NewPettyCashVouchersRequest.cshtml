@@ -1,0 +1,114 @@
+﻿@model Latest_Staff_Portal.ViewModel.PettyCashVouchers2
+
+
+<div class="row">
+
+    @* <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control", @id= "Date" } })
+                @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Account Type", htmlAttributes: new { @class = "control-label col-md-2" })
+            <select class="form-control" id="Account_Type">
+                @*<option value="0">GL Account</option>*@
+                <option value="1" selected>Customer</option>
+                @*<option value="2">Vendor</option>
+                    <option value="3">Bank Account</option>
+                    <option value="4">Fixed Assets</option>
+                    <option value="5">IC Partner</option>
+                    <option value="6">Employee</option>*@
+
+
+            </select>
+
+        </div>
+    </div>
+    @* <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Cheque_No, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                @Html.EditorFor(model => model.Cheque_No, new { htmlAttributes = new { @class = "form-control", @id= "Cheque_No" } })
+                @Html.ValidationMessageFor(model => model.Cheque_No, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+    @* <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Cheque_Date, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                @Html.EditorFor(model => model.Cheque_Date, new { htmlAttributes = new { @class = "form-control", @id= "Cheque_Date" } })
+                @Html.ValidationMessageFor(model => model.Cheque_Date, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Account Number", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.Paying_Bank_Account, new { htmlAttributes = new { @class = "form-control", @id = "Paying_Bank_Account", @readonly = "readonly" } })
+            @* @Html.DropDownListFor(model => model.Paying_Bank_Account, Model.ListOfEmployees, "Select Option", new { @class = "form-control", @id = "Paying_Bank_Account" })*@
+
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Account Name", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.Payee, new { htmlAttributes = new { @class = "form-control", @id = "Payee", @readonly = "readonly" } })
+           
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Payment Narration", htmlAttributes: new { @class = "control-label col-md-2" })
+            <textArea class="form-control" id="Payment_Narration" rows="3"></textArea>
+        </div>
+
+    </div>
+    @* <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Payee, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                @Html.EditorFor(model => model.Payee, new { htmlAttributes = new { @class = "form-control", @id= "Payee" } })
+                @Html.ValidationMessageFor(model => model.Payee, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Total_Amount_LCY, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                @Html.EditorFor(model => model.Total_Amount_LCY, new { htmlAttributes = new { @class = "form-control", @id= "Total_Amount_LCY" } })
+                @Html.ValidationMessageFor(model => model.Total_Amount_LCY, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+    @* <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Currency_Code, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                @Html.EditorFor(model => model.Currency_Code, new { htmlAttributes = new { @class = "form-control", @id= "Currency_Code" } })
+                @Html.ValidationMessageFor(model => model.Currency_Code, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+    @*  <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Shortcut_Dimension_1_Code, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                @Html.EditorFor(model => model.Shortcut_Dimension_1_Code, new { htmlAttributes = new { @class = "form-control", @id="" } })
+                @Html.ValidationMessageFor(model => model.Shortcut_Dimension_1_Code, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Shortcut_Dimension_2_Code, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                @Html.EditorFor(model => model.Shortcut_Dimension_2_Code, new { htmlAttributes = new { @class = "form-control", @id="" } })
+                @Html.ValidationMessageFor(model => model.Shortcut_Dimension_2_Code, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+</div>
+
+<div align="center">
+    <input type="button" class="btn btn-primary action-buttons" value="Create Document" onclick="SubmitPettyCashVoucherRequest();" />
+</div>

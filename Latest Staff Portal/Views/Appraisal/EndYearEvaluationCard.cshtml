@@ -1,0 +1,813 @@
+﻿@model Latest_Staff_Portal.ViewModel.ANUPEAisalCardList
+@{
+    ViewBag.Title = "EndYearEvaluationCard";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+</style>
+<!--
+<link href="~/assets/css/Loader.css" rel="stylesheet" />
+<div class="loading" align="center" id="divLoader">
+    <br />
+    <img src="~/assets/images/ajax-loader.gif" alt="" />
+</div>
+-->
+<div style="background-color: black;">
+    <a href="#" onclick="AppRequisitionLink();" style="color:yellow"><<< Back To ANUPEAisal Document</a>
+</div>
+<div class="card">
+    <div class="card-title">End Year Evaluation(Document No : @Request.QueryString["AppDoc"])</div>
+    <div class="card-body">
+        <div id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="card mb-1 shadow-none">
+                <div class="card-header" id="headingThree1" aria-expanded="false" aria-controls="collapseThree1" data-toggle="collapse" href="#collapseThree1">
+                    <h6 class="m-0">
+                        <span class="fa fa-arrow-down"></span> Section 1 : QUANTITATIVE PERFORMANCE EVALUATION
+                    </h6>
+                </div>
+                <div id="collapseThree1" class="collapse"
+                     aria-labelledby="headingThree1" data-parent="#accordion">
+                    <div class="card-body">
+                        <div id="divPerfTargetReview"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-1 shadow-none">
+                <div class="card-header" id="headingFive" aria-expanded="false" aria-controls="collapseFive" data-toggle="collapse" href="#collapseFive">
+                    <h6 class="m-0">
+                        <span class="fa fa-arrow-down"></span> Section 2a : QUALITATIVE ASSESSMENT(Staff Values)
+                    </h6>
+                </div>
+                <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordion">
+                    <div class="card-body">
+                        <div id="divStaffValues"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-1 shadow-none">
+                <div class="card-header" id="headingFive1" aria-expanded="false" aria-controls="collapseFive1" data-toggle="collapse" href="#collapseFive1">
+                    <h6 class="m-0">
+                        <span class="fa fa-arrow-down"></span> Section 2b : QUALITATIVE ASSESSMENT(Core Competence)
+                    </h6>
+                </div>
+                <div id="collapseFive1" class="collapse" aria-labelledby="headingFive1" data-parent="#accordion">
+                    <div class="card-body">
+                        <div id="divValuesCompe"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-1 shadow-none">
+                <div class="card-header" id="headingSix" aria-expanded="false" aria-controls="collapseSix" data-toggle="collapse" href="#collapseSix">
+                    <h6 class="m-0">
+                        <span class="fa fa-arrow-down"></span> Section 2c : SUPERVISOR'S CORE COMPETENCE
+                    </h6>
+                </div>
+                <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordion">
+                    <div class="card-body">
+                        <div id="divMgrCoreCompVal"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-1 shadow-none">
+                <div class="card-header" id="headingFour" aria-expanded="false" aria-controls="collapseFour" data-toggle="collapse" href="#collapseFour">
+                    <h6 class="m-0">
+                        <span class="fa fa-arrow-down"></span> Section 3a : PROFESSIONAL/TECHNICAL TRAINING DEVELOPMENT OBJECTIVE(S)
+                    </h6>
+                </div>
+                <div id="collapseFour" class="collapse"
+                     aria-labelledby="headingFour" data-parent="#accordion">
+                    <div class="card-body">
+                        <div id="divTrainDevmpt"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-1 shadow-none">
+                <div class="card-header" id="headingEight" aria-expanded="false" aria-controls="collapseEight" data-toggle="collapse" href="#collapseEight">
+                    <h6 class="m-0">
+                        <span class="fa fa-arrow-down"></span> Section 3b : TRAINING/CONFERENCE/SEMINARS UPDATES
+                    </h6>
+                </div>
+                <div id="collapseEight" class="collapse"
+                     aria-labelledby="headingEight" data-parent="#accordion">
+                    <div class="card-body">
+                        <div id="divProfTechTrainDevmpt"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-1 shadow-none">
+                <div class="card-header" id="headingNine" aria-expanded="false" aria-controls="collapseNine" data-toggle="collapse" href="#collapseNine">
+                    <h6 class="m-0">
+                        <span class="fa fa-arrow-down"></span> Section 3c : INVOLVEMENT IN SPECIAL PROJECT/EVENTS/ASSIGNMENTS
+                    </h6>
+                </div>
+                <div id="collapseNine" class="collapse"
+                     aria-labelledby="headingNine" data-parent="#accordion">
+                    <div class="card-body">
+                        <div id="divProfTechTrainDevmpt"></div>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            <div align="right">
+                <input type="button" value="Send To Supervisor >>>" class="btn btn-primary" id="btnApp" onclick="SendDocTo();"/>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <label id="labelF"></label>
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal Small Modal////////////////////////////*@
+<div class="modal fade" id="myModalSmall" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <label id="labelF"></label>
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodySmall">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.shadow-none').on('shown.bs.collapse', function () {
+            $(this).find('.fa-arrow-down').removeClass('fa-arrow-down').addClass('fa-arrow-up');
+        }).on('hidden.bs.collapse', function () {
+            $(this).find('.fa-arrow-up').removeClass('fa-arrow-up').addClass('fa-arrow-down');
+        });
+        LoadSectionData();
+    });
+    var LoadSectionData = function () {
+        ShowProgress();
+        var DocNo = `@Model.ApprisalCode`;
+        LoadPerformanceIndicatorReview(DocNo);
+        LoadTrainingDevelopment(DocNo);
+        LoadStaffValues(DocNo);
+        LoadCompetenceValues(DocNo);
+        LoadMGRValuesCompe(DocNo);
+        LoadTrainingConferenceSeminars(DocNo);
+        LoadTrainingProjectEventsAssignment(DocNo);
+        HideProgress();
+    };
+    var LoadPerformanceIndicatorReview = function (DocNo) {
+        $.ajax({
+            async: true,
+            type: "post",
+            contentType: "application/json; charset = utf-8",
+            data: JSON.stringify({ AppDoc: DocNo, Type: "E", Level: "A", EvalT: "ENDY" }),
+            url: "/ANUPEAisal/LoadPerformanceIndicator",
+            success: function (data) {
+                $("#divPerfTargetReview").html(data);
+            },
+            error: function () {
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+    var LoadTrainingDevelopment = function (DocNo) {
+        $.ajax({
+            async: true,
+            type: "post",
+            contentType: "application/json; charset = utf-8",
+            data: JSON.stringify({ AppDoc: DocNo }),
+            url: "/ANUPEAisal/LoadTrainingDev",
+            success: function (data) {
+                $("#divTrainDevmpt").html(data);
+            },
+            error: function () {
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+    var LoadStaffValues = function (DocNo) {
+        $.ajax({
+            async: true,
+            type: "post",
+            contentType: "application/json; charset = utf-8",
+            data: JSON.stringify({ AppDoc: DocNo }),
+            url: "/ANUPEAisal/LoadStaffValues",
+            success: function (data) {
+                $("#divStaffValues").html(data);
+            },
+            error: function () {
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+    var LoadCompetenceValues = function (DocNo) {
+        $.ajax({
+            async: true,
+            type: "post",
+            contentType: "application/json; charset = utf-8",
+            data: JSON.stringify({ AppDoc: DocNo }),
+            url: "/ANUPEAisal/LoadCompetenceValues",
+            success: function (data) {
+                $("#divValuesCompe").html(data);
+            },
+            error: function () {
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+    var LoadMGRValuesCompe = function (DocNo) {
+        $.ajax({
+            async: true,
+            type: "post",
+            contentType: "application/json; charset = utf-8",
+            data: JSON.stringify({ AppDoc: DocNo }),
+            url: "/ANUPEAisal/LoadMGRCoreCompetenceValues",
+            success: function (data) {
+                $("#divMgrCoreCompVal").html(data);
+            },
+            error: function () {
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+    var LoadTrainingConferenceSeminars = function (DocNo) {
+        $.ajax({
+            async: true,
+            type: "post",
+            contentType: "application/json; charset = utf-8",
+            data: JSON.stringify({ AppDoc: DocNo }),
+            url: "/ANUPEAisal/LoadTrainingConferenceSeminars",
+            success: function (data) {
+                $("#divTrainDevmpt").html(data);
+            },
+            error: function () {
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+    var LoadTrainingProjectEventsAssignment = function (DocNo) {
+        $.ajax({
+            async: true,
+            type: "post",
+            contentType: "application/json; charset = utf-8",
+            data: JSON.stringify({ AppDoc: DocNo }),
+            url: "/ANUPEAisal/LoadTrainingProjectEventsAssignment",
+            success: function (data) {
+                $("#divTrainDevmpt").html(data);
+            },
+            error: function () {
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+    var AddAKPI = function () {
+        $("#labelF").text("KPI Form");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/ANUPEAisal/KPIForm',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var AddTrainingDev = function () {
+        $("#labelF").text("PROFESSIONAL/TECHNICAL TRAINING DEVELOPMENT OBJECTIVE(S)");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/ANUPEAisal/TrainingDevForm',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var SaveKPIRecord = function () {
+        var DocNo = $("#DocNo").html();
+        var AggreedKPI = $("#txtAgrredKPI").val();
+        var KPIIndicator = $("#txtKPIIndicator").val();
+        var weight = $("#txtWeight").val();
+        var ddlUnit = $("#ddlUnit").children("option:selected").val();
+        var remarks = $("#txtComments").val();
+
+        if (DocNo == "") {
+            Swal.fire('error', 'ANUPEAisal Doc No cannot be empty', 'error');
+            return;
+        }
+        else if (AggreedKPI == "") {
+            Swal.fire('error', 'enter KIP', 'error');
+            return;
+        }
+        else if (KPIIndicator == "") {
+            Swal.fire('error', 'Enter KPI Indicator', 'error');
+            return;
+        }
+        else if (weight == "") {
+            Swal.fire('error', 'Enter Weight', 'error');
+            return;
+        }
+        else if (ddlUnit == "") {
+            Swal.fire('error', 'Choose Unit', 'error');
+            return;
+        }
+        else {
+            var PerformanceIndicator = {};
+            PerformanceIndicator.ANUPEAisal_No = DocNo;
+            PerformanceIndicator.Agreed_Performance_Targets = AggreedKPI;
+            PerformanceIndicator.Key_Performance_Indicator = KPIIndicator;
+            PerformanceIndicator.Weight = weight;
+            PerformanceIndicator.Unit = ddlUnit;
+            PerformanceIndicator.ANUPEAisee_Comments = remarks;
+
+            ShowProgress();
+            $.ajax({
+                type: "post",
+                url: "/ANUPEAisal/SubmitKPIs",
+                data: JSON.stringify({ kpi: PerformanceIndicator }),
+                contentType: "application/json; charset = utf-8",
+                success: function (data) {
+                    if (data.success == true) {
+                        Swal.fire('Success', data.message, 'success');
+                        LoadPerformanceIndicator(DocNo);
+                        LoadPerformanceIndicatorReview(DocNo);
+                        $("#myModal").modal("hide");
+                        HideProgress();
+                    }
+                    else {
+                        HideProgress();
+                        Swal.fire('error', data.message, 'error');
+                    }
+                },
+                error: function () {
+                    HideProgress();
+                    Swal.fire('error', data.message, 'error');
+                }
+            });
+        }
+    }
+    var DropKPIRecord = function (DocNo, LnNo) {
+        if (DocNo == "") {
+            Swal.fire('error', 'ANUPEAisal Document No cannot be empty', 'error');
+            return;
+        }
+        else if (LnNo == "") {
+            Swal.fire('error', 'Record Line Number cannot be Empty', 'error');
+            return;
+        }
+        else {
+            ShowProgress();
+            $.ajax({
+                type: "post",
+                url: "/ANUPEAisal/DropKPIs",
+                data: JSON.stringify({ DocNo: DocNo, LnNo: LnNo }),
+                contentType: "application/json; charset = utf-8",
+                success: function (data) {
+                    if (data.success == true) {
+                        Swal.fire('Success', data.message, 'success');
+                        LoadPerformanceIndicator(DocNo);
+                        LoadPerformanceIndicatorReview(DocNo);
+                        $("#myModal").modal("hide");
+                        HideProgress();
+                    }
+                    else {
+                        HideProgress();
+                        Swal.fire('error', data.message, 'error');
+                    }
+                },
+                error: function () {
+                    HideProgress();
+                    Swal.fire('error', data.message, 'error');
+                }
+            });
+        }
+    }
+    var EvalKPIItem = function (DocNo, LnNo, Level) {
+        $("#labelF").text("KPI Evaluation Form");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ DocNo: DocNo, LnNo: LnNo, Level: Level }),
+            url: '/ANUPEAisal/KPIEvaluationForm',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var SaveKPIReviewRecord = function (DocNo, LnNo) {
+        var ResultsAchvd = $("#txtResultsAchved").val();
+        var SelfAssessment = $("#txtScore").val();
+        var remarks = $("#txtAppComments").val();
+
+        if (DocNo == "") {
+            Swal.fire('error', 'ANUPEAisal Doc No cannot be empty', 'error');
+            return;
+        }
+        if (LnNo == "") {
+            Swal.fire('error', 'ANUPEAisal Record Line Number Cannot be empty', 'error');
+            return;
+        }
+        else if (ResultsAchvd == "") {
+            Swal.fire('error', 'enter KIP Results Achieved', 'error');
+            return;
+        }
+        else if (SelfAssessment == "") {
+            Swal.fire('error', 'Choose your assessment', 'error');
+            return;
+        }
+        else {
+            var PerformanceIndicator = {};
+            PerformanceIndicator.ANUPEAisal_No = DocNo;
+            PerformanceIndicator.Line_No = LnNo;
+            PerformanceIndicator.Key_Result_Areas_Output = ResultsAchvd;
+            PerformanceIndicator.Self_Assesment = SelfAssessment;
+            PerformanceIndicator.ANUPEAisee_Comments = remarks;
+
+            ShowProgress();
+            $.ajax({
+                type: "post",
+                url: "/ANUPEAisal/SubmitKPIsEvaluation",
+                data: JSON.stringify({ kpi: PerformanceIndicator }),
+                contentType: "application/json; charset = utf-8",
+                success: function (data) {
+                    if (data.success == true) {
+                        Swal.fire('Success', data.message, 'success');
+                        LoadPerformanceIndicatorReview(DocNo);
+                        $("#myModal").modal("hide");
+                        HideProgress();
+                    }
+                    else {
+                        HideProgress();
+                        Swal.fire('error', data.message, 'error');
+                    }
+                },
+                error: function () {
+                    HideProgress();
+                    Swal.fire('error', data.message, 'error');
+                }
+            });
+        }
+    }
+    var UploadStaffValues = function () {
+        var DocNo = $("#DocNo").html();
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ DocNo: DocNo, Cat: "1" }),
+            url: '/ANUPEAisal/SubmitStaffCompetenceValues',
+            success: function (data) {
+                if (data.success == true) {
+                    Swal.fire('Success', data.message, 'success');
+                    LoadStaffValues(DocNo);
+                    $("#myModal").modal("hide");
+                    HideProgress();
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var UploadStaffCompetenceValues = function () {
+        var DocNo = $("#DocNo").html();
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ DocNo: DocNo, Cat: "2" }),
+            url: '/ANUPEAisal/SubmitStaffCompetenceValues',
+            success: function (data) {
+                if (data.success == true) {
+                    Swal.fire('Success', data.message, 'success');
+                    LoadCompetenceValues(DocNo);
+                    $("#myModal").modal("hide");
+                    HideProgress();
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var UploadMGRCompetenceValues = function () {
+        var DocNo = $("#DocNo").html();
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ DocNo: DocNo, Cat: "3" }),
+            url: '/ANUPEAisal/SubmitStaffCompetenceValues',
+            success: function (data) {
+                if (data.success == true) {
+                    Swal.fire('Success', data.message, 'success');
+                    LoadMGRValuesCompe(DocNo);
+                    $("#myModal").modal("hide");
+                    HideProgress();
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var SaveTrainingDevRecord = function () {
+        var DocNo = $("#DocNo").html();
+        var CourseName = $("#CourseName").val();
+        var Obj = $("#txtTRObj").val();
+        var Reason = $("#txtReason").val();
+        var Action = $("#txtAction").val();
+        var Results = $("#txtResults").val();
+        var Reamrks = $("#txtAppRemarks").val();
+
+        if (DocNo == "") {
+            Swal.fire('error', 'ANUPEAisal Doc No cannot be empty', 'error');
+            return;
+        }
+        else if (CourseName == "") {
+            Swal.fire('error', 'Enter Name of the Course', 'error');
+            return;
+        }
+        else if (Obj == "") {
+            Swal.fire('error', 'Enter Training Objective', 'error');
+            return;
+        }
+        else if (Reason == "") {
+            Swal.fire('error', 'Enter Reason why it is Required', 'error');
+            return;
+        }
+        else if (Action == "") {
+            Swal.fire('error', 'Enter Development Actions to be Taken', 'error');
+            return;
+        }
+        else if (Results == "") {
+            Swal.fire('error', 'Enter Results Achieved Against Development Action Plan', 'error');
+            return;
+        }
+        else if (Reamrks == "") {
+            Swal.fire('error', 'Enter Remarks', 'error');
+            return;
+        }
+        else {
+            var TrainingDev = {};
+            TrainingDev.ANUPEAisal_No = DocNo;
+            TrainingDev.Course_Name = CourseName;
+            TrainingDev.Objective = Obj;
+            TrainingDev.Reason = Reason;
+            TrainingDev.Action = Action;
+            TrainingDev.Results_Obtained = Results;
+            TrainingDev.Remarks_ANUPEAisee = Reamrks;
+            TrainingDev.Type = "1";
+
+            ShowProgress();
+            $.ajax({
+                type: "post",
+                url: "/ANUPEAisal/SaveTrainingDev",
+                data: JSON.stringify({ trDev: TrainingDev }),
+                contentType: "application/json; charset = utf-8",
+                success: function (data) {
+                    if (data.success == true) {
+                        Swal.fire('Success', data.message, 'success');
+                        LoadTrainingDevelopment(DocNo);
+                        $("#myModal").modal("hide");
+                        HideProgress();
+                    }
+                    else {
+                        HideProgress();
+                        Swal.fire('error', data.message, 'error');
+                    }
+                },
+                error: function () {
+                    HideProgress();
+                    Swal.fire('error', data.message, 'error');
+                }
+            });
+        }
+    }
+    var DropTrainingDevRecord = function (DocNo, LnNo) {
+        if (DocNo == "") {
+            Swal.fire('error', 'ANUPEAisal Document No cannot be empty', 'error');
+            return;
+        }
+        else if (LnNo == "") {
+            Swal.fire('error', 'Record Line Number cannot be Empty', 'error');
+            return;
+        }
+        else {
+            ShowProgress();
+            $.ajax({
+                type: "post",
+                url: "/ANUPEAisal/DropTrainingDev",
+                data: JSON.stringify({ DocNo: DocNo, LnNo: LnNo }),
+                contentType: "application/json; charset = utf-8",
+                success: function (data) {
+                    if (data.success == true) {
+                        Swal.fire('Success', data.message, 'success');
+                        LoadTrainingDevelopment(DocNo);
+                        $("#myModal").modal("hide");
+                        HideProgress();
+                    }
+                    else {
+                        HideProgress();
+                        Swal.fire('error', data.message, 'error');
+                    }
+                },
+                error: function () {
+                    HideProgress();
+                    Swal.fire('error', data.message, 'error');
+                }
+            });
+        }
+    }
+    var EvalCompValueItem = function (DocNo, Code, LnNo, Level) {
+        $("#labelF").text("Value & Competence Evaluation Form");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ DocNo: DocNo, Code: Code, LnNo: LnNo, Level: Level }),
+            url: '/ANUPEAisal/CompValueEvaluationForm',
+            success: function (data) {
+                $("#modalBodySmall").html(data);
+                HideProgress();
+                $("#myModalSmall").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var SaveCompValueReviewRecord = function (DocNo, Code, LnNo, Level) {
+        var SelfAssessment = $("#ddlScore").children("option:selected").val();
+
+        if (DocNo == "") {
+            Swal.fire('error', 'ANUPEAisal Doc No cannot be empty', 'error');
+            return;
+        }
+        if (LnNo == "") {
+            Swal.fire('error', 'ANUPEAisal Record Line Number Cannot be empty', 'error');
+            return;
+        }
+        else if (SelfAssessment == "") {
+            Swal.fire('error', 'Choose your assessment', 'error');
+            return;
+        }
+        else {
+            var CompetenceValues = {};
+            CompetenceValues.ANUPEAisal_No = DocNo;
+            CompetenceValues.Code = Code;
+            CompetenceValues.Line_No = LnNo;
+            CompetenceValues.Category = Level;
+            CompetenceValues.ANUPEAisal_Assesment = "";
+            CompetenceValues.Score = SelfAssessment;
+
+            ShowProgress();
+            $.ajax({
+                type: "post",
+                url: "/ANUPEAisal/SubmitCompValueEvaluation",
+                data: JSON.stringify({ CValues: CompetenceValues }),
+                contentType: "application/json; charset = utf-8",
+                success: function (data) {
+                    if (data.success == true) {
+                        Swal.fire('Success', data.message, 'success');
+                        if (Level == "1") {
+                            LoadStaffValues(DocNo);
+                        }
+                        else if (Level == "2") {
+                            LoadCompetenceValues(DocNo);
+                        }
+                        else if (Level == "3") {
+                            LoadMGRValuesCompe(DocNo);
+                        }
+                        else {
+                        }
+
+                        $("#myModalSmall").modal("hide");
+                        HideProgress();
+                    }
+                    else {
+                        HideProgress();
+                        Swal.fire('error', data.message, 'error');
+                    }
+                },
+                error: function () {
+                    HideProgress();
+                    Swal.fire('error', data.message, 'error');
+                }
+            });
+        }
+    }
+    var SendDocTo = function () {
+        var DocNo = `@Model.ApprisalCode`;
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo, SendTo: "1" }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/ANUPEAisal/SendDocumentTo',
+            success: function (data) {
+                if (data.success == true) {
+                    ShowProgress();
+                    window.location = "/ANUPEAisal/MyANUPEAisalList";
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var AppRequisitionLink = function () {
+        ShowProgress();
+        var DocNo = `@Model.ApprisalCode`;
+        window.location = "/ANUPEAisal/ANUPEAisalScoreCard?AppDoc=" + DocNo;
+    };
+</script>

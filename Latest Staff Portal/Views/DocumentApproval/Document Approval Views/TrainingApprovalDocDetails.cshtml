@@ -1,0 +1,178 @@
+﻿@model Latest_Staff_Portal.ViewModel.TrainingDocument
+<div class="row">
+    <div class="col-md-6">
+        <b>Document No</b>
+        @Html.TextBoxFor(m => m.DocHeader.Application_No, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        <b>Date Requested</b>
+        @Html.TextBoxFor(m => m.DocHeader.Application_Date, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Start Date</b>
+        @Html.TextBoxFor(m => m.DocHeader.StartDate, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        <b>End Date</b>
+        @Html.TextBoxFor(m => m.DocHeader.EndDate, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+@*<div class="row">
+    <div class="col-md-6">
+        <b>Requestor No</b>
+        @Html.TextBoxFor(m => m.DocHeader.Requestor, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        <b>Requestor Name</b>
+        @Html.TextBoxFor(m => m.DocHeader.RequestorName, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>*@
+<div class="row">
+    <div class="col-md-6">
+        <b>Station</b>
+        @Html.TextBoxFor(m => m.DocHeader.Directorate, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        <b>Department</b>
+        @Html.TextBoxFor(m => m.DocHeader.Department, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Status</b>
+        @Html.TextBoxFor(m => m.DocHeader.Status, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        @*<b>Section</b>
+        @Html.TextBoxFor(m => m.DocHeader.Section, new { @class = "form-control", @readonly = "readonly" })*@
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Course Description</b>
+        @Html.TextAreaFor(m => m.DocHeader.Course_Desc, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        <b>Trainer</b>
+        @Html.TextBoxFor(m => m.DocHeader.Trainer, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+@*<div class="row">
+    <div class="col-md-6">
+        <b>Training Category</b>
+        @Html.TextBoxFor(m => m.DocHeader.Training_Category, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        <b>Training Category Level</b>
+        @Html.TextBoxFor(m => m.DocHeader.Training_CategoryL, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>*@
+<div class="row">
+    <div class="col-md-12">
+        <b>Purpose</b>
+        @Html.TextBoxFor(m => m.DocHeader.Purpose, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+@*<div class="row">
+    <div class="col-md-6">
+        <b>Total Amount</b>
+        @Html.TextBoxFor(m => m.DocHeader.TotalAmount, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        <b>Amount in words</b>
+        @Html.TextAreaFor(m => m.DocHeader.AmountInWords, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>*@
+<hr/>
+<hr style="border:1px solid black"/>
+<b>List of Participant</b>
+<hr/>
+<div class="pre-scrollable">
+    <table class="table table-centered table-nowrap" id="ParticipantLines">
+        <thead>
+        <tr>
+            <th>No</th>
+            <th>Name</th>
+            <th style="text-align:center" class="tdAction">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        @{
+            if (Model.ListOfTrainees != null && Model.ListOfTrainees.Count() > 0)
+            {
+                foreach (var item in Model.ListOfTrainees)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.No)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td style="text-align:center" class="tdAction">
+                            <a href="javascript:void(0);" class="text-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" onclick="RemoveItem('@item.No');">
+                                <i class="mdi mdi-close font-size-16"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="3" style="color:red">
+                        No Records Found
+                    </td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>
+<hr style="border:1px solid black"/>
+<b>Trining Cost Item List</b>
+<hr/>
+<div class="pre-scrollable">
+    <table class="table table-centered table-nowrap" id="ParticipantLines">
+        <thead>
+        <tr>
+            <th>Item</th>
+            <th>Cost</th>
+            <th style="text-align:center" class="tdAction">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        @{
+            if (Model.ListOfTraininingCost != null && Model.ListOfTraininingCost.Count() > 0)
+            {
+                foreach (var item in Model.ListOfTraininingCost)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Item)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Cost)
+                        </td>
+                        <td style="text-align:center" class="tdAction">
+                            <a href="javascript:void(0);" class="text-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" onclick="RemoveItemCost('@item.No', '@item.Item');">
+                                <i class="mdi mdi-close font-size-16"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="3" style="color:red">
+                        No Records Found
+                    </td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>

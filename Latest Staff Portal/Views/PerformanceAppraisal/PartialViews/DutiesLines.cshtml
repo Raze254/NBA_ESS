@@ -1,0 +1,30 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.PositionResponsibilities>
+
+
+
+
+<div class="table-responsive">
+    <table id="datatable-buttonsDutyLines" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead>
+            <tr>
+                <th>Category </th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Category)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+</div>

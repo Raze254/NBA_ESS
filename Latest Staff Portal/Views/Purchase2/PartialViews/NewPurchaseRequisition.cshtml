@@ -1,0 +1,118 @@
+﻿@model Latest_Staff_Portal.ViewModel.PurchaseRequisitions
+
+@{
+    ViewBag.Title = "NewPurchaseRequisition";
+}
+
+
+
+<div class="row">
+
+
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Purchase Requisition Type", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            <select class="form-control" id="PRN_Type">
+                <option value="" selected hidden>Select Option</option>
+                <option value="1">Standard</option>
+                <option value="2">Project Works</option>
+            </select>
+            @Html.ValidationMessageFor(model => model.PRN_Type, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    @* <div class="form-group">
+            @Html.LabelFor(model => model.Document_Date, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Document_Date, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Document_Date, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Location Code", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.DropDownListFor(model => model.Location_Code, Model.ListOfLocation_Code, "Select Option", new { @class = "form-control", @id = "Location_Code" })
+            @Html.ValidationMessageFor(model => model.Location_Code, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Requisition Product Group", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            <select class="form-control" id="Requisition_Product_Group">
+                <option value="" selected hidden>Select Option</option>
+                <option value="1">Goods</option>
+                <option value="2">Services</option>
+                <option value="3">Works</option>
+            </select>
+            @Html.ValidationMessageFor(model => model.Requisition_Product_Group, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Procurement_Plan_ID, htmlAttributes: new { @class = "control-label col-md-2"  })
+            <input class="form-control" type="text" id="Procurement_Plan_ID" readonly style="background-color:#f2f2f2"/>
+
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.PP_Planning_Category, htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.DropDownListFor(model => model.PP_Planning_Category, Model.ListOfPP_Planning_Category, "Select option", new { @class = "form-control", @id = "ItemCategoryCode" })
+            @Html.ValidationMessageFor(model => model.PP_Planning_Category, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Budget", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.DropDownListFor(model => model.PP_Total_Budget, Model.ListOfBudgets, "Select Option", new { @class = "form-control", @id = "PP_Total_Budget" })
+            @Html.ValidationMessageFor(model => model.PP_Total_Budget, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+</div>
+
+@*<hr style="border:1px solid black" />
+<div align="center">
+    <input type="button" class="btn btn-primary action-buttons" value="Create" onclick="SubmitPurchaseRequisition();" />
+</div>
+*@
+
+
+<script>
+    $(document).ready(function () {
+        GetProcurementPlanID();
+
+    });
+
+    function GetProcurementPlanID() {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            url: "/Purchase/ProcurementPlanIDLookup",
+            success: function (data) {
+                $("#Procurement_Plan_ID").val(data);
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem processing your request. Please try again later.");
+            }
+        });
+    }
+
+</script>

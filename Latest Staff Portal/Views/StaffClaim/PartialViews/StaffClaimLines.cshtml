@@ -1,0 +1,78 @@
+﻿@using System.Globalization
+@model IEnumerable<Latest_Staff_Portal.ViewModel.StaffClaimLines>
+
+@{ 
+    var status = ViewBag.Status;
+}
+
+
+<div class="table-responsive">
+    <table id="staffClaimsWidget" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead>
+            <tr>
+                @*<th>Account No</th>
+        <th>Account Name</th>*@
+                <th>Type</th>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Amount</th>
+                <th>Amount LCY</th>
+                <th>Action</th>
+                @* <th>Validated Bank Name</th>*@
+
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Any())
+            {
+                foreach (var item in Model)
+                {
+
+                   
+                    <tr>
+                        @*<td>@item.AccountNo</td>
+                            <td>@item.AccountName</td>*@
+                        <td>@item.Claim_Type</td>
+                        <td>@item.Date</td>
+                        <td>@item.Description</td>
+                        <td>@item.Amount.ToString("C", new CultureInfo("sw-KE"))</td>
+                        <td>@item.Amount_LCY.ToString("C", new CultureInfo("sw-KE"))</td>
+                        <td>
+                            @if (@status == "Open")
+                            {
+                                <button class="btn btn-danger btn-sm" onclick="DeleteStaffClaimLine(`@item.Line_No`);">
+                                    <i class="fa fa-plus-circle" aria-hidden="true"></i> Delete
+                                </button>
+                            }
+
+                        </td>
+                        @*<td>@item.ValidatedBankName</td>*@
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+@if (@status=="Open")
+{
+    <div style="text-align:right; margin-top: 20px">
+        <button class="btn btn-primary action-buttons2" onclick="AddStaffClaimLine();">
+            <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Line
+        </button>
+    </div>
+
+}
+
+
+
+
+
+
+
+<script>
+    $("#staffClaimsWidget").DataTable({
+        lengthChange: true,
+        lengthMenu: [3, 10, 25, 50, 100]
+    });
+</script>

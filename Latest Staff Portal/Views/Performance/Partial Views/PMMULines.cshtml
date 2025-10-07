@@ -1,0 +1,213 @@
+﻿@*@model IEnumerable<Latest_Staff_Portal.ViewModel.PMMULinesLinesList>*@
+@model Latest_Staff_Portal.ViewModel.PMMULinesList
+    @{ 
+        var TotalWeight = ViewBag.TotalWeight;
+    }
+
+
+
+<div class="table-responsive">
+    <table class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color: black; color: white;">
+            <tr>
+
+                <th>Contract No</th>
+                @* <th>Total Weight</th>*@
+                <th>Strategy Plan ID</th>
+                <th>Entry No</th>
+                <th>Outcome</th>
+                <th>Strategic Objective</th>
+                <th>Strategies </th>
+                <th>Perspectives</th>
+                <th>Strategy Output_Code</th>
+                <th>Outputs</th>
+                <th>Output Indicators </th>
+                <th>Unit Of Measure</th>
+                <th>National Average</th>
+                <th>Best Achievement</th>
+                <th>Baseline_Target</th>
+                <th>Weight</th>
+                <th>Target</th>
+                <th>Achieved_Target</th>
+                <th>Net Weight</th>
+                <th>Comments</th>
+                <th class="actionHeader">Action</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.ListOfPMMULines != null && Model.ListOfPMMULines.Any())
+            {
+                foreach (var item in Model.ListOfPMMULines)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Contract_No)
+                        </td>
+                        <td hidden>
+                            @TotalWeight
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Strategy_Plan_ID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Entry_No)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Outcome)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Strategic_Objective)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Strategies)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Perspectives)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Strategy_Output_Code)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Outputs)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Output_Indicators)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Unit_of_Measure)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.National_Average)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Best_Achievement)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Baseline_Target)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Weight)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Target)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Achieved_Target)
+                        </td>
+                        <td>
+                            @{
+                                float NW = 0;
+                                if (item.Weight != 0 && item.Target != 0)
+                                {
+                                    // Calculate NW as (Achieved_Target / Target) * Weight using float arithmetic
+                                    NW = ((float)item.Achieved_Target / item.Target) * item.Weight;
+                                }
+                            }
+                            @NW.ToString("0.00")
+                        </td>
+
+
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Comments)
+                        </td>
+                        <td style="text-align:right" class="tdAction">
+                            <button class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Edit"
+                                    onclick="GetActivities('@item.Contract_No', '@item.Entry_No',  '@item.Strategy_Output_Code', '@item.Weight');">
+                                View Activities
+                            </button>
+                            @{
+
+                                if (@Model.PMMU_Document_Stage == " ")
+                                {
+                                    if (Model.Approval_Status == "Open")
+                                    {
+                                        <button class="btn btn-success  btn-sm" data-toggle="tooltip" data-placement="top" title="Edit"
+                                                onclick="EditItem('@item.Contract_No', '@item.Entry_No',  '@item.Outcome', '@item.Strategic_Objective', '@item.Strategies', '@item.Perspectives', '@item.Strategy_Output_Code', '@item.Outputs', '@item.Output_Indicators', '@item.Activities', '@item.Unit_of_Measure', '@item.Baseline_Target', '@item.Weight', '@item.Target', '@item.Achieved_Target', '@item.Comments');">
+                                            Edit Line
+                                        </button>
+
+                                        <button class="btn btn-danger  btn-sm ml-3" data-toggle="tooltip" data-placement="top" title="Delete" onclick="RemoveItem('@item.Contract_No');">Delete</button>
+                                    }
+
+                                }
+
+
+                                if (@Model.PMMU_Document_Stage == "Negotiation")
+                                {
+                                    if (Model.Approval_Status == "Open" || Model.Approval_Status == "Released")
+                                    {
+                                        <button class="btn btn-success  btn-sm" data-toggle="tooltip" data-placement="top" title="Edit"
+                                                onclick="EditItem('@item.Contract_No', '@item.Entry_No',  '@item.Outcome', '@item.Strategic_Objective', '@item.Strategies', '@item.Perspectives', '@item.Strategy_Output_Code', '@item.Outputs', '@item.Output_Indicators', '@item.Activities', '@item.Unit_of_Measure', '@item.Baseline_Target', '@item.Weight', '@item.Target', '@item.Achieved_Target', '@item.Comments');">
+                                            Edit Line
+                                        </button>
+
+                                        <button class="btn btn-danger  btn-sm ml-3" data-toggle="tooltip" data-placement="top" title="Delete" onclick="RemoveItem('@item.Contract_No');">Delete</button>
+                                    }
+
+                                }
+
+                                if (@Model.PMMU_Document_Stage == "Evaluation")
+                                {
+                                    if (Model.Approval_Status == "Open")
+                                    {
+                                        <button class="btn btn-success  btn-sm" data-toggle="tooltip" data-placement="top" title="Edit"
+                                                onclick="EditItem('@item.Contract_No', '@item.Entry_No',  '@item.Outcome', '@item.Strategic_Objective', '@item.Strategies', '@item.Perspectives', '@item.Strategy_Output_Code', '@item.Outputs', '@item.Output_Indicators', '@item.Activities', '@item.Unit_of_Measure', '@item.Baseline_Target', '@item.Weight', '@item.Target', '@item.Achieved_Target', '@item.Comments');">
+                                            Edit Line
+                                        </button>
+
+                                        <button class="btn btn-danger  btn-sm ml-3" data-toggle="tooltip" data-placement="top" title="Delete" onclick="RemoveItem('@item.Contract_No');">Delete</button>
+                                    }
+
+                                }
+
+                            }
+                        </td>
+
+                    </tr>
+
+                }
+                                    
+
+            }
+
+            else
+            {
+                <tr>
+                    <td colspan="15" style="color: red;">No Records Found</td>
+                </tr>
+            }
+        <tr  style="background-color: black; color: white;">
+            <th colspan="11">Totals</th>
+            <th>N/a</th>
+            <th>@TotalWeight</th>
+            <th>N/a</th>
+            <th>N/a</th>
+            <th>N/a</th>
+            <th></th>
+            <th></th>    
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+@{
+    if (Model.Approval_Status == "Open")
+    {
+
+        if (Model.PMMU_Document_Stage != "Evaluation")
+        {
+
+            if (@TotalWeight<100) {
+            <div style="text-align:right">
+                <button class="action-buttons" onclick="AddPMMULine();">
+                    <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Line
+                </button>
+            </div>
+                }
+            }
+        }
+    }

@@ -1,0 +1,224 @@
+﻿
+@{
+    ViewBag.Title = "Notifications";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 7px;
+        font-size: 12px;
+    }
+</style>
+
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/Dashboard/Dashboard">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active">Noticications</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<hr />
+<br />
+
+
+
+<div class="card">
+    <div class="card-body">
+        <div id="divList"></div>
+    </div>
+</div>
+
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Documents</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@* //////////////////////View Document//////////////////////////// *@
+<div class="modal fade" id="myModalAttachment" tabindex="-1" role="dialog" aria-labelledby="myModalAttachmentLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalAttachmentLabel">View Attachment</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+            </div>
+            <div class="modal-body" id="modalAttachmentBody">
+                <iframe id="iframe" style="width:100%;height:75vh;"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadNotices('@ViewBag.Type');
+        $('#myModalAttachment').on('show.bs.modal', function () {
+            scrollTopPosition = $('#myModal .modal-body').scrollTop();
+            $('#myModal').css('opacity', '0');
+        });
+        $('#myModalAttachment').on('hidden.bs.modal', function () {
+            $('#myModal').css('opacity', '1');
+            $('#myModal .modal-body').scrollTop(scrollTopPosition);
+            if ($('.modal:visible').length) {
+                $('body').addClass('modal-open');
+            }
+        });
+    });
+    var LoadNotices = function (typeCheck) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: "/Common/GetNoticesList?type=" + typeCheck,
+            success: function (data) {
+                $("#divList").html(data);
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+    var GetAttachments = function (documentNumber) {
+        ShowProgress();
+        var status = "None";
+        var DocNo = documentNumber;
+	$.ajax({
+		async: true,
+		type: "POST",
+		datatype: "json",
+		contentType: "application/json; charset = utf-8",
+		processData: false,
+        data: JSON.stringify({ DocNo: DocNo, documentStatus: status }),
+        url: "/Common/EdmsDocumentAttachmentList",
+		success: function (data) {
+            $("#modalBody").html(data);
+            HideProgress();
+            $("#myModal").modal("show");
+		},
+        error: function () {
+            HideProgress();
+			Swal.fire("There is some problem to process your request. Please try after some time");
+		}
+	});
+    };
+    var ViewAttachment = function (moduleCheck, docNo, docId) {
+        $.ajaxSetup({ cache: false });
+        ShowProgress();
+        var viewer = $("#modalAttachmentBody");
+        viewer.empty();
+
+        $.ajax({
+            url: '/Common/GetEdmsDocuments',
+            type: "GET",
+            datatype: "json",
+            cache: false,
+            contentType: "application/json; charset=utf-8",
+            data: {
+                module: moduleCheck,
+                documentNo: docNo,
+                documentType: "Expenditure Requisition",
+                documentId: docId
+            },
+            success: function (data) {
+                if (data.success) {
+                    if (data.base64) {
+                        var mimeType = data.mimeType || 'application/pdf';
+
+                        if (mimeType.startsWith('application/pdf')) {
+
+                            var byteCharacters = atob(data.base64);
+                            var byteNumbers = new Array(byteCharacters.length);
+                            for (var i = 0; i < byteCharacters.length; i++) {
+                                byteNumbers[i] = byteCharacters.charCodeAt(i);
+                            }
+                            var byteArray = new Uint8Array(byteNumbers);
+                            var blob = new Blob([byteArray], { type: mimeType });
+                            var blobUrl = URL.createObjectURL(blob);
+
+
+                            viewer.html('<iframe src="' + blobUrl + '" style="width:100%; height:500px;" frameborder="0"></iframe>');
+                        } else if (mimeType.startsWith('image/')) {
+
+                            viewer.html('<img src="data:' + mimeType + ';base64,' + data.base64 + '" style="width:100%;"/>');
+                        } else {
+
+                            var blob = b64toBlob(data.base64, mimeType);
+                            var url = window.URL.createObjectURL(blob);
+                            window.open(url, '_blank');
+                        }
+                        $("#myModalAttachment").modal("show");
+                    } else {
+
+                        window.location = '/Common/AttachmentDownload?fileName=' + data.message;
+                        Swal.fire('Success', 'Document Downloaded successfully', 'success');
+                    }
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+                HideProgress();
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Error', err.responseText || 'An error occurred', 'error');
+            }
+        });
+    };
+    function b64toBlob(base64, contentType) {
+        var byteCharacters = atob(base64);
+        var byteArrays = [];
+
+        for (var offset = 0; offset < byteCharacters.length; offset += 512) {
+            var slice = byteCharacters.slice(offset, offset + 512);
+
+            var byteNumbers = new Array(slice.length);
+            for (var i = 0; i < slice.length; i++) {
+                byteNumbers[i] = slice.charCodeAt(i);
+            }
+
+            var byteArray = new Uint8Array(byteNumbers);
+            byteArrays.push(byteArray);
+        }
+
+        return new Blob(byteArrays, { type: contentType });
+    }
+</script>
+

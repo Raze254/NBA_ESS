@@ -1,0 +1,54 @@
+﻿@model Latest_Staff_Portal.ViewModel.MedicalCardReplacement
+
+
+<div>
+    <h2>Medical Card Replacement Guidelines</h2>
+    <p>Follow the instructions provided to initiate the replacement process.</p>
+    <ul>
+        <li>Lipa Na Mpesa - Pay Bill - Business No. – 488494</li>
+        <li>Account name: PJ followed by 1st Name of Person whose card is to be processed.</li>
+        <li>Enter amount – (300/= for card replacement)</li>
+    </ul>
+    <p>Attatch entire Mpesa message (Screenshot) below</p>
+    <div class="form-group">
+        <div class="col-md-12">
+            <input type="file" class="form-control" required id="mpesaScreenshot" multiple="multiple"/>
+            <span class="text-danger">*</span>
+        </div>
+    </div>
+    <br/>
+    <p>For inquiries, please contact: <a href="mailto:welfarebenefitsandmedical@court.go.ke" style="color:darkblue">welfarebenefitsandmedical@court.go.ke</a></p>
+
+</div>
+
+
+<div align="center">
+    <input type="button" class="btn btn-primary waves-effect waves-light" value="Proceed" onclick="Proceed();"/>
+</div>
+<script type="text/javascript">
+    function Proceed() {
+        var fileInput = document.getElementById('mpesaScreenshot');
+        if (fileInput.files.length === 0) {
+            Swal.fire('Error', 'Please Add  Mpesa message (Screenshot).', 'error');
+            return;
+        }
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: "/WelfareManagement/NewMedicalCard",
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+</script>

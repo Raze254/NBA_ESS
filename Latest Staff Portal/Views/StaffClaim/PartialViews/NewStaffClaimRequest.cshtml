@@ -1,0 +1,129 @@
+﻿@model Latest_Staff_Portal.ViewModel.StaffClaims
+
+<div class="card-body">
+    <div class="row">
+        <div class="col-md-6">
+            <b>Account Type</b>
+            <select class="form-control" id="ddlAccountType" onchange="ShowFrom();">
+                <option value="">----</option>
+                <option value="1">G/L Account</option>
+                <option value="2">Customer</option>
+                <option value="3">Vendor</option>
+                <option value="4">Bank Account</option>
+                <option value="5">Fixed Asset</option>
+                <option value="6">IC Partner</option>
+                <option value="7">Employee</option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <b>Account No</b>
+            @Html.TextBoxFor(m => m.AccountNo, new { @class = "form-control", id = "txtAccountNo" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <b>Account Name</b>
+            @Html.TextBoxFor(m => m.AccountName, new { @class = "form-control", id = "txtAccountName" })
+        </div>
+        <div class="col-md-6">
+            <b>Payee</b>
+            @Html.TextBoxFor(m => m.Payee, new { @class = "form-control", id = "txtPayee" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <b>Payment Narration</b>
+            @Html.TextBoxFor(m => m.PaymentNarration, new { @class = "form-control", id = "txtPaymentNarration" })
+        </div>
+        <div class="col-md-6">
+            <b>Surrender Doc No</b>
+            @Html.DropDownListFor(model => model.SurrenderDocNo, Model.ListOfSurrenders, "--select Surrender--", new { @class = "form-control", id = "ddlSurrenderDocNo" })
+            @Html.ValidationMessageFor(model => model.SurrenderDocNo, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <b>Shortcut Dimension 1 Code</b>
+            @Html.DropDownListFor(model => model.ShortcutDimension1Code, Model.ListOfDim1, "--select Dimension 1--", new { @class = "form-control", id = "ddlShortcutDimension1Code" })
+            @Html.ValidationMessageFor(model => model.ShortcutDimension1Code, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-6">
+            <b>Shortcut Dimension 2 Code</b>
+            @Html.DropDownListFor(model => model.ShortcutDimension2Code, Model.ListOfDim2, "--select Dimension 2--", new { @class = "form-control", id = "ddlShortcutDimension2Code" })
+            @Html.ValidationMessageFor(model => model.ShortcutDimension2Code, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <b>Project Name</b>
+            @Html.TextBoxFor(m => m.ProjectName, new { @class = "form-control", id = "txtProjectName" })
+        </div>
+        <div class="col-md-6">
+            <b>Currency Code</b>
+            @Html.DropDownListFor(model => model.CurrencyCode, Model.ListOfCurrencyCodes, "--select Currency--", new { @class = "form-control", id = "ddlCurrencyCode" })
+            @Html.ValidationMessageFor(model => model.CurrencyCode, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <b>Strategic Plan</b>
+            @Html.DropDownListFor(model => model.StrategicPlan, Model.ListOfStrategicPlans, "--select Strategic Plan--", new { @class = "form-control", id = "ddlStrategicPlan" })
+            @Html.ValidationMessageFor(model => model.StrategicPlan, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-6">
+            <b>Reporting Year Code</b>
+            @Html.DropDownListFor(model => model.ReportingYearCode, Model.ListOfReportingYears, "--select Reporting Year--", new { @class = "form-control", id = "ddlReportingYearCode" })
+            @Html.ValidationMessageFor(model => model.ReportingYearCode, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <b>Workplan Code</b>
+            @Html.DropDownListFor(model => model.WorkplanCode, Model.ListOfWorkplans, "--select Workplan--", new { @class = "form-control", id = "ddlWorkplanCode" })
+            @Html.ValidationMessageFor(model => model.WorkplanCode, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-6">
+            <b>Activity Code</b>
+            @Html.DropDownListFor(model => model.ActivityCode, Model.ListOfActivities, "--select Activity--", new { @class = "form-control", id = "ddlActivityCode" })
+            @Html.ValidationMessageFor(model => model.ActivityCode, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <b>Expenditure Requisition Code</b>
+            @Html.DropDownListFor(model => model.ExpenditureRequisitionCode, Model.ListOfExpenditureRequisitions, "--select Expenditure Requisition--", new { @class = "form-control", id = "ddlExpenditureRequisitionCode" })
+            @Html.ValidationMessageFor(model => model.ExpenditureRequisitionCode, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>
+<div id="divButtonSave">
+    <hr style="border:1px solid black"/>
+    <div align="center">
+        <input type="button" class="btn btn-primary waves-effect waves-light" value="Submit" onclick="SubmitStaffClaimRequisition();"/>
+    </div>
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		$('#txtFromDate, #txtToDate').datepicker({
+			changeMonth: true,
+			changeYear: true,
+			autoclose: true,
+			yearRange: '-1:+2',
+			showOtherMonths: true,
+			dateFormat: 'dd/mm/yy'
+		});
+		$('#txtFromDate, #txtToDate').focus(function () {
+			$("#ui-datepicker-div").position({
+				my: "left top",
+				at: "left bottom",
+				of: $(this)
+			});
+		});
+
+		// Initialize select2 for dropdowns
+		$("#ddlAccountType, #ddlSurrenderDocNo, #ddlShortcutDimension1Code, #ddlShortcutDimension2Code, #ddlCurrencyCode, #ddlStrategicPlan, #ddlReportingYearCode, #ddlWorkplanCode, #ddlActivityCode, #ddlExpenditureRequisitionCode").select2({
+			width: '100%'
+		});
+	});
+</script>

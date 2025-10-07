@@ -1,0 +1,174 @@
+﻿@model Latest_Staff_Portal.ViewModel.PaymentDocument
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    hr {
+        margin: 4px;
+    }
+</style>
+<div class="row">
+    <div class="col-md-6">
+        <b>Document No</b>
+        @Html.TextBoxFor(m => m.DocHeader.No, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        <b>Date Raised</b>
+        @Html.TextBoxFor(m => m.DocHeader.Date, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Station</b>
+        @Html.TextBoxFor(m => m.DocHeader.Directorate, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        <b>Department</b>
+        @Html.TextBoxFor(m => m.DocHeader.Department, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Pay Mode</b>
+        @Html.TextBoxFor(m => m.DocHeader.Pay_Mode, new { @class = "form-control", @readonly = "readonly", rows = 5 })
+    </div>
+    <div class="col-md-6">
+        <b>Cheque Number</b>
+        @Html.TextBoxFor(m => m.DocHeader.ChequeNo, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Paying Bank</b>
+        @Html.TextBoxFor(m => m.DocHeader.PayingBank, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        <b>Paying Bank Account Number</b>
+        @Html.TextBoxFor(m => m.DocHeader.Paying_Bank_Account, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Payment To</b>
+        @Html.TextBoxFor(m => m.DocHeader.PaymentTo, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        <b>On Behalf Of</b>
+        @Html.TextBoxFor(m => m.DocHeader.OnBehalfOf, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Prepared By</b>
+        @Html.TextBoxFor(m => m.DocHeader.RaisedBy, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        <b>Status</b>
+        @Html.TextBoxFor(m => m.DocHeader.Status, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Total Payment Amount</b>
+        @Html.TextBoxFor(m => m.DocHeader.TotalAmount, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        <b>Total VAT Amount</b>
+        @Html.TextBoxFor(m => m.DocHeader.TotalVATAmount, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Total Witholding Tax Amount</b>
+        @Html.TextBoxFor(m => m.DocHeader.TotalWithHTAXAmount, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        <b>Total Retention Amount</b>
+        @Html.TextBoxFor(m => m.DocHeader.TotalRETAmount, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Total VAT Withholding Amount</b>
+        @Html.TextBoxFor(m => m.DocHeader.TotalVATWITHHAmount, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        <b>Total PAYE Amount</b>
+        @Html.TextBoxFor(m => m.DocHeader.TotalPAYEAmount, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Total Net Amount</b>
+        @Html.TextBoxFor(m => m.DocHeader.TotalNETAmount, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <b>Purpose</b>
+        @Html.TextAreaFor(m => m.DocHeader.Remarks, new { rows = 3, @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<hr/>
+<hr style="border:1px solid black"/>
+<b>Imprest Lines</b>
+<hr/>
+<div class="pre-scrollable">
+    <table class="table table-hover" id="PurchaseRequisitionLine">
+        <thead>
+        <tr>
+            <th>Type</th>
+            <th>Account Type</th>
+            <th>Account No</th>
+            <th>Account Name</th>
+            <th style="text-align:center">Amount</th>
+        </tr>
+        </thead>
+        <tbody>
+        @{
+            if (Model.ListOfPaymentLines != null && Model.ListOfPaymentLines.Count() > 0)
+            {
+                foreach (var item in Model.ListOfPaymentLines)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Type)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AccountType)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AccountNo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AccountName)
+                        </td>
+                        <td style="text-align:center">
+                            @Html.DisplayFor(modelItem => item.Amount)
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5" style="color:red">
+                        No Records Found
+                    </td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>
+<hr style="border:1px solid black"/>
+<div class="row">
+    <div class="col-md-12">
+        <b>Attachments</b>
+        <div id="divAttachDocs"></div>
+    </div>
+</div>

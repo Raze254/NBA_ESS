@@ -1,0 +1,294 @@
+﻿@{
+    ViewBag.Title = "RejectedDocuments";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+<style>
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+<!--
+<link href="~/assets/css/Loader.css" rel="stylesheet" />
+<div class="loading" align="center" id="divLoader">
+    <br />
+    <img src="~/assets/images/ajax-loader.gif" alt="" />
+</div>
+-->
+<div class="card pre-scrollable">
+    <div class="card-title">Approved Document List</div>
+    <hr/>
+    <div class="card-body">
+        <div>
+            <input type="button" onclick="LoadDocumentRejectedList('')" id="lvCount" class="btn btn-primary BtnPadding"/>
+            <input type="button" onclick="LoadDocumentRejectedList('38')" id="PRNCount" class="btn btn-danger BtnPadding"/>
+            <input type="button" onclick="LoadDocumentRejectedList('70135010')" id="SRNCount" class="btn btn-primary BtnPadding"/>
+            <input type="button" onclick="LoadDocumentRejectedList('70135469')" id="ImpCount" class="btn btn-danger BtnPadding"/>
+            <input type="button" onclick="LoadDocumentRejectedList('70135450')" id="SurrCount" class="btn btn-primary BtnPadding"/>
+            <input type="button" onclick="LoadDocumentRejectedList('70135454')" id="ClaimCount" class="btn btn-danger BtnPadding"/>
+            <input type="button" onclick="LoadDocumentRejectedList('70134894')" id="Clearance" class="btn btn-primary BtnPadding"/>
+        </div>
+        <hr/>
+        <div class="pre-scrollable">
+            <div id="divApprovalDocList"></div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Rejected Document Details</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ Status: 'Rejected' }),
+            url: "/DocumentApproval/CountDocumentForApproval",
+            success: function (data) {
+                HideProgress();
+                if (data.DocCount.LeaveCount > 0) {
+                    document.getElementById("lvCount").value = "Leave(" + data.DocCount.LeaveCount + ")";
+                    $("#lvCount").show();
+                }
+                else {
+                    $("#lvCount").hide();
+                }
+                if (data.DocCount.PRNCount > 0) {
+                    document.getElementById("PRNCount").value = "PRN(" + data.DocCount.PRNCount + ")";
+                    $("#PRNCount").show();
+                }
+                else {
+                    $("#PRNCount").hide();
+                }
+                if (data.DocCount.SRNCount > 0) {
+                    document.getElementById("SRNCount").value = "SRN(" + data.DocCount.SRNCount + ")";
+                    $("#SRNCount").show();
+                }
+                else {
+                    $("#SRNCount").hide();
+                }
+                if (data.DocCount.ImpCount > 0) {
+                    document.getElementById("ImpCount").value = "Imp(" + data.DocCount.ImpCount + ")";
+                    $("#ImpCount").show();
+                }
+                else {
+                    $("#ImpCount").hide();
+                }
+                if (data.DocCount.SurrCount > 0) {
+                    document.getElementById("SurrCount").value = "Surrender(" + data.DocCount.SurrCount + ")";
+                    $("#SurrCount").show();
+                }
+                else {
+                    $("#SurrCount").hide();
+                }
+                if (data.DocCount.ClaimCount > 0) {
+                    document.getElementById("ClaimCount").value = "Claim(" + data.DocCount.ClaimCount + ")";
+                    $("#ClaimCount").show();
+                }
+                else {
+                    $("#ClaimCount").hide();
+                }
+                if (data.DocCount.Clearance > 0) {
+                    document.getElementById("Clearance").value = "Clearance(" + data.DocCount.Clearance + ")";
+                    $("#Clearance").show();
+                }
+                else {
+                    $("#Clearance").hide();
+                }
+                var SessionValue = '@Request.RequestContext.HttpContext.Session["Location"]';
+
+                if (SessionValue != "") {
+                    if (SessionValue == "2") { LoadDocumentRejectedList("38"); }
+                    if (SessionValue == "3") { LoadDocumentRejectedList("70135010"); }
+                    if (SessionValue == "4") { LoadDocumentRejectedList("70135469"); }
+                    if (SessionValue == "7") { LoadDocumentRejectedList("70135450"); }
+                    if (SessionValue == "5") { LoadDocumentRejectedList("70135454"); }
+                    if (SessionValue == "6") { LoadDocumentRejectedList("70134894"); }
+                }
+                else {
+                    if (data.DocCount.LeaveCount > 0) {
+                        LoadDocumentRejectedList("");
+                    }
+                    else if (data.DocCount.PRNCount > 0) {
+                        LoadDocumentRejectedList("38");
+                    }
+                    else if (data.DocCount.SRNCount > 0) {
+                        LoadDocumentRejectedList("70135010");
+                    }
+                    else if (data.DocCount.ImpCount > 0) {
+                        LoadDocumentRejectedList("70135469");
+                    }
+                    else if (data.DocCount.SurrCount > 0) {
+                        LoadDocumentRejectedList("70135450");
+                    }
+                    else if (data.DocCount.ClaimCount > 0) {
+                        LoadDocumentRejectedList("70135454");
+                    }
+                    else if (data.DocCount.Clearance > 0) {
+                        LoadDocumentRejectedList("70134894");
+                    }
+                    else {
+                        LoadDocumentRejectedList("");
+                    }
+                }
+            },
+            error: function () {
+                Swal.fire("There is some problem to process your request. Please try after some time");
+                HideProgress();
+            }
+        });
+    });
+    var LoadDocumentRejectedList = function (TableID) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ TbID: TableID, Status: 'Rejected' }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: "/DocumentApproval/LoadDocumentForApprovalList",
+            success: function (data) {
+                $("#divApprovalDocList").html(data);
+                HideProgress();
+            },
+            error: function () {
+                Swal.fire("There is some problem to process your request. Please try after some time");
+                HideProgress();
+            }
+        });
+    }
+    var ViewDoc = function (TabelID, DocNo) {
+        if (DocNo == "") {
+            Swal.fire('Warning', "Document Number cannot be empty", 'warning');
+            return;
+        }
+        else {
+            ShowProgress();
+            $.ajax({
+                async: true,
+                type: "POST",
+                datatype: "json",
+                contentType: "application/json; charset = utf-8",
+                processData: false,
+                data: JSON.stringify({ TableID: TabelID, DocNo: DocNo}),
+                url: '/DocumentApproval/DocumentEntryDetails',
+                success: function (data) {
+                    HideProgress();
+                    LoadDocumentDetails(TabelID, DocNo);                    
+                    $("#modalBody").html(data);
+                    $("#myModal").modal("show");
+                },
+                error: function (err) {
+                    HideProgress();
+                    Swal.fire('Warning', err, 'warning');
+                }
+            });
+        }
+    }
+    var LoadDocumentDetails = function (TableID, DocNo, DocType) {
+        var url;
+        if (TableID == "38") {
+            url = "/DocumentApproval/PurchaseReqDocApprovalDetails";
+        }
+        else if (TableID == "70135010") {
+            url = "/DocumentApproval/StoreReqDocApprovalDetails";
+        }
+        else if (TableID == "70135469") {
+            url = "/DocumentApproval/ImprestReqDocApprovalDetails";
+        }
+        else if (TableID == "70135454") {
+            url = "/DocumentApproval/StaffClaimReqDocApprovalDetails";
+        }
+        else {
+            url = "";
+        }
+        if (url != "") {
+            ShowProgress();
+            $.ajax({
+                async: true,
+                type: "POST",
+                datatype: "json",
+                data: JSON.stringify({ DocNo: DocNo }),
+                contentType: "application/json; charset = utf-8",
+                processData: false,
+                url: url,
+                success: function (data) {
+                    $("#divDocDetails").html(data);                    
+                    LoadApprovalTrail(TableID, DocNo, DocType);
+                    LoadDocComments(DocNo);
+                    HideProgress();
+                },
+                error: function () {
+                    HideProgress();
+                    Swal.fire("There is some problem to process your request. Please try after some time");
+                }
+            });
+        }
+    }
+    var LoadApprovalTrail = function (TableID, DocNo, DocType) {
+        //ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ TableID: TableID, DocNo: DocNo, DocType: DocType }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: "/DocumentApproval/PreviousApprovalTrail",
+            success: function (data) {
+                $("#divApprovalTrail").html(data);
+                //HideProgress();
+            },
+            error: function () {
+                //HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+    var LoadDocComments = function (DocNo) {
+        //ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: "/Common/MyDocumentComments",
+            success: function (data) {
+                $("#divDocComments").html(data);
+                //HideProgress();
+            },
+            error: function () {
+               // HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+</script>

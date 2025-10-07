@@ -1,0 +1,194 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from dreamguys.co.in/demo/doccure/admin/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 30 Nov 2019 04:12:46 GMT -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>NBA Staff Portal - Login</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="~/assets/img/logo2.png">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+
+    <!-- Fontawesome CSS -->
+    <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="/assets/css/style.css">
+
+    <script src="~/assets/js/jquery2.0.3.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/assets/css/custom.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/assets/css/custom.css">
+
+    <script src="~/assets/js/jquery2.0.3.min.js"></script>
+
+</head>
+<body id="body">
+    <link href="~/assets/css/Loader.css" rel="stylesheet" />
+    <div class="loading" align="center" id="divLoader">
+        <div class="loader-container">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+    <script src="~/assets/js/ObfuscateSite.js"></script>
+    <!-- Main Wrapper -->
+    <div class="main-wrapper login-body">
+        <div class="login-wrapper">
+            <div class="container">
+                <div class="loginboxx">
+
+
+                    <div class="login-right">
+                        <div class="login-right-wrap">
+
+                            <center>
+                                <div class="mb-2">
+                                    <img class="img-fluid" src="/assets/img/logo.png" alt="Logo" style="height: 60px;">
+                                </div>
+
+                                <h2 class="mb-3" style="font-size: 25px; ">National Biosafety Authority</h2>
+
+
+                            </center>
+
+
+                            <div style="outline: solid #f2f2f2 1px; border-radius: 10px; padding: 20px">
+                                <div class=" text-center mt-3">
+                                    <h4 class="" style="font-size: 22px; ">Staff Login</h4>
+                                </div>
+
+                                <!-- Form -->
+                                <div class="mb-4">
+                                    <label class="form-label text-dark font-weight-bold pl-3" for="username">Username<span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="username" placeholder="Enter Username" required>
+                                </div>
+
+                                <div class="mb-4">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div>
+                                            <label class="form-label text-dark font-weight-bold pl-3" for="password">Password<span class="text-danger">*</span></label>
+                                        </div>
+                                    </div>
+
+                                    <div class="input-group">
+                                        <input type="password" class="form-control py-4" autocomplete="off" id="userpassword" placeholder="Enter password" required />
+                                        <span class="input-group-text" style="cursor: pointer;">
+                                            <i class="fa fa-eye"
+                                               onmousedown="showPassword()"
+                                               onmouseup="hidePassword()"
+                                               onmouseleave="hidePassword()"></i>
+                                        </span>
+                                    </div>
+
+                                </div>
+                                <div class="text-center">
+                                    <button class="btn btn-info btn-block" id="btnLogin" type="submit" onclick="LoginUser()">Login</button>
+                                </div>
+
+                                <!-- forgot password -->
+                                <div class="mt-4 overflow-hidden">                
+                                    <div class="mb-2 float-right">
+                                        <a href="#" class="text-center forgotpass">Forgot password?</a>
+                                     
+                                    </div>
+                                </div>
+
+                                <!-- /Form -->
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Main Wrapper -->
+    <!-- jQuery -->
+    <!-- Bootstrap Core JS -->
+    <script src="/assets/js/popper.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="/assets/js/script.js"></script>
+    <script src="~/assets/js/ShowProgression.js"></script>
+    <script src="~/assets/js/sweetalert2.min.js"></script>
+    @*<script src="~/SiteJS/LoginJS.js"></script>*@
+</body>
+
+</html>
+
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const passwordField = document.getElementById('userpassword');
+        passwordField.addEventListener('paste', (e) => {
+            e.preventDefault();
+            alert('Pasting is disabled for this field.');
+        });
+    });
+    function LoginUser() {
+        var username = $("#username").val();
+        var password = $("#userpassword").val();
+
+        if (username === "") {
+            Swal.fire('Warning', 'Enter Username', 'warning');
+            return;
+        } else if (password === "") {
+            Swal.fire('Warning', 'Enter Your Password', 'warning');
+            return;
+        }
+
+        ShowProgress();
+
+        $.ajax({
+            type: "POST",
+            url: "/Login/LoginUser",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({ UserName: username, Password: password }),
+            dataType: "json",
+            success: function (data) {
+                //alert(data.message);
+
+                if (data.success) {
+                    //Swal.fire('Success', 'Login Successful', 'success');
+                    window.location = data.message; // Redirect to the given URL
+
+                } else {
+                    Swal.fire('Error', data.message, 'error'); // Display error message
+                    HideProgress();
+                }
+            },
+            error: function (err) {
+                HideProgress(); // Hide loading indicator
+
+                // Handle server-side or network errors
+                Swal.fire('Error', 'An unexpected error occurred: ' + err.responseText, 'error');
+            }
+        });
+    }
+
+
+
+    function showPassword() {
+        document.getElementById("userpassword").type = "text";
+    }
+
+    function hidePassword() {
+        document.getElementById("userpassword").type = "password";
+    }
+
+
+</script>

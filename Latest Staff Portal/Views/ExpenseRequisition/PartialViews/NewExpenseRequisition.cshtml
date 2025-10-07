@@ -1,0 +1,385 @@
+﻿@using Latest_Staff_Portal.ViewModel
+@model Latest_Staff_Portal.ViewModel.ExpenseRequisition
+
+<style>
+    .d-flex {
+        display: flex;
+    }
+
+    .align-items-center {
+        align-items: center;
+    }
+
+    .ml-2 {
+        margin-left: 0.5rem;
+    }
+</style>
+
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Requested By:", new { @class = "control-label col-md-12", @for = "CreatedBy" })
+                    @Html.TextBoxFor(m => m.CreatedBy, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2", id = "CreatedBy" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Date", new { @class = "control-label col-md-12", @for = "Date" })
+                    @Html.TextBoxFor(m => m.Date, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2", id = "date" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Department", new { @class = "control-label col-md-12", @for = "GlobalDimension2Code" })
+                    @Html.TextBoxFor(m => m.GlobalDimension2Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2", id = "ddlDim2" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Name", new { @class = "control-label col-md-12", @for = "GlobalDimension2Code" })
+                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2", id = "AdminUnitName" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Workplan", new { @class = "control-label col-md-12", @for = "Workplan" })
+                    @Html.DropDownListFor(model => model.Workplan, Model.ListOfWorkPlans, "--Select Work Plan--", new { @class = "form-control select2", id = "Workplan", onchange = "GetAies()" })
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Description", new { @class = "control-label col-md-12", @for = "Description" })
+                    @Html.TextBoxFor(m => m.Description, new { @class = "form-control", id = "Description" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group d-flex align-items-center">
+                    @Html.Label("Requires Imprest", new { @class = "control-label col-md-6", @for = "RequiresImprest" })
+                    <div class="form-check ml-2">
+                        @Html.CheckBoxFor(m => m.RequiresImprest, new { @class = "form-check-input", id = "RequiresImprest", onclick = "handleRequiresImprestClick(this)" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="divRequiresImprest" style="display:none">
+            <b>Imprest Details</b>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Imprest Type:", new { @class = "control-label col-md-12", @for = "ImprestType" })
+                        <select class="form-control" id="ddlPrnType" onchange="ShowNumberOfDays();">
+                            <option value="">--Select Imprest Type--</option>
+                            <option value="1">Safari Imprest</option>
+                            <option value="2">Standing Imprest</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Start Date", new { @class = "control-label col-md-12", @for = "StartDate" })
+                        <input type="text" class="form-control" placeholder="dd/mm/yyyy" id="txtDate" onkeydown="return false;" autocomplete="off" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6" id="numberOfDays">
+                    <div class="form-group">
+                        @Html.Label("Number Of Nights:", new { @class = "control-label col-md-12", @for = "NumberOfDays" })
+                        @Html.TextBoxFor(m => m.NoOfDays, new { @class = "form-control", id = "NumberOfDays", type = "number", min = "0", step = "1" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Subject", new { @class = "control-label col-md-12", @for = "Subject" })
+                        @Html.TextBoxFor(m => m.Subject, new { @class = "form-control", id = "Subject" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Memo Narration:", new { @class = "control-label col-md-12", @for = "Objective" })
+                        @Html.TextBoxFor(m => m.Objective, new { @class = "form-control", id = "Objective" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group d-flex align-items-center">
+                    @Html.Label("Requires Direct Payment", new { @class = "control-label col-md-6", @for = "RequiresDirectPayment" })
+                    <div class="form-check ml-2">
+                        @Html.CheckBoxFor(m => m.RequiresDirectPayment, new { @class = "form-check-input", id = "RequiresDirectPayment", onclick = "handleRequiresDirectPayment(this)" })
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group d-flex align-items-center">
+                    @Html.Label("Requires Purchase Requisition", new { @class = "control-label col-md-6", @for = "RequiresPRN" })
+                    <div class="form-check ml-2">
+                        @Html.CheckBoxFor(m => m.RequiresPRN, new { @class = "form-check-input", id = "RequiresPRN", onclick = "handleRequiresPRNClick(this)" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="diveDiriectPayment" style="display:none">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Direct Payment Type:", new { @class = "control-label col-md-12", @for = "ImprestType" })
+                        <select class="form-control" id="ddldirectPayment">
+                            <option value="">--Select Direct Payment Type--</option>
+                            <option value="0">Non-Employee & Other Claims</option>
+                            <option value="1">Employee Claim</option>
+                            <option value="2">Contract Payment</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="divRequiresPRN" style="display:none">
+            <b>PRN Details</b>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Procurement Plan ID:", new { @class = "control-label col-md-12", @for = "ProcurementPlanID" })
+                        @Html.DropDownListFor(model => model.ProcurementPlanID, Model.ListOfProcurementPlans, "--select Procurement Plan ID--", new { @class = "form-control", id = "ProcurementPlanID", onchange = "GetProcurementCategories()" })
+                        @Html.ValidationMessageFor(model => model.ProcurementPlanID, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("PRN Type", new { @class = "control-label col-md-12", @for = "PRNType" })
+                        <select class="form-control" id="PRNType">
+                            <option value="">--Select PRN Type--</option>
+                            <option value="0">Standard</option>
+                            <option value="1">Project Works</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Location Code:", new { @class = "control-label col-md-12", @for = "LocationCode" })
+                        @Html.DropDownListFor(model => model.LocationCode, Model.ListOfLocations, "--select Location Code--", new { @class = "form-control", id = "LocationCode" })
+                        @Html.ValidationMessageFor(model => model.LocationCode, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Product Requisition Group", new { @class = "control-label col-md-12", @for = "ProductRequisitionGroup" })
+                        <select class="form-control" id="ProductRequisitionGroup">
+                            <option value="">--Select Product Requisition Group--</option>
+                            <option value="0">Goods</option>
+                            <option value="1">Service</option>
+                            <option value="2">Works</option>
+                            <option value="3">Assets</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Procurement Plan Category:", new { @class = "control-label col-md-12", @for = "ProcurementPlanCategory" })
+                        @Html.DropDownListFor(model => model.PPPlanCategory, Model.ListOfProcurementCategories, "--select Procurement Plan Category--", new { @class = "form-control", id = "ProcurementPlanCategory" })
+                        @Html.ValidationMessageFor(model => model.PPPlanCategory, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<hr />
+<div align="center">
+    <input type="button" class="btn btn-primary action-buttons" value="Submit Request" onclick="SubmitExpenseRequest();" />
+</div>
+<script type="text/javascript">
+	$(document).ready(function () {
+        $('#myModal').on('shown.bs.modal', function () {
+            setTimeout(function () {
+                $('.select2').select2({
+                    dropdownParent: $('#myModal'),
+                    width: '100%'
+                });
+            }, 200);
+        });
+        $('#numberOfDays').hide();
+		$('#txtDate, #Date').datepicker({
+			changeMonth: true,
+			changeYear: true,
+			autoclose: true,
+			yearRange: '-1:+2',
+			showOtherMonths: true,
+			dateFormat: 'dd/mm/yy'
+		});
+		$("#txtDate").focus(function () {
+			$("#ui-datepicker-div").position({
+				my: "left top",
+				at: "left bottom",
+				of: $(this)
+			});
+		});
+		var today = new Date();
+		var day = ("0" + today.getDate()).slice(-2);
+		var month = ("0" + (today.getMonth() + 1)).slice(-2);
+		var todayFormatted = today.getFullYear() + "-" + month + "-" + day;
+		$('#Date').val(todayFormatted);
+	});
+    var ShowNumberOfDays = function () {
+        var imprestType = $("#ddlPrnType").children("option:selected").val();
+        if (imprestType == 1) {
+            $('#numberOfDays').show();
+        }
+        else {
+            $('#numberOfDays').hide();
+        }
+    }
+    function handleRequiresSpecialAie(checkbox) {
+        var divRequiresImprest = document.getElementById("divRequiresSpecial");
+        if (checkbox.checked) {
+            divRequiresImprest.style.display = "block";
+        } else {
+            divRequiresImprest.style.display = "none";
+        }
+    }
+	function handleRequiresImprestClick(checkbox) {
+		var divRequiresImprest = document.getElementById("divRequiresImprest");
+		if (checkbox.checked) {
+			divRequiresImprest.style.display = "block";
+		} else {
+			divRequiresImprest.style.display = "none";
+		}
+    }
+
+	function handleRequiresDirectPayment(checkbox) {
+		var divRequiresDirectPayment = document.getElementById("diveDiriectPayment");
+		if (checkbox.checked) {
+			divRequiresDirectPayment.style.display = "block";
+		} else {
+			divRequiresDirectPayment.style.display = "none";
+		}
+	}
+
+	function handleRequiresPRNClick(checkbox) {
+		var divRequiresPRN = document.getElementById("divRequiresPRN");
+		if (checkbox.checked) {
+			divRequiresPRN.style.display = "block";
+		} else {
+			divRequiresPRN.style.display = "none";
+		}
+	}
+    function GetWorkPlans() {
+        var adminunit = $("#ddlDim2").children("option:selected").val();
+        var activityDropdown = document.getElementById('Workplan');
+    ShowProgress();
+        if (adminunit) {
+        $.ajax({
+            url: '@Url.Action("GetWorkPlans", "ExpenseRequisition")',
+            type: 'GET',
+            data: { adminUnit: adminunit },
+            success: function(response) {
+                activityDropdown.innerHTML = '<option value="">-- Select Work Plan --</option>';
+                if (response.success && response.ListOfActivities.length > 0) {
+                    $.each(response.ListOfActivities, function(index, item) {
+                        var option = document.createElement('option');
+                        option.value = item.Value;
+                        option.text = item.Text;
+                        activityDropdown.add(option);
+                    });
+                } else {
+                    var option = document.createElement('option');
+                    option.text = 'No workplans found';
+                    option.disabled = true;
+                    activityDropdown.add(option);
+                }
+                HideProgress();
+            },
+            error: function(xhr, status, error) {
+                Swal.fire('Error', 'An error occurred while fetching workplans: ' + error, 'error');
+                HideProgress();
+            }
+        });
+    } else {
+            activityDropdown.innerHTML = '<option value="">-- Select Work Plan --</option>';
+        HideProgress();
+    }
+}
+    function GetAies() {
+        var adminunit = $("#ddlDim2").children("option:selected").val();
+        var workplanCheck = $("#Workplan").children("option:selected").val();
+        var activityDropdown = document.getElementById('aie');
+        if (adminunit) {
+        $.ajax({
+            url: '@Url.Action("GetAies", "ExpenseRequisition")',
+            type: 'GET',
+            data: { adminUnit: adminunit, workplan: workplanCheck },
+            success: function(response) {
+                activityDropdown.innerHTML = '<option value="">-- Select Aie --</option>';
+                if (response.success && response.ListOfActivities.length > 0) {
+                    $.each(response.ListOfActivities, function(index, item) {
+                        var option = document.createElement('option');
+                        option.value = item.Value;
+                        option.text = item.Text;
+                        activityDropdown.add(option);
+                    });
+                } else {
+                    var option = document.createElement('option');
+                    option.text = 'No aie found';
+                    option.disabled = true;
+                    activityDropdown.add(option);
+                }
+            },
+            error: function(xhr, status, error) {
+                Swal.fire('Error', 'An error occurred while fetching workplans: ' + error, 'error');
+            }
+        });
+    } else {
+            activityDropdown.innerHTML = '<option value="">-- Select Work Plan --</option>';
+        HideProgress();
+    }
+}
+
+     function GetProcurementCategories() {
+         var selectedValue = document.getElementById('ProcurementPlanID').value;
+
+		 ShowProgress();
+        $.ajax({
+            url: '@Url.Action("GetProcurementPlanCategories", "ExpenseRequisition")',
+            type: 'GET',
+            data: { procurementPlanId: selectedValue },
+            success: function (data) {
+                if (data.success) {
+                    var dropdown = $('#ProcurementPlanCategory');
+                    dropdown.empty();
+                    dropdown.append($('<option>').text('--select Procurement Plan Category--').attr('value', ''));
+
+                    $.each(data.ListofprocurementCategories, function (i, item) {
+						dropdown.append($('<option>').text(item.Text).attr('value', item.Value));
+						HideProgress();
+                    });
+                } else {
+                    alert('Failed to retrieve data: ' + data.message);
+                }
+            },
+            error: function () {
+                alert('Error occurred while fetching procurement categories.');
+            }
+        });
+    }
+
+</script>

@@ -1,0 +1,519 @@
+@using System.Web.UI.WebControls
+@model IEnumerable<Latest_Staff_Portal.ViewModel.PerformanceTargetLines>
+
+@{
+    var PMMU_No = ViewBag.ContractNo;
+    var pasStage = ViewBag.PAS_Stage;
+    var stage = ViewBag.ActionStage;
+    var capability = ViewBag.Capable;
+    var showActions = false;
+
+    if (ViewBag.ActionStage == "Sent To Supervisor" && !ViewBag.Capable || ViewBag.ActionStage == "Evaluated and Agreed")
+    {
+        showActions = false;
+    }
+    else if (ViewBag.ActionStage == "Sent To Supervisor" && ViewBag.Capable)
+    {
+        showActions = true;
+    }
+    else if (ViewBag.ActionStage == "Returned To Employee" && !ViewBag.Capable)
+    {
+        showActions = true;
+    }
+    else if (ViewBag.ActionStage == "Mid Year Review")
+    {
+        showActions = true;
+    }
+
+    else if (ViewBag.PAS_Stage == "Evaluation" && ViewBag.ActionStage == " ")
+    {
+        showActions = false;
+    }
+    else
+    {
+        showActions = (ViewBag.Capable && ViewBag.ActionStage == "Sent To Supervisor") ||
+                      ViewBag.ActionStage == "Draft" ||
+                      (ViewBag.PAS_Stage == "Evaluation" && ViewBag.ActionStage != "Sent To Supervisor");
+    }
+
+    // Check editing conditions
+    bool canEditSelfAssessment = pasStage == "Evaluation" && !capability && ViewBag.ActionStage != "Evaluated and Agreed" && ViewBag.ActionStage != "Returned to Supervisor";
+    bool canEditJointAgreed = pasStage == "Evaluation" && capability && ViewBag.ActionStage != "Evaluated and Agreed";
+}
+
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 7px;
+        font-size: 12px;
+    }
+
+    .card-body {
+        background-color: inherit;
+        color: inherit !important;
+        border-color: inherit;
+        box-shadow: none;
+    }
+
+    .text-wrap {
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        white-space: normal;
+    }
+
+    .kpi-cell, .duty-cell, .unit-cell, .target-cell {
+        max-width: 150px;
+    }
+
+    .activity-cell {
+        max-width: 250px;
+    }
+
+    .weight-cell {
+        min-width: 150px;
+    }
+
+    .text-end {
+        text-align: right;
+    }
+
+    .editable-input {
+        width: 80px;
+        border: 1px solid #ddd;
+        padding: 4px 6px;
+        border-radius: 4px;
+        background-color: #fff;
+        display: inline-block;
+    }
+
+        .editable-input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+    /* Container for input and save button */
+    .input-save-container {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        justify-content: center;
+    }
+
+    .save-btn-container {
+        text-align: center;
+        padding: 5px;
+    }
+
+    .save-row-btn {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 4px 8px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 11px;
+        white-space: nowrap;
+    }
+
+        .save-row-btn:hover {
+            background-color: #218838;
+        }
+
+        .save-row-btn:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+
+    /* Inline save button next to input */
+    .inline-save-btn {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 3px 6px;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 10px;
+        white-space: nowrap;
+    }
+
+        .inline-save-btn:hover {
+            background-color: #218838;
+        }
+
+        .inline-save-btn:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+
+    /* Assessment cell styling */
+    .assessment-cell {
+        width: 140px;
+        padding: 5px !important;
+    }
+</style>
+
+<div class="table-responsive">
+    <table class="datatable table table-striped table-bordered" id="TargetLines">
+        <thead>
+            <tr style="background-color: black;">
+                <th>S.No</th>
+                <th>Action</th>
+                <th>Appraisee Objective</th>
+                <th>Activity</th>
+                <th class="text-wrap" style="width: 250px;">KPI</th>
+                <th class="text-wrap" style="width: 280px;">Individual Target</th>
+                <th>Unit of Measure</th>
+                <th class="text-wrap weight-cell" style="min-width: 150px">Weight</th>
+                <th class="text-wrap" style="max-width: 80px">Target (%)</th>
+                <th class="text-wrap assessment-cell">Joint /Agreed Achievement</th>
+                <th class="text-wrap assessment-cell">Self Assessment Mid Year</th>
+                <th class="text-wrap assessment-cell">Supervisor Assessment Mid Year</th>
+                <th class="text-wrap assessment-cell">Self Evaluation End Year</th>
+                <th class="text-wrap assessment-cell">Supervisor Assessment End Year</th>
+                <th class="text-wrap" style="width: 120px;">Weighted Score</th>
+            </tr>
+        </thead>
+        <tbody id="performanceTable">
+            @if (Model != null && Model.Any())
+            {
+                int index = 1;
+                foreach (var item in Model)
+                {
+                    <tr data-entry-no="@item.Entry_No" data-doc-no="@item.DocNo">
+                        <td>@index</td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-success BtnPadding" href="#"
+                               onclick="ViewLine('@item.PMMU_No', '@item.DocNo', '@item.Entry_No', '@item.Activity', '@item.Individual_Target', '@item.Performance_Indicator', '@item.PAS_Activity', '@item.Unit_of_Measure', '@item.Weight', '@item.Target', '@item.Self_Assessment_Target', '@item.Joint_Agreed_Target', '@item.Weighted_Score', '@item.Populate_Activities_From');"
+                               aria-label="View" style="color: white !important">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                            <a class="btn btn-sm btn-danger BtnPadding ms-2" href="#"
+                               onclick="DeleteTargetLine('@item.DocNo', '@item.Entry_No');"
+                               aria-label="Delete" style="color: white !important">
+                                <i class="fas fa-trash-alt"></i> Delete
+                            </a>
+                        </td>
+                        <td class="text-wrap activity-cell">@Html.DisplayFor(modelItem => item.Appraisee_Objective)</td>
+                        <td class="text-wrap activity-cell">@Html.DisplayFor(modelItem => item.Activity)</td>
+                        <td class="text-wrap duty-cell">@Html.DisplayFor(modelItem => item.Performance_Indicator)</td>
+                        <td class="text-wrap duty-cell">@Html.DisplayFor(modelItem => item.Individual_Target)</td>
+                        <td class="text-wrap unit-cell">@Html.DisplayFor(modelItem => item.Unit_of_Measure)</td>
+                        <td class="text-wrap weight-cell">@Html.DisplayFor(modelItem => item.Weight)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Target)</td>
+                        <td class="text-wrap entry-cell">@Html.DisplayFor(modelItem => item.Entry_No)</td>
+                        <td class="text-wrap assessment-cell">@Html.DisplayFor(modelItem => item.Self_Assessment_Mid_year)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Supervisor_Assessment_Mid_year)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Self_Assessment_Target)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Score)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Weighted_Score)</td>
+                    </tr>
+                    index++;
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="15" class="text-center text-danger">No Records Found</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr style="background-color: black; color: white;">
+                <td colspan="3" class="text-end">Total Out of 80 -----------</td>
+                <td class="text-start"><span class="badge bg-light text-dark">@ViewBag.TotalWeight</span></td>
+                <td colspan="3" class="text-end">Total Out of 100 -----------</td>
+                <td class="text-start"><span class="badge bg-light text-dark">@ViewBag.OveralWeight</span></td>
+                <td colspan="7"></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script>
+
+    $(document).ready(function () {
+        var table = $("#TargetLines").DataTable({
+            lengthChange: true,
+            order: [[1, 'desc']],
+            lengthMenu: [5, 10, 25, 50, 100],
+            "bDestroy": true,
+            columnDefs: [
+                { targets: 8, visible: false }
+            ]
+        });
+
+        $('.editable-input').on('input', function () {
+            var value = parseFloat($(this).val());
+            var entryNo = $(this).data('entry-no');
+            var saveButtons = $(`button[data-entry-no="${entryNo}"]`);
+            var row = $(this).closest('tr');
+
+            if (isNaN(value) || value < 0 ) {
+                $(this).css('border-color', '#dc3545');
+                saveButtons.prop('disabled', true);
+            } else {
+                $(this).css('border-color', '#28a745');
+                saveButtons.prop('disabled', false);
+
+                if ($(this).hasClass('joint-agreed-input')) {
+                    var targetCell = row.find('td').eq(-5);
+                    var weightCell = row.find('td').eq(-6);
+
+                    var targetValue = parseFloat(targetCell.text().trim());
+                    var weightValue = parseFloat(weightCell.text().trim());
+
+                    if (!isNaN(targetValue) && !isNaN(weightValue) && targetValue > 0) {
+                        var newWeightedScore = calculateWeightedScore(value, targetValue, weightValue);
+                        updateWeightedScoreDisplay(row, newWeightedScore);
+                    }
+                }
+            }
+        });
+
+        $('.joint-agreed-input').on('blur', function () {
+            var value = parseFloat($(this).val());
+            if (isNaN(value) || value < 0) {
+                var row = $(this).closest('tr');
+                var originalValue = $(this).data('original-value');
+                var targetCell = row.find('td').eq(-5);
+                var weightCell = row.find('td').eq(-6);
+
+                var targetValue = parseFloat(targetCell.text().trim());
+                var weightValue = parseFloat(weightCell.text().trim());
+
+                if (!isNaN(targetValue) && !isNaN(weightValue) && targetValue > 0) {
+                    var originalWeightedScore = calculateWeightedScore(originalValue, targetValue, weightValue);
+                    updateWeightedScoreDisplay(row, originalWeightedScore);
+                }
+            }
+        });
+    });
+
+
+
+    function ViewLine(pmmuNo, docNo, EntryNo, Activity, IndividualTarget, PerformanceIndicator, PAS_Activity, UnitOfMeasure, Weight, Target, SelfAssessmentTarget, JointAgreedTarget, weightedScore, Populate_Activities_From) {
+        ShowProgress();
+        var ViewLineContent = {
+            PMMU_No: pmmuNo,
+            DocNo: docNo,
+            Entry_No: EntryNo,
+            Activity: Activity,
+            Individual_Target: IndividualTarget,
+            Performance_Indicator: PerformanceIndicator,
+            PAS_Activity: PAS_Activity,
+            Unit_of_Measure: UnitOfMeasure,
+            Weight: Weight,
+            Target: Target,
+            Self_Assessment_Target: SelfAssessmentTarget,
+            Joint_Agreed_Target: JointAgreedTarget,
+            Weighted_Score: weightedScore,
+            capability: '@ViewBag.Capable',
+            Populate_Activities_From: Populate_Activities_From,
+            stage: '@stage',
+        };
+
+        $.ajax({
+            async: true,
+            type: "POST",
+            url: '/Pas/ViewTargetLine',
+            data: JSON.stringify(ViewLineContent),
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $('#modalBody').html(data);
+                $('#myModal').find('.modal-title').html("Update Performance Target");
+                $('#myModal').modal('show');
+                HideProgress();
+            },
+            error: function (xhr, status, error) {
+                Swal.fire("Error", "An error occurred while fetching record", "error");
+                HideProgress();
+            }
+        });
+    }
+
+    function DeleteTargetLine(docNo, LineNo) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                ShowProgress();
+                var DeleteTargetLineContent = {
+                    DocNo: docNo,
+                    Entry_No: LineNo
+                };
+
+                $.ajax({
+                    async: true,
+                    type: "POST",
+                    url: '/Pas/DeleteTargetLine',
+                    data: JSON.stringify(DeleteTargetLineContent),
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        Swal.fire("Deleted!", "Record has been deleted.", "success");
+                        HideProgress();
+                        LoadPerformanceTargetlLines();
+                    },
+                    error: function (xhr, status, error) {
+                        Swal.fire("Error", "An error occurred while deleting record", "error");
+                        HideProgress();
+                    }
+                });
+            }
+        });
+    }
+
+    function SaveAssessmentValues(pmmuNo, docNo, EntryNo, Activity, IndividualTarget, PerformanceIndicator, PAS_Activity, UnitOfMeasure, Weight, Target, SelfAssessmentTarget, JointAgreedTarget, weightedScore, Populate_Activities_From) {
+        var row = $(`tr[data-entry-no="${EntryNo}"]`);
+        var saveButtons = row.find(`button[data-entry-no="${EntryNo}"]`);
+
+        var selfAssessmentInput = row.find('.self-assessment-input');
+        var jointAgreedInput = row.find('.joint-agreed-input');
+
+        var selfAssessmentValue = selfAssessmentInput.length > 0 ? selfAssessmentInput.val() : SelfAssessmentTarget;
+        var jointAgreedValue = jointAgreedInput.length > 0 ? jointAgreedInput.val() : JointAgreedTarget;
+
+        if (selfAssessmentInput.length > 0 && (selfAssessmentValue === '' || selfAssessmentValue < 0)) {
+            Swal.fire("Error", "Self Assessment value must be between 0", "error");
+            return;
+        }
+
+        if (jointAgreedInput.length > 0 && (jointAgreedValue === '' || jointAgreedValue < 0 )) {
+            Swal.fire("Error", "Joint/Agreed Achievement value must be between 0", "error");
+            return;
+        }
+
+        var selfOriginal = selfAssessmentInput.length > 0 ? selfAssessmentInput.data('original-value') : null;
+        var jointOriginal = jointAgreedInput.length > 0 ? jointAgreedInput.data('original-value') : null;
+
+        if ((selfAssessmentValue == selfOriginal || selfAssessmentInput.length === 0) &&
+            (jointAgreedValue == jointOriginal || jointAgreedInput.length === 0)) {
+            Swal.fire("Info", "No changes detected", "info");
+            return;
+        }
+
+        saveButtons.prop('disabled', true);
+        saveButtons.html('<i class="fas fa-spinner fa-spin"></i>');
+        ShowProgress();
+
+        var updateData = {
+            PMMU_No: pmmuNo,
+            DocNo: docNo,
+            Entry_No: EntryNo,
+            Activity: Activity,
+            Individual_Target: IndividualTarget,
+            Performance_Indicator: PerformanceIndicator,
+            PAS_Activity: PAS_Activity,
+            Unit_of_Measure: UnitOfMeasure,
+            Weight: Weight,
+            Target: Target,
+            Self_Assessment_Target: selfAssessmentValue,
+            Joint_Agreed_Target: jointAgreedValue,
+            Weighted_Score: weightedScore,
+            capability: '@ViewBag.Capable',
+            Populate_Activities_From: Populate_Activities_From,
+            stage: '@stage'
+        };
+
+        $.ajax({
+            async: true,
+            type: "POST",
+            url: '/Pas/SubmitUpdatedTargetLine',
+            data: JSON.stringify({ newTarget: updateData }),
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                if (selfAssessmentInput.length > 0) {
+                    selfAssessmentInput.data('original-value', selfAssessmentValue);
+                }
+                if (jointAgreedInput.length > 0) {
+                    jointAgreedInput.data('original-value', jointAgreedValue);
+                }
+
+                Swal.fire("Success", "Performance Target Updated Successfully", "success");
+                $("#myModal").modal('hide');
+                HideProgress();
+                LoadPerformanceTargetlLines();
+            },
+            error: function (xhr, status, error) {
+                saveButtons.prop('disabled', false);
+                row.find('.inline-save-btn').html('<i class="fas fa-save"></i>');
+                row.find('.save-row-btn').html('<i class="fas fa-save"></i> Save');
+                HideProgress();
+                console.error('Error details:', xhr.responseText);
+                Swal.fire('Error', 'An error occurred while saving the target line.', 'error');
+            }
+        });
+    }
+
+
+    function ViewEvidence(DocNo, LineNo, Objective) {
+        ShowProgress();
+        var PAS_Stage =  '@pasStage'
+        var documentStage=  '@stage'
+
+        $.ajax({
+            type: 'POST',
+            url: '/Pas/EvidenceView',
+            data: JSON.stringify({ DocNo, LineNo, Objective, PAS_Stage, documentStage }),
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+                $('#modalBody').html(response);
+                $('#myModal').find('.modal-title').html("OBJECTIVE EVIDENCE");
+                $('#myModal').modal('show');
+                HideProgress();
+            },
+            error: function (xhr, status, error) {
+                Swal.fire('Error', 'Failed to Load Evidence. Please try again.', 'error');
+            }
+        });
+    }
+
+
+    function calculateWeightedScore(jointAgreedTarget, target, weight) {
+        if (!jointAgreedTarget || !target || target == 0) {
+            return 0;
+        }
+
+        var score = (parseFloat(jointAgreedTarget) / parseFloat(target)) * parseFloat(weight);
+        return Math.round(score * 100) / 100;
+    }
+
+
+    function updateWeightedScoreDisplay(row, newScore) {
+        var weightedScoreCell = row.find('td').eq(-2);
+        weightedScoreCell.text(newScore.toFixed(2));
+
+        weightedScoreCell.css('background-color', '#d4edda');
+        setTimeout(function () {
+            weightedScoreCell.css('background-color', '');
+        }, 1000);
+    }
+
+    $(document).ready(function() {
+        $('.editable-input').on('input', function() {
+            var value = parseFloat($(this).val());
+            var entryNo = $(this).data('entry-no');
+            var saveButtons = $(`button[data-entry-no="${entryNo}"]`);
+
+            if (isNaN(value) || value < 0) {
+                $(this).css('border-color', '#dc3545');
+                saveButtons.prop('disabled', true);
+            } else {
+                $(this).css('border-color', '#28a745');
+                saveButtons.prop('disabled', false);
+            }
+        });
+    });
+
+</script>

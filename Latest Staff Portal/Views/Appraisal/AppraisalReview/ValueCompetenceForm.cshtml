@@ -1,0 +1,25 @@
+﻿@model Latest_Staff_Portal.ViewModel.CompetenceValues
+@Model.Description
+<hr/>
+<div class="bg-soft-dark" style="color:black">
+    <div class="row">
+        <div class="col-md-12">
+            <span style="font-weight: bold">Supervisor Score</span>
+            @if (ViewBag.Assessment != null && ViewBag.Assessment.Count > 0)
+            {
+                @Html.DropDownListFor(m => m.Sup_Score, new SelectList(ViewBag.Assessment, "Value", "Text", Model.Sup_Score), "----", new { id = "ddlSupScore", @class = "form-control" })
+            }
+        </div>
+        <div class="col-md-12">
+            <span style="font-weight: bold">Agreed Score</span>
+            @if (ViewBag.Assessment != null && ViewBag.Assessment.Count > 0)
+            {
+                @Html.DropDownListFor(m => m.Agreed_Score, new SelectList(ViewBag.Assessment, "Value", "Text", Model.Agreed_Score), "----", new { id = "ddlAgreedScore", @class = "form-control" })
+            }
+        </div>
+    </div>
+    <hr/>
+    <div align="center">
+        <input type="button" class="btn btn-primary" value="Save Record" onclick="SaveCompValueReviewRecord('@Model.ANUPEAisal_No', '@Model.Code', '@Model.Line_No', '@Model.Level');"/>
+    </div>
+</div>

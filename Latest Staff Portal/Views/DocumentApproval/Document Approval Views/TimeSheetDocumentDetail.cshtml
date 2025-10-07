@@ -1,0 +1,137 @@
+﻿@model Latest_Staff_Portal.ViewModel.TimesheetHeader
+
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    hr {
+        margin: 4px;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+<div class="card">
+    <div class="card-title">Time Sheet Document Details(@Model.No)</div>
+    <hr/>
+    <div>
+        <input type="button" class="btn btn-danger" id="btnEdit" value="Print Timesheet" onclick="PrintReport(`@Model.No`);"/>
+        <hr/>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <b>Document No</b>
+                @Html.TextBoxFor(m => m.No, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+            <div class="col-md-6">
+                <b>Period</b>
+                @Html.TextBoxFor(m => m.Period, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "dtPicker" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <b>Start Date</b>
+                @Html.TextBoxFor(m => m.StartDate, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtStartDate" })
+            </div>
+            <div class="col-md-6">
+                <b>End Date</b>
+                @Html.TextBoxFor(m => m.EndDate, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtEndDate" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <b>Year</b>
+                @Html.TextBoxFor(m => m.Year, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtYear" })
+            </div>
+            <div class="col-md-6">
+                <b>Hours Worked</b>
+                @Html.TextBoxFor(m => m.Hours_Worked, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtNetAmount" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <b>Document Date</b>
+                @Html.TextBoxFor(m => m.Doc_Date, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtDocDate" })
+            </div>
+            <div class="col-md-6">
+                <b>Status</b>
+                @Html.TextBoxFor(m => m.Status, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtStatus" })
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <div id="DivImpLines">
+        <hr style="border:1px solid black"/>
+        <b>Time Sheet Lines</b>
+        <hr/>
+        <div class="table-responsive">
+            <table class="table table-centered table-nowrap" id="TimeSheetLines">
+                <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Project Code</th>
+                    <th>Day Type</th>
+                    <th>Date</th>
+                    <th style="text-align:center">Hours</th>
+                    <th style="text-align:center">LOE</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                @{
+                    if (Model.ListOfTimesheetLines != null && Model.ListOfTimesheetLines.Count() > 0)
+                    {
+                        foreach (var item in Model.ListOfTimesheetLines)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Ledger_No)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ProjectCode)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Day_Type)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Date)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Hours)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PercentageLoe)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Description)
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" style="color:red">
+                                No Records Found
+                            </td>
+                        </tr>
+                    }
+                }
+                </tbody>
+            </table>
+        </div>
+        <hr style="border:1px solid black"/>
+        <div class="row">
+            <div class="col-md-12">
+                <b>Attachments</b>
+                <div id="divAttachDocs"></div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,142 @@
+﻿@model Latest_Staff_Portal.ViewModel.Imprest
+
+
+<div class="row">
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Trip Start Date", htmlAttributes: new { @class = "control-label col-md-2" })
+            <input type="text" class="form-control" placeholder="dd/mm/yyyy" id="TripStartDate" onkeydown="return false;" autocomplete="off" />
+            @Html.ValidationMessageFor(model => model.TripStartDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Trip Expected End Date", htmlAttributes: new { @class = "control-label col-md-2" })
+            <input type="text" class="form-control" placeholder="dd/mm/yyyy" id="TripExpectedEndDate" onkeydown="return false;" autocomplete="off" />
+            @Html.ValidationMessageFor(model => model.TripExpectedEndDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Number of Days", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.NoofDays, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #ccc", @id= "NoofDays" } })
+            @Html.ValidationMessageFor(model => model.NoofDays, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Purpose of Imprest", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.PurposeofImprest, new { htmlAttributes = new { @class = "form-control", @id= "PurposeofImprest" } })
+            @Html.ValidationMessageFor(model => model.PurposeofImprest, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Deadline for Imprest Return", htmlAttributes: new { @class = "control-label col-md-2" })
+            <input type="text" class="form-control" placeholder="dd/mm/yyyy" id="DeadlineforImprestReturn" onkeydown="return false;" autocomplete="off" />
+            @Html.ValidationMessageFor(model => model.DeadlineforImprestReturn, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    @*<div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Transaction Type", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.TransactionType, new { htmlAttributes = new { @class = "form-control", @id= "TransactionType" } })
+             @Html.DropDownListFor(m => m.TransactionType, Model.ListOfTransactionTypes, "Select Option--", new { @class = "form-control", @id = "TransactionType" })
+            @Html.ValidationMessageFor(model => model.TransactionType, "", new { @class = "text-danger" })
+        </div>
+    </div>*@
+
+  @*  <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Total Amount Requested", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.TotalAmountRequested, new { htmlAttributes = new { @class = "form-control", @id= "TotalAmountRequested" } })
+            @Html.ValidationMessageFor(model => model.TotalAmountRequested, "", new { @class = "text-danger" })
+        </div>
+    </div>*@
+    @*<div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Imprest Amount", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.ImprestAmount, new { htmlAttributes = new { @class = "form-control", @id= "ImprestAmount" } })
+            @Html.ValidationMessageFor(model => model.ImprestAmount, "", new { @class = "text-danger" })
+        </div>
+    </div>
+*@
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Activity Date", htmlAttributes: new { @class = "control-label col-md-2" })
+            <input type="text" class="form-control" placeholder="dd/mm/yyyy" id="ActivityDate" onkeydown="return false;" autocomplete="off" />
+            @Html.ValidationMessageFor(model => model.ActivityDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+   @* <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("PayMode", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.DropDownListFor(m => m.PayMode, Model.ListOfPayModes, "Select Option--", new { @class = "form-control", @id = "PayMode" })
+            @Html.ValidationMessageFor(model => model.PayMode, "", new { @class = "text-danger" })
+        </div>
+    </div>*@
+
+  @*  <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Bank Account", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.DropDownListFor(m => m.BankAccount, Model.ListOfBankAC, "Select Option--", new { @class = "form-control", @id = "BankAccount" })
+            @Html.ValidationMessageFor(model => model.BankAccount, "", new { @class = "text-danger" })
+        </div>
+    </div>*@
+    @*<div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Cheque No", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.ChequeNo, new { htmlAttributes = new { @class = "form-control", @id = "ChequeNo" } })
+            @Html.ValidationMessageFor(model => model.ChequeNo, "", new { @class = "text-danger" })
+        </div>
+    </div>*@
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Imprest Type", htmlAttributes: new { @class = "control-label col-md-2" })
+            <select class="form-control" id="ImprestType">
+                <option value="" selected hidden>Select Option</option>
+                <option value="0">Individual</option>
+                <option value="1">Group</option>
+            </select>
+            @Html.ValidationMessageFor(model => model.ImprestType, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+        // Initialize datepickers
+        $('#RequestDate, #TripStartDate, #TripExpectedEndDate, #ActivityDate, #DeadlineforImprestReturn').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-1:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy'
+        });
+
+        // Adjust the position of the datepicker for both fields
+        $('#RequestDate, #TripStartDate, #TripExpectedEndDate, #ActivityDate, #DeadlineforImprestReturn').focus(function () {
+            $("#ui-datepicker-div").position({
+                my: "left top",
+                at: "left bottom",
+                of: $(this)
+            });
+        });
+
+        /*  // Set default value to today's date
+          var today = new Date();
+          var day = ("0" + today.getDate()).slice(-2);
+          var month = ("0" + (today.getMonth() + 1)).slice(-2);
+          var todayFormatted = day + "/" + month + "/" + today.getFullYear();
+          $('#RequestDate, #TripStartDate, #TripExpectedEndDate, #ActivityDate, #DeadlineforImprestReturn').val(todayFormatted);*/
+    });
+</script>
+

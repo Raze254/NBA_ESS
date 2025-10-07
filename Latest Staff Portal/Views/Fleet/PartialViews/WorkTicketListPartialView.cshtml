@@ -1,0 +1,146 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.MonthlyWorkTicketCard>
+
+@{
+    ViewBag.Title = "WorkTicketListPartialView";
+}
+
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead>
+            <tr>
+                <th>Action</th>
+                <th>Daily Work Ticket</th>
+                <th>Month Date</th>
+                <th>Month Name</th>
+                <th>Ticket No</th>
+                <th>Previous Work Ticket No</th>
+                <th>Vehicle Registration No</th>
+                <th>Status</th>
+                @*<th>Comments</th>
+                <th>Department</th>
+                <th>Closed by</th>
+                <th>Global Dimension 1 Code</th>
+                <th>Date Closed</th>
+                <th>Created By</th>
+                <th>Date Created</th>
+                <th>Authorized By</th>
+                <th>Authorized By Name</th>
+                <th>Time Created</th>
+                <th>Total Fuel Carried Forward</th>
+                <th>Total Fuel Drawn (Ltrs)</th>
+                <th>Total Kilometers</th>
+                <th>Total Km's Covered</th>
+                <th>Total Miles per Litre Fuel</th>
+                <th>Total Miles per Litre Oil</th>
+                <th>Total Oil Drawn (Ltrs)</th>
+                <th>Defect</th>
+                <th>Defect Date</th>
+                <th>Action Taken/Reported</th>*@
+
+            </tr>
+        </thead>
+        <tbody>
+
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <input class="btn btn-primary btn-sm action-buttons3" type="button" onclick="ViewDoc('@item.Daily_Work_Ticket');" value="Select" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Daily_Work_Ticket)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Month_Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Month_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Ticket_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Previous_Work_Ticket_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Vehicle_Registration_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                   @* <td>
+                        @Html.DisplayFor(modelItem => item.Comments)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Department)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Closed_by)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Global_Dimension_1_Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date_Closed)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Created_By)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date_Created)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Authorized_By)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Authorized_By_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Time_Created)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Total_Fuel_Carried_Forward)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Total_Fuel_Drawn_Ltrs)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Total_Kilometers)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Total_Km_x0027_s_Covered)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Total_Miles_Per_Litre_Fuel)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Total_Miles_Per_Ltr_Oil)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Total_Oil_Drawn_Ltrs)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Defect)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Defect_Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Action_Taken_Reported)
+                    </td>
+*@
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<script>
+$("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100] // Same options for the second table
+    });</script>
+

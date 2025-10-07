@@ -1,0 +1,12 @@
+﻿@model Latest_Staff_Portal.ViewModel.ICTAssetRequest
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Document Remarks", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.TextAreaFor(model => model.Remarks, new { @class = "form-control", id = "TxtRemarks" })
+            </div>
+        </div>
+    </div>
+</div>
+<hr/>

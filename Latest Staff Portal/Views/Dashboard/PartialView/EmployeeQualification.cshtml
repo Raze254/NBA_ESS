@@ -1,0 +1,46 @@
+﻿@model List<Latest_Staff_Portal.ViewModel.EmployeeQualification>
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+        <tr>
+            <th>Employee No</th>
+            <th>Line No</th>
+            <th>Qualification Category</th>
+            <th>Qualification Code</th>
+            <th>Description</th>
+            <th>Institution Company</th>
+
+            <th>Specialization</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        @if (Model.Count() > 0)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Employee_No</td>
+                    <td>@item.Line_No</td>
+                    <td>@item.Qualification_Category</td>
+                    <td>@item.Qualification_Code</td>
+                    <td>@item.Description</td>
+                    <td>@item.Institution_Company</td>
+
+                    <td>@item.Specialization</td>
+
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="15" style="color:red">
+                    No Records Found
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

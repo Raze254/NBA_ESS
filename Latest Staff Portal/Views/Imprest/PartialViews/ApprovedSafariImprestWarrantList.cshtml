@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.ApprovedSafariImprest>
+
+<div class="text-center">
+    <h4>Approved Safari Imprest warrant List</h4>
+</div>
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black; color:white;">
+            <tr>
+                <th>Action</th>
+                <th>No</th>
+                <th>Posting Date</th>
+                <th>Account Type</th>
+                <th>Account No</th>
+                <th>Account Name</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <input type="button" onclick="ViewDoc('@item.No');" class="btn action-buttons2" value="Select" />
+                        </td>
+                        <td>@item.No</td>
+                        <td>@item.Posting_Date.ToString("dd/MM/yyyy")</td>
+                        <td>@item.Account_Type</td>
+                        <td>@item.Account_No</td>
+                        <td>@item.Account_Name</td>
+                        <td>@item.Status</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+<script type="text/javascript">
+    $("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100] // Same options for the second table
+    });
+</script>

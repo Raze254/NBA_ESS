@@ -1,0 +1,231 @@
+﻿@model Latest_Staff_Portal.ViewModel.ResourceRequirements
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    hr {
+        margin: 4px;
+    }
+
+    .BtnPadding {
+        padding: 7px;
+        font-size: 12px;
+    }
+
+    .scrollable-modal-body {
+        max-height: 500px; /* Adjust the height as needed */
+        overflow-y: auto;
+    }
+</style>
+
+<div class="card">
+    <div class="card-body">
+        <div style="text-align:right">
+            <button style="background: #162f25; color:whitesmoke; border-radius:10px" onclick="GetBudgetPerActivity('@Model.No');">
+                <i class="fa fa-superpowers" aria-hidden="true"></i> Budget Per Activity
+            </button>
+            <button style="background: #162f25; color:whitesmoke; border-radius:10px" onclick="GetBudgetPerItem('@Model.No');">
+                <i class="fa fa-list-ol" aria-hidden="true"></i> Budget Per Item
+            </button>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Document no", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.No, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Description", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Description, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("STAJ Blueprint", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.StrategyPlanID, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Financial Year", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.YearReportingCode, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("From ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.StartDate, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("To ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.EndDate, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Geographical Code", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.GlobalDimension1Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Administrative unit Code", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.GlobalDimension2Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("AWP Consolidation Template", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.AnnualWorkplan, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*//////////////////////Modal////////////////////////////*@
+
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <!-- Add the 'modal-lg' class for a larger modal -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myModalLabel">
+                    <label id="labelF"></label>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Content goes here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+
+<div id="myModal2" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <!-- Add the 'modal-lg' class for a larger modal -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myModalLabel">
+                    <label id="labelF2"></label>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody2">
+                <!-- Content goes here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+
+<div id="myModal3" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel3" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <!-- Add the 'modal-lg' class for a larger modal -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myModalLabel3">
+                    <label id="labelF3"></label>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body scrollable-modal-body" id="modalBody3">
+                <!-- Content goes here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script src="~/assets/js/pdfobject.min.js"></script>
+<script>
+    var GetBudgetPerActivity = function (documentNo) {
+        ShowProgress();
+        $("#modalTitle").text("Budget Per Activity");
+        $.ajax({
+            async: true,
+            datatype: "json",
+            type: "POST",
+            data: JSON.stringify({ documentNumber: documentNo }),
+            processData: false,
+            contentType: "application/json; charset = utf-8",
+            url: '/Workplans/GeneratePerActivity',
+            success: function (data) {
+                if (data.success == true) {
+                    $('iframe').attr('src', "data:application/pdf;base64," + data.message);
+                    $("#myModalUnits").modal("show");
+                    HideProgress();
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var GetBudgetPerItem = function (documentNo) {
+        ShowProgress();
+        $("#modalTitle").text("Budget Per Item");
+        $.ajax({
+            async: true,
+            datatype: "json",
+            type: "POST",
+            data: JSON.stringify({ documentNumber: documentNo }),
+            processData: false,
+            contentType: "application/json; charset = utf-8",
+            url: '/Workplans/GeneratePerItem',
+            success: function (data) {
+                if (data.success == true) {
+                    $('iframe').attr('src', "data:application/pdf;base64," + data.message);
+                    $("#myModalUnits").modal("show");
+                    HideProgress();
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+</script>

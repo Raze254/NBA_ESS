@@ -1,0 +1,179 @@
+﻿@model Latest_Staff_Portal.ViewModel.TrainingRequisition
+
+
+
+<div class="row">
+
+
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Training Plan", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.DropDownListFor(model => model.Training_Plan_No, Model.ListOfTrainingPlan, "Select Option", new { @class = "form-control", @id = "Training_Plan_No2", @onchange = "GetCourses(this.value)" })
+            @Html.ValidationMessageFor(model => model.Training_Plan_No, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Course Title", htmlAttributes: new { @class = "control-label col-md-2" })
+            <select class="form-control" id="Course_Title_dropdown">
+                <option value="">Select Option</option>
+            </select>
+        </div>
+    </div>
+
+  @*  <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Directorate", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.DropDownListFor(model => model.Employee_Department, Model.ListOfResponsibilityCenters, "Select Option", new { @class = "form-control", @id = "Employee_Department2" })
+            @Html.ValidationMessageFor(model => model.Employee_Department, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @id = "Description2" } })
+            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Start Date", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.TextBoxFor(model => model.Start_DateTime, new { @class = "form-control", @id = "Start_DateTime2", @placeholder = "dd/mm/yyyy", @autocomplete = "off" })
+
+            @Html.ValidationMessageFor(model => model.Start_DateTime, "", new { @class = "text-danger" })
+        </div>
+    </div>*@
+    @*<div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("End Date", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                @Html.EditorFor(model => model.End_DateTime, new { htmlAttributes = new { @class = "form-control", @id = "End_DateTime" } })
+                @Html.ValidationMessageFor(model => model.End_DateTime, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+   @* <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Duration", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Duration, new { htmlAttributes = new { @class = "form-control", @id = "Duration2" } })
+            @Html.ValidationMessageFor(model => model.Duration, "", new { @class = "text-danger" })
+        </div>
+    </div>*@
+    @*  <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Duration_Type, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                @Html.EditorFor(model => model.Duration_Type, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Duration_Type, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+   @* <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Training Region", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            <select class="form-control" id="Training_Region2">
+                <option value="" selected hidden>Select option</option>
+                <option value="1">Local</option>
+                <option value="2">Oversees</option>
+                v
+            </select>
+            @Html.ValidationMessageFor(model => model.Training_Region, "", new { @class = "text-danger" })
+        </div>
+    </div>*@
+    @* <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Cost, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                @Html.EditorFor(model => model.Cost, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Cost, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Training Venue", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.Training_Venue_Region_Code, new { htmlAttributes = new { @class = "form-control", @id= "Training_Venue_Region_Code2" } })
+            @*@Html.DropDownListFor(model => model.Training_Venue_Region_Code, Model.ListOfLocations, "Select Option", new { @class = "form-control", @id = "Training_Venue_Region_Code2" })*@
+            @Html.ValidationMessageFor(model => model.Training_Venue_Region_Code, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+  @*  <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Regions Code", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.DropDownListFor(model => model.Training_Responsibility_Code, Model.ListOfRegions, "Select Option", new { @class = "form-control", @id = "Training_Responsibility_Code2" })
+            @Html.ValidationMessageFor(model => model.Training_Responsibility_Code, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Location", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Location, new { htmlAttributes = new { @class = "form-control", @id = "Location2" } })
+            @Html.ValidationMessageFor(model => model.Location, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Provider", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.DropDownListFor(model => model.Provider, Model.ListOfProviders, "Select Option", new { @class = "form-control", @id = "Provider2" })
+            @Html.ValidationMessageFor(model => model.Provider, "", new { @class = "text-danger" })
+        </div>
+    </div>*@
+
+
+
+</div>
+<div class="row text-center">
+    <div class="col-md-12">
+        <div> <input type="button" class="btn btn-primary action-buttons" value="Submit" onclick="SubmitTrainingRequisition();" /></div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#Start_DateTime2').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-0:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy',
+            minDate: 0
+        });
+
+       
+    });
+
+    var GetCourses = function (Training_Plan_No) {
+       
+
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: "json",
+            url: "/Training/CoursesJSon",
+            data: { Training_Plan_No: Training_Plan_No},
+            success: function (data) {
+                var dropdown = $("#Course_Title_dropdown");
+                dropdown.empty();
+                dropdown.append('<option value="">-- Select Option --</option>');
+
+                if (data && data.length > 0) {
+                    $.each(data, function (index, item) {
+                        dropdown.append('<option value="' + item.Course_Title + '">' + item.Course_Description + ' (' + item.Course_Title + ')' + '</option>');
+                    });
+                }
+            },
+            error: function () {
+                Swal.fire("There is some problem processing your request. Please try again later.");
+            }
+        });
+    };
+
+</script>

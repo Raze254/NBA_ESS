@@ -1,0 +1,67 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.TrainingRequisition>
+
+@{
+    ViewBag.Title = "TrainingRequisitionListPartialView";
+}
+
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead>
+            <tr>
+                <th>Action</th>
+                <th>Code</th>
+                <th>Training Plan No</th>
+                <th>Department</th>
+                <th>Course Title</th>
+                <th>Description</th>
+               
+                <th>Created By</th>
+                
+                <th>Status</th>
+              
+        </thead>
+        <tbody>
+
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <input class="btn btn-primary btn-sm action-buttons3" type="button" onclick="ViewDoc('@item.Code');" value="Select" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Training_Plan_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Employee_Department)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Course_Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Created_By)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<script>
+$("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100] // Same options for the second table
+});
+</script>

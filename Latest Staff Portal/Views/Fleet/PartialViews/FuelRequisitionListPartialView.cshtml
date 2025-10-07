@@ -1,0 +1,91 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.FuelRequisitionCard>
+
+@{
+    ViewBag.Title = "FuelRequisitionListPartialView";
+}
+
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead>
+            <tr>
+                <th>Action</th>
+                <th>Requisition No</th>
+                <th>Total Price of Fuel</th>
+                <th>Transport Requisition No</th>
+                <th>Route Code</th>
+                <th>Route Description</th>
+                <th>Request Date</th>
+                <th>Status</th>
+                <th>Prepared By</th>
+                <th>Posted Invoice No</th>
+                <th>Job No</th>
+                <th>Job Task</th>
+                <th>Job Name</th>
+                <th>Job Task Name</th>
+
+            </tr>
+        </thead>
+        <tbody>
+
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <input class="btn btn-primary btn-sm action-buttons3" type="button" onclick="ViewDoc('@item.Requisition_No');" value="Select" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Requisition_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Total_Price_of_Fuel)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Transport_Requisition_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Route_Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Route_Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Request_Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Prepared_By)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Posted_Invoice_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Job_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Job_Task)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Job_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Job_Task_Name)
+                    </td>
+                   
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+$("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100] // Same options for the second table
+});
+</script>
+
+

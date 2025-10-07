@@ -1,0 +1,336 @@
+﻿@{
+    ViewBag.Title = "ImprestMemoRequisitionList";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+<style>
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#" onclick="Dashboard();">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active">Imprest Memo List</li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+<hr />
+<br />
+<div class="card">
+    <div class="card-header">
+
+        <h4>Imprest Memo List</h4>
+        <div style="text-align:right">
+            <a href="#" onclick="NewImprestMemoRequisition();" class="btn action-buttons">New Request</a>
+        </div>
+
+    </div>
+
+    <div class="card-body">
+
+        <div id="divRegList"></div>
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">New Imprest Memo Requisition</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal Links////////////////////////////*@
+<div class="modal fade" id="myModalLinks" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Actions</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodyLinks">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadImprestMemoReqList();
+    });
+    var LoadImprestMemoReqList = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: "/ImprestMemo/ImprestMemoRequisitionListPartialView",
+            success: function (data) {
+                $("#divRegList").html(data);
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+    var NewImprestMemoRequisition = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: "/ImprestMemo/NewImprestMemoRequest",
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var SubmitImprestMemoRequisition = function () {
+        var date = $("#Date").val();
+        var Subject = $("#Subject").val();
+        var Objective = $("#Objective").val();
+        var Imprest_Naration = $("#Imprest_Naration").val();
+        var Start_Date = $("#Start_Date").val();
+        var No_of_days = $("#No_of_days").val();
+        var Return_Date = $("#Return_Date").val();
+        var Due_Date = $("#Due_Date").val();
+        var Global_Dimension_1_Code = $("#Global_Dimension_1_Code").val();
+        var Global_Dimension_2_Code = $("#Global_Dimension_2_Code").val();
+        var Strategic_Plan = $("#Strategic_Plan").val();
+        var Reporting_Year_Code = $("#Reporting_Year_Code").val();
+        var Workplan_Code = $("#workplanDropdown").val();
+        var Activity_Code = $("#workplanDropdown2").val();
+        var Expenditure_Requisition_Code = $("#Expenditure_Requisition_Code").val();
+
+
+
+
+        if (!Subject) {
+            Swal.fire('Warning', "Subject is required", 'warning');
+            return;
+        }
+        if (!Objective) {
+            Swal.fire('Warning', "Objective IS required", 'warning');
+            return;
+        }
+
+
+        var Data = {
+            date: date,
+            Subject: Subject,
+            Objective: Objective,
+            Imprest_Naration: Imprest_Naration,
+            Start_Date: Start_Date,
+            No_of_days: No_of_days,
+            Return_Date: Return_Date, 
+            Due_Date: Due_Date,
+            Global_Dimension_1_Code: Global_Dimension_1_Code,
+            Global_Dimension_2_Code: Global_Dimension_2_Code,
+            Strategic_Plan: Strategic_Plan,
+            Reporting_Year_Code: Reporting_Year_Code,
+            Workplan_Code: Workplan_Code,
+            Activity_Code: Activity_Code,
+            Expenditure_Requisition_Code: Expenditure_Requisition_Code
+        }
+        ShowProgress();
+        //Send the JSON array to Controller using AJAX.
+        $.ajax({
+            type: "POST",
+            url: "/ImprestMemo/SubmitImprestMemoRequisition",
+            data: JSON.stringify({ Data: Data }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+                    window.location = data.message;
+                }
+                else {
+                    Swal.fire('Warning', data.message, 'warning');
+                    HideProgress();
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    };
+    var SelectedRow = function (DocNo, Status) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo, Status: Status, DocType: 'IMP' }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/CommonActions',
+            success: function (data) {
+                $("#modalBodyLinks").html(data);
+                HideProgress();
+                $("#myModalLinks").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var ViewDoc = function (DocNo) {
+        ShowProgress();
+        window.location = "/ImprestMemo/ImprestMemoDocumentView?DocNo=" + DocNo;
+    }
+    var SendDocForApproval = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/ImprestMemo/SendImprestMemoAppForApproval',
+            success: function (data) {
+                if (data.LogOut == true) {
+                    window.location = data.message;
+                }
+                else {
+                    if (data.success == true) {
+                        HideProgress();
+                        LoadImprestMemoReqList();
+                        $("#myModalLinks").modal("hide");
+                        Swal.fire('Success', data.message, 'success');
+                    }
+                    else {
+                        HideProgress();
+                        Swal.fire('Error', data.message, 'error');
+                    }
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var CancelDocForApproval = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/ImprestMemo/CancelImprestMemoAppForApproval',
+            success: function (data) {
+                if (data.LogOut == false) {
+                    window.location = data.message;
+                }
+                else {
+                    if (data.success == true) {
+                        HideProgress();
+                        LoadImprestMemoReqList();
+                        $("#myModalLinks").modal("hide");
+                        Swal.fire('Success', data.message, 'success');
+                    }
+                    else {
+                        HideProgress();
+                        Swal.fire('Error', data.message, 'error');
+                    }
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    };
+    var ViewApprovalTrail = function (DocNo) {
+        $("#labelF").text("Document Approval Trail");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo, RecID: "Imprest Memo Header: " + DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/DocumentApprovalTrail',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModalLinks").modal("hide");
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var ViewDocComments = function (documentNumber) {
+        $("#labelF").text("Document Comments");
+        ShowProgress();
+        var RecordID = "ImprestMemo Header: " + DocNo;
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ docNo: documentNumber }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/DocumentApprovalComments',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModalLinks").modal("hide");
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+</script>

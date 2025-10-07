@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.ImprestMemo>
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th>Action</th>
+                <th>No</th>
+                <th>Date</th>
+                <th>Subject</th>
+                <th>Requester</th>
+                <th>Requester Name</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <input type="button" onclick="ViewDoc('@item.No');" style="background: #162f25; color:whitesmoke; border-radius:10px" value="Select" />
+                            </td>
+                            <td>@item.No</td>
+                            <td>@item.Date</td>
+                            <td>@item.Subject</td>
+                            <td>@item.Requestor</td>
+                            <td>@item.RequestorName</td>
+                            <td>@item.Status</td>
+
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<script>
+    $("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100] // Same options for the second table
+    });
+</script>

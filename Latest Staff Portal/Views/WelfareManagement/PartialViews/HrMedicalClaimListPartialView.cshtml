@@ -1,0 +1,52 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.MedicalClaim>
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+        <tr>
+            <th>Action</th>
+            <th>Member No</th>
+            <th>Claim No</th>
+            <th>Claim Type</th>
+            <th>Claim Date</th>
+            <th>Dependants</th>
+            <th>Patient Name</th>
+            <th>Document Ref</th>
+            <th>Date of Service</th>
+            <th>Attended By</th>
+            <th>Amount Charged</th>
+            <th>Comments</th>
+        </tr>
+        </thead>
+        <tbody>
+        @if (Model.Count() > 0)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <input type="button" onclick="SelectedRow('@item.Claim_No');" style="background: #162f25; color:whitesmoke; border-radius:10px" value="Select"/>
+                    </td>
+                    <td>@item.Member_No</td>
+                    <td>@item.Claim_No</td>
+                    <td>@item.Claim_Type</td>
+                    <td>@item.Claim_Date</td>
+                    <td>@item.Dependants</td>
+                    <td>@item.Patient_Name</td>
+                    <td>@item.Document_Ref</td>
+                    <td>@item.Date_of_Service</td>
+                    <td>@item.Attended_By</td>
+                    <td>@item.Amount_Charged</td>
+                    <td>@item.Comments</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="12" style="color:red">No Records Found</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

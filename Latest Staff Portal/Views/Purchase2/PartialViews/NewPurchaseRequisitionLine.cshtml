@@ -1,0 +1,49 @@
+﻿@model Latest_Staff_Portal.ViewModel.PurchaseRequisitionLines
+
+@*<p>@Model.ProcurementPlanID</p>*@
+<div class="row">
+    <div class="col-md-12">
+        @Html.Label("Document No", htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.EditorFor(model => model.DocumentNo, new { htmlAttributes = new { @class = "form-control", @id = "Document_No", @readonly = "readonly", @style = "background-color: #dedebd" } })
+    </div>
+
+    @*  <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Procurement Plan Category", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.EditorFor(model => model.ProcurementPlanCategory, new { htmlAttributes = new { @class = "form-control", @id = "ProcurementPlanCategory", @readonly = "readonly", @style = "background-color: #dedebd" } })
+                @Html.ValidationMessageFor(model => model.ProcurementPlanCategory, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+    <div class="col-md-12 mt-3">
+        <div class="form-group">
+            @Html.Label("Procurement Plan Item", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.DropDownListFor(m => m.ItemCategoryCode, Model.ListOfProcurement_Plan_Entry, "Select Option--", new { @class = "form-control", @id = "ItemCategoryCode" })
+            @Html.ValidationMessageFor(model => model.ItemCategoryCode, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Quantity, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control", @id = "Quantity" } })
+            @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Direct Unit Cost", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.DirectUnitCost, new { htmlAttributes = new { @class = "form-control", @id = "DirectUnitCost" } })
+            @Html.ValidationMessageFor(model => model.DirectUnitCost, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Technical Specifications", htmlAttributes: new { @class = "control-label col-md-2" })
+            <textarea class="form-control" rows="3" id="TechnicalSpecifications"></textarea>
+            @*@Html.EditorFor(model => model.TechnicalSpecifications, new { htmlAttributes = new { @class = "form-control", @id = "TechnicalSpecifications" } })*@
+            @Html.ValidationMessageFor(model => model.TechnicalSpecifications, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,1578 @@
+﻿﻿﻿@model Latest_Staff_Portal.ViewModel.ExpenseRequisition
+
+@{
+    ViewBag.Title = "ExpenseRequisitionDocument";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    hr {
+        margin: 4px;
+    }
+
+    .BtnPadding {
+        padding: 7px;
+        font-size: 12px;
+    }
+    .select2-container.custom-select .select2-selection {
+        background-color: #dedebd !important;
+        border: 1px solid #ccc;
+    }
+    .select2-container.custom-select .select2-selection--single {
+        background-color: #dedebd !important;
+    }
+
+</style>
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#" onclick="ExpenseRequisitionLink();">Expense Requisitions</a></li>
+                <li class="breadcrumb-item active">Expense Requisition Document(@Model.No)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <p hidden id="GlobalDimension1Code">@Model.GlobalDimension1Code</p>
+    <p hidden id="GlobalDimension2Code">@Model.GlobalDimension2Code</p>
+    <div class="card-body">
+        <div style="text-align:right">
+            <button class="btn btn-primary action-buttons2" onclick="GenerateExpenseRequisitionReport('@Model.No');">
+                <i class="fa fa-print" aria-hidden="true"></i> Print Report
+            </button>
+            @if (Model.ApprovalStatus == "Pending Approval")
+            {
+                <button class="btn btn-primary action-buttons2" onclick="ViewApprovalTrail('@Model.No');">
+                    <i class="fa fa-route" aria-hidden="true"></i> Approval Trail
+                </button>
+                <button class="btn btn-primary action-buttons2" onclick="CancelDocApprovalRequest('@Model.No');">
+                    <i class="fa fa-superpowers" aria-hidden="true"></i> Cancel Approval Request
+                </button>
+
+            }
+            <button class="btn btn-primary action-buttons2" onclick="ViewDocComments('@Model.No');">
+                <i class="fa fa-list-ol" aria-hidden="true"></i>  Comments
+            </button>
+           @* @{
+                if (Model.ApprovalStatus == "Open")
+                {
+
+                    <button class="btn btn-primary action-buttons2" onclick="EditDocument();">
+                        <i class="fa fa-history" aria-hidden="true"></i> Edit Header
+                    </button>
+                }
+            }*@
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Document no", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.No, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#f2f2f2", id = "documentNo" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Description, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#f2f2f2", id = "description" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Corporate Strategy", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.CorporateStrategy, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#f2f2f2", id = "corporateStrategy" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Reporting Period", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.ReportingPeriod, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#f2f2f2", id = "reportingPeriod" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Budget Code", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.BudgetCode, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#f2f2f2", id = "budgetCode" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Date", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Date, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#f2f2f2", id = "date" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Geographical Location", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.GeographicalLocationName, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#f2f2f2", id = "geographicalLocation" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Administrative Unit", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.AdminUnitName, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#f2f2f2", id = "adminUnitName" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Workplan", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Workplan, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#f2f2f2", id = "workplan" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Approval Status", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.ApprovalStatus, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#f2f2f2", id = "approvalStatus" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Requires Direst Payment", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @if (ViewBag.OptionList != null && ViewBag.OptionList.Count > 0)
+                    {
+                        @Html.DropDownListFor(m => m.RequiresDirectPayment, new SelectList(ViewBag.OptionList, "Value", "Text", Model.RequiresDirectPayment), "--Select--", new { @id = "requiresDirectPayment", @class = "form-control", @readonly = "readonly", @style = "background-color:#f2f2f2" })
+                    }
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Requires Purchase Requisition", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @if (ViewBag.OptionList != null && ViewBag.OptionList.Count > 0)
+                    {
+                        @Html.DropDownListFor(m => m.RequiresPRN, new SelectList(ViewBag.OptionList, "Value", "Text", Model.RequiresPRN), "--Select--", new { @id = "requiresPRN", @class = "form-control", @readonly = "readonly", @style = "background-color:#f2f2f2" })
+                    }
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Requires Imprest", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @if (ViewBag.OptionList != null && ViewBag.OptionList.Count > 0)
+                    {
+                        @Html.DropDownListFor(m => m.RequiresImprest, new SelectList(ViewBag.OptionList, "Value", "Text", Model.RequiresImprest), "--Select--", new { @id = "requiresImprest", @class = "form-control", @readonly = "readonly", @style = "background-color:#f2f2f2" })
+                    }
+                </div>
+            </div>
+        </div>
+        @{
+            if (Model.RequiresImprest)
+            {
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.Label("Imprest Type", htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.DropDownListFor(m => m.ImprestType, new SelectList(ViewBag.ImprestTypes, "Value", "Text", Model.ImprestType), "--Select Imprest Type--", new { @id = "ddlImprestType", @class = "form-control", @readonly = "readonly", @style = "background-color:#f2f2f2" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.Label("Start Date", htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.TextBoxFor(m => m.StartDate, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#f2f2f2", id = "startDate" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.Label("Objective", htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.TextBoxFor(m => m.Objective, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#f2f2f2", id = "objective" })
+                        </div>
+                    </div>
+                    @if (Model.ImprestType == "Safari Imprest")
+                    {
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.Label("No Of Nights:", htmlAttributes: new { @class = "control-label col-md-12" })
+                                @Html.TextBoxFor(m => m.NoOfDays, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#f2f2f2", id = "noOfDays" })
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.Label("End Date", htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.TextBoxFor(m => m.EndDate, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#f2f2f2", id = "endDate" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.Label("Subject", htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.TextBoxFor(m => m.Subject, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#f2f2f2", id = "subject" })
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        <div class="row" id="direct">
+            @{
+                if (Model.RequiresDirectPayment)
+                {
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.Label("Direct Payment Type", htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.DropDownListFor(m => m.DirectPay, new SelectList(ViewBag.DirectPaymentTypes, "Value", "Text", Model.DirectPay), "--Select Direct Payment Type--", new { @id = "directPaymentTypes", @class = "form-control", @readonly = "readonly", @style = "background-color:#f2f2f2" })
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+        @{
+            if (Model.RequiresPRN)
+            {
+                <div id="prn">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.Label("Procurement Plan ID", htmlAttributes: new { @class = "control-label col-md-12" })
+                                @Html.TextBoxFor(m => m.ProcurementPlanID, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#f2f2f2", id = "procurementPlanID" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.Label("Purchase Requisition Type", htmlAttributes: new { @class = "control-label col-md-12" })
+                                @Html.TextBoxFor(m => m.PRNType, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#f2f2f2", id = "prnType2" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.Label("Geographical Location", htmlAttributes: new { @class = "control-label col-md-12" })
+                                @Html.TextBoxFor(m => m.GeographicalLocationName, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#f2f2f2", id = "geographicalLocation" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.Label("Requisition Product Group", htmlAttributes: new { @class = "control-label col-md-12" })
+                                @Html.TextBoxFor(m => m.RequisitionProductGroup, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#f2f2f2", id = "requisitionProductGroup" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.Label("Procurement Category", htmlAttributes: new { @class = "control-label col-md-12" })
+                                @if (ViewBag.Activities != null && ViewBag.Activities.Count > 0)
+                                {
+                                    @Html.DropDownListFor(
+                                        m => m.PPPlanCategory, 
+                                        new SelectList(ViewBag.Activities, "Value", "Text", Model.RequiresImprest), 
+                                        "--Select--", 
+                                        new { @id = "ppPlanCategory", @class = "form-control select2 custom-select", @readonly = "readonly" }
+                                    )
+
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        @if (Model.ApprovalStatus == "Open")
+        {
+            <div align="center">
+                <input type="button" class="btn btn-primary action-buttons" value="Update Header" onclick="UpdateExpenseRequisition();" />
+            </div>
+        }
+        <div id="divDepositLines">
+            <hr style="border:1px solid black" />
+            <b>Expense Requisition Line</b>
+            <hr />
+            <div id="divLines"></div>
+            <hr style="border:1px solid black" />
+            <b>Document Attachments</b>
+            <hr />
+            <div id="divAttachDocs"></div>
+            @{
+
+                if (Model.ApprovalStatus == "Open")
+                {
+                    <div align="center">
+                        <input type="button" class="btn btn-primary action-buttons" value="Send (@Model.No) For Approval" onclick="SendDocForApproval('@Model.No');" />
+                    </div>
+                }
+            }
+            <hr />
+        </div>
+    </div>
+
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myModalLabel"><label id="labelF"></label></h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="updateLineNo" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Update Expense Line</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="docNo">Document No:</label>
+                        <input type="text" id="docNo" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="lineNo">Line No:</label>
+                        <input type="text" id="lineNo" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="resourceNo">Resource No:</label>
+                        <input type="text" id="resourceNo" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="amount">Amount:</label>
+                        <input type="number" id="amount" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="UpdateLine();">Update Line</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="myModalUnits" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalCheck">Expense Requisition</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <iframe src="" width="100%" height="600px"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+@* //////////////////////View Document//////////////////////////// *@
+<div class="modal fade" id="myModalAttachment" tabindex="-1" role="dialog" aria-labelledby="myModalAttachmentLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalAttachmentLabel">View Attachment</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+            </div>
+            <div class="modal-body" id="modalAttachmentBody">
+                <iframe id="iframe" style="width:100%;height:75vh;"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script src="~/assets/js/pdfobject.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+    LoadExpenseRequisitionLine(`@Model.No`);
+    GetDocumentAttachments();
+    $('.select2').select2();
+});
+
+var LoadExpenseRequisitionLine = function (DocNo) {
+    var status = '@Model.ApprovalStatus';
+    var reqImprest = '@Model.RequiresImprest';
+    var reqPRN = '@Model.RequiresPRN';
+    var reqDirPay = '@Model.RequiresDirectPayment';
+    var dirPayType = '@Model.DirectPay';
+    var GlobalDimension1Code = '@Model.GlobalDimension1Code';
+    var GlobalDimension2Code = '@Model.GlobalDimension2Code';
+    ShowProgress();
+    $.ajax({
+        async: true,
+        type: "POST",
+        dataType: "html",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify({
+            DocNo: DocNo,
+            status: status,
+            reqImprest: reqImprest,
+            reqPrn: reqPRN,
+            dirPay: reqDirPay,
+            dirPayType: dirPayType,
+            GlobalDimension1Code: GlobalDimension1Code,
+            GlobalDimension2Code: GlobalDimension2Code
+        }),
+        url: "/ExpenseRequisition/ExpenseRequisitionLine",
+        success: function (data) {
+            $("#divLines").html(data);
+            HideProgress();
+        },
+        error: function () {
+            HideProgress();
+            Swal.fire("There is some problem to process your request. Please try after some time");
+        }
+    });
+};
+
+	var AddExpenseRequisitionLine = function () {
+    var docNo = '@Model.No';
+    var workPlan = '@Model.Workplan';
+    var activityID = '@Model.ActivityCode';
+    $("#labelF").text("New Expense Requisition Line");
+    ShowProgress();
+    $.ajax({
+        async: true,
+        type: "GET",
+        dataType: "html",
+        url: '/ExpenseRequisition/NewExpenseRequisitionLine',
+        data: {
+            docNo: docNo,
+            workPlan: workPlan,
+            activityID: activityID
+        },
+        success: function (data) {
+            $("#modalBody").html(data);
+            HideProgress();
+            $("#myModal").modal("show");
+        },
+        error: function (err) {
+            HideProgress();
+            Swal.fire('Warning', err.responseText, 'warning');
+        }
+    });
+};
+	var AddImprestLine = function (GlAcc, LineNo) {
+        var document = '@Model.ImprestType';
+		$("#labelF").text("New Imprest Line Details");
+		ShowProgress();
+		$.ajax({
+			async: true,
+			type: "GET",
+			dataType: "html",
+			url: '/Imprest/NewImprestLine',
+			data: {
+				glAccount: GlAcc,
+				LineNo: LineNo,
+                documentType: document
+			},
+			success: function (data) {
+				$("#modalBody").html(data);
+				HideProgress();
+				$("#myModal").modal("show");
+			},
+			error: function (err) {
+				HideProgress();
+				Swal.fire('Warning', err.responseText, 'warning');
+			}
+		});
+    };
+	var AddStaffClaimLine = function (GlAcc, LineNo) {
+		$("#labelF").text("New Staff Claim Lines");
+		ShowProgress();
+		$.ajax({
+			async: true,
+			type: "GET",
+			dataType: "html",
+			url: '/ExpenseRequisition/NewStaffClaimLine',
+			data: {
+				glAccount: GlAcc,
+				LineNo: LineNo,
+                documentNo: '@Model.No'
+			},
+			success: function (data) {
+				$("#modalBody").html(data);
+				HideProgress();
+				$("#myModal").modal("show");
+			},
+			error: function (err) {
+				HideProgress();
+				Swal.fire('Warning', err.responseText, 'warning');
+			}
+		});
+    };
+	var AddNonStaffClaimLine = function (GlAcc, LineNo) {
+		$("#labelF").text("New Non Staff Claim Lines");
+        var docNo = '@Model.No';
+		ShowProgress();
+		$.ajax({
+			async: true,
+			type: "GET",
+			dataType: "html",
+			url: '/ExpenseRequisition/NewNonStaffClaimLine',
+			data: {
+				glAccount: GlAcc,
+				LineNo: LineNo,
+                documentNo: docNo
+			},
+			success: function (data) {
+				$("#modalBody").html(data);
+				HideProgress();
+				$("#myModal").modal("show");
+			},
+			error: function (err) {
+				HideProgress();
+				Swal.fire('Warning', err.responseText, 'warning');
+			}
+		});
+	};
+    var AddContractPayment = function (GlAcc, LineNo) {
+	$("#labelF").text("New Contract Payment Line");
+    var docNo = '@Model.No';
+	ShowProgress();
+	$.ajax({
+		async: true,
+		type: "GET",
+		dataType: "html",
+        url: '/ExpenseRequisition/NewContractPayment',
+		data: {
+			glAccount: GlAcc,
+			LineNo: LineNo,
+            documentNo: docNo
+		},
+		success: function (data) {
+			$("#modalBody").html(data);
+			HideProgress();
+			$("#myModal").modal("show");
+		},
+		error: function (err) {
+			HideProgress();
+			Swal.fire('Warning', err.responseText, 'warning');
+		}
+	});
+};
+
+
+    var AddPrnLine = function (GlAcc, LineNo, GlobalDimension1Code, GlobalDimension1Code) {
+        var procPlan = '@Model.ProcurementPlanID';
+
+        var GlobalDimension1Code = '@Model.GlobalDimension1Code';
+        var GlobalDimension2Code = '@Model.GlobalDimension2Code';
+
+
+		$("#labelF").text("New PRN Line Details");
+		ShowProgress();
+
+		$.ajax({
+			async: true,
+			type: "GET",
+			dataType: "html",
+			url: '/ExpenseRequisition/NewExpensePRNLine',
+			data: {
+				glAccount: GlAcc,
+				LineNo: LineNo,
+                procurementPlan: procPlan,
+                GlobalDimension1Code: GlobalDimension1Code,
+                GlobalDimension2Code: GlobalDimension2Code
+			},
+			success: function (data) {
+				$("#modalBody").html(data);
+				HideProgress();
+				$("#myModal").modal("show");
+			},
+			error: function (err) {
+				HideProgress();
+				Swal.fire('Warning', err.responseText, 'warning');
+			}
+		});
+	};
+
+
+    var ViewImprestLine = function (glAccount, lineNo) {
+        var docNo = '@Model.No';
+        $("#modalBody").html('');
+    var status = '@Model.ApprovalStatus';
+
+    $("#labelF").text("View Imprest Line Details");
+    ShowProgress();
+        var requestData = JSON.stringify({
+            docNo: docNo,
+        GLAccount: glAccount,
+        LineNo: lineNo,
+        Status: status
+    });
+
+    $.ajax({
+        async: true,
+        type: "POST",
+        dataType: "html",
+        contentType: "application/json; charset=utf-8",
+        processData: false,
+        url: '/Imprest/ImprestLines',
+        data: requestData,
+        success: function (data) {
+            $("#modalBody").html(data);
+            HideProgress();
+            $("#myModal").modal("show");
+        },
+        error: function (err) {
+            HideProgress();
+            Swal.fire('Warning', err.responseText, 'warning');
+        }
+    });
+    };
+	var ViewStaffClaim = function (glAccount, lineNo) {
+        var docNo = '@Model.No';
+        $("#modalBody").html('');
+
+    $("#labelF").text("View Staff Claim Line Details");
+    ShowProgress();
+        var requestData = JSON.stringify({
+            docNo: docNo,
+        GLAccount: glAccount,
+        LineNo: lineNo
+    });
+
+    $.ajax({
+        async: true,
+        type: "POST",
+        dataType: "html",
+        contentType: "application/json; charset=utf-8",
+        processData: false,
+		url: '/ExpenseRequisition/ViewStaffClaim',
+        data: requestData,
+        success: function (data) {
+            $("#modalBody").html(data);
+            HideProgress();
+            $("#myModal").modal("show");
+        },
+        error: function (err) {
+            HideProgress();
+            Swal.fire('Warning', err.responseText, 'warning');
+        }
+    });
+};
+	var ViewNonStaffClaim = function (glAccount, lineNo) {
+        var docNo = '@Model.No';
+        $("#modalBody").html('');
+    $("#labelF").text("View Staff Claim Line Details");
+    ShowProgress();
+        var requestData = JSON.stringify({
+            docNo: docNo,
+        GLAccount: glAccount,
+        LineNo: lineNo
+    });
+
+    $.ajax({
+        async: true,
+        type: "POST",
+        dataType: "html",
+        contentType: "application/json; charset=utf-8",
+        processData: false,
+        url: '/ExpenseRequisition/ViewNonStaffClaim',
+        data: requestData,
+        success: function (data) {
+            $("#modalBody").html(data);
+            HideProgress();
+            $("#myModal").modal("show");
+        },
+        error: function (err) {
+            HideProgress();
+            Swal.fire('Warning', err.responseText, 'warning');
+        }
+    });
+};
+    var ViewContractPayment = function (glAccount, lineNo) {
+        var docNo = '@Model.No';
+        $("#modalBody").html('');
+    $("#labelF").text("View Contract Payment Details");
+    ShowProgress();
+        var requestData = JSON.stringify({
+            docNo: docNo,
+        GLAccount: glAccount,
+        LineNo: lineNo
+    });
+
+    $.ajax({
+        async: true,
+        type: "POST",
+        dataType: "html",
+        contentType: "application/json; charset=utf-8",
+        processData: false,
+        url: '/ExpenseRequisition/ViewContractPayment',
+        data: requestData,
+        success: function (data) {
+            $("#modalBody").html(data);
+            HideProgress();
+            $("#myModal").modal("show");
+        },
+        error: function (err) {
+            HideProgress();
+            Swal.fire('Warning', err.responseText, 'warning');
+        }
+    });
+};
+
+    var ViewPRNLine = function (glAccount, lineNo) {
+     var docNo = '@Model.No';
+        $("#modalBody").html('');
+    var status = '@Model.ApprovalStatus';
+
+    $("#labelF").text("View PRN Line Details");
+    ShowProgress();
+        var requestData = JSON.stringify({
+            docNo: docNo,
+        GLAccount: glAccount,
+        LineNo: lineNo,
+        Status: status
+    });
+
+    $.ajax({
+        async: true,
+        type: "POST",
+        dataType: "html",
+        contentType: "application/json; charset=utf-8",
+        processData: false,
+		url: '/Purchase/ExpensePRNLine',
+        data: requestData,
+        success: function (data) {
+            $("#modalBody").html(data);
+            HideProgress();
+            $("#myModal").modal("show");
+        },
+        error: function (err) {
+            HideProgress();
+            Swal.fire('Warning', err.responseText, 'warning');
+        }
+    });
+    };
+
+
+    function SubmitExpenseRequisitionLine() {
+        var isValid = true;
+        var documentNo = $("#DocumentNo").val();
+        var glAccount = $("#GLAccount").val();
+        var totalAmount = $("#TotalAmount").val();
+		var resourceReqNo = $("#ResourceReqNo").val();
+		var ActivityId = $("#ActivityCode").val();
+
+        if (!documentNo) {
+            Swal.fire('Warning', 'Document No field is required.', 'warning');
+            isValid = false;
+        }
+
+        if (!glAccount) {
+            Swal.fire('Warning', 'Please select a G/L Account.', 'warning');
+            isValid = false;
+        }
+
+        if (!totalAmount || isNaN(totalAmount) || parseFloat(totalAmount) <= 0) {
+            Swal.fire('Warning', 'Total Amount must be a positive number.', 'warning');
+            isValid = false;
+        }
+
+        // Exit if validation fails
+        if (!isValid) {
+            return;
+        }
+
+        // Prepare data object
+        var expenseRequisitionLine = {
+            DocumentNo: documentNo,
+            GLAccount: glAccount,
+            TotalAmount: parseFloat(totalAmount),
+            ResourceReqNo: resourceReqNo,
+			ActivityId: ActivityId
+        };
+        // Show progress indicator
+        ShowProgress();
+
+        // Send data via AJAX
+        $.ajax({
+            type: "POST",
+            url: "/ExpenseRequisition/SubmitExpenseRequisitionLine",
+            data: JSON.stringify(expenseRequisitionLine),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                HideProgress();
+                if (data.success) {
+                    var form = $('<form>', {
+                        action: '/ExpenseRequisition/ExpenseRequisitionDocument',
+                        method: 'POST'
+                    }).append($('<input>', {
+                        type: 'hidden',
+                        name: 'DocNo',
+                        value: data.message
+                    }));
+                    form.appendTo('body').submit();
+                    Swal.fire('Success', 'Expense requisition line submitted successfully.', 'success');
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Error', 'An error occurred while submitting the request.', 'error');
+            }
+        });
+    }
+function SubmitPurchaseline() {
+    var isValid = true;
+    var glAccount = $("#txtGLAccount").val();
+    if (!glAccount) {
+        Swal.fire('Warning', 'GL Account field is required.', 'warning');
+        isValid = false;
+    }
+    var lineNo = $("#txtLineNo").val();
+    if (!lineNo) {
+        Swal.fire('Warning', 'Line No field is required.', 'warning');
+        isValid = false;
+    }
+	var procPlanEntryNo = $("#txtEntryNumber").val();
+    var expenseDescription = $("#txtExpenseDescription").val();
+    var quantity = $("#txtQuantity").val();
+    if (!quantity) {
+        Swal.fire('Warning', 'Quantity field is required.', 'warning');
+        isValid = false;
+    }
+    var rate = $("#txtUnitCost").val();
+    if (!rate) {
+        Swal.fire('Warning', 'Unit Cost field is required.', 'warning');
+        isValid = false;
+    }
+    var pType = $("#ddlProcType").val();
+    alert(pType)
+    if (!pType) {
+        Swal.fire('Warning', 'Procurement Type field is required.', 'warning');
+        isValid = false;
+    }
+    var docNo = '@Model.No';
+    if (!isValid) {
+        return;
+    }
+    var expensePRNLine = {
+        DocumentNo: docNo,
+        GLAccount: glAccount,
+        LineNo: lineNo,
+        ProcPlanEntryNo: procPlanEntryNo,
+        ExpenseDescription: expenseDescription,
+        Quantity: quantity,
+        Rate: rate,
+        pType: pType
+    };
+    ShowProgress();
+    $.ajax({
+        type: "POST",
+		url: "/ExpenseRequisition/SubmitExpensePRNLine",
+        data: JSON.stringify(expensePRNLine),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (data) {
+            HideProgress();
+            if (data.success) {
+                Swal.fire('Success', 'PRN requisition line submitted successfully.', 'success');
+                var form = $('<form>', {
+                    action: '/ExpenseRequisition/ExpenseRequisitionDocument',
+                    method: 'POST'
+                }).append($('<input>', {
+                    type: 'hidden',
+                    name: 'DocNo',
+                    value: docNo
+                }));
+                form.appendTo('body').submit();
+            } else {
+                Swal.fire('Warning', data.message, 'warning');
+            }
+        },
+        error: function (err) {
+            HideProgress();
+            Swal.fire('Warning', err.responseText, 'warning');
+        }
+    });
+}
+
+    function SubmitImprestLine() {
+        var isValid = true;
+        var days = '@Model.NoOfDays';
+        var glAccount = $("#txtGLAccount").val();
+        var lineNo = $("#txtLineNo").val();
+		var employeeNo = $("#ddlEmployeeNo").val();
+        if (!employeeNo) {
+            Swal.fire('Warning', 'Please select an Employee No.', 'warning');
+            isValid = false;
+        }
+        var imprestType = '@Model.ImprestType';
+
+		var destination = $("#ddlDestination").val();
+
+		if (imprestType === "Safari Imprest") {
+			if (!destination) {
+				Swal.fire('Warning', 'Please select a Destination.', 'warning');
+				isValid = false;
+			}
+		}
+        var quantity = $("#txtQuantity").val();
+        if (!quantity) {
+            Swal.fire('Warning', 'Quantity field is required.', 'warning');
+            isValid = false;
+        }
+        if (quantity > days && imprestType === "Safari Imprest") {
+			Swal.fire('Warning', 'Select fewer days.', 'warning');
+			isValid = false;
+        }
+        var Rate = $("#txtRate").val();
+        var docNo = '@Model.No';
+        if (!isValid) {
+            return;
+        }
+		var isclaim = false;
+
+        var imprestLine = {
+            DocumentNo: docNo,
+            GLAccount: glAccount,
+            LineNo: lineNo,
+            EmployeeNo: employeeNo,
+            Destination: destination,
+            Quantity: quantity,
+			Rate: Rate,
+			isclaim: isclaim
+        };
+
+        ShowProgress();
+
+        $.ajax({
+            type: "POST",
+            url: "/Imprest/SubmitImprestLine",
+            data: JSON.stringify(imprestLine),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                HideProgress();
+                if (data.success) {
+                    Swal.fire('Success', 'Imprest requisition line submitted successfully.', 'success');
+                    $("#myModal").modal("hide");
+                    LoadExpenseRequisitionLine(`@Model.No`);
+
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseText, 'warning');
+            }
+        });
+    }
+    var GetDocumentAttachments = function () {
+	var DocNo = `@Model.No`;
+    var status = '@Model.ApprovalStatus';
+	$.ajax({
+		async: true,
+		type: "POST",
+		datatype: "json",
+		contentType: "application/json; charset = utf-8",
+		processData: false,
+        data: JSON.stringify({ DocNo: DocNo, documentStatus: status }),
+        url: "/Common/EdmsDocumentAttachmentList",
+		success: function (data) {
+			$("#divAttachDocs").html(data);
+		},
+		error: function () {
+			Swal.fire("There is some problem to process your request. Please try after some time");
+		}
+	});
+};
+	var AddAttachment = function () {
+		$("#labelF").text("File Upload");
+		ShowProgress();
+		$.ajax({
+			async: true,
+			type: "GET",
+			datatype: "html",
+            url: '/Common/FileUploadForm',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    };
+	var SaveAttachmentFile = function () {
+		var DocNo = `@Model.No`;
+		var filename; var base64String; var filetype;
+        var files = document.getElementById('AttachmentFile').files;
+		if (files.length) {
+			var file = files[0];
+            if (file.size > 50000000) {
+                Swal.fire('Warning', 'Please only files less than 50MB allowed. Thanks!!', 'warning');
+            }
+			else {
+				var blob = file.slice();
+				filetype = file.type;
+				filename = file.name;
+				var reader = new FileReader();
+				reader.onloadend = function (evt) {
+					if (evt.target.readyState == FileReader.DONE) {
+						var cont = evt.target.result
+						base64String = getB64Str(cont);
+						ShowProgress();
+						$.ajax({
+							type: "POST",
+							url: "/Common/SaveAttachedFile",
+                            data: JSON.stringify({ DocNo: DocNo, base64Upload: base64String, fileName: filename, Extn: filetype, TableID: 50110, module: "FNC", documentType:"Expenditure Requisition"}),
+							contentType: "application/json; charset=utf-8",
+							dataType: "json",
+							success: function (data) {
+								if (data.success) {
+									HideProgress();
+									$("#myModal").modal("hide");
+									Swal.fire('Success', data.message, 'success');
+                                    GetDocumentAttachments();
+								}
+								else {
+                                    GetDocumentAttachments();
+									Swal.fire('Warning', data.message, 'warning');
+									HideProgress();
+								}
+							},
+							error: function (err) {
+								HideProgress();
+								Swal.fire('Warning', err, 'warning');
+							}
+						});
+					}
+				};
+				reader.readAsArrayBuffer(blob);
+			}
+		}
+	};
+	function getB64Str(buffer) {
+		var binary = '';
+		var bytes = new Uint8Array(buffer);
+		var len = bytes.byteLength;
+		for (var i = 0; i < len; i++) {
+			binary += String.fromCharCode(bytes[i]);
+		}
+		return window.btoa(binary);
+	}
+    var ViewAttachment = function (moduleCheck, docNo, docId) {
+        $.ajaxSetup({ cache: false });
+        ShowProgress();
+        var viewer = $("#modalAttachmentBody");
+        viewer.empty();
+
+        $.ajax({
+            url: '/Common/GetEdmsDocuments',
+            type: "GET",
+            datatype: "json",
+            cache: false,
+            contentType: "application/json; charset=utf-8",
+            data: {
+                module: moduleCheck,
+                documentNo: docNo,
+                documentType: "Expenditure Requisition",
+                documentId: docId
+            },
+            success: function (data) {
+                if (data.success) {
+                    if (data.base64) {
+                        var mimeType = data.mimeType || 'application/pdf';
+
+                        if (mimeType.startsWith('application/pdf')) {
+
+                            var byteCharacters = atob(data.base64);
+                            var byteNumbers = new Array(byteCharacters.length);
+                            for (var i = 0; i < byteCharacters.length; i++) {
+                                byteNumbers[i] = byteCharacters.charCodeAt(i);
+                            }
+                            var byteArray = new Uint8Array(byteNumbers);
+                            var blob = new Blob([byteArray], { type: mimeType });
+                            var blobUrl = URL.createObjectURL(blob);
+
+
+                            viewer.html('<iframe src="' + blobUrl + '" style="width:100%; height:500px;" frameborder="0"></iframe>');
+                        } else if (mimeType.startsWith('image/')) {
+
+                            viewer.html('<img src="data:' + mimeType + ';base64,' + data.base64 + '" style="width:100%;"/>');
+                        } else {
+
+                            var blob = b64toBlob(data.base64, mimeType);
+                            var url = window.URL.createObjectURL(blob);
+                            window.open(url, '_blank');
+                        }
+                        $("#myModalAttachment").modal("show");
+                    } else {
+
+                        window.location = '/Common/AttachmentDownload?fileName=' + data.message;
+                        Swal.fire('Success', 'Document Downloaded successfully', 'success');
+                    }
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+                HideProgress();
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Error', err.responseText || 'An error occurred', 'error');
+            }
+        });
+    };
+    function b64toBlob(base64, contentType) {
+        var byteCharacters = atob(base64);
+        var byteArrays = [];
+
+        for (var offset = 0; offset < byteCharacters.length; offset += 512) {
+            var slice = byteCharacters.slice(offset, offset + 512);
+
+            var byteNumbers = new Array(slice.length);
+            for (var i = 0; i < slice.length; i++) {
+                byteNumbers[i] = slice.charCodeAt(i);
+            }
+
+            var byteArray = new Uint8Array(byteNumbers);
+            byteArrays.push(byteArray);
+        }
+
+        return new Blob(byteArrays, { type: contentType });
+    }
+	var SendDocForApproval = function (DocNo) {
+		ShowProgress();
+		$.ajax({
+            async: true,
+            type: "POST",
+            dataType: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            url: '/ExpenseRequisition/SendExpenseReqForApproval',
+            success: function (data) {
+                HideProgress();
+                if (data.success === true) {
+                    Swal.fire('Success', data.message, 'success');
+                    var form = $('<form>', {
+                        action: '/ExpenseRequisition/ExpenseRequisitionDocument',
+                        method: 'POST'
+                    }).append($('<input>', {
+                        type: 'hidden',
+                        name: 'DocNo',
+                        value: DocNo
+                    }));
+                    form.appendTo('body').submit();
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+			error: function (err) {
+				HideProgress();
+				Swal.fire('Warning', err.responseText, 'warning');
+			}
+		});
+	};
+	var CancelDocApprovalRequest = function (DocNo) {
+		ShowProgress();
+		$.ajax({
+			async: true,
+			type: "POST",
+			dataType: "json",
+			data: JSON.stringify({ DocNo: DocNo }),
+			contentType: "application/json; charset=utf-8",
+			processData: false,
+			url: '/ExpenseRequisition/CancelExpReqApprovalRequest',
+			success: function (data) {
+				HideProgress();
+				if (data.success === true) {
+                    Swal.fire('Success', data.message, 'success');
+                    var form = $('<form>', {
+                        action: '/ExpenseRequisition/ExpenseRequisitionDocument',
+                        method: 'POST'
+                    }).append($('<input>', {
+                        type: 'hidden',
+                        name: 'DocNo',
+                        value: DocNo
+                    }));
+                    form.appendTo('body').submit();
+				} else {
+					Swal.fire('Error', data.message, 'error');
+				}
+			},
+			error: function (err) {
+				HideProgress();
+				Swal.fire('Warning', err.responseText, 'warning');
+			}
+		});
+    };
+	var ViewApprovalTrail = function (DocNo) {
+		ShowProgress();
+		$.ajax({
+			async: true,
+			type: "POST",
+			datatype: "json",
+			data: JSON.stringify({ DocNo: DocNo, RecID: "HR Leave Application: " + DocNo }),
+			contentType: "application/json; charset = utf-8",
+			processData: false,
+			url: '/Common/DocumentApprovalTrail',
+			success: function (data) {
+				$("#modalBody").html(data);
+				HideProgress();
+				$("#myModalLinks").modal("hide");
+				$("#myModal").modal("show");
+			},
+			error: function (err) {
+				HideProgress();
+				Swal.fire('Warning', err, 'warning');
+			}
+		});
+	}
+	var RemoveItem = function (docNo, lineNo) {
+		ShowProgress();
+		$.ajax({
+			async: true,
+			type: "POST",
+			dataType: "json",
+			data: JSON.stringify({
+				docNo: docNo,
+				lineNo: lineNo
+			}),
+			contentType: "application/json; charset=utf-8",
+			processData: false,
+			url: '/ExpenseRequisition/DeleteExpenseLine',
+			success: function (data) {
+				HideProgress();
+				if (data.success === true) {
+                    LoadExpenseRequisitionLine(`@Model.No`);
+                    Swal.fire('Success', data.message, 'success');
+				} else {
+					Swal.fire('Error', data.message, 'error');
+				}
+			},
+			error: function (err) {
+				HideProgress();
+				Swal.fire('Warning', err.responseText, 'warning');
+			}
+		});
+	};
+    var DeleteAllocationLines = function (docNo, lineNo,source) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            dataType: "json",
+            data: JSON.stringify({
+                docNo: docNo,
+                lineNo: lineNo,
+                sourceLine: source
+            }),
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            url: '/ExpenseRequisition/DeleteAllocationLines',
+            success: function (data) {
+                HideProgress();
+                if (data.success === true) {
+                    $("#myModal").modal("hide");
+                   Swal.fire('Success',data.message,'success');
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseText, 'warning');
+            }
+        });
+    };
+    var DeleteAttachment = function (docId,line) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            dataType: "json",
+            data: JSON.stringify({
+                documentId: docId,
+                lineNo: line
+            }),
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            url: '/Common/RemoveFileAsync',
+            success: function (data) {
+                HideProgress();
+                if (data.success === true) {
+                    Swal.fire('Success', data.message, 'success');
+                    GetDocumentAttachments();
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                    GetDocumentAttachments();
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseText, 'warning');
+            }
+        });
+    };
+
+	var UpdateLine = function () {
+		var docNo = $('#docNo').val();
+		var lineNo = $('#lineNo').val();
+		var resourceNo = $('#resourceNo').val();
+		var amount = $('#amount').val();
+		ShowProgress();
+
+		$.ajax({
+			async: true,
+			type: "POST",
+			dataType: "json",
+			data: JSON.stringify({
+				docNo: docNo,
+				lineNo: lineNo,
+				resourceNo: resourceNo,
+				amount: amount
+			}),
+			contentType: "application/json; charset=utf-8",
+			processData: false,
+			url: '/ExpenseRequisition/UpdateExpenseLineLine',
+			success: function (data) {
+				HideProgress();
+				if (data.success === true) {
+                    LoadExpenseRequisitionLine(`@Model.No`);
+                    $('#updateLineNo').modal('hide');
+					Swal.fire('Success',data.message,'success');
+
+				} else {
+					Swal.fire('Error', data.message, 'error');
+				}
+			},
+			error: function (err) {
+				HideProgress();
+				Swal.fire('Warning', err.responseText, 'warning');
+			}
+		});
+	};
+
+	function EditItem(documentNo, lineNo, resourceNo) {
+
+		document.getElementById('docNo').value = documentNo;
+		document.getElementById('lineNo').value = lineNo;
+		document.getElementById('resourceNo').value = resourceNo;
+		$('#updateLineNo').modal('show');
+    }
+	var GenerateExpenseRequisitionReport = function (docNo) {
+
+		var docNo = '@Model.No';
+
+		ShowProgress();
+		$.ajax({
+			async: true,
+			type: "POST",
+			datatype: "json",
+			data: JSON.stringify({ documentNumber: docNo }),
+			contentType: "application/json; charset=utf-8",
+			processData: false,
+			url: '/ExpenseRequisition/GenerateExpenseRequisitionReport',
+			success: function (data) {
+				if (data.success) {
+					$('iframe').attr('src', "data:application/pdf;base64," + data.message);
+					$("#myModalUnits").modal("show");
+					HideProgress();
+
+				} else {
+					Swal.fire('Error', data.message, 'error');
+					HideProgress();
+
+				}
+			},
+			error: function (err) {
+				HideProgress();
+				Swal.fire('Warning', err, 'warning');
+			}
+		});
+	}
+
+    var DeletePRNExpense = function (docNo, lineNo) {
+
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            dataType: "json",
+            data: JSON.stringify({
+                docNo: docNo,
+                lineNo: lineNo
+            }),
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            url: '/Purchase/DeletePRNExpense',
+            success: function (data) {
+                HideProgress();
+                if (data.success === true) {
+                    var form = $('<form>', {
+                        action: '/ExpenseRequisition/ExpenseRequisitionDocument',
+                        method: 'POST'
+                    }).append($('<input>', {
+                        type: 'hidden',
+                        name: 'DocNo',
+                        value: docNo
+                    }));
+                    form.appendTo('body').submit();
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseText, 'warning');
+            }
+        });
+    };
+    var ViewDocComments = function (documentNumber) {
+        $("#labelF").text("Document Comments");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ docNo: documentNumber }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/DocumentApprovalComments',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var EditDocument = function () {
+        $("#ppPlanCategory,#description,#activityDescription,#requiresImprest,#startDate,#noOfDays,#subject,#objective,#requiresDirectPayment,#directPaymentTypes,#requiresPRN,#requisitionProductGroup,#prnType2,#imprestType,#activityCode,#ddlImprestType").css("background-color", "white"); $("#ppPlanCategory,#description,#activityDescription,#requiresImprest,#startDate,#noOfDays,#subject,#objective,#requiresDirectPayment,#directPaymentTypes,#requiresPRN,#requisitionProductGroup,#prnType2,#imprestType,#ddlImprestType,#activityCode").attr("readonly", false);
+        $('#startDate').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-0:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy',
+            minDate: 0
+        });
+    }
+    function UpdateExpenseRequisition() {
+    var isValid = true;
+    var documentNo = '@Model.No';
+    var date = $("#date").val()
+    var workplan = $("#workplan").val();
+    var activityCode = $("#activityCode").val();
+    var description = $("#description").val();
+
+    var requiresImprest = $("#requiresImprest").children("option:selected").val() === "True";
+
+    var imprestType = null, startDate = null, numberOfDays = null, subject = null, objective = null;
+    if (requiresImprest) {
+        imprestType = $("#ddlImprestType").val();
+        startDate = $("#startDate").val();
+        numberOfDays = $("#noOfDays").val();
+        subject = $("#subject").val();
+        objective = $("#objective").val();
+    }
+    var requiresDirectPayment = $("#requiresDirectPayment").children("option:selected").val() === "True";
+    var ddldirectPayment = null;
+
+    if (requiresDirectPayment) {
+        ddldirectPayment = $("#directPaymentTypes").children("option:selected").val();
+    }
+
+    var requiresPRN = $("#requiresPRN").children("option:selected").val() === "True";
+    var procurementPlanID = null, prnType = null, locationCode = null, productRequisitionGroup = null, procurementPlanCategory = null;
+    if (requiresPRN) {
+        procurementPlanID = $("#procurementPlanID").val();
+        prnType = $("#prnType2").val();
+        locationCode = $("#geographicalLocation").val();
+        productRequisitionGroup = $("#requisitionProductGroup").val();
+        procurementPlanCategory = $("#ppPlanCategory").val();
+    }
+    if (!isValid) {
+        return;
+    }
+    var expenseRequisition = {
+        No: documentNo,
+        Date: date,
+        Description: description,
+        RequiresImprest: requiresImprest,
+        ImprestType: imprestType,
+        StartDate: startDate,
+        NoOfDays: numberOfDays,
+        Subject: subject,
+        Objective: objective,
+        RequiresDirectPayment: requiresDirectPayment,
+        RequiresPRN: requiresPRN,
+        PRNType: prnType,
+        ProductRequisitionGroup: productRequisitionGroup,
+        PPPlanCategory: procurementPlanCategory,
+        DirectPay: ddldirectPayment,
+        ActivityCode: activityCode
+    };
+    ShowProgress();
+    $.ajax({
+        type: "POST",
+        url: "/ExpenseRequisition/UpdateExpenseRequisition",
+        data: JSON.stringify(expenseRequisition),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (data) {
+            HideProgress();
+            if (data.success) {
+                var form = $('<form>', {
+                    action: '/ExpenseRequisition/ExpenseRequisitionDocument',
+                    method: 'POST'
+                }).append($('<input>', {
+                    type: 'hidden',
+                    name: 'DocNo',
+                    value: documentNo
+                }));
+                form.appendTo('body').submit();
+            } else {
+                Swal.fire('Warning', data.message, 'warning');
+            }
+        },
+        error: function (err) {
+            HideProgress();
+            Swal.fire('Warning', err.responseText, 'warning');
+        }
+    });
+}
+</script>

@@ -1,0 +1,39 @@
+﻿@model Latest_Staff_Portal.ViewModel.LeavePlanner
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Leave Calendar", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.DropDownListFor(m => m.Leave_Calendar, Model.ListOfCalendars, "Select Option--", new { @class = "form-control", @id = "Leave_Calendar" })
+            @Html.ValidationMessageFor(model => model.Leave_Calendar, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Implementing Unit", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.DropDownListFor(m => m.Responsibility_Center, Model.ListOfImplementingUnits, "Select Option--", new { @class = "form-control", @id = "Responsibility_Center" })
+            @Html.ValidationMessageFor(model => model.Implementing_Unit_Name, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Programme", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.DropDownListFor(m => m.Global_Dimension_1_Code, Model.ListOfDimensions, "Select Option--", new { @class = "form-control", @id = "Global_Dimension_1_Code" })
+            @Html.ValidationMessageFor(model => model.Global_Dimension_1_Code, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+
+</div>
+<div class="row">
+    <div class="form-group col-md-12 text-center" style="text-align:center">
+        <input type="button" class="btn btn-primary waves-effect waves-light" value="Submit Planner" onclick="SubmitPlanner();" />
+    </div>
+
+</div>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

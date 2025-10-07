@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.Attendance>
+
+<table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+    <thead style="background-color:black;color:white">
+    <tr>
+        <th>Entry No</th>
+        <th>Clockin Date</th>
+        <th>Employee No</th>
+        <th>Employee Name</th>
+        <th>Clockin Time</th>
+        <th>Clockout Time</th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (Model != null && Model.Any())
+    {
+        foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.EntryNo</td>
+                <td>@item.ClockinDate.ToString("yyyy-MM-dd")</td>
+                <td>@item.EmployeeNo</td>
+                <td>@item.EmployeeName</td>
+                <td>@item.ClockinTime.ToString(@"hh\:mm\:ss")</td>
+                <td>@item.ClockoutTime.ToString(@"hh\:mm\:ss")</td>
+            </tr>
+        }
+    }
+    else
+    {
+        <tr>
+            <td colspan="6" style="color:red">
+                No Records Found
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

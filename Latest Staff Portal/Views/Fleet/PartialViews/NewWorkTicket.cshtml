@@ -1,0 +1,201 @@
+﻿@model Latest_Staff_Portal.ViewModel.MonthlyWorkTicketCard
+
+@{
+    ViewBag.Title = "NewWorkTicket";
+}
+
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Month Date", htmlAttributes: new { @class = "control-label col-md-2" })
+            @*@Html.TextBoxFor(model => model.Month_Date, new { @class = "form-control", @id = "Month_Date2", @placeholder = "dd/mm/yyyy", @autocomplete = "off" })*@
+            @Html.DropDownListFor(model => model.Month_Date,Model.ListPayPeriods, "Select Option",  new { @class = "form-control", @id= "Month_Date2" })
+            @Html.ValidationMessageFor(model => model.Month_Date, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("GOK Work Ticket No", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Ticket_No, new { htmlAttributes = new { @class = "form-control", @id= "Ticket_No2" } })
+            @Html.ValidationMessageFor(model => model.Ticket_No, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Previous Work Ticket No", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Previous_Work_Ticket_No, new { htmlAttributes = new { @class = "form-control", @id = "Previous_Work_Ticket_No2" } })
+            @Html.ValidationMessageFor(model => model.Previous_Work_Ticket_No, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Vehicle Registration No", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.DropDownListFor(model => model.Vehicle_Registration_No, Model.ListOfVehicleReg, "Select Option", new { @class = "form-control", @id = "Vehicle_Registration_No2" })
+            @Html.ValidationMessageFor(model => model.Vehicle_Registration_No, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+
+    @*  <div class="form-group">
+            @Html.LabelFor(model => model.Comments, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Comments, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Comments, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+    @*<div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Department", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                @Html.EditorFor(model => model.Department, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Department, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    *@
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Region", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.DropDownListFor(model => model.Global_Dimension_1_Code, Model.ListOfRegions, "Select Option", new { @class = "form-control", @id = "Global_Dimension_1_Code2" })
+            @Html.ValidationMessageFor(model => model.Global_Dimension_1_Code, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+
+
+     <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Authorized By", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                @Html.DropDownListFor(model => model.Authorized_By,Model.ListOfEmployees," Select Option",  new { @class = "form-control" , @id= "Authorized_By2" })
+                @Html.ValidationMessageFor(model => model.Authorized_By, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+
+    @*  <div class="col-md-6">
+            <div class="form-group">
+                   @Html.LabelFor(model => model.Total_Fuel_Carried_Forward, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                       @Html.EditorFor(model => model.Total_Fuel_Carried_Forward, new { htmlAttributes = new { @class = "form-control" } })
+                       @Html.ValidationMessageFor(model => model.Total_Fuel_Carried_Forward, "", new { @class = "text-danger" })
+                   </div>
+               </div>
+            <div class="col-md-6">
+               <div class="form-group">
+                   @Html.LabelFor(model => model.Total_Fuel_Drawn_Ltrs, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                       @Html.EditorFor(model => model.Total_Fuel_Drawn_Ltrs, new { htmlAttributes = new { @class = "form-control" } })
+                       @Html.ValidationMessageFor(model => model.Total_Fuel_Drawn_Ltrs, "", new { @class = "text-danger" })
+                   </div>
+               </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Total_Kilometers", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                @Html.EditorFor(model => model.Total_Kilometers, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Total_Kilometers, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Total KMs Covered", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.Total_Km_x0027_s_Covered, new { htmlAttributes = new { @class = "form-control", @id = "Total_Kms_Covered2" } })
+            @Html.ValidationMessageFor(model => model.Total_Km_x0027_s_Covered, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    @*<div class="form-group">
+            @Html.LabelFor(model => model.Total_Miles_Per_Litre_Fuel, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Total_Miles_Per_Litre_Fuel, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Total_Miles_Per_Litre_Fuel, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+    @*<div class="form-group">
+            @Html.LabelFor(model => model.Total_Miles_Per_Ltr_Oil, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Total_Miles_Per_Ltr_Oil, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Total_Miles_Per_Ltr_Oil, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+    @* <div class="form-group">
+            @Html.LabelFor(model => model.Total_Oil_Drawn_Ltrs, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Total_Oil_Drawn_Ltrs, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Total_Oil_Drawn_Ltrs, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Defect", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Defect, new { htmlAttributes = new { @class = "form-control", @id = "Defect2" } })
+            @Html.ValidationMessageFor(model => model.Defect, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Defect_Date", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.TextBoxFor(model => model.Defect_Date, new { @class = "form-control", @id = "Defect_Date2", @placeholder = "dd/mm/yyyy", @autocomplete = "off" })
+            @*@Html.EditorFor(model => model.Defect_Date, new { htmlAttributes = new { @class = "form-control", @id = "" } })*@
+            @Html.ValidationMessageFor(model => model.Defect_Date, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Action Taken Reported", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Action_Taken_Reported, new { htmlAttributes = new { @class = "form-control", @id = "Action_Taken_Reported2" } })
+            @Html.ValidationMessageFor(model => model.Action_Taken_Reported, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+</div>
+
+<div align="center">
+    <input type="button" class="btn btn-primary action-buttons" value="Submit Record" onclick="SubmitWorkTicket();" />
+</div>
+
+
+<script>
+    $(document).ready(function () {
+      
+
+        $('#Month_Date2').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-0:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy',
+            minDate: 0
+        });
+
+        $('#Defect_Date2').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-0:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy',
+            minDate: 0
+        });
+
+       
+
+    });
+</script>
+
+

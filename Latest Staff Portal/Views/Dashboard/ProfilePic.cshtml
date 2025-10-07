@@ -1,0 +1,31 @@
+﻿@using Latest_Staff_Portal.Models
+@model Latest_Staff_Portal.ViewModel.EmployeeView
+<div>
+    @{
+        var imgSrc = "";
+        if (Session["ImgProfile"] == null)
+        {
+           
+        }
+        else
+        {
+            imgSrc = Session["ImgProfile"].ToString();
+        }
+
+        if (imgSrc != "")
+        {
+            <img src="@imgSrc" Height="115" Width="114" style="border-radius: 50% !important"/>
+        }
+        else
+        {
+            if (Model.Gender == "Female")
+            {
+                <img src="~/assets/images/profile_f.png" Height="115" Width="114" style="border-radius: 50% !important"/>
+            }
+            else
+            {
+                <img src="~/assets/images/profile_m.png" Height="115" Width="114" style="border-radius: 50% !important"/>
+            }
+        }
+    }
+</div>

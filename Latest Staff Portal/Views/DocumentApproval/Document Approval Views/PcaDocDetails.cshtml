@@ -1,0 +1,255 @@
+﻿@model Latest_Staff_Portal.ViewModel.PayChangeAdvice
+
+
+<div class="card">
+
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <b>Document No</b>
+                @Html.TextBoxFor(m => m.ChangeAdviceSerialNo, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+            <div class="col-md-6">
+                <b>Payroll Period</b>
+                @Html.TextBoxFor(m => m.PayrollPeriod, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "dtPicker" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <b>Employee No</b>
+                @Html.TextBoxFor(m => m.EmployeeCode, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtEmpNo" })
+            </div>
+            <div class="col-md-6">
+                <b>Employee Name</b>
+                @Html.TextBoxFor(m => m.EmployeeName, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtEmpName" })
+            </div>
+        </div>
+        @*<div class="row">
+                <div class="col-md-6">
+                    <b>Implementing Unit</b>
+                    @Html.DropDownListFor(m => m.Dim1, new SelectList(Model.ListOfDim1, "Value", "Text", Model.Dim1), "--Select Station--", new { @id = "ddlDim1", @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                </div>
+                <div class="col-md-6">
+                    <div class="col-md-6">
+                        <b>Department</b>
+                        @Html.DropDownListFor(m => m.Dim2, new SelectList(Model.ListOfDim2, "Value", "Text", Model.Dim2), "--Select Project--", new { @id = "ddlDim2", @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                    </div>
+                </div>
+            </div>*@
+        @*<div class="row">
+                <div class="col-md-6">
+                    <b>Source of Funds</b>
+                    @Html.DropDownListFor(m => m.Dim3, new SelectList(Model.ListOfDim3, "Value", "Text", Model.Dim3), "--Select Program--", new { @id = "ddlDim3", @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                </div>
+                <div class="col-md-6">
+                    <div class="col-md-6">
+                        <b>Donor</b>
+                        @Html.DropDownListFor(m => m.Dim4, new SelectList(Model.ListOfDim4, "Value", "Text", Model.Dim2), "--Select Donor--", new { @id = "ddlDim4", @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                    </div>
+                </div>
+            </div>*@
+        <div class="row">
+            <div class="col-md-6">
+                <b>Status</b>
+                @Html.TextBoxFor(m => m.Status, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtStatus" })
+            </div>
+            <div class="col-md-6">
+                <b>Basic Pay</b>
+                @Html.TextBoxFor(m => m.BasicPay, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtNetAmount" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <b>Comments</b>
+                @Html.TextAreaFor(m => m.Comments, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", rows = 5, id = "txtPurpose" })
+            </div>
+        </div>
+    </div>
+    <hr/>
+    @*<div align="center" id="DivUpdateButton">
+            <input type="button" class="btn btn-primary waves-effect waves-light" value="Update Header" onclick="UpdatePCAHeader();" />
+        </div>*@
+    <div id="DivImpLines">
+        <hr style="border:1px solid black"/>
+        <b>Pay Change Advice Lines</b>
+        <hr/>
+        <div id="divClaimLines"></div>
+        <hr style="border:1px solid black"/>
+        <div class="row">
+            <div class="col-md-12">
+                <b>Attachments</b>
+                <div id="divAttachDocs"></div>
+            </div>
+        </div>
+        <hr style="border:1px solid black"/>
+        @*<div align="right" id="DivSendForApproval">
+                <input type="button" class="btn btn-danger BtnPadding" value="send for approval >>>" onclick="SendDocForApproval();" />
+            </div>*@
+        <hr/>
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" ke aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myModalLabel">New Pay Change Advice Line</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal View Doc////////////////////////////*@
+<div class="modal fade" id="myModalAttachment" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Attachment</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalAttachmentBody">
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@{
+    if (Model.Status == "Open")
+    {
+        <div align="center">
+            <input type="button" class="btn btn-primary waves-effect waves-light" value="Send (@Model.ChangeAdviceSerialNo) For Approval" onclick="sendPCAAppForApproval('@Model.ChangeAdviceSerialNo');"/>
+        </div>
+    }
+}
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script src="~/assets/js/pdfobject.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadPCADocumentLines(`@Model.ChangeAdviceSerialNo`,`@Model.Status`);
+        HideHeaderEditInput();
+        var status = `@Model.Status`;
+        //if (status == "Pending") {
+        //    $("#HideEditButton").show();
+        //    $("#HideLineButton").show();
+        //    $("#DivSendForApproval").show();
+        //}
+        //else {
+        //    $("#HideEditButton").hide();
+        //    $("#HideLineButton").hide();
+        //    $("#DivSendForApproval").hide();
+        //}
+        var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+        if (Successmsg != "") {
+            Swal.fire('Success', Successmsg, 'success',true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+    });
+    var LoadPCADocumentLines = function (DocNo, Status) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ DocNo: DocNo, Status: Status }),
+            url: "/PCA/PCADocumentLines",
+            success: function (data) {
+                $("#divClaimLines").html(data);
+                if (Status != "Open") {
+                    $("#addPCALine").hide();
+                }
+                HideProgress();
+                GetDocumentAttachments();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    };
+    var GetDocumentAttachments = function () {
+        ShowProgress();
+        var DocNo = `@Model.ChangeAdviceSerialNo`;
+        var Status = `@Model.Status`;
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ DocNo: DocNo, TableID: 50763, Status: Status}),
+            url: "/Common/DocumentAttachments",
+            success: function (data) {
+                HideProgress();
+                $("#divAttachDocs").html(data);
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    };
+  
+    var ViewAttachment = function (tbl, No, Id,fName, ext) {
+        $.ajaxSetup({ cache: false });
+        ShowProgress();
+        $.ajax({
+            cache: false,
+            url: '/Common/DocumentAttachmentview',
+            type: "POST",
+            datatype: "json",
+            cache: false,
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ tblID: tbl, No: No, ID: Id, fileName: fName, ext: ext }),
+            success: function (data) {
+                if (data.success == true) {
+                    if (data.view == true) {
+                        var viewer = $("#modalAttachmentBody");
+                        if (ext == "pdf") {
+                            PDFObject.embed("data:application/" + ext + ";base64," + data.message + "", viewer);
+                        }
+                        if (ext == "png" || ext == "jpg") {
+                            PDFObject.embed("data:image/" + ext + ";base64," + data.message + "", viewer);
+                        }
+                        $("#myModalAttachment").modal("show");
+                        HideProgress();
+                    }
+                    else {
+                        window.location = '/Common/AttachmentDownload?fileName=' + data.message;
+                        Swal.fire('Success', 'Document Downloaded successfully', 'success');
+                        HideProgress();
+                    }
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    };
+
+
+</script>

@@ -1,0 +1,299 @@
+﻿@model Latest_Staff_Portal.ViewModel.PMMUCard
+@{
+    ViewBag.Title = "PMMU";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#" onclick="DSPOPLink();">DSPOP</a></li>
+                <li class="breadcrumb-item active">PMMU</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+
+        @if (Model.PMMU_Document_Stage != "Evaluation")
+        {
+            <div style="text-align:right">
+                <button class="action-buttons" onclick="NewPMMU();">
+                    <i class="fa fa-plus-circle" aria-hidden="true"></i> New PMMU
+                </button>
+            </div>
+        }
+
+        <hr />
+        <div id="divPMMUList"></div>
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">New PMMU</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal Links////////////////////////////*@
+<div class="modal fade" id="myModalLinks" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Actions</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodyLinks">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*//////////////////////create copy Modal////////////////////////////*@
+<div class="modal fade" id="createCopyModal" tabindex="-1" aria-labelledby="createCopyModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Create Copy</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h6>How many copies do you like to create? (Maximum 5 copies)</h6>
+                        <div class="form-group">
+                            <input class="form-control" type="number" id="copiesNo" name="copiesNo" value="" placeholder="Enter the number of copies to create" required />
+                        </div>
+                        <input type="text"   id="CopyNo" />
+                        <input type="text"  id="Target_Setting_Commitee" />
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="confirmCreateCopy()">Create</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/assets/js/ShowProgression.js"></script>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadPMMUList();
+        var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+        if (Successmsg != "") {
+            Swal.fire('Success', Successmsg, 'success', true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+    });
+	var LoadPMMUList = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+			url: "/Performance/PMMUList",
+            success: function (data) {
+                $("#divPMMUList").empty().html(data);
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+
+
+    var ViewDoc = function (No) {
+        ShowProgress();
+        var form = $('<form>', {
+            action: '/Performance/PMMUDocumentView',
+            method: 'POST'
+        }).append($('<input>', {
+            type: 'hidden',
+            name: 'No',
+            value: No
+        }));
+        form.appendTo('body').submit();
+    };
+
+    
+
+    function createCopy(No, Target_Setting_Commitee) {
+        // Show the modal
+        document.getElementById('CopyNo').value = No;
+        document.getElementById('Target_Setting_Commitee').value = Target_Setting_Commitee;
+
+        var createCopyModal = new bootstrap.Modal(document.getElementById('createCopyModal'));
+        createCopyModal.show();
+    }
+
+    var confirmCreateCopy = function () {
+        var copies = parseInt(document.getElementById('copiesNo').value);
+        var No = document.getElementById('CopyNo').value;
+        alert(No)
+
+        // Check if the input is valid (e.g., not empty or less than 1)
+        if (isNaN(copies) || copies <= 0) {
+            Swal.fire("Warning", "There is some problem processing your request. Please enter a valid number of copies.", "warning");
+            return;
+        }
+
+        if ( copies > 5) {
+            Swal.fire("Warning", "You can only create a maximum of 5 copies", "warning");
+            return;
+        }
+
+        // Assuming PMMU is an object you want to send
+        var PMMU = {
+            No: No,
+            numberOfCopies: copies,
+            // Add other properties to PMMU as required
+        };
+
+        ShowProgress();
+
+        $.ajax({
+            type: "POST",
+            url: "/Performance/SubmitPMMUCopies",
+            data: JSON.stringify(PMMU),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                HideProgress();
+                if (data.success) {
+                    Swal.fire('Success', 'PMMU copies created successfully.', 'success');
+                    location.reload();
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseText, 'warning');
+            }
+        });
+    };
+
+    var NewPMMU = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET", // Use GET as you're not sending data to the server
+            url: "/Performance/NewPMMU", // Ensure the correct URL
+            dataType: "html", // Expecting an HTML response
+            success: function (data) {
+                $("#modalBody").html(data); // Inject the returned partial view into the modal body
+                HideProgress();
+                $("#myModal").modal("show"); // Show the modal
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', 'An error occurred while loading the PMMU form. Please try again.', 'warning');
+            }
+        });
+    };
+
+
+    function SubmitPMMU() {
+        var isValid = true;
+
+        //get form details
+        var Responsible_Employee_No = $("#Responsible_Employee_No").val();
+        var Description = $("#Description").val();
+        var Strategy_Plan_ID = $("#Strategy_Plan_ID").val();
+        var Responsibility_Center = $("#Responsibility_Center").val();
+
+        if (!Strategy_Plan_ID) {
+            Swal.fire('Warning', 'Please select a Strategy Plan ID.', 'warning');
+            isValid = false;
+        }
+
+        if (!Description) {
+            Swal.fire('Warning', 'Description field is required.', 'warning');
+            isValid = false;
+        }
+
+        if (!isValid) {
+            return;
+        }
+
+        var PMMU = {
+            Description: Description,
+            Strategy_Plan_ID: Strategy_Plan_ID,
+            Responsibility_Center: Responsibility_Center,
+        };
+
+        ShowProgress();
+
+        $.ajax({
+            type: "POST",
+            url: "/Performance/SubmitPMMU",
+            data: JSON.stringify(PMMU),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                HideProgress();
+                if (data.success) {
+                    Swal.fire('Success', 'PMMU created', 'success');
+                    ViewDoc(data.message);
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseText, 'warning');
+            }
+        });
+    }
+</script>
+
+

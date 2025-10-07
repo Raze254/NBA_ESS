@@ -1,0 +1,112 @@
+﻿@model Latest_Staff_Portal.ViewModel.MedicalCardReplacement
+
+@{
+    ViewBag.Title = "MedicalCardReplacementPartialView";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    hr {
+        margin: 4px;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+
+<div style="background-color: black;">
+    <a href="#" onclick="LoanApplicationsList();" style="color: yellow"><<< Back to Medical Card Replacement List</a>
+</div>
+
+<div class="card">
+    <div class="card-title">Medical Card Replacement (@Model.DocumentNo.)</div>
+    <hr/>
+
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                @Html.Label("Document No ", new { @class = "control-label col-md-12" })
+                @Html.TextBoxFor(m => m.DocumentNo, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+            <div class="col-md-6">
+                @Html.Label("Date ", new { @class = "control-label col-md-12" })
+                @Html.TextBoxFor(m => m.DocumentDate, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                @Html.Label("Empolyee No ", new { @class = "control-label col-md-12" })
+                @Html.TextBoxFor(m => m.EmployeeNo, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+            <div class="col-md-6">
+                @Html.Label("Employee Name ", new { @class = "control-label col-md-12" })
+                @Html.TextBoxFor(m => m.EmployeeName, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                @Html.Label("Dependant No", new { @class = "control-label col-md-12" })
+                @Html.TextBoxFor(m => m.DependantNo, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+            </div>
+
+            <div class="col-md-6">
+                @Html.Label("Dependant Name", new { @class = "control-label col-md-12" })
+                @Html.TextBoxFor(m => m.DependantName, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                @Html.Label("Card No", new { @class = "control-label col-md-12" })
+                @Html.TextBoxFor(m => m.CardNo, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+            </div>
+
+            <div class="col-md-6">
+                @Html.Label("Description", new { @class = "control-label col-md-12" })
+                @Html.TextAreaFor(m => m.Description, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" ke aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myModalLabel">
+                    <label id="labelF"></label>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script src="~/assets/js/pdfobject.min.js"></script>
+<script type="text/javascript">
+    
+
+</script>

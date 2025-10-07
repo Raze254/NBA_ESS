@@ -1,0 +1,60 @@
+﻿@model Latest_Staff_Portal.ViewModel.EmpExtraInf
+<style>
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+<div class="pre-scrollable">
+    <table id="tableScoreCard" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead>
+        <tr>
+            <th>@Model.Title</th>
+            @if (Model.Level == "S")
+            {
+                <th style="width:10%">Action</th>
+            }
+        </tr>
+        </thead>
+        <tbody>
+        @{
+            if (Model.EmpExtraInfList != null)
+            {
+                {
+                    if (Model.EmpExtraInfList.Count() > 0)
+                    {
+                        foreach (var item in Model.EmpExtraInfList)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Description)
+                                </td>
+                                @if (Model.Level == "S")
+                                {
+                                    <td style="text-align:right">
+                                        <a href="javascript:void(0);" class="text-danger" onclick="DropEmpExtraInf('@item.ANUPEAisal_No', '@item.Entry_No');">Remove</a>
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="2" style="color:red">
+                                No Records Found
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+        }
+        </tbody>
+    </table>
+</div>
+@if (Model.Level == "S")
+{
+    <div align="right">
+        <input type="button" value="Add Line" class="btn btn-danger BtnPadding" onclick="AddEmpExtra('@Model.Title', '@Model.Section');"/>
+    </div>
+}

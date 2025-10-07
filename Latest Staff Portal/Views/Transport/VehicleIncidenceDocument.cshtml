@@ -1,0 +1,258 @@
+﻿@model Latest_Staff_Portal.ViewModel.VehicleIncident
+
+
+@{
+    ViewBag.Title = "VehicleIncidenceDocument";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    hr {
+        margin: 4px;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+<div style="background-color: black;">
+    <a href="/Transport/VehicleIncidentView" style="color:yellow"><<< Back To Incidence List</a>
+</div>
+<div class="card">
+    <div class="card-title">Vehicle Incidence Card(@Model.IncidentNo)</div>
+    <hr/>
+    @*<div style="text-align:right" id="HideEditButton">
+        <input type="button" class="btn btn-danger BtnPadding" id="btnEdit" value="Edit Header" onclick="EditDocument();" />
+        <hr />
+    </div>*@
+    <div class="card-body">
+
+        <div class="row">
+            <div class="col-md-6">
+                <b>Incidence Number</b>
+                @Html.TextBoxFor(m => m.IncidentNo, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+            <div class="col-md-6">
+                <b>Status</b>
+                @Html.TextBoxFor(m => m.Status, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <b>Incident Date</b>
+                @Html.TextBoxFor(m => m.IncidentDate, new { @class = "form-control", placeholder = "dd/mm/yyyy", id = "dtPicker", onkeydown = "return false;", autocomplete = "off" })
+            </div>
+
+
+            <div class="col-md-6">
+                <b>Vehicle Id</b>
+                @Html.DropDownListFor(model => model.VehicleID, Model.ListOfVehicles, "--Select Vehicle Id --", new { @class = "form-control", id = "ddlVehicleId" })
+                @Html.ValidationMessageFor(model => model.VehicleID, "", new { @class = "text-danger" })
+            </div>
+
+
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <b>Driver ID</b>
+                @Html.DropDownListFor(model => model.DriverID, Model.ListOfDrivers, "--Select Driver Id --", new { @class = "form-control", id = "ddlDriverId" })
+                @Html.ValidationMessageFor(model => model.DriverID, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-6">
+                <b>Incident Time</b>
+                @Html.TextBoxFor(m => m.IncidentTime, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <b>Person Culpable</b>
+                @Html.TextBoxFor(m => m.PersonCulpable, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+            </div>
+            <div class="col-md-6">
+                <b>Responsible Employee</b>
+                @Html.DropDownListFor(model => model.ResponsibleEmployee, Model.ListOfResponsibleEmployee, "--Select Responsible Employee--", new { @class = "form-control", id = "ddlRespEmployee" })
+                @Html.ValidationMessageFor(model => model.ResponsibleEmployee, "", new { @class = "text-danger" })
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <b>Work Ticket No</b>
+                @Html.DropDownListFor(model => model.WorkTicketNo, Model.ListOfWorkTickets, "--Select Work Ticket--", new { @class = "form-control", id = "ddlWorkTicket" })
+                @Html.ValidationMessageFor(model => model.WorkTicketNo, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-6">
+                <b>Duty Station</b>
+                @Html.DropDownListFor(model => model.DutyStation, Model.ListOfDutyStations, "--Select Duty Station--", new { @class = "form-control", id = "ddlDutyStation" })
+                @Html.ValidationMessageFor(model => model.DutyStation, "", new { @class = "text-danger" })
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <b>Incident Description</b>
+                @Html.TextAreaFor(m => m.IncidentDescription, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+
+            </div>
+        </div>
+    </div>
+
+
+    @*//////////////////////Modal////////////////////////////*@
+    <div id="myModal" class="modal fade" tabindex="-1" role="dialog" ke aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title mt-0" id="myModalLabel">
+                        <label id="labelF"></label>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modalBody">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script src="~/assets/js/pdfobject.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#dtFrom,#dtTo').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-0:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy',
+            minDate: 0
+        });
+        $("#dtFrom,#dtTo").focus(function () {
+            $("#ui-datepicker-div").position({
+                my: "left top",
+                at: "left bottom",
+                of: $(this)
+            });
+        });
+        $("#ddlDim2,#ddlDim1,#ddlDriver,#ddlRespC,#ddlVendor,#ddlVehicle").select2({
+            width: '100%'
+        });
+        //document.getElementById("ddlDim2").disabled = true;
+        //document.getElementById("ddlDim1").disabled = true;
+
+    });
+    var FilterDimension2 = function () {
+        var Dim1 = $("#ddlDim1").children("option:selected").val();
+
+        if (Dim1 == "") {
+            $("#ddlDim2 option").remove();
+            $('#ddlDim2').empty().append('<option selected="selected" value="">--Select Project--</option>');
+        }
+        else {
+            ShowProgress();
+            $("#ddlDim2 option").remove();
+            $('#ddlDim2').empty().append('<option selected="selected" value="">--Select Project---</option>');
+
+            $.getJSON("/Common/FilterDimension2", { Dim1: Dim1 },
+                function (data) {
+                    $('#ddlDim2').empty().append('<option selected="selected" value="">--Select Project--</option>');
+                    $.each(data.ListOfDim2, function () {
+                        $("#ddlDim2").append($("<option></option>").val(this['Value']).html(this['Text']));
+                    });
+                    HideProgress();
+                });
+        }
+    }
+    var FilterDimension3 = function () {
+        var Dim1 = $("#ddlDim1").children("option:selected").val();
+        var Dim2 = $("#ddlDim2").children("option:selected").val();
+        var Dim3 = $("#ddlDim3").children("option:selected").val();
+        if (Dim1 == "") {
+            $("#ddlDim3 option").remove();
+            $('#ddlDim3').empty().append('<option selected="selected" value="">--Select Project--</option>');
+        }
+        else {
+            ShowProgress();
+            $("#ddlDim3 option").remove();
+            $('#ddlDim3').empty().append('<option selected="selected" value="">--Select Programme Area---</option>');
+
+            $.getJSON("/Common/FilterDimension3", { Dim1: Dim1, Dim2: Dim2, Dim3: Dim3 },
+                function (data) {
+                    $('#ddlDim3').empty().append('<option selected="selected" value="">--Select Programme Area--</option>');
+                    $.each(data.ListOfDim3, function () {
+                        $("#ddlDim3").append($("<option></option>").val(this['Value']).html(this['Text']));
+                    });
+                    HideProgress();
+                });
+        }
+    }
+    var FilterDimension4 = function () {
+        var Dim1 = $("#ddlDim1").children("option:selected").val();
+        var Dim2 = $("#ddlDim2").children("option:selected").val();
+        var Dim3 = $("#ddlDim3").children("option:selected").val();
+        if (Dim1 == "") {
+            $("#ddlDim4 option").remove();
+            $('#ddlDim4').empty().append('<option selected="selected" value="">--Select Activity--</option>');
+        }
+        else {
+            ShowProgress();
+            $("#ddlDim4 option").remove();
+            $('#ddlDim4').empty().append('<option selected="selected" value="">--Select Activity---</option>');
+
+            $.getJSON("/Common/FilterDimension4", { Dim1: Dim1, Dim2: Dim2, Dim3: Dim3 },
+                function (data) {
+                    $('#ddlDim4').empty().append('<option selected="selected" value="">--Select Activity--</option>');
+                    $.each(data.ListOfDim4, function () {
+                        $("#ddlDim4").append($("<option></option>").val(this['Value']).html(this['Text']));
+                    });
+                    HideProgress();
+                });
+            FilterDimension7();
+        }
+    }
+
+    var FilterDimension7 = function () {
+        var Dim1 = $("#ddlDim1").children("option:selected").val();
+        var Dim2 = $("#ddlDim2").children("option:selected").val();
+        var Dim3 = $("#ddlDim3").children("option:selected").val();
+        if (Dim1 == "") {
+            $("#ddlDim7 option").remove();
+            $('#ddlDim7').empty().append('<option selected="selected" value="">--Select Sub Program--</option>'); c
+        }
+        else {
+            ShowProgress();
+            $("#ddlDim7 option").remove();
+            $('#ddlDim7').empty().append('<option selected="selected" value="">--Select Sub Program---</option>');
+
+            $.getJSON("/Common/FilterDimension7", { Dim1: Dim1, Dim3: Dim3 },
+                function (data) {
+                    $('#ddlDim7').empty().append('<option selected="selected" value="">--Select Sub Program--</option>');
+                    $.each(data.ListOfDim7, function () {
+                        $("#ddlDim7").append($("<option></option>").val(this['Value']).html(this['Text']));
+                    });
+                    HideProgress();
+                });
+        }
+    }
+</script>

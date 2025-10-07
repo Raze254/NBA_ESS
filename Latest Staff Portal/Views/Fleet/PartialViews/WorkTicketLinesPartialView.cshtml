@@ -1,0 +1,156 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.DailyWorkTicketLines>
+
+@{
+    ViewBag.Title = "WorkTicketLinesPartialView";
+}
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead>
+            <tr>
+                <th>Daily Work Ticket</th>
+                <th>Entry No</th>
+                <th>Transport Requisition No</th>
+                <th>Commencement</th>
+                <th>Destination</th>
+                <th>Route Description</th>
+                <th>Date</th>
+                <th>Driver Allocated</th>
+                <th>Driver Name</th>
+                <th>Journey Route</th>
+                <th>Oil Drawn (Litres)</th>
+                <th>Fuel Drawn (Litres)</th>
+                <th>Order No</th>
+                <th>Time Out</th>
+                <th>Time In</th>
+                <th>Opening Odometer Reading</th>
+                <th>Closing Odometer Reading</th>
+                <th>Total Kilometres</th>
+                <th>Miles Per Litre (Fuel)</th>
+                <th>Miles Per Litre (Oil)</th>
+                <th>Fuel Carried Forward</th>
+                <th>Authorized By</th>
+                <th>GOK Officer</th>
+                <th>Position</th>
+                <th>Defect Date</th>
+                <th>Defect</th>
+                <th>Action Taken / Reported</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr data-entryno="@item.EntryNo">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Daily_Work_Ticket)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EntryNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Transport_Requisition_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Commencement)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Destination)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Route_Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Driver_Allocated)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Driver_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Journey_Route)
+                    </td>
+                    <td>
+                        @Html.EditorFor(modelItem => item.Oil_Drawn_Litres, new { htmlAttributes = new { @class = "form-control oil-drawn", @id = "Oil_Drawn_Litres_" + item.EntryNo } })
+                    </td>
+                    <td>
+                        @Html.EditorFor(modelItem => item.Fuel_Drawn_Litres, new { htmlAttributes = new { @class = "form-control Fuel_Drawn_Litres", @id = "Fuel_Drawn_Litres_" + item.EntryNo } })
+                    </td>
+                    <td>
+                        @Html.EditorFor(modelItem => item.Order_No, new { htmlAttributes = new { @class = "form-control Order_No", @id = "Order_No_" + item.EntryNo } })
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(modelItem => item.Time_out, new
+                        {
+                            @class = "form-control Time_out",
+                            type = "time",
+                            id = "Time_out_" + item.EntryNo
+                        })
+                    </td>
+
+                   
+                    <td>
+                        @Html.TextBoxFor(modelItem => item.Time_In, new
+                        {
+                            @class = "form-control Time_In",
+                            type = "time",
+                            id = "Time_In_" + item.EntryNo
+                        })
+                    </td>
+                    <td>
+                        @Html.EditorFor(modelItem => item.Opening_Odometer_Reading, new { htmlAttributes = new { @class = "form-control Opening_Odometer_Reading", @id = "Opening_Odometer_Reading_" + item.EntryNo } })
+                    </td>
+                    <td>
+                        @Html.EditorFor(modelItem => item.Closing_Odometer_Reading, new { htmlAttributes = new { @class = "form-control Closing_Odometer_Reading", @id = "Closing_Odometer_Reading_" + item.EntryNo } })
+                    </td>
+                    <td>
+                        @Html.EditorFor(modelItem => item.Total_Kilometres, new { htmlAttributes = new { @class = "form-control Total_Kilometres", @id = "Total_Kilometres_" + item.EntryNo } })
+                    </td>
+                    <td>
+                        @Html.EditorFor(modelItem => item.Miles_Per_Litre_Fuel, new { htmlAttributes = new { @class = "form-control Miles_Per_Litre_Fuel", @id = "Miles_Per_Litre_Fuel_" + item.EntryNo } })
+                    </td>
+                    <td>
+                        @Html.EditorFor(modelItem => item.Miles_Per_Litre_Oil, new { htmlAttributes = new { @class = "form-control Miles_Per_Litre_Oil", @id = "Miles_Per_Litre_Oil_" + item.EntryNo } })
+                    </td>
+                    <td>
+                        @Html.EditorFor(modelItem => item.Fuel_Carried_Forward, new { htmlAttributes = new { @class = "form-control Fuel_Carried_Forward", @id = "Fuel_Carried_Forward_" + item.EntryNo } })
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Authorized_By)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GOK_Officer)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Position)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Defect_Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Defect)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Action_Taken_Reported)
+                    </td>
+                    <td>
+                        <button class="btn btn-primary btn-sm action-buttons2" onclick="handleUpdate('@item.Daily_Work_Ticket','@item.Transport_Requisition_No','@item.EntryNo')">
+                            <i class="mdi mdi-pencil font-size-16"></i> Update
+                        </button>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+$("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100] // Same options for the second table
+});
+</script>

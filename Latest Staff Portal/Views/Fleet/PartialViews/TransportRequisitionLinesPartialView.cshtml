@@ -1,0 +1,82 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.FleetRequestLines>
+
+@{
+    ViewBag.Title = "FleetRequisitionLinesPartialView";
+    var DocNo= ViewBag.DocNo;
+    var Status = ViewBag.Status;
+}
+
+<div class="table-responsive">
+    <table id="TReqLines" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead>
+            <tr>
+                <th>Req No</th>
+                <th>Employee No</th>
+                <th>Employee Name</th>
+                <th>Date of Trip</th>
+                <th>No of Days Requested</th>
+                <th>Trip End Date</th>
+                <th>Trip End Time</th>
+                <th></th>
+            </tr>
+
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Req_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Employee_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Employee_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date_of_Trip)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.No_of_Days_Requested)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Trip_End_Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Trip_End_Time)
+                    </td>
+                    <td>
+
+                        @if (Status == "Open")
+                        {
+                            <button class="btn btn-danger btn-sm" onclick="DeleteTransportRequisitionLine('@DocNo', `@item.Employee_No` );">
+                                <i class="fa fa-plus-circle" aria-hidden="true"></i> Delete Line
+                            </button>
+                        }
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div style="text-align:right">
+    @if (Status == "Open")
+    {
+        <button class="btn btn-primary btn-sm action-buttons2" onclick="AddTransportRequisitionLine('@DocNo' );">
+            <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Line
+        </button>
+    }
+
+</div>
+
+<script>
+    $("#TReqLines").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100] // Same options for the second table
+    });
+</script>
+

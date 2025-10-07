@@ -1,0 +1,63 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.ImprestSurrender>
+@{
+    var status = ViewBag.status;
+}
+<div class="text-center">
+    <h4>Imprest Surrender List (@status)</h4>
+</div>
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th>Action</th>
+                <th>No</th>
+                <th>Date</th>
+                <th>Payee</th>
+                <th>Imprest Amount</th>
+                <th>Imprest Issue No</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @{
+                if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <input type="button" onclick="ViewDoc('@item.No');" class="btn btn-sm action-buttons3" value="Select" />
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.No)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Date)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Payee)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ImprestAmount)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ImprestIssueDocNo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Status)
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [3, 10, 25, 50, 100]
+    });
+</script>

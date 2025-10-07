@@ -1,0 +1,85 @@
+﻿@model Latest_Staff_Portal.ViewModel.TrainingParticipantsList
+
+@{
+    ViewBag.Title = "NewTrainingRequisitionLine";
+}
+    
+<div class="row">
+   
+  
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Employee", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.DropDownListFor(model => model.Employee_Code,Model.ListOfEmployees,"Select Option",  new { @class = "form-control", @id= "Employee_Code" } )
+            @Html.ValidationMessageFor(model => model.Employee_Code, "", new { @class = "text-danger" })
+        </div>
+    </div>
+   @* <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Training_Responsibility_Code, htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Training_Responsibility_Code, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Training_Responsibility_Code, "", new { @class = "text-danger" })
+        </div>
+    </div>*@
+    
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Type Of Expense", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.DropDownListFor(model => model.Type, Model.ListOfExpenseTypes,"Select Option",  new { @class = "form-control", @id = "Type" })
+            @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Destination, htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Destination, new { htmlAttributes = new { @class = "form-control", @id = "Destination" } })
+            @Html.ValidationMessageFor(model => model.Destination, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.No_of_Days, htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.No_of_Days, new { htmlAttributes = new { @class = "form-control", @id = "No_of_Days" } })
+            @Html.ValidationMessageFor(model => model.No_of_Days, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Total_Amount, htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Total_Amount, new { htmlAttributes = new { @class = "form-control", @id = "Total_Amount" } })
+            @Html.ValidationMessageFor(model => model.Total_Amount, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Training_Responsibility, htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Training_Responsibility, new { htmlAttributes = new { @class = "form-control", @id = "Training_Responsibility" } })
+            @Html.ValidationMessageFor(model => model.Training_Responsibility, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Employee Region", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.DropDownListFor(model => model.Global_Dimension_1_Code, Model.ListOfRegions," Select Option", new { @class = "form-control", @id = "Global_Dimension_1_Code" })
+            @Html.ValidationMessageFor(model => model.Global_Dimension_1_Code, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Witness", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Witness, new { htmlAttributes = new { @class = "form-control", @id = "Witness" } })
+            @Html.ValidationMessageFor(model => model.Witness, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    
+</div>
+<div class="text-center"> <input type="button" class="btn btn-primary action-buttons" value="Submit" onclick="SubmitTrainingRequisitionLine();" /></div>

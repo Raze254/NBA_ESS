@@ -1,0 +1,66 @@
+﻿@model List<Latest_Staff_Portal.ViewModel.TrainingNeedRequests>
+<div class="row" id="">
+    <div class="col-xl-12 col-sm-12 col-12">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="datatable table table-stripped" id="datatable-requisitions">
+                                <thead style="background-color:black;color:white">
+                                <tr>
+                                    <th>Action</th>
+                                    <th>Code</th>
+                                    <th>Financial Year</th>
+                                    <th>Employee No</th>
+                                    <th>Employee Name</th>
+                                    <th>Department</th>
+                                    <th>Job Title</th>
+                                    <th>Status</th>
+                                    <th>Estimate Cost</th>
+                                    <th>Source</th>
+                                    <th>Submitted</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model != null && Model.Any())
+                                    {
+                                        foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td style="text-align:right">
+                                                    <button class="btn btn-primary btn-sm" onclick="ViewTrainingRequisitionDoc('@item.Code');">
+                                                        <i class="fa fa-eye"></i> View
+                                                    </button>
+   
+                                                </td>
+                                                <td>@item.Code</td>
+                                                <td>@item.Financial_Year</td>
+                                                <td>@item.Employee_No</td>
+                                                <td>@item.Employee_Name</td>
+                                                <td>@item.Department</td>
+                                                <td>@item.Job_Title</td>
+                                                <td>@item.Status</td>
+                                                <td>@item.Estimate_Cost.ToString("N0")</td>
+                                                <td>@item.Source</td>
+                                                <td>@(item.Submitted ? "Yes" : "No")</td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#datatable-requisitions").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100],
+        "bDestroy": true
+    });
+</script>

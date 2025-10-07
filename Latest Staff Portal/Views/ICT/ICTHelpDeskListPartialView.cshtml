@@ -1,0 +1,69 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.ICTHelpDesk>
+
+@{
+    ViewBag.Title = "ICTHelpDeskListPartialView";
+}
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead class="thead-bg">
+            <tr>
+                <th>Action</th>
+                <th>Document No</th>
+                @*<th>Description</th>*@
+                <th>ICT Issue Category</th>
+                <th>Request Date</th>
+                <th>Request Time</th>
+                <th>Status</th>
+                <th>Assigned To</th>
+
+            </tr>
+
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <input type="button" onclick="ViewDoc('@item.Job_No');" class="btn btn-primary btn-sm action-buttons2" value="Select" />
+                        @if (@item.Status == "Resolved")
+                        {
+                            <input type="button" onclick="CloseIssue('@item.Job_No');" class="btn btn-danger btn-sm" value="Close Issue" />
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Job_No)
+                    </td>
+                  @*  <td>
+                        @Html.DisplayFor(modelItem => item.Description_of_the_issue)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ICT_Issue_Category)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Request_Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Request_Time)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Assigned_To)
+                    </td>
+
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<script type="text/javascript">
+    $("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100]
+    });
+</script>

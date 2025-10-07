@@ -1,0 +1,192 @@
+﻿@using Latest_Staff_Portal.Models
+@{
+    var phone = Session["Phone"].ToString();
+
+
+    //string phone2 = employee.MobilePhoneNo;
+    var email = Session["Email"].ToString();
+
+    string MaskString(string input)
+    {
+        if (input.Length <= 3)
+        {
+            // If the input is very short, return the input as it is since masking wouldn't make sense.
+            return input;
+        }
+
+        return new string('x', input.Length - 3) + input.Substring(input.Length - 3);
+    }
+
+    var maskedPhone = MaskString(phone);
+    //string maskedPhone2 = MaskString(phone2);
+    var maskedEmail = MaskString(email);
+    var OTPType = "Both";
+    /* var OTPType = CommonClass.GetESSOTPNotificationSetup();*/
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from dreamguys.co.in/demo/doccure/admin/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 30 Nov 2019 04:12:46 GMT -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>BioVax Staff Portal - Request OTP</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="~/assets/img/logo.png">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+
+    <!-- Fontawesome CSS -->
+    <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/assets/css/custom.css">
+
+    <!--[if lt IE 9]>
+        <script src="assets/js/html5shiv.min.js"></script>
+        <script src="assets/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body id="body">
+<link href="~/assets/css/Loader.css" rel="stylesheet"/>
+
+<link href="~/assets/css/Loader.css" rel="stylesheet"/>
+<div class="loading" align="center" id="divLoader">
+    <div class="loader-container">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</div>
+
+<script src="~/assets/js/ObfuscateSite.js"></script>
+
+<!-- Main Wrapper -->
+<div class="main-wrapper login-body">
+    <div class="login-wrapper">
+        <div class="container">
+            <div class="loginboxx">
+
+                <div class="login-right">
+                    <div class="login-right-wrap">
+
+                        <center>
+                            <img class="img-fluid" src="/assets/img/logo.png" alt="Logo" style="height: 60px;">
+                            <h1 class="mb-4 mt-10" style="font-size: 24px; margin-top: 50px">User Login</h1>
+                        </center>
+
+                        <h1 style="font-size: 18px;" class="mt-4 mb-4">Request OTP</h1>
+
+                        <!-- Form -->
+                        @{
+                            if (OTPType == "Email" || OTPType == "Both")
+                            {
+                                <div class="form-group">
+                                    <button class="btn btn-info btn-block" type="submit" onclick="GenerateEmailOTPCode()">Send to my Email</button>
+                                </div>
+                            }
+
+                            if (OTPType == "Phone" || OTPType == "Both")
+                            {
+                                <div class="form-group">
+                                    <button class="btn btn-info btn-block" type="submit" onclick="GeneratePortalOTPCode()">Send to (@maskedPhone)</button>
+                                </div>
+                            }
+                        }
+
+ 
+                        <!-- /Form -->
+                        <div class="text-center forgotpass mt-4">
+                            <a href="/Login/Login"><i class="fa fa-reply"></i> Back</a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Main Wrapper -->
+<!-- jQuery -->
+<script src="/assets/js/jquery-3.2.1.min.js"></script>
+
+<!-- Bootstrap Core JS -->
+<script src="/assets/js/popper.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+
+<!-- Custom JS -->
+<script src="/assets/js/script.js"></script>
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script src="~/SiteJS/LoginJS.js"></script>
+<script src="~/SiteJS/ForgetPasswordJS.js"></script>
+
+</body>
+
+<!-- Mirrored from dreamguys.co.in/demo/doccure/admin/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 30 Nov 2019 04:12:46 GMT -->
+</html>
+<script>
+	function GeneratePortalOTPCode() {
+		ShowProgress(); // Show loading indicator
+
+		$.ajax({
+			type: "POST",
+			url: "/Settings/GeneratePortalOTPCode", // Ensure this URL matches your server endpoint
+			contentType: "application/json; charset=utf-8",
+			dataType: "json",
+			success: function (data) {
+				HideProgress(); // Hide loading indicator
+
+				if (data.success) {
+					window.location = data.message; // Redirect to the given URL
+				} else {
+					Swal.fire('Error', data.message, 'error'); // Display error message
+				}
+			},
+			error: function (err) {
+				HideProgress(); // Hide loading indicator
+
+				// Handle server-side or network errors
+				Swal.fire('Error', 'An unexpected error occurred: ' + err.responseText, 'error');
+			}
+		});
+    }
+    function GenerateEmailOTPCode() {
+        ShowProgress(); // Show loading indicator
+
+        $.ajax({
+            type: "POST",
+            url: "/Settings/GenerateEmailOTPCode", // Ensure this URL matches your server endpoint
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                HideProgress(); // Hide loading indicator
+
+                if (data.success) {
+                    window.location = data.message; // Redirect to the given URL
+                } else {
+                    Swal.fire('Error', data.message, 'error'); // Display error message
+                }
+            },
+            error: function (err) {
+                HideProgress(); // Hide loading indicator
+
+                // Handle server-side or network errors
+                Swal.fire('Error', 'An unexpected error occurred: ' + err.responseText, 'error');
+            }
+        });
+    }
+
+
+</script>

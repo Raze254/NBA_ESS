@@ -1,0 +1,257 @@
+﻿@model Latest_Staff_Portal.ViewModel.LoanApplicationCard
+
+@{
+    ViewBag.Title = "LoanApplicationsCard";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+<style>
+	thead {
+		background-color: black;
+		color: white;
+	}
+
+	hr {
+		margin: 4px;
+	}
+
+	.BtnPadding {
+		padding: 1px;
+		font-size: 12px;
+	}
+</style>
+
+
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+
+                <li class="breadcrumb-item">
+                    <a href="#" onclick="LoanApplicationsList();"> @Model.LoanProductType</a>
+                </li>
+                <li class="breadcrumb-item active">Loan Application(@Model.LoanNo)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <hr/>
+
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <b>Employee No</b>
+                @Html.TextBoxFor(m => m.EmployeeNo, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+            <div class="col-md-6">
+                <b>Employee Name</b>
+                @Html.TextBoxFor(m => m.EmployeeName, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <b>Loan Product Type</b>
+                @Html.TextBoxFor(m => m.LoanProductType, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+            <div class="col-md-6">
+                <b>Date</b>
+                @Html.TextBoxFor(m => m.ApplicationDate, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", placeholder = "dd/mm/yyyy" })
+                <div class="a"></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <b>Amount Requested</b>
+                @Html.TextBoxFor(m => m.AmountRequested, new { @class = "form-control" })
+            </div>
+            <div class="col-md-6">
+                <b>Description</b>
+                @Html.TextBoxFor(m => m.Description, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <b>Reason</b>
+                @Html.TextAreaFor(m => m.Reason, new { @class = "form-control", rows = 4 })
+            </div>
+            <div class="col-md-6">
+                <b>Loan Status</b>
+                @Html.TextBoxFor(m => m.LoanStatus, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+
+        </div>
+    </div>
+
+    <hr/>
+    <b>Loan Review</b>
+    <hr/>
+    <div class="row">
+        <div class="col-md-6">
+            <b>Interest Calculation</b>
+            @Html.TextBoxFor(m => m.InterestCalculationMethod, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+        <div class="col-md-6">
+            <b>Issued Date</b>
+            @Html.TextBoxFor(m => m.IssuedDate, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <b>Approved Amount</b>
+            @Html.TextBoxFor(m => m.ApprovedAmount, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+        <div class="col-md-6">
+            <b>Installments</b>
+            @Html.TextBoxFor(m => m.Instalment, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <b>Repayment</b>
+            @Html.TextBoxFor(m => m.Repayment, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+        <div class="col-md-6">
+            <b>Flat Rate Principal</b>
+            @Html.TextBoxFor(m => m.FlatRatePrincipal, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <b>Flat Rate Interest</b>
+            @Html.TextBoxFor(m => m.FlatRateInterest, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+        <div class="col-md-6">
+            <b>Interest Rate</b>
+            @Html.TextBoxFor(m => m.InterestRate, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <b>Attachments</b>
+            <div id="divAttachDocs"></div>
+        </div>
+    </div>
+</div>
+@{
+    if (Model.LoanStatus == "Being Processed")
+    {
+        <div align="center">
+            <input type="button" class="btn btn-primary waves-effect waves-light" value="Send (@Model.LoanNo) For Approval" onclick="SendDocForApproval('@Model.LoanNo');"/>
+        </div>
+    }
+}
+
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" ke aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myModalLabel">
+                    <label id="labelF"></label>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script src="~/assets/js/pdfobject.min.js"></script>
+<script type="text/javascript">
+	 $(document).ready(function () {
+		 GetDocumentAttachments();
+
+     var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+     if (Successmsg != "") {
+         Swal.fire('Success', Successmsg, 'success',true);
+         $.ajax({
+             type: "POST",
+             url: "/Common/NullibySessions"
+         });
+     }
+ });
+     var LoanApplicationsList = function () {
+        ShowProgress();
+
+        var loanProductType = "@Model.LoanProductType";
+
+         if (loanProductType === "SALARY ADVANCE") {
+             window.location = "/WelfareManagement/SalaryAdvanceLoanApplicationsList";
+         } else if (loanProductType === "MORTGAGE LOAN") {
+             window.location = "/WelfareManagement/MortgageLoanApplicationsList";
+         } else if (loanProductType === "CAR LOAN") {
+             window.location = "/WelfareManagement/CarLoanApplicationsList";
+         }
+	}
+	  var GetDocumentAttachments = function () {
+      ShowProgress();
+      var DocNo = `@Model.LoanNo`;
+      var Status = `@Model.LoanStatus`;
+      $.ajax({
+          async: true,
+          type: "POST",
+          datatype: "json",
+          contentType: "application/json; charset = utf-8",
+          processData: false,
+		  data: JSON.stringify({ DocNo: DocNo, TableID: 69011, Status: Status}),
+          url: "/Common/DocumentAttachments",
+          success: function (data) {
+              HideProgress();
+              $("#divAttachDocs").html(data);
+          },
+          error: function () {
+              HideProgress();
+              Swal.fire("There is some problem to process your request. Please try after some time");
+          }
+      });
+  };
+	var SendDocForApproval = function (DocNo) {
+		ShowProgress();
+		$.ajax({
+			async: true,
+			type: "POST",
+			datatype: "json",
+			data: JSON.stringify({ DocNo: DocNo }),
+			contentType: "application/json; charset = utf-8",
+			processData: false,
+			url: '/WelfareManagement/SendLoanAppForApproval',
+			success: function (data) {
+				if (data.success == true) {
+					HideProgress();
+					//LoadLeaveReqList();
+					//$("#myModalLinks").modal("hide");
+					Swal.fire('Success', data.message, 'success');
+				}
+				else {
+					HideProgress();
+					Swal.fire('Error', data.message, 'error');
+				}
+			},
+			error: function (err) {
+				HideProgress();
+				Swal.fire('Warning', err, 'warning');
+			}
+		});
+
+	}
+
+
+</script>

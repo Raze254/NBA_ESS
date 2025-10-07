@@ -1,0 +1,242 @@
+﻿@*@model Latest_Staff_Portal.ViewModel.PurchaseDocument
+<div class="row">
+    <div class="col-md-6">
+        <b>Document No</b>
+        @Html.TextBoxFor(m => m.DocHeader.No, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        <b>Date Requested</b>
+        @Html.TextBoxFor(m => m.DocHeader.Date, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Requestor No</b>
+        @Html.TextBoxFor(m => m.DocHeader.RequestorNo, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        <b>Requestor Name</b>
+        @Html.TextBoxFor(m => m.DocHeader.RequestorName, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Donor Name</b>
+        @Html.TextBoxFor(m => m.DocHeader.Dim1, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        <b>Project Name</b>
+        @Html.TextBoxFor(m => m.DocHeader.Dim2, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Program Area Name</b>
+        @Html.TextBoxFor(m => m.DocHeader.Dim3, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        <b>Activity/ Beneficiary Name</b>
+        @Html.TextBoxFor(m => m.DocHeader.Dim4, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>County Name</b>
+        @Html.TextBoxFor(m => m.DocHeader.Dim5, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        <b> Sub Program Name</b>
+        @Html.TextBoxFor(m => m.DocHeader.Dim7, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Status</b>
+        @Html.TextBoxFor(m => m.DocHeader.Status, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <b>Purpose</b>
+        @Html.TextAreaFor(m => m.DocHeader.Remarks, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Total Amount</b>
+        @Html.TextBoxFor(m => m.TotalAmount, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        <b>Amount in words</b>
+        @Html.TextAreaFor(m => m.AmountInWords, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<hr />
+<hr style="border:1px solid black" />
+<b>Purchase Lines</b>
+<hr />
+<div class="pre-scrollable">
+    <table class="table table-hover" id="PurchaseRequisitionLine">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>No</th>
+                <th>Expense Code</th>
+                <th>Description</th>
+                <th>Specifications</th>
+                <th>Receiving Location</th>
+                <th class="text-center">Quantity</th>
+                <th>Unit Measure</th>
+                <th>G/L Account</th>
+                <th class="text-left">Unit Amount</th>
+                <th class="text-left">Amount</th>
+                @if (@Model.RequisitionType == "Operations")
+                {
+                    <th class="text-left">No of Days</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model.ListOfPurchaseLines != null && Model.ListOfPurchaseLines.Count() > 0)
+                {
+                    foreach (var item in Model.ListOfPurchaseLines)
+                    {
+                        <tr>
+                           <td>
+                                @Html.DisplayFor(modelItem => item.LineType)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Item)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ExpenseCode)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ItemDesc)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Description2)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Location)
+                            </td>
+                            <td class="text-center">
+                                @Html.DisplayFor(modelItem => item.Qnty)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.UnitM)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ItemGlBudget)
+                            </td>
+                            <td class="text-left">
+                                @Html.DisplayFor(modelItem => item.Amount)
+                            </td>
+                            <td class="text-left">
+                                @Html.DisplayFor(modelItem => item.LineAmount)
+                            </td>
+                            @if (@Model.RequisitionType == "Operations")
+                            {
+                                <td class="text-left">
+                                    @Html.DisplayFor(modelItem => item.NoofDays)
+                                </td>
+                            }
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="3" style="color:red">
+                            No Records Found
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <script type="text/javascript" >
+        $(document).ready(function () {
+
+            var url;
+            //$('#labelSearch').text("GL Budget Account");
+
+            //url = "/Common/GetServiceList2";
+            //$("#ddlSearchItem option").remove();
+            //$('#ddlSearchItem').empty().append('<option selected="selected" value="">----</option>');
+            //$.getJSON(url,
+            //    function (data) {
+            //        if (data.success == true) {
+            //            $('#ddlSearchItem').empty().append('<option selected="selected" value="">----</option>');
+            //            $.each(data.DropDownData.ListOfddlData, function () {
+            //                $("#ddlSearchItem").append($("<option></option>").val(this['Value']).html(this['Text']));
+            //            });
+
+
+            //            HideProgress();
+            //        }
+            //        else {
+            //            Swal.fire('Warning', data.message, 'warning');
+            //        }
+            //    });
+
+            //$("#ddlSearchItem").val('');
+
+
+            $("#ddlitemGlBudget").select2({
+                width: '100%',
+                placeholder: 'Search...'
+            });
+
+        });
+        var EditItem = function (DocNo, LnNo) {
+            $("#lblTitl").text("New Purchase Line");
+            ShowProgress();
+            $.ajax({
+                async: true,
+                type: "POST",
+                datatype: "json",
+                contentType: "application/json; charset = utf-8",
+                processData: false,
+                data: JSON.stringify({ LnNo: LnNo, DocNo: DocNo }),
+                url: '/DocumentApproval/EditPurchaseLine',
+                success: function (data) {
+                    $("#modalBody").html(data);
+                    HideProgress();
+                    $("#myModal").modal("show");
+                },
+                error: function (err) {
+                    HideProgress();
+                    Swal.fire('Warning', err, 'warning');
+                }
+            });
+        };
+        var UpdateItemGl = function (DocNo, LnNo,GLAccount) {
+            $("#lblTitl").text("Update Purchase Line");
+            ShowProgress();
+            $.ajax({
+                async: true,
+                type: "POST",
+                datatype: "json",
+                contentType: "application/json; charset = utf-8",
+                processData: false,
+                data: JSON.stringify({ LnNo: LnNo, DocNo: DocNo, GLAccount: GLAccount }),
+                url: '/DocumentApproval/UpdatePurchaseItemGL',
+                success: function (data) {
+                    $("#modalBody").html(data);
+                    HideProgress();
+                    $("#myModal").modal("show");
+                },
+                error: function (err) {
+                    HideProgress();
+                    Swal.fire('Warning', err, 'warning');
+                }
+            });
+        };
+
+    </script>
+</div>*@

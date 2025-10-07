@@ -1,0 +1,80 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.WarrantImprestLines>
+
+@{
+    ViewBag.Title = "ImprestWarrantLines";
+}
+
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th>No</th>
+                @*<th>Line No</th>*@
+                @* <th>Advance Type</th>*@
+            @*    <th>Account Type</th>
+                <th>Account No</th>
+                <th>Account Name</th>*@
+                <th>Purpose</th>
+                <th>Daily Rate</th>
+                <th>No of Days</th>
+               @* <th>Vote Item</th>
+                <th>Currency Code</th>*@
+                <th>Amount</th>
+
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.No)
+                    </td>
+                    @* <td>
+                            @Html.DisplayFor(modelItem => item.Line_No)
+                        </td>*@
+                    @* <td>
+                            @Html.DisplayFor(modelItem => item.Advance_Type)
+                        </td>*@
+                  @*  <td>
+                        @Html.DisplayFor(modelItem => item.Account_Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Account_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Account_Name)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Purpose)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Daily_Rate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.No_of_Days)
+                    </td>
+                   @* <td>
+                        @Html.DisplayFor(modelItem => item.Vote_Item)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Currency_Code)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Amount)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#datatable").DataTable(), $("#datatable-buttons").DataTable({
+            lengthChange: !1
+        }).buttons().container().appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)")
+    });</script>

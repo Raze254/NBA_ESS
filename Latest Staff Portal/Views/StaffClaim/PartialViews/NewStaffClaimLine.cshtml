@@ -1,0 +1,77 @@
+﻿@model Latest_Staff_Portal.ViewModel.StaffClaimLines
+
+@{
+    ViewBag.Title = "NewStaffClaimLine";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Claim Type", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.DropDownListFor(model => model.Claim_Type, Model.ListOfStaffClaimType, "Select Option", new { @class = "form-control", @id= "Claim_Type2" })
+            @Html.ValidationMessageFor(model => model.Claim_Type, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Date", htmlAttributes: new { @class = "control-label col-md-2" })
+            <input type="text" class="form-control" placeholder="dd/mm/yyyy" id="Date2" onkeydown="return false;" autocomplete="off" />
+            @*@Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control" } })*@
+            @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @id = "Description2" } })
+            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Amount", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control", @id = "Amount2" } })
+            @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+</div>
+
+<div class="text-center">
+    <input type="button" class="btn btn-primary action-buttons" value="Submit" onclick="SubmitStaffClaimLine();" />
+</div>
+
+<script>
+    $(document).ready(function () {
+        // Initialize datepickers
+        $('#Date2').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-1:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy'
+        });
+
+        // Adjust the position of the datepicker for both fields
+        $('#Date2').focus(function () {
+            $("#ui-datepicker-div").position({
+                my: "left top",
+                at: "left bottom",
+                of: $(this)
+            });
+        });
+
+        // Set default value to today's date
+        var today = new Date();
+        var day = ("0" + today.getDate()).slice(-2);
+        var month = ("0" + (today.getMonth() + 1)).slice(-2);
+        var todayFormatted = day + "/" + month + "/" + today.getFullYear();
+        $('#Date2').val(todayFormatted);
+    });
+</script>

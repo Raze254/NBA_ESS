@@ -1,0 +1,16 @@
+﻿@model Latest_Staff_Portal.ViewModel.CompetenceValues
+<div class="bg-soft-dark" style="color:black">
+    <div class="row">
+        <div class="col-md-6">
+            <span style="font-weight: bold">Score</span>
+            @if (ViewBag.Assessment != null && ViewBag.Assessment.Count > 0)
+            {
+                @Html.DropDownListFor(m => m.Score, new SelectList(ViewBag.Assessment, "Value", "Text", Model.Score), "----", new { id = "ddlScore", @class = "form-control" })
+            }
+        </div>
+        <div class="col-md-6">
+            <br/>
+            <input type="button" class="btn btn-danger" value="Save Score" onclick="SaveCompValueReviewRecord('@Model.ANUPEAisal_No', '@Model.Code', '@Model.Line_No', '@Model.Level');"/>
+        </div>
+    </div>
+</div>

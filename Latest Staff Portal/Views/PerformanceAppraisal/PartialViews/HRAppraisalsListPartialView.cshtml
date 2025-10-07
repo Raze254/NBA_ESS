@@ -1,0 +1,85 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.AppraisalsList>
+
+@{
+    
+    var approval_stage= ViewBag.title;
+}
+
+<div class="text-center">
+    <h4>Performance Appraisal List (@approval_stage)</h4>
+</div>
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead>
+            <tr>
+                <th>Action</th>
+                <th>Appraisal No</th>
+                <th>Employee No</th>
+                <th>Employee Name</th>
+                <th>User ID</th>
+                @*<th>Job Title</th>
+                <th>Job Description</th>
+                <th>Appraisal Type</th>*@
+                <th>Appraisal Period</th>
+                <th>Status</th>
+                <th>Appraisal Stage</th>
+                <th>Sent</th>
+              
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <input class="btn btn-primary btn-sm action-buttons3" type="button" onclick="ViewDoc('@item.Appraisal_No');" value="Select" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Appraisal_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Employee_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Employee_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.User_ID)
+                    </td>
+                   @* <td>
+                        @Html.DisplayFor(modelItem => item.Job_Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Job_Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Appraisal_Type)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Appraisal_Period)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Appraisal_Stage)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Sent)
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+$("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100] // Same options for the second table
+});
+</script>
+

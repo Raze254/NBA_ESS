@@ -1,0 +1,138 @@
+﻿@model Latest_Staff_Portal.ViewModel.VehicleIncident
+
+<div class="form-group">
+    @*@Html.Label("Employee No", htmlAttributes: new { @class = "control-label col-md-12" })
+    <div class="col-md-12">
+        <input type="text" class="form-control" id="txtEmpoyeeNo" readonly style="background-color: #dedebd;" value="@Model.RequestedBy" />
+    </div>*@
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Incident Date", new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    <input type="text" class="form-control" placeholder="dd/mm/yyyy" id="dtPicker" onkeydown="return false;" autocomplete="off"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Vehicle Id:", new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    @Html.DropDownListFor(model => model.VehicleID, Model.ListOfVehicles, "--Select Vehicle Id --", new { @class = "form-control", id = "ddlVehicleId" })
+                    @Html.ValidationMessageFor(model => model.VehicleID, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Driver ID:", new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    @Html.DropDownListFor(model => model.DriverID, Model.ListOfDrivers, "--Select Driver Id --", new { @class = "form-control", id = "ddlDriverId" })
+                    @Html.ValidationMessageFor(model => model.DriverID, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Incident Time", new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    <input type="time" class="form-control" id="txtTime"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Person Culpable", new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    <input type="text" class="form-control" id="txtPersonCulpable"/>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Responsible Employee", new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    @Html.DropDownListFor(model => model.ResponsibleEmployee, Model.ListOfResponsibleEmployee, "--Select Responsible Employee--", new { @class = "form-control", id = "ddlRespEmployee" })
+                    @Html.ValidationMessageFor(model => model.ResponsibleEmployee, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Work Ticket No", new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    @Html.DropDownListFor(model => model.WorkTicketNo, Model.ListOfWorkTickets, "--Select Work Ticket--", new { @class = "form-control", id = "ddlWorkTicket" })
+                    @Html.ValidationMessageFor(model => model.WorkTicketNo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Duty Station", new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    @Html.DropDownListFor(model => model.DutyStation, Model.ListOfDutyStations, "--Select Duty Station--", new { @class = "form-control", id = "ddlDutyStation" })
+                    @Html.ValidationMessageFor(model => model.DutyStation, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                @Html.Label("Incident Description", new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    <textarea id="txtDescription" class="form-control"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<hr/>
+<div align="center">
+    <input type="button" class="btn btn-primary waves-effect waves-light" value="Submit Request" onclick="SubmitTransportRequisition();"/>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#dtPicker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-0:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy',
+            minDate: 0
+        });
+        $('#TxtReturnDate').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-0:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy',
+            minDate: 0
+        });
+        $(window).resize(function () {
+            $('#dtPicker').datepicker('hide');
+            $('#dtPicker').blur();
+            $('#TxtReturnDate').datepicker('hide');
+            $('#TxtReturnDate').blur();
+            $("#DivAccom").hide();
+        });
+        $("#ddlDriverId,#ddlDutyStation,#ddlWorkTicket,#ddlRespEmployee,#ddlVehicleId").select2({
+            width: '100%'
+        });
+    });
+
+
+</script>

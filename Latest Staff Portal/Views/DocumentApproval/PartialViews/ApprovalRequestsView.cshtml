@@ -1,0 +1,308 @@
+﻿@model Latest_Staff_Portal.ViewModel.DocumentCount
+@{
+
+    var hasNoPending = false;
+}
+<div class="card-title">@Model.Status Documents Approval List</div>
+<hr />
+<div class="card">
+    <div class="card-body">
+        @if (Model != null)
+        {
+            <ol class="list-group">
+                @if (Model.LeaveCount > 0)
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('69205','Leave Requisition','@Model.Status','N');">Leave Applications (<span class="badge badge-info badge-pill">@Model.LeaveCount</span>)</a>
+                    </li>
+                }
+                @if (Model.PRNCount > 0)
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('38','Purchase Requisition','@Model.Status','Quote');">Purchase Requisitions (<span class="badge badge-info badge-pill">@Model.PRNCount</span>)</a>
+                    </li>
+                }
+                @if (Model.LPOCount > 0)
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('38','LPO Requisition','@Model.Status','Order');">LPO Requisitions (<span class="badge badge-info badge-pill">@Model.LPOCount</span>)</a>
+                    </li>
+                }
+                @if (Model.SRNCount > 0)
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('70134954','Store Requisition','@Model.Status','N');">Store Requisitions (<span class="badge badge-info badge-pill">@Model.SRNCount</span>)</a>
+                    </li>
+                }
+                @if (Model.ImpCount > 0)
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('70135176','Imprest Requisition','@Model.Status','N');">Travel Advance (<span class="badge badge-info badge-pill">@Model.ImpCount</span>)</a>
+                    </li>
+                }
+                @if (Model.SurrCount > 0)
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('70135168','Imprest Surrender Requisition','@Model.Status','N');">Imprest Surrender Requisitions (<span class="badge badge-info badge-pill">@Model.SurrCount</span>)</a>
+                    </li>
+                }
+                @if (Model.ClaimCount > 0)
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('57000','Staff Claim Requisition','@Model.Status','N');">Staff Claim Requisitions (<span class="badge badge-info badge-pill">@Model.ClaimCount</span>)</a>
+                    </li>
+                }
+                @if (Model.Transport > 0)
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('59003','Transport Requisition','@Model.Status','N');">Transport Requisitions (<span class="badge badge-info badge-pill">@Model.Transport</span>)</a>
+                    </li>
+                }
+                @if (Model.Training > 0)
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('70135040','Training Requisition','@Model.Status','N');">Training Requisitions (<span class="badge badge-info badge-pill">@Model.Training</span>)</a>
+                    </li>
+                }
+                @if (Model.TransferOrder > 0)
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('5740','Transfer Order Requisition','@Model.Status','N');">Transfer Order Requests (<span class="badge badge-info badge-pill">@Model.TransferOrder</span>)</a>
+                    </li>
+                }
+                @if (Model.PVCount > 0)
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('70135171','Payment Voucher Requisition','@Model.Status','N');">Payment Voucher Requisitions (<span class="badge badge-info badge-pill">@Model.PVCount</span>)</a>
+                    </li>
+                }
+                @if (Model.TNA > 0)
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('70135057','Training Needs Analysis','@Model.Status','N');">Training Needs Analysis (<span class="badge badge-info badge-pill">@Model.TNA</span>)</a>
+                    </li>
+                }
+                @if (Model.impMemoCount > 0)
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('55277','Imprest Memo','@Model.Status','N');">Imprest Memo (<span class="badge badge-info badge-pill">@Model.impMemoCount</span>)</a>
+                    </li>
+                }
+                @if (Model.FuelCount > 0)
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('70135140','Fuel Requisition','@Model.Status','N');">Fuel Requisitions (<span class="badge badge-info badge-pill">@Model.FuelCount</span>)</a>
+                    </li>
+                }
+                @if (Model.MaintenanceCount > 0)
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('70135140','Maintenance Requisition','@Model.Status','N');">Maintenance Requisition (<span class="badge badge-info badge-pill">@Model.MaintenanceCount</span>)</a>
+                    </li>
+                }
+                @if (Model.LVReimbursementCount > 0)
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('50029','Re-Imbursement','@Model.Status','N');">Leave Reimbursement (<span class="badge badge-info badge-pill">@Model.LVReimbursementCount</span>)</a>
+                    </li>
+                }
+                @if (Model.LVCarryForwardCount > 0)
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('50029','Carry Forward','@Model.Status','N');">Leave Carry Forward (<span class="badge badge-info badge-pill">@Model.LVCarryForwardCount</span>)</a>
+                    </li>
+                }
+                @if (Model.LVTimeoffCount > 0)
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('50029','Time Off Lie','@Model.Status','N');">Timeoff Lieu (<span class="badge badge-info badge-pill">@Model.LVTimeoffCount</span>)</a>
+                    </li>
+                }
+                @if (Model.TimeSheet > 0)
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('70135250','Timesheet','@Model.Status','N');">Timesheet (<span class="badge badge-info badge-pill">@Model.TimeSheet</span>)</a>
+                    </li>
+                }
+                @if (Model.Workshop > 0)
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('70135164','Workshop Advance','@Model.Status','N');">Workshop Advance (<span class="badge badge-info badge-pill">@Model.Workshop</span>)</a>
+                    </li>
+                }
+                @if (Model.RFQCount > 0)
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('173','Request for Quotation','@Model.Status','N');">Request for Quotation (<span class="badge badge-info badge-pill">@Model.RFQCount</span>)</a>
+                    </li>
+                }
+                @if (Model.MobilityCount > 0)
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('69055','Employee Transfers ','@Model.Status','N');">Employee Transfer (<span class="badge badge-info badge-pill">@Model.MobilityCount</span>)</a>
+                    </li>
+                }
+                @if (Model.PCACount > 0)
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('50763','Paychange Advice','@Model.Status','N');">Pay Change Advice (<span class="badge badge-info badge-pill">@Model.PCACount</span>)</a>
+                    </li>
+                }
+                @if (Model.WelfareCount > 0)
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('69011',' ','@Model.Status','N');">Loans (<span class="badge badge-info badge-pill">@Model.WelfareCount</span>)</a>
+                    </li>
+                }
+                @if (Model.TrainingExtention > 0)
+
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('50763','Training Extension','@Model.Status','N');">Training Extensions(<span class="badge badge-info badge-pill">@Model.TrainingExtention</span>)</a>
+                    </li>
+                }
+
+                @if (Model.Leaveplanner > 0)
+
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('69217','Leave Planner','@Model.Status','N');">Leave Planner(<span class="badge badge-info badge-pill">@Model.Leaveplanner</span>)</a>
+                    </li>
+                }
+                @if (Model.FunctionalProcurementPlan > 0)
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('69217','Leave Planner','@Model.Status','N');">Leave Planner(<span class="badge badge-info badge-pill">@Model.Leaveplanner</span>)</a>
+                    </li>
+                }
+
+                @if (Model.ResourceRequirements > 0)
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('70098','Functional Procurement Plan','@Model.Status','N');">Procurement Plan(<span class="badge badge-info badge-pill">@Model.Leaveplanner</span>)</a>
+                    </li>
+                }
+
+                @if (Model.ExpenseRequisition > 0)
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('80019','Resource Requirements','@Model.Status','N');">Resource Requirements(<span class="badge badge-info badge-pill">@Model.ResourceRequirements</span>)</a>
+                    </li>
+                }
+                @if (Model.ExpenseRequisition > 0)
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('50110','ExpenseRequisition','@Model.Status','N');">Expense Requisition(<span class="badge badge-info badge-pill">@Model.ExpenseRequisition</span>)</a>
+                    </li>
+                }
+                @if (Model.Workplans > 0)
+
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('80019','','@Model.Status','N');">Work-Plans(<span class="badge badge-info badge-pill">@Model.Workplans</span>)</a>
+                    </li>
+                }
+                @if (Model.Payments > 0)
+
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('57000','Payments','@Model.Status','N');">Payments(<span class="badge badge-info badge-pill">@Model.Payments</span>)</a>
+                    </li>
+                }
+                @if (Model.LeaveRecall > 0)
+
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('69520','Leave Recall','@Model.Status','N');">Leave Recall(<span class="badge badge-info badge-pill">@Model.LeaveRecall</span>)</a>
+                    </li>
+                }
+                @if (Model.Efts > 0)
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('57018','EFTs','@Model.Status','N');">EFTs(<span class="badge badge-info badge-pill">@Model.Efts</span>)</a>
+                    </li>
+                }
+                @if (Model.IFSTenderCom > 0)
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('70141',' Tender Committes','@Model.Status','N');"> Tender Committees(<span class="badge badge-info badge-pill">@Model.IFSTenderCom</span>)</a>
+                    </li>
+                }
+                @if (Model.StaffClaim > 0)
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('57000','Staff Claim','@Model.Status','N');">Employee Claims(<span class="badge badge-info badge-pill">@Model.StaffClaim</span>)</a>
+                    </li>
+                }
+                @if (Model.SafariImprest > 0)
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('57000','Safari Imprest','@Model.Status','N');">Safari Imprest(<span class="badge badge-info badge-pill">@Model.SafariImprest</span>)</a>
+                    </li>
+                }
+                @if (Model.StandingImprest > 0)
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('57000','Standing Imprest','@Model.Status','N');">Safari Imprest(<span class="badge badge-info badge-pill">@Model.StandingImprest</span>)</a>
+                    </li>
+                }
+                @if (Model.SpecialImprest > 0)
+                {
+                    hasNoPending = true;
+                    <li class="list-group-item">
+                        <a href="#" onclick="GetDocumentApprovalList('57000','Special Imprest','@Model.Status','N');">Special Imprest(<span class="badge badge-info badge-pill">@Model.SpecialImprest</span>)</a>
+                    </li>
+                }
+            </ol>
+        }
+        @if (!hasNoPending)
+        {
+            <p style="color:red">No Records Found!</p>
+        }
+
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    var GetDocumentApprovalList = function (TbleID, Title, Status, DocType) {
+        window.location = "/DocumentApproval/GetDocumentForApprovalList?TbID=" + TbleID + "&Status=" + Status + "&Title=" + Title + "&DocType=" + DocType + "";
+    }
+</script>

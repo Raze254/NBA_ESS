@@ -1,0 +1,63 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.AieLines>
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.DocumentNo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GLAccount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GLAccountName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AmountToAuthorize)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PlannedAmount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Balance)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <input type="button" onclick="ReportType('@item.DocumentNo');" style="background: #162f25; color: whitesmoke; border-radius: 10px;" value="Print Report" />
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.GLAccount)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.GLAccountName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AmountToAuthorize)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PlannedAmount)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Balance)
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    $("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100]
+    });
+</script>

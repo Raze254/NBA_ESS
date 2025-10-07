@@ -1,0 +1,71 @@
+﻿@model Latest_Staff_Portal.ViewModel.ImprestMemoNonStaffList
+<div class="table-responsive">
+    <table class="table table-centered table-nowrap" id="ImpLines">
+        <thead>
+        <tr>
+            <th>Names</th>
+            <th>Organization</th>
+            <th>Designation</th>
+            <th class="tdAction">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        @{
+            if (Model.ListOfNonstaff != null && Model.ListOfNonstaff.Count() > 0)
+            {
+                foreach (var item in Model.ListOfNonstaff)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Names)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Organization)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Designation)
+                        </td>
+
+                        <td style="text-align:right" class="tdAction">
+                            <a href="javascript:void(0);" class="mr-3 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" onclick="EditItemNonstaff('@item.ImprestMemoNo', '@item.LineNo');">
+                                <i class="mdi mdi-pencil font-size-16"></i>
+                            </a>
+                            <a href="javascript:void(0);" class="text-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" onclick="RemoveItemNonstaff('@item.ImprestMemoNo','@item.LineNo');">
+                                <i class="mdi mdi-close font-size-16"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="8" style="color:red">
+                        No Records Found
+                    </td>
+                </tr>
+            }
+        }
+        </tbody>
+        <tfoot>
+        <tr class="HideLineButton">
+            <td class="text-right" colspan="8">
+                <input type="button" value="Add Non-Staff" class="btn btn-danger BtnPadding" onclick="AddImprestNonStaff();"/>
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var status = '@Model.Status';
+        if (status == "Pending") {
+            $(".tdAction").show();
+            $(".HideLineButton").show();
+        }
+        else {
+            $(".tdAction").hide();
+            $(".HideLineButton").hide();
+        }
+    });
+</script>

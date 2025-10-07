@@ -1,0 +1,48 @@
+﻿@model Latest_Staff_Portal.ViewModel.TrainingAssessment
+
+@{
+    ViewBag.Title = "NewTrainingAssessmentRequest";
+}
+
+
+    
+<div class="row">
+
+    <div class="col-md-12">
+
+        <div class="form-group">
+            @Html.Label("Application Code", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.DropDownListFor(model => model.Application_Code,Model.ListOfApplicationCodes, "Select Option",  new { @class = "form-control", @id= "Application_Code"  })
+            @Html.ValidationMessageFor(model => model.Application_Code, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+
+
+    @*
+
+        <div class="col-md-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Venue, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Venue, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Venue, "", new { @class = "text-danger" })
+                </div>
+            </div>
+    *@
+
+    <div class="col-md-12" hidden>
+        <div class="form-group">
+            @Html.Label("No of Participants", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.No_of_Participants, new { htmlAttributes = new { @class = "form-control", @id= "No_of_Participants" } })
+            @Html.ValidationMessageFor(model => model.No_of_Participants, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+</div>
+<div align="center">
+    <input type="button" class="btn btn-primary action-buttons" value="Create" onclick="SubmitTrainingAssessment();" />
+</div>

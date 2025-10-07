@@ -1,0 +1,114 @@
+﻿@model Latest_Staff_Portal.ViewModel.FleetRequestItems
+
+@{
+    ViewBag.Title = "NewFleetRequisitionItem";
+}
+
+<div class="row">
+    @*<div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Ticket_No, htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Ticket_No, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Ticket_No, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Requisition_Number, htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Requisition_Number, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Requisition_Number, "", new { @class = "text-danger" })
+        </div>
+    </div>*@
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Item Type", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.DropDownListFor(model => model.Item_Type, Model.ListOfItemCategories, "Select Option",  new { @class = "form-control",  @id = "Item_Type" } )
+            @Html.ValidationMessageFor(model => model.Item_Type, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @id= "Description" } })
+            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Serial Number", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Serial_Number, new { htmlAttributes = new { @class = "form-control", @id = "Serial_Number" } })
+            @Html.ValidationMessageFor(model => model.Serial_Number, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Quantity", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control", @id = "Quantity" } })
+            @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Purpose", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Purpose, new { htmlAttributes = new { @class = "form-control", @id = "Purpose" } })
+            @Html.ValidationMessageFor(model => model.Purpose, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Returnable", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            <div class="checkbox">
+                @Html.EditorFor(model => model.Returnable,  new {  @id = "Returnable" })
+                @Html.ValidationMessageFor(model => model.Returnable, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Item Return Date", htmlAttributes: new { @class = "control-label col-md-2" })
+            <input type="datetime" class="form-control" placeholder="dd/mm/yyyy" id="Item_Return_Date" onkeydown="return false;" autocomplete="off" />
+            @Html.ValidationMessageFor(model => model.Item_Return_Date, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Remarks Comments", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Remarks_Comments, new { htmlAttributes = new { @class = "form-control", @id = "Remarks_Comments" } })
+            @Html.ValidationMessageFor(model => model.Remarks_Comments, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>
+
+<div align="center">
+    <input type="button" class="btn btn-primary action-buttons" value="Submit Record" onclick="SubmitTransportRequisitionItem();" />
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#Item_Return_Date').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-0:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy',
+            minDate: 0
+        });
+
+
+        $("#ddlDim1,#ddlDim2,#ddlDim3,#ddlDim4,#ddlDim5,#ddlRespC,#ddlImprestDueType").select2({
+            width: '100%'
+        });
+
+
+    });
+</script>

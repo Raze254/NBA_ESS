@@ -1,0 +1,511 @@
+﻿@using Latest_Staff_Portal.Models
+@using Latest_Staff_Portal.ViewModel
+@{
+    Layout = null;
+    string imgSrc = "", gender = "", Name = "";
+    var IsICT = false;
+    if (Session["Username"] == null)
+    {
+        Html.Action("Login", "Login");
+    }
+    else
+    {
+        if (Session["ImgProfile"] == null)
+        {
+            var base64 = CommonClass.ProfilePicture(Session["Username"].ToString());
+            if (base64 != "")
+            {
+                imgSrc = string.Format("data:image/gif;base64,{0}", base64);
+                Session["ImgProfile"] = imgSrc;
+            }
+        }
+        else
+        {
+            imgSrc = Session["ImgProfile"].ToString();
+        }
+
+        if (Session["StaffDetails"] == null)
+        {
+            var s = CommonClass.GetStaffDetails(Session["Username"].ToString());
+            gender = s[0];
+            Name = s[1];
+
+            Session["StaffDetails"] = s;
+        }
+        else
+        {
+            var s = (string[])Session["StaffDetails"];
+            gender = s[0];
+            Name = s[1];
+        }
+
+        IsICT = CommonClass.IsICTStaff(Session["Username"].ToString());
+    }
+}
+<!DOCTYPE html>
+<style>
+
+    .body {
+        background-image: url('../Login/Bckground.jpg');
+        margin: 0;
+    }
+</style>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>The Judiciary Of Kenya | Staff Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="The Judiciary Of Kenya Staff Portal" name="description"/>
+    <meta content="Themesbrand" name="author"/>
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="~/assets/images/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="~/assets/img/logo.png">
+
+
+    <link href="~/assets/select2/css/select2.min.css" rel="stylesheet"/>
+    <link href="~/assets/css/sweetalert2.min.css" rel="stylesheet"/>
+
+    <link href="~/assets/css/dataTables.bootstrap4.min.css" rel="stylesheet"/>
+    <link href="~/assets/css/buttons.bootstrap4.min.css" rel="stylesheet"/>
+    <link href="~/assets/css/responsive.bootstrap4.min.css" rel="stylesheet"/>
+    <!-- Bootstrap Css -->
+    <link href="~/assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css"/>
+
+    <!-- Icons Css -->
+    <link href="~/assets/css/icons.min.css" rel="stylesheet" type="text/css"/>
+    <!-- App Css-->
+    <link href="~/assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css"/>
+
+    <script src="~/assets/js/jquery2.0.3.min.js"></script>
+
+
+    <link rel="shortcut icon" type="image/x-icon" href="/assets/img/logo.png">
+
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="/assets/css/feathericon.min.css">
+
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body data-sidebar="dark">
+@*<script src="~/assets/js/ObfuscateSite.js"></script>*@
+<link href="~/assets/css/Loader.css" rel="stylesheet"/>
+<div class="loading" align="center" id="divLoader">
+    <br/>
+    <img src="~/assets/images/ajax-loader.gif" alt="" width="150" height="150"/>
+</div>
+<!-- Begin page -->
+<div id="layout-wrapper">
+
+<!-- Header -->
+<div class="header" style="background-color: #162f25;">
+
+    <!-- Logo -->
+
+    <div class="header-left">
+        <a href="#" onclick="DashBoardLink();" class="logo">
+            <img src="/assets/img/lg2.gif" alt="Logo" width="60" height="60">
+            <br/><span style="float:left;"></span>
+        </a>
+        <a href="#" onclick="DashBoardLink();" class="logo logo-small">
+            <img src="/assets/img/lg2.gif" alt="Logo" width="60" height="60">
+            <br/><span style="float:left;"></span>
+        </a>
+    </div>
+
+
+    <!-- /Logo -->
+
+    <a href="javascript:void(0);" id="toggle_btn">
+        <i class="fe fe-text-align-left"></i>
+    </a>
+
+    <div class="top-nav-search">
+        <form>
+            <input type="text" id="searchInput" class="form-control" placeholder="Search here" oninput="filterLinks(this.value)">
+            <button class="btn" type="button" onclick="searchLinks()">
+                <i class="fa fa-search"></i>
+            </button>
+        </form>
+        <div style="background: white;">
+            <ul id="suggestions"></ul>
+        </div>
+
+    </div>
+
+    <!-- Mobile Menu Toggle -->
+    <a class="mobile_btn" id="mobile_btn">
+        <i class="fa fa-bars"></i>
+    </a>
+    <!-- /Mobile Menu Toggle -->
+    <!-- Header Right Menu -->
+    <ul class="nav user-menu">
+
+        <!-- Notifications -->
+        <li class="nav-item dropdown noti-dropdown">
+            <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                <!-- To add count -->
+
+                <i class="fe fe-bell"></i> <span class="badge badge-pill">0</span>
+            </a>
+            <div class="dropdown-menu notifications">
+                <div class="topnav-dropdown-header">
+                    <span class="notification-title">Notifications</span>
+                    <a href="javascript:void(0)" class="clear-noti"> Clear All </a>
+                </div>
+                <div class="noti-content">
+                    <ul class="notification-list">
+                        <li class="notification-message">
+                            <a href="#">
+                                <div class="media">
+                                    <span class="avatar avatar-sm">
+                                        @{
+                                            if (imgSrc != "")
+                                            {
+                                                <img class="rounded-circle header-profile-user" src="@imgSrc" alt="">
+                                            }
+                                            else
+                                            {
+                                                if (gender == "Female")
+                                                {
+                                                    <img class="rounded-circle header-profile-user" src="~/assets/images/profile_f.png" alt="">
+                                                }
+                                                else
+                                                {
+                                                    <img class="rounded-circle header-profile-user" src="~/assets/images/profile_m.png" alt="">
+                                                }
+                                            }
+                                        }
+                                    </span>
+                                    <div class="media-body">
+                                        <p class="noti-details">
+                                            <span class="noti-title">@Model.FullName</span> <span class="noti-title"></span>
+                                        </p>
+                                        @*<p class="noti-time"><span class="notification-time">4 mins ago</span></p>*@
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="topnav-dropdown-footer">
+                    <a href="#">View all Notifications</a>
+                </div>
+            </div>
+        </li>
+        <!-- /Notifications -->
+        <!-- User Menu -->
+        <li class="nav-item dropdown has-arrow">
+            <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                @{
+                    if (imgSrc != "")
+                    {
+                        <img class="rounded-circle header-profile-user" src="@imgSrc" alt="">
+                    }
+                    else
+                    {
+                        if (gender == "Female")
+                        {
+                            <img class="rounded-circle header-profile-user" src="~/assets/images/profile_f.png" alt="">
+                        }
+                        else
+                        {
+                            <img class="rounded-circle header-profile-user" src="~/assets/images/profile_m.png" alt="">
+                        }
+                    }
+                }
+            </a>
+            <div class="dropdown-menu">
+                <div class="user-header">
+                    <div class="row">
+                        <div class="col-md-12 d-flex align-items-center">
+                            @{
+                                if (imgSrc != "")
+                                {
+                                    <img class="rounded-circle header-profile-user" src="@imgSrc" alt="">
+                                }
+                                else
+                                {
+                                    if (gender == "Female")
+                                    {
+                                        <img class="rounded-circle header-profile-user" src="~/assets/images/profile_f.png" alt="">
+                                    }
+                                    else
+                                    {
+                                        <img class="rounded-circle header-profile-user" src="~/assets/images/profile_m.png" alt="">
+                                    }
+                                }
+                            }
+                        </div>
+
+
+                    </div>
+                </div>
+                <a class="dropdown-item" href="#" onclick="PersonalProfile();">My Profile</a>
+                @*<a class="dropdown-item" href="#">Settings</a>*@
+                <a class="dropdown-item text-danger" href="@Url.Action("Login", "Login")"><i class="bx bx-power-off font-size-16 align-middle mr-1 text-danger"></i> Logout</a>
+
+            </div>
+        </li>
+
+        <!-- /User Menu -->
+
+    </ul>
+    <!-- /Header Right Menu -->
+
+</div>
+<!-- /Header -->
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar" style="background-color: #162f25;">
+    <div class="sidebar-inner slimscroll">
+        <div id="sidebar-menu" class="sidebar-menu">
+            <ul>
+                <li onclick="openMenu()">
+                    <a href="#" onclick="DashBoardLink();">
+                        <i class="fe fe-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="submenu">
+                    <a href="#" onclick="toggleSubMenu(event, 'profileSubMenu')">
+                        <i class="fe fe-user"></i>
+                        <span>My Profile</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul id="profileSubMenu" class="submenu-content" style="display: none; padding-left: 20px;">
+                        <li>
+                            <a href="#" onclick="PersonalProfile();">
+                                Profile
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="ChangePasswordLink();" class="waves-effect">
+                                Change Password
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="submenu">
+                    <a href="#" onclick="toggleSubMenu(event, 'departmentsSubMenu')">
+                        <i class="fe fe-document"></i>
+                        <span>Departments</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul id="departmentsSubMenu" class="submenu-content" style="display: none; padding-left: 20px;">
+                    <li>
+                        <a href="#" onclick="HumanResourceLink()">
+                            Human Resource
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="DASSLink()">
+                            DASS
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="FinanceLink()">
+                            Finance
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="AccountsLink()">
+                            Accounts
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="ProcurementLink()">
+                            Procurement
+                        </a>
+                    </li>
+                </li>
+                <li>
+                    <a href="#" onclick="ProjectsLink()">
+                        Projects
+                    </a>
+                </li>
+            </ul>
+            </li>
+            <li class="submenu">
+                <a href="#" onclick="toggleSubMenu(event, 'approvalsSubmenu')">
+                    <i class="bx bx-check"></i>
+                    <span>Approvals</span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <ul id="approvalsSubmenu" class="submenu-content" style="display: none; padding-left: 20px;">
+                    <li>
+                        <a href="#" onclick="DocumentApprovalSummeryLink('Open');">
+                            Pending my Approval
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="ApprovedDocLink('Approved');">
+                            My Approved Documents
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="RejectedDocLink('Rejected');">
+                            My Rejected Documents
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            @{
+                var employee = Session["EmployeeData"] as EmployeeView;
+                var role = employee.UserRole;
+                if (role == "Mobility")
+                {
+                    <li class="submenu">
+                        <a href="#" onclick="PCALink();">
+                            <i class="fa fa-dollar" style="font-size: 18px;"></i>
+                            <span>Pay Change Advice</span>
+                        </a>
+                    </li>
+                }
+            }
+
+
+            <li class="submenu">
+                <a href="#">
+                    <i class="fa fa-sign-out" style="font-size: 18px;"></i>
+                    <span>Staff Exit</span>
+                    <span class="menu-arrow"></span>
+                </a>
+
+                <ul class="submenu-content" style="display: none; padding-left: 20px;">
+                    <li>
+                        <a href="#" onclick="StaffClearancelink();">
+                            Staff Clearance
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="submenu">
+                <a href="#">
+                    <i class="fa fa-question-circle" style="font-size: 18px;"></i>
+                    <span>Help and Support</span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <ul class="submenu-content" style="display: none; padding-left: 20px;">
+                    <li>
+                        <a href="/Common/HRInformation">
+                            HR Information
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            Help Desk
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Common/FAQsView">
+                            FAQs
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="main-content" style="height: calc(100vh - 60px); overflow-y: auto;">
+    <div class="page-content">
+        <div class="container-fluid">
+            @RenderBody()
+            <!-- End Page-content -->
+        </div>
+    </div>
+
+    <footer class="footer" style="color: #fff; background-color: #162f25;">
+        <div class="container-fluid d-flex align-items-center justify-content-center" style="height: 100%;">
+            <div class="row">
+                <div class="col-sm-4 text-center">
+                    <img src="~/assets/images/judlogo.png" alt="" height="40">
+                    <br>
+                    <span>Judiciary</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+
+</div>
+<!-- END layout-wrapper -->
+<!-- JAVASCRIPT -->
+<script src="~/assets/js/pages/jquery.min.js"></script>
+<script src="~/assets/js/pages/bootstrap.bundle.min.js"></script>
+<script src="~/assets/js/pages/metisMenu.min.js"></script>
+<script src="~/assets/js/pages/simplebar.min.js"></script>
+<script src="~/assets/js/pages/waves.min.js"></script>
+
+<script src="~/assets/select2/js/select2.min.js"></script>
+<script src="~/assets/js/sweetalert2.min.js"></script>
+
+<script src="~/assets/js/jquery.dataTables.min.js"></script>
+<script src="~/assets/js/dataTables.bootstrap4.min.js"></script>
+
+<script src="~/assets/js/dataTables.buttons.min.js"></script>
+<script src="~/assets/js/buttons.bootstrap4.min.js"></script>
+
+<script src="~/assets/js/jszip.min.js"></script>
+<script src="~/assets/js/pdfmake.min.js"></script>
+<script src="~/assets/js/vfs_fonts.js"></script>
+
+<script src="~/assets/js/buttons.html5.min.js"></script>
+<script src="~/assets/js/buttons.print.min.js"></script>
+<script src="~/assets/js/buttons.colVis.min.js"></script>
+
+<script src="~/assets/js/dataTables.responsive.min.js"></script>
+<script src="~/assets/js/responsive.bootstrap4.min.js"></script>
+
+<script src="~/DatePicker/jquery-ui.min.js"></script>
+<link href="~/DatePicker/jquery-ui.min.css" rel="stylesheet"/>
+
+<script src="~/assets/js/pages/app.js"></script>
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script src="~/SiteJS/SideBarLink.js"></script>
+<script src="~/SiteJS/SearchLinks.js"></script>
+<script src="/assets/js/script.js"></script>
+
+
+<script>
+        //function toggleSubMenu(event, submenuId) {
+        //    event.preventDefault();
+        //    var subMenu = document.getElementById(submenuId);
+        //    var allSubMenus = document.querySelectorAll('.submenu-content');
+        //    allSubMenus.forEach(function (menu) {
+        //        if (menu.id !== submenuId) {
+        //            menu.style.display = 'none';
+        //        }
+        //    });
+        //    if (subMenu.style.display === 'none') {
+        //        subMenu.style.display = 'block';
+        //    } else {
+        //        subMenu.style.display = 'none';
+        //    }
+        //}
+
+        // List of links
+        document.addEventListener('DOMContentLoaded', function () {
+            const sidebarLinks = document.querySelectorAll('.sidebar-menu a');
+
+            sidebarLinks.forEach(link => {
+                if (link.href === window.location.href) {
+                    link.parentNode.classList.add('active');
+                    const submenu = link.closest('.submenu');
+                    if (submenu) {
+                        const submenuContent = submenu.querySelector('.submenu-content');
+                        if (submenuContent) {
+                            submenuContent.style.display = 'block';
+                        }
+                    }
+                }
+            });
+        });
+
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.LeaveReqList>
+<div class="pre-scrollable">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+        <tr>
+            <th>Action</th>
+            <th>Recall</th>
+            <th>No</th>
+            <th>Employee Name</th>
+            <th>Employee Category</th>
+            <th>Reliever</th>
+            <th>Department</th>
+            <th>Leave Type</th>
+            <th>Applied Days</th>
+            <th>Date</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Return Date</th>
+            <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        @{
+            if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <input type="button" onclick="ViewDoc('@item.No');" style="background: #162f25; color:whitesmoke; border-radius:10px" value="Select" />
+                        </td>
+
+                        <td>
+                            @if (item.IsSupervisor)
+                            {
+                                <input type="button" onclick="Recall('@item.No');" value="Recall" style="background-color: #162f25; color: whitesmoke;" />
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.No)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EmpName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EmployeeCategory)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Reliever)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Department)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Leave_Type)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Applied_Days)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Starting_Date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.End_Date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Return_Date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Status)
+                        </td>
+                    </tr>
+                }
+            }
+        }
+        </tbody>
+    </table>
+</div>
+<script>
+    $("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100]
+    });
+</script>

@@ -1,0 +1,102 @@
+﻿@model Latest_Staff_Portal.ViewModel.HrWelfareIncidenceCard
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Affected Employee", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="text" class="form-control" id="txtAffectedEmployee" value="@Model.Affected_Employee" readonly="readonly" style="background-color:lightgrey"/>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Employee Name", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="text" class="form-control" id="txtEmployeeName" value="@Model.Employee_Name" readonly="readonly" style="background-color:lightgrey"/>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Incidence Date", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="text" class="form-control" placeholder="dd/mm/yyyy" id="txtIncidenceDate" onkeydown="return false;" autocomplete="off"/>
+                <div class="a"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Incidence Time", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="text" class="form-control" id="txtIncidenceTime"/>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Incidence", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(model => model.Incidence, new SelectList(Model.ListOfIncidences, "Value", "Text"), "--Select Incidence--", new { @class = "form-control", id = "ddlIncidence" })
+                @Html.ValidationMessageFor(model => model.Incidence, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Duty Station", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(model => model.Duty_Station, new SelectList(Model.ListOfDutyStations, "Value", "Text"), "--Select Duty Station--", new { @class = "form-control", id = "ddlDutyStation" })
+                @Html.ValidationMessageFor(model => model.Duty_Station, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="row">
+
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Action Taken", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <textarea class="form-control" id="txtActionTaken"></textarea>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<hr/>
+
+<div align="center">
+    <input type="button" class="btn btn-primary waves-effect waves-light" value="Submit Incident" onclick="SubmitIncident();"/>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#txtIncidenceDate').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-1:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy'
+        });
+        $("#txtIncidenceDate").focus(function () {
+            $("#ui-datepicker-div").position({
+                my: "left top",
+                at: "left bottom",
+                of: $(this)
+            });
+        });
+    });
+</script>

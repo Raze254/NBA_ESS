@@ -1,0 +1,38 @@
+﻿@model Latest_Staff_Portal.ViewModel.PersonalGoalsObjectives
+
+@{
+    ViewBag.Title = "NewObjective";
+}
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Perfomance Goals & Targets", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Perfomance_Goals_and_Targets, new { htmlAttributes = new { @class = "form-control", @id= "Perfomance_Goals_and_Targets2" } })
+            @Html.ValidationMessageFor(model => model.Perfomance_Goals_and_Targets, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Weight", htmlAttributes: new { @class = "control-label col-md-2" })
+            <input class="form-control" type="text" value="10" id="Weight2" readonly />
+        </div>
+    </div>
+    <div class="col-md-12" hidden>
+        <div class="form-group">
+            @Html.Label("Key Perfomance Indicator", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Key_Perfomance_Indicator, new { htmlAttributes = new { @class = "form-control", @id = "Key_Perfomance_Indicator2" } })
+            @Html.ValidationMessageFor(model => model.Key_Perfomance_Indicator, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+</div>
+
+<div align="center">
+    <input type="button" class="btn btn-primary action-buttons" value="Submit Record" onclick="SubmitObjective();" />
+</div>
+

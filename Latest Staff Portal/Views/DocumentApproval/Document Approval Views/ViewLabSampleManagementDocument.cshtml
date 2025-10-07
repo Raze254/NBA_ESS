@@ -1,0 +1,374 @@
+﻿@model Latest_Staff_Portal.ViewModel.LabSampleManagement
+
+@{
+    ViewBag.Title = "LabSampleManagementDocumentView";
+}
+
+
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Sample ID", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Sample_ID, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+            @Html.ValidationMessageFor(model => model.Sample_ID, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Received At", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Received_At, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+            @Html.ValidationMessageFor(model => model.Received_At, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Analysed At", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Analysed_At, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+            @Html.ValidationMessageFor(model => model.Analysed_At, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Exported At", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Exported_At, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+            @Html.ValidationMessageFor(model => model.Exported_At, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Turnaround Time", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.TurnAround_Time, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+            @Html.ValidationMessageFor(model => model.TurnAround_Time, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Status", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Status, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+            @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Created By", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Created_By, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+            @Html.ValidationMessageFor(model => model.Created_By, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+</div>
+
+<hr />
+@{
+    if (Model.Status != "Pending Approval")
+    {
+        @*<div align="center" id="DivUpdateButton">
+                <input type="button" class="btn btn-primary action-buttons" value="Update Header" onclick="UpdateHeader();" />
+            </div>*@
+    }
+}
+<div id="DivPurchaseRegLines" style="margin: 10px 20px">
+    <hr style="border:1px solid black" />
+    <b>Lab Sample Lines</b>
+    <hr />
+    <div id="divLabSampleLines"></div>
+    <hr style="border:1px solid black" />
+</div>
+
+
+
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title" id="lblTle"></h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadLabSampleLines(`@Model.Sample_ID`);
+
+     var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+     if (Successmsg != "") {
+         Swal.fire('Success', Successmsg, 'success', true);
+         $.ajax({
+             type: "POST",
+             url: "/Common/NullibySessions"
+         });
+     }
+
+        $('#myModal').on('hidden.bs.modal', function () {
+            $('.modal-backdrop').remove();
+            $('body').removeClass('modal-open');
+            $('body').css('padding-right', '');
+        });
+     });
+
+    var LoadLabSampleLines = function (Sample_ID) {
+        var Approval_Status = '@Model.Status';
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "html",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ Sample_ID: Sample_ID, Status: Approval_Status }),
+            url: "/Technical/LabSampleManagementLinesPartialView",
+            success: function (data) {
+                $("#divLabSampleLines").html(data);
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    };
+    var AddLabSampleLine = function () {
+        var Sample_ID = `@Model.Sample_ID`;
+        $("#lblTle").text("New Lab Sample Line");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: "html",
+            url: '/Technical/NewLabSampleLine',
+            data: {
+                Sample_ID: Sample_ID,
+            },
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseText, 'warning');
+            }
+        });
+    };
+    var SubmitLabSampleLine = function () {
+        var Sample_ID = `@Model.Sample_ID`;
+        var Sample_Type = $(`#Sample_Type`).val();
+        var Source = $(`#Source`).val();
+
+        var Quantity_ml = $(`#Quantity_ml`).val();
+        var Storage_Location = $(`#Storage_Location`).val();
+        var Notes = $(`#Notes`).val();
+
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({
+                Sample_ID: Sample_ID,
+                Sample_Type: Sample_Type,
+                Source: Source,
+                Quantity_ml: Quantity_ml,
+                Storage_Location: Storage_Location,
+                Notes: Notes
+            }),
+            url: '/Technical/SubmitLabSampleLine',
+            success: function (data) {
+                if (data.success == true) {
+                    HideProgress();
+                    Swal.fire('Success', 'Record successfully added', 'success').then(() => {
+                        window.location.reload();
+                    });
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Error', data.message, 'error');
+                }
+                HideProgress();
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+
+    };
+
+    var DeleteLabSampleLine = function (Sample_ID, Line_No) {
+        var Sample_ID = `@Model.Sample_ID`;
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "This lab sample line will be permanently deleted.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                ShowProgress();
+                $.ajax({
+                    async: true,
+                    type: "POST",
+                    datatype: "json",
+                    contentType: "application/json; charset=utf-8",
+                    processData: false,
+                    data: JSON.stringify({ Sample_ID: Sample_ID, Line_No: Line_No }),
+                    url: '/Technical/DeleteLabSampleLine',
+                    success: function (data) {
+                        HideProgress();
+                        if (data.success === true) {
+                            Swal.fire('Deleted!', data.message, 'success').then(() => {
+                                window.location.reload();
+                            });
+                        } else {
+                            Swal.fire('Error', data.message, 'error');
+                        }
+                    },
+                    error: function (err) {
+                        HideProgress();
+                        Swal.fire('Warning', err.responseText || 'Something went wrong.', 'warning');
+                    }
+                });
+            }
+        });
+    };
+
+    var SendDocForApproval = function () {
+        var Sample_ID = `@Model.Sample_ID`;
+        $.ajaxSetup({ cache: false });
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You want to send this document for approval!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Send it!'
+        }).then((result) => {
+            if (result.value) {
+                ShowProgress();
+                $.ajax({
+                    async: true,
+                    type: "POST",
+                    datatype: "json",
+                    data: JSON.stringify({ Sample_ID: Sample_ID }),
+                    contentType: "application/json; charset = utf-8",
+                    processData: false,
+                    url: '/Technical/SendLabSampleDocForApproval',
+                    success: function (data) {
+                        if (data.success == true) {
+                            HideProgress();
+                            window.location.reload();
+                        }
+                        else {
+                            HideProgress();
+                            Swal.fire('Error', data.message, 'error');
+                        }
+                    },
+                    error: function (err) {
+                        HideProgress();
+                        Swal.fire('Warning', err, 'warning');
+                    }
+                });
+            }
+            else {
+                Swal.fire('Cancelled', 'Document not sent for approval', 'error');
+            }
+        });
+    }
+    var CancelDocApproval = function () {
+        var Sample_ID = `@Model.Sample_ID`;
+        $.ajaxSetup({ cache: false });
+          Swal.fire({
+              title: 'Are you sure?',
+              text: "You want to Cancel this document  approval request?",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Yes, Send it!'
+          }).then((result) => {
+              if (result.value) {
+                  ShowProgress();
+                  $.ajax({
+                      async: true,
+                      type: "POST",
+                      datatype: "json",
+                      data: JSON.stringify({ Sample_ID: Sample_ID }),
+                      contentType: "application/json; charset = utf-8",
+                      processData: false,
+                      url: '/Technical/CancelLabSampleDocApproval',
+                      success: function (data) {
+                          if (data.success == true) {
+                              HideProgress();
+                              window.location.reload();
+                          }
+                          else {
+                              HideProgress();
+                              Swal.fire('Error', data.message, 'error');
+                          }
+                      },
+                      error: function (err) {
+                          HideProgress();
+                          Swal.fire('Warning', err, 'warning');
+                      }
+                  });
+              }
+              else {
+                  Swal.fire('Cancelled', 'Document not sent for approval', 'error');
+              }
+          });
+      }
+    var ViewApprovalTrail = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/DocumentApprovalTrail',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+</script>

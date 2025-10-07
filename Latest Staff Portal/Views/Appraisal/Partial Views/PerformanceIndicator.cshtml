@@ -1,0 +1,151 @@
+﻿@model Latest_Staff_Portal.ViewModel.PerformanceEvaluationList
+
+@{
+    decimal TotalWeight = 0, ObjScore = 0, CoreVScore = 0, PercScore = 0;
+    var count = 0;
+}
+<style>
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+<div class="pre-scrollable">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead>
+        <tr>
+            <th width="20%">Objective/ Initiative</th>
+            <th width="20%">Outcome Performance Indicator</th>
+            <th width="5%">UOM</th>
+            <th width="20%">Desired Performance Direction</th>
+            <th width="5%">Scale Type</th>
+            <th width="5%">Target</th>
+            <th width="5%">Self Review</th>
+            @*@if ((Model.AllowTargetSetting) && (Model.Open_To == "ANUPEAisee") && (!Model.Supervisor_ANUPEAised))
+        {*@
+            <th style="text-align:right" width="5%">Action</th>
+            @*}*@
+            @*@if ((Model.AllowEvaluation) || (Model.Supervisor_ANUPEAised))
+        {
+            <th width="5%">ANUPEAisee</th>
+            <th width="5%">Supervisor</th>
+            <th width="5%">Agreed</th>
+            <th width="20%">ANUPEAisee Comments</th>
+            <th width="20%">Supervisor Comments</th>
+            if ((Model.Open_To == "ANUPEAisee" || Model.Open_To == "HR") && (!Model.Supervisor_ANUPEAised))
+            {
+                <th style="text-align:right" width="5%">Action</th>
+            }
+        }*@
+        </tr>
+        </thead>
+        <tbody>
+        @{
+            if (Model.ListOfPerformanceEvaluation != null)
+            {
+                if (Model.ListOfPerformanceEvaluation.Count() > 0)
+                {
+                    foreach (var item in Model.ListOfPerformanceEvaluation)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Objective_Initiative)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Outcome_Performance_Indicator)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Unit_of_Measure)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Desired_Performance_Direction)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Scale_Type)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Target_Qty)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Self_Review_Qty)
+                            </td>
+                            @*@if ((Model.AllowTargetSetting) && (Model.Open_To == "ANUPEAisee") && (!Model.Supervisor_ANUPEAised))
+                            {*@
+                            <td style="text-align:right">
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Action List
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" href="#" onclick="EditKPIRecord('@item.Performance_Evaluation_ID','@item.Line_No','@item.Self_Review_Qty');">Edit</a>
+                                        <a class="dropdown-item" href="#" onclick="DropKPIRecord('@item.Performance_Evaluation_ID','@item.Line_No');">Delete</a>
+                                    </div>
+                                </div>
+                            </td>
+                            }
+                            @*@if ((Model.AllowEvaluation) || (Model.Supervisor_ANUPEAised))
+                            {
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Self_Score)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Supervisors_Score)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Agreed_Score)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ANUPEAisee_Comments)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Supervisor_Comments)
+                                </td>
+                                if ((Model.Open_To == "ANUPEAisee" || Model.Open_To == "HR") && (!Model.Supervisor_ANUPEAised))
+                                {
+                                    <td style="text-align:right">
+                                        <a href="javascript:void(0);" class="text-success" onclick="EvalKPIItem('@item.ANUPEAisal_No','@item.Line_No','@Model.Level');">Evaluate</a>
+                                    </td>
+                                }*@
+                            }
+                        </tr>
+                        TotalWeight = TotalWeight + Convert.ToDecimal(item.Self_Review_Qty);
+                        ObjScore = ObjScore + Convert.ToDecimal(item.Target_Qty);
+                        count = count + 1;
+                    }
+
+                    ObjScore = Math.Round(ObjScore / (count * 5) * 5, 2);
+                    PercScore = Math.Round(ObjScore / 5 * 100, 2);
+                }
+            }
+        }
+        </tbody>
+    </table>
+</div>
+<div class="bg-soft-secondary" style="border-top:2px solid black">
+    <b>Total Weight :</b> <span class="badge badge-info">@TotalWeight</span>
+    | <b>Objective Score :</b> <span class="badge badge-info">@ObjScore</span>
+    | <b>Objective Percentage :</b> <span class="badge badge-info">@PercScore</span>
+    <input type="hidden" id="hideenTotalWeight" value="@TotalWeight"/>
+    <input type="hidden" id="hidenNewWeight"/>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#datatable").DataTable(), $("#datatable-buttons").DataTable({
+            lengthChange: !1,
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    title: 'Recruits List',
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+                {
+                    extend: 'pdfHtml5',
+                    title: 'Recruits List',
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                }
+            ]
+        }).buttons().container().appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)")
+    });
+</script>

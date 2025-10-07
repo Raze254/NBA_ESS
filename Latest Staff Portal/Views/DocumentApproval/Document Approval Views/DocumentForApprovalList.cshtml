@@ -1,0 +1,74 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.DocumentsForApproval>
+
+
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead >
+        <tr>
+            <th>Action</th>
+            <th>Doc No.</th>
+            <th>Sender</th>
+            <th>Date Sent for Approval</th>
+            <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        @{
+            if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    if (item.CommentFound)
+                    {
+                        <tr style="background-color:red">
+                            <td>
+                                <a href="#" onclick="ViewDoc('@item.TabelID','@item.Document_No','@item.Sequence','@item.Entry_No');">View Document</a>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Document_No)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Sender_Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DateSend)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Status)
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>
+                                <a href="#" onclick="ViewDoc('@item.TabelID','@item.Document_No','@item.Sequence','@item.Entry_No');">View Document</a>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Document_No)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Sender_Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DateSend)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Status)
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+        }
+        </tbody>
+    </table>
+</div>
+<script>
+    $("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100],
+        "bDestroy": true
+    });
+</script>

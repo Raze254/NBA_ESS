@@ -1,0 +1,115 @@
+﻿@model Latest_Staff_Portal.ViewModel.TrainingCostViewModel
+<style>
+    .select2-container.custom-select .select2-selection {
+        background-color: white !important;
+        border: 1px solid #ccc;
+    }
+
+    .select2-container.custom-select .select2-selection--single {
+        background-color: white !important;
+    }
+</style>
+
+@{ 
+   var activeCourse= ViewBag.activeCourse;
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Cost Category", htmlAttributes: new { @class = "control-label col-md-12" })
+            @Html.DropDownListFor(m => m.CostCategory, Model.ListOfCostCategories, "--Select Cost Category--", new { @id = "CostCategory", @class = "form-control select2 custom-select" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Cost Item", htmlAttributes: new { @class = "control-label col-md-12" })
+            @Html.DropDownListFor(m => m.CostItem, Model.ListOfOtherCostItems, "--Select Cost Item--", new { @id = "CostItem", @class = "form-control select2 custom-select" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Unit Cost", htmlAttributes: new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.UnitCost, new { @class = "form-control", @type = "number", @step = "0.01", @min = "0", id = "UnitCost", @placeholder = "Enter Unit Cost" })
+            @* Hidden field to store DSA unit cost *@
+            <input type="hidden" id="DsaUnitCost" value="@ViewBag.DsaUnitCost" />
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Quantity", htmlAttributes: new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.Quantity, new { @class = "form-control", @type = "number", @min = "1", @value = "1", id = "Quantity", @placeholder = "Enter Quantity" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Total Cost", htmlAttributes: new { @class = "control-label col-md-12" })
+            <input type="text" id="TotalCost" class="form-control" readonly style="background-color:#dedebd" placeholder="Total will be calculated automatically" />
+        </div>
+    </div>
+</div>
+<div align="center">
+    <input type="button" class="btn btn-primary action-buttons" value="Submit Training Cost" onclick="SubmitTrainingCost('@ViewBag.Course',`@activeCourse`);" />
+</div>
+<script>
+    $(document).ready(function () {
+        $('.select2').select2({
+            dropdownParent: $('#myModal')
+        });
+
+        // Set default quantity to 1 if it's 0 or empty
+        var quantityField = $('#Quantity');
+        if (!quantityField.val() || quantityField.val() == '0') {
+            quantityField.val('1');
+        }
+
+        // Handle cost item selection change
+        $('#CostItem').on('change', function () {
+            handleCostItemChange();
+        });
+
+        $('#UnitCost, #Quantity').on('input', function () {
+            calculateTotalCost();
+        });
+
+        var initialCategory = $('#CostCategory').val();
+        if (initialCategory) {
+            loadCostItems(initialCategory);
+        }
+
+        // Calculate initial total cost
+        calculateTotalCost();
+    });
+
+    function handleCostItemChange() {
+        var selectedValue = $('#CostItem').val();
+        var unitCostField = $('#UnitCost');
+        var dsaUnitCost = $('#DsaUnitCost').val();
+
+        if (selectedValue === 'DSA -') {
+            // Set DSA unit cost and make field readonly
+            unitCostField.val(dsaUnitCost);
+            unitCostField.prop('readonly', true);
+            unitCostField.css('background-color', '#dedebd');
+        } else {
+            // Reset unit cost field to editable
+            unitCostField.val('');
+            unitCostField.prop('readonly', false);
+            unitCostField.css('background-color', 'white');
+        }
+
+        // Recalculate total cost
+        calculateTotalCost();
+    }
+
+    function calculateTotalCost() {
+        var unitCost = parseFloat($('#UnitCost').val()) || 0;
+        var quantity = parseInt($('#Quantity').val()) || 0;
+        var totalCost = unitCost * quantity;
+        $('#TotalCost').val(totalCost.toFixed(2));
+    }
+</script>

@@ -1,0 +1,946 @@
+﻿@using Latest_Staff_Portal.ViewModel
+@model Latest_Staff_Portal.ViewModel.StaffClaims
+
+@{
+    ViewBag.Title = "StaffClaimDocumentView";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    hr {
+        margin: 4px;
+    }
+
+    .BtnPadding {
+        padding: 7px;
+        font-size: 12px;
+    }
+</style>
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#" onclick="StaffClaimsLink();">Staff Claims</a>
+                </li>
+                <li class="breadcrumb-item active">Staff Claim Document Details(@Model.No)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<hr />
+<br />
+<div class="card">
+    <div class="card-header">
+        @* <div class="alert alert-danger mt-3" style="font-size: 0.9em;">
+            <strong style="color: red;">*</strong> If Bank Validation Fails, click on <b>Update Details</b> in the top right tab.
+        </div>*@
+        <div style="text-align:right">
+            @* <button style="background: #162f25; color: whitesmoke; border-radius: 10px;" class="BtnPadding" onclick="GetFO22('@Model.No')">
+            <i class="fas fa-print" aria-hidden="true"></i> Preview F.O.22
+        </button>*@
+            @*   <button style="background: #162f25; color: whitesmoke; border-radius: 10px" class="BtnPadding" onclick="GenerateExpenseRequisitionReport('@Model.ExpenditureRequisitionCode');">
+            <i class="fa fa-print" aria-hidden="true"></i> Print Memo Report
+        </button>*@
+            @*  <button style="background: #315b7c; color: whitesmoke; border-radius: 10px;" class="BtnPadding" onclick="ViewDimensions()">
+            <i class="fas fa-project-diagram" aria-hidden="true"></i> Dimensions
+        </button>
+            *@
+            @* <button class="btn btn-primary action-buttons2" onclick="ViewDocComments('@Model.No');">
+            <i class="fa fa-list-ol" aria-hidden="true"></i> Comments
+        </button>*@
+            @{
+
+                @*   if (Model.Status == "Released" && Model.Posted == "False")
+            {
+                <button style="background: #162f25; color:whitesmoke;  border-radius:10px" class="BtnPadding" onclick="Post('@Model.No');">
+                    <i class="fa fa-plus-circle" aria-hidden="true"></i> Post (@Model.No)
+                </button>
+
+            }*@
+            }
+
+            @if (Model.Status == "Open")
+            {
+
+                <button class="btn btn-primary action-buttons2" onclick="SendStaffClaimsDocForApproval('@Model.No');">
+                    <i class="fa fa-close" aria-hidden="true"></i> Send Document For Approval
+                </button>
+            }
+
+
+            @if (Model.Status == "Pending Approval")
+            {
+
+                <button class="btn btn-danger action-buttons2" style="background-color: red" onclick="CancelStaffClaimsDocApproval('@Model.No');">
+                    <i class="fa fa-close" aria-hidden="true"></i> Cancel Approval Request
+                </button>
+                <button class="btn btn-primary action-buttons2" onclick="ViewApprovalTrail('@Model.No');">
+                    <i class="fa fa-barcode" aria-hidden="true"></i> Approval Trail
+                </button>
+            }
+
+            <button class="btn btn-primary action-buttons2" onclick="ViewComments('@Model.No');">
+                <i class="fa fa-list" aria-hidden="true"></i> Approval / Rejection Comments
+            </button>
+
+            <div class="text-center mt-5"><h4>Staff Claim Document (@Model.No)</h4></div>
+            <br />
+
+        </div>
+    </div>
+    <div class="card-body">
+      
+        <div class="row">
+            <div class="col-md-6 form-group">
+                @Html.Label("Document No", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.No, new { @class = "form-control", @readonly = "readonly" })
+            </div>
+            <div class="col-md-6 form-group">
+                @Html.Label("Date Requested", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.Date, new { @class = "form-control", @readonly = "readonly", id = "dtPicker" })
+            </div>
+
+           @* <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("AIE Receipt Number", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.AieReceipt, new { @class = "form-control", @readonly = "readonly" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Committed Amount", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.CommittedAmount, new { @class = "form-control", @readonly = "readonly" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Available Balance", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.AvailableAmount, new { @class = "form-control", @readonly = "readonly" })
+                </div>
+            </div>
+*@
+            <div class="col-md-6 form-group">
+                @Html.Label("Account Type", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.AccountType, new { @class = "form-control", @readonly = "readonly", id = "txtAccountType" })
+            </div>
+            <div class="col-md-6 form-group">
+                @Html.Label("Account No", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.AccountNo, new { @class = "form-control", @readonly = "readonly", id = "txtAccountNo" })
+            </div>
+
+            <div class="col-md-6 form-group">
+                @Html.Label("Account Name", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.AccountName, new { @class = "form-control", @readonly = "readonly", id = "txtAccountName" })
+            </div>
+           @* <div class="col-md-6 form-group">
+                @Html.Label("Payee", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.Payee, new { @class = "form-control", @readonly = "readonly", id = "txtPayee" })
+            </div>
+
+            <div class="col-md-6 form-group">
+                @Html.Label("Payment Narration", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.PaymentNarration, new { @class = "form-control", @readonly = "readonly", id = "txtPaymentNarration" })
+            </div>*@
+            <div class="col-md-6 form-group">
+                @Html.Label("Department Name", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.DepartmentName, new { @class = "form-control", @readonly = "readonly", id = "txtDepartmentName" })
+            </div>
+
+            <div class="col-md-6 form-group">
+                @Html.Label("Administrative Unit", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.ShortcutDimension2Code, new { @class = "form-control", @readonly = "readonly", id = "txtShortcutDimension2Code" })
+            </div>
+           @* <div class="col-md-6 form-group">
+                @Html.Label("Project Name", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.ProjectName, new { @class = "form-control", @readonly = "readonly", id = "txtProjectName" })
+            </div>
+
+            <div class="col-md-6 form-group">
+                @Html.Label("Total Amount LCY", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.TotalAmountLCY, new { @class = "form-control", @readonly = "readonly", id = "txtTotalAmountLCY" })
+            </div>
+            <div class="col-md-6 form-group">
+                @Html.Label("Strategic Plan", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.StrategicPlan, new { @class = "form-control", @readonly = "readonly", id = "txtStrategicPlan" })
+            </div>
+
+            <div class="col-md-6 form-group">
+                @Html.Label("Reporting Year Code", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.ReportingYearCode, new { @class = "form-control", @readonly = "readonly", id = "txtReportingYearCode" })
+            </div>
+            <div class="col-md-6 form-group">
+                @Html.Label("Workplan Code", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.WorkplanCode, new { @class = "form-control", @readonly = "readonly", id = "txtWorkplanCode" })
+            </div>
+
+            <div class="col-md-6 form-group">
+                @Html.Label("Activity Code", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.ActivityCode, new { @class = "form-control", @readonly = "readonly", id = "txtActivityCode" })
+            </div>
+            <div class="col-md-6 form-group">
+                @Html.Label("Expenditure Requisition Code", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.ExpenditureRequisitionCode, new { @class = "form-control", @readonly = "readonly", id = "txtExpenditureRequisitionCode" })
+            </div>
+*@
+            <div class="col-md-6 form-group">
+                @Html.Label("Status", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.Status, new { @class = "form-control", @readonly = "readonly", id = "txtStatus" })
+            </div>
+        </div>
+        <hr style="border:1px solid black" />
+        <b>Staff Claim Lines</b>
+        <hr />
+        <div id="divClaimLines"></div>
+        <hr style="border:1px solid black" />
+        <div class="row">
+            <div class="col-md-12">
+                <b>Attachments</b>
+                <div id="divAttachDocs"></div>
+            </div>
+        </div>
+        <hr style="border:1px solid black" />
+        <hr />
+
+    </div>
+</div>
+
+
+@* //////////////////////////////Modal///////////////////////////////////////// *@
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myModalLabel">
+                    <label id="labelF"></label>
+                </h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@* //////////////////////View Document//////////////////////////// *@
+<div class="modal fade" id="myModalAttachment" tabindex="-1" role="dialog" aria-labelledby="myModalAttachmentLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalAttachmentLabel">View Attachment</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+            </div>
+            <div class="modal-body" id="modalAttachmentBody">
+                <iframe id="iframe" style="width:100%;height:75vh;" frameborder="0"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal fade" id="myModalUnits" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title"></h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodyUnits">
+                <iframe id="iframe" style="width:100%;height:450px"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script src="~/assets/js/pdfobject.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadClaimDocumentLines(`@Model.No`,`@Model.Status`);
+    });
+    var LoadClaimDocumentLines = function (DocNo,Status) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ DocNo: DocNo, Status: Status }),
+            url: "/StaffClaim/StaffClaimLines",
+            success: function (data) {
+                $("#divClaimLines").html(data);
+                HideProgress();
+                GetDocumentAttachments();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    };
+    var GetFO22 = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/StaffClaim/GenerateFo22Report',
+            success: function (data) {
+                if (data.success == true) {
+                    $('iframe').attr('src', "data:application/pdf;base64," + data.message);
+                    $("#myModalUnits").modal("show");
+                    HideProgress();
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+
+    }
+    var GetDocumentAttachments = function () {
+	    var DocNo = `@Model.No`;
+	    $.ajax({
+		    async: true,
+		    type: "POST",
+		    datatype: "json",
+		    contentType: "application/json; charset = utf-8",
+		    processData: false,
+            data: JSON.stringify({ DocNo: DocNo}),
+            url: "/Common/EdmsDocumentAttachmentList",
+		    success: function (data) {
+			    $("#divAttachDocs").html(data);
+		    },
+		    error: function () {
+			    Swal.fire("There is some problem to process your request. Please try after some time");
+		    }
+	    });
+    };
+    var StaffClaimRequisitionLink = function () {
+        ShowProgress();
+        window.location = "/StaffClaim/StaffClaims";
+    }
+
+
+
+
+    var AddStaffClaimLine = function () {
+
+        var Document_No = '@Model.No';
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: "html",
+            url: '/StaffClaim/NewStaffClaimLine',
+            data: {
+                Document_No: Document_No
+            },
+          success: function (data) {
+              $("#modalBody").html(data);
+              HideProgress();
+              $("#myModal").modal("show");
+          },
+          error: function (err) {
+              HideProgress();
+              Swal.fire('Warning', err.responseText, 'warning');
+          }
+       });
+    };
+
+
+    function SubmitStaffClaimLine() {
+        var isValid = true;
+
+        // Collect data from the form
+        var formData = {
+            No:`@Model.No`,
+            Claim_Type: $("#Claim_Type2").val(),
+            Date: $("#Date2").val(),
+            Description: $("#Description2").val(),
+            Amount: $("#Amount2").val(),
+        };
+
+        // Validation checks
+        if (!formData.Claim_Type) {
+            Swal.fire('Warning', 'Select Claim Type.', 'warning');
+            isValid = false;
+        }
+
+        if (!formData.Description) {
+            Swal.fire('Warning', 'Enter Description.', 'warning');
+            isValid = false;
+        }
+
+        if (!formData.Amount || formData.Amount <= 0) {
+            Swal.fire('Warning', 'Enter a valid Amount greater than 0.', 'warning');
+            isValid = false;
+        }
+
+        // Exit if validation fails
+        if (!isValid) {
+            return;
+        }
+
+        // Prepare data object
+        var newStaffClaimLine = formData;
+
+        // Show progress indicator
+        ShowProgress();
+
+        // Send data via AJAX
+        $.ajax({
+            type: "POST",
+            url: "/StaffClaim/SubmitStaffClaimLine",
+            data: JSON.stringify(newStaffClaimLine),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                HideProgress();
+                if (data.success) {
+                    Swal.fire('Success', 'Staff Claim line submitted successfully.', 'success')
+                        .then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.reload();
+                            }
+                        });
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Error', 'An error occurred while submitting the request.', 'error');
+            }
+        });
+    }
+
+
+    function DeleteStaffClaimLine(Line_No) {
+        var No = `@Model.No`;
+        ShowProgress();
+        $.ajax({
+            type: "POST",
+            url: "/StaffClaim/DeleteStaffClaimLine",
+            data: JSON.stringify({ No: No, Line_No: Line_No }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                HideProgress();
+                if (data.success) {
+                    Swal.fire('Success', 'Staff Claim line Deleted successfully.', 'success')
+                        .then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.reload();
+                            }
+                        });
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Error', 'An error occurred while submitting the request.', 'error');
+            }
+        });
+    }
+
+
+
+
+    var SendStaffClaimsDocForApproval = function (DocNo) {
+		ShowProgress();
+		$.ajax({
+			async: true,
+			type: "POST",
+			datatype: "json",
+			data: JSON.stringify({ DocNo: DocNo }),
+			contentType: "application/json; charset = utf-8",
+			processData: false,
+            url: '/StaffClaim/SendStaffClaimsDocForApproval',
+			success: function (data) {
+				if (data.success == true) {
+					HideProgress();
+                    window.location.reload();
+				}
+				else {
+					HideProgress();
+
+					Swal.fire('Error', data.message, 'error');
+				}
+			},
+			error: function (err) {
+				HideProgress();
+				Swal.fire('Warning', err, 'warning');
+			}
+		});
+
+	}
+    var CancelStaffClaimsDocApproval = function (DocNo) {
+		ShowProgress();
+		$.ajax({
+			async: true,
+			type: "POST",
+			dataType: "json",
+			data: JSON.stringify({ DocNo: DocNo }),
+			contentType: "application/json; charset=utf-8",
+			processData: false,
+            url: '/StaffClaim/CancelStaffClaimsDocApproval',
+			success: function (data) {
+				HideProgress();
+				if (data.success === true) {
+                    Swal.fire('Success', data.message, 'success');
+                    window.location.reload();
+				} else {
+					Swal.fire('Error', data.message, 'error');
+				}
+			},
+			error: function (err) {
+				HideProgress();
+				Swal.fire('Warning', err.responseText, 'warning');
+			}
+		});
+	};
+
+    var ViewApprovalTrail = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo, RecID: "HR Leave Application: " + DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/DocumentApprovalTrail',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModalLinks").modal("hide");
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var ViewDocComments = function (documentNumber) {
+        $("#labelF").text("Document Comments");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ docNo: documentNumber }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/DocumentApprovalComments',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+	var Post = function (DocNo) {
+		ShowProgress();
+		$.ajax({
+			async: true,
+			type: "POST",
+			dataType: "json",
+			data: JSON.stringify({ DocNo: DocNo }),
+			contentType: "application/json; charset=utf-8",
+			processData: false,
+            url: '/StaffClaim/PostStaffClaim',
+			success: function (data) {
+				HideProgress();
+				if (data.success === true) {
+					Swal.fire('Success', data.message, 'success');
+                    var form = $('<form>', {
+                        action: '/StaffClaim/StaffClaimDocumentView',
+                        method: 'POST'
+                    }).append($('<input>', {
+                        type: 'hidden',
+                        name: 'DocNo',
+                        value: DocNo
+                    }));
+                    form.appendTo('body').submit();
+				} else {
+					Swal.fire('Error', data.message, 'error');
+				}
+			},
+			error: function (err) {
+				HideProgress();
+				Swal.fire('Warning', err.responseText, 'warning');
+			}
+		});
+	};
+    var ViewDimensions = function () {
+        $("#labelF").text("Dimensions");
+        var dimension = '@Model.DimensionSetId';
+        $.ajaxSetup({ cache: false });
+        ShowProgress();
+        $.ajax({
+            cache: false,
+            url: '/Common/Dimensions',
+            type: "POST",
+            datatype: "json",
+            cache: false,
+            data: JSON.stringify({ dimensionSetId: dimension }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            success: function (data) {
+                if (data) {
+                    $('#modalBody').html(data);
+                    $("#myModal").modal("show");
+                    HideProgress();
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    };
+    var GenerateExpenseRequisitionReport = function (docNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ documentNumber: docNo }),
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            url: '/ExpenseRequisition/GenerateExpenseRequisitionReport',
+            success: function (data) {
+                if (data.success) {
+                    $('iframe').attr('src', "data:application/pdf;base64," + data.message);
+                    $("#myModalUnits").modal("show");
+                    HideProgress();
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                    HideProgress();
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+
+
+
+    var ValidateBankAccount = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/ValidateBankAccountLines',
+            success: function (data) {
+                if (data.success) {
+                    LoadClaimDocumentLines(`@Model.No`, `@Model.Status`);
+                    Swal.fire('Success', data.message, 'success');
+                }
+                else {
+                    Swal.fire('Error', data.message, 'error');
+                }
+                HideProgress();
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var UpdateBankDetails  = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo}),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/UpdateEmployeeBankDetails',
+            success: function (data) {
+                if (data.success) {
+
+                    Swal.fire('Success', data.message, 'success');
+                    HideProgress();
+                }
+                else {
+                    Swal.fire('Error', data.message, 'error');
+                    HideProgress();
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+
+
+
+    var GetDocumentAttachments = function () {
+      var DocNo = `@Model.No`;
+      var status = '@Model.Status';
+         $.ajax({
+              async: true,
+              type: "POST",
+              datatype: "json",
+              contentType: "application/json; charset = utf-8",
+              processData: false,
+                    data: JSON.stringify({ DocNo: DocNo, documentStatus: status }),
+                    url: "/Common/DocumentAttachments",
+              success: function (data) {
+               $("#divAttachDocs").html(data);
+              },
+              error: function () {
+               Swal.fire("There is some problem to process your request. Please try after some time");
+              }
+         });
+    };
+	var AddAttachment = function () {
+          $("#labelF").text("File Upload");
+          ShowProgress();
+          $.ajax({
+           async: true,
+           type: "GET",
+           datatype: "html",
+              url: '/Common/FileUploadForm',
+              success: function (data) {
+                  $("#modalBody").html(data);
+                  HideProgress();
+                  $("#myModal").modal("show");
+              },
+              error: function (err) {
+                  HideProgress();
+                  Swal.fire('Warning', err, 'warning');
+              }
+
+          });
+
+      };
+    var SaveAttachmentFile = function (receiptNumber) {
+
+        var DocNo = `@Model.No`;
+          var files = document.getElementById('AttachmentFile').files;
+          var filename; var base64String; var filetype;
+          if (files.length) {
+              var file = files[0];
+              if (file.size > 50000000) {
+                  Swal.fire('Warning', 'Please only files less than 50MB allowed. Thanks!!', 'warning');
+              }else
+              {
+               var blob = file.slice();
+               filetype = file.type;
+               filename = file.name;
+               var reader = new FileReader();
+               reader.onloadend = function (evt) {
+                if (evt.target.readyState == FileReader.DONE) {
+	                var cont = evt.target.result
+	                base64String = getB64Str(cont);
+	                ShowProgress();
+	                $.ajax({
+		                type: "POST",
+		                url: "/Common/SaveAttachedFile",
+                                    data: JSON.stringify({ DocNo: DocNo, base64Upload: base64String, fileName: filename, Extn: filetype, TableID: 57000, module: "Imprest Surrender", documentType:"Imprest"}),
+		                contentType: "application/json; charset=utf-8",
+		                dataType: "json",
+		                success: function (data) {
+			                if (data.success) {
+				                HideProgress();
+				                $("#myModal").modal("hide");
+				                Swal.fire('Success', data.message, 'success');
+                                            GetDocumentAttachments();
+			                }
+			                else {
+				                Swal.fire('Warning', data.message, 'warning');
+				                HideProgress();
+			                }
+		                },
+		                error: function (err) {
+			                HideProgress();
+			                Swal.fire('Warning', err, 'warning');
+		                }
+	                });
+                }
+
+                  };
+                  reader.readAsArrayBuffer(blob);
+              }
+         }
+    };
+    var DeleteAttachment = function (DocNo, DocID) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            dataType: "json",
+            data: JSON.stringify({
+                DocNo: DocNo,
+                tblID: 57000,
+                DocID: DocID,
+                lineNo: 0,
+            }),
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            url: '/Common/DeleteAttachedDocument',
+            success: function (data) {
+                HideProgress();
+                if (data.success === true) {
+                    Swal.fire('Success', data.message, 'success').then((result) => {
+                        if (result.isConfirmed) {
+                            GetDocumentAttachments(); // reload attachments after OK
+                        }
+                    });
+                } else {
+                    Swal.fire('Error', data.message, 'error').then((result) => {
+                        if (result.isConfirmed) {
+                            GetDocumentAttachments(); // still reload if error acknowledged
+                        }
+                    });
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseText, 'warning');
+            }
+        });
+    };
+    var ViewAttachment = function (docNo, docId) {
+        $.ajaxSetup({ cache: false });
+        ShowProgress();
+        var viewer = $("#modalAttachmentBody");
+        viewer.empty();
+
+        $.ajax({
+            url: '/Common/ViewAttachedDocument',
+            type: "GET",
+            datatype: "json",
+            cache: false,
+            contentType: "application/json; charset=utf-8",
+            data: {
+                tableID: 57000,
+                documentNo: docNo,
+                documentType: "Imprest Surrender",
+                documentId: docId
+            },
+            success: function (data) {
+                if (data.success) {
+                    if (data.base64) {
+                        var mimeType = data.mimeType || 'application/pdf';
+
+                        if (mimeType.startsWith('application/pdf')) {
+
+                            var byteCharacters = atob(data.base64);
+                            var byteNumbers = new Array(byteCharacters.length);
+                            for (var i = 0; i < byteCharacters.length; i++) {
+                                byteNumbers[i] = byteCharacters.charCodeAt(i);
+                            }
+                            var byteArray = new Uint8Array(byteNumbers);
+                            var blob = new Blob([byteArray], { type: mimeType });
+                            var blobUrl = URL.createObjectURL(blob);
+
+
+                            viewer.html('<iframe src="' + blobUrl + '" style="width:100%; height:500px;" frameborder="0"></iframe>');
+                        } else if (mimeType.startsWith('image/')) {
+
+                            viewer.html('<img src="data:' + mimeType + ';base64,' + data.base64 + '" style="width:100%;"/>');
+                        } else {
+
+                            var blob = b64toBlob(data.base64, mimeType);
+                            var url = window.URL.createObjectURL(blob);
+                            window.open(url, '_blank');
+                        }
+                        $("#myModalAttachment").modal("show");
+                    } else {
+
+                        window.location = '/Common/AttachmentDownload?fileName=' + data.message;
+                        Swal.fire('Success', 'Document Downloaded successfully', 'success');
+                    }
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+                HideProgress();
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Error', err.responseText || 'An error occurred', 'error');
+            }
+        });
+    };
+    function getB64Str(buffer) {
+        var binary = '';
+        var bytes = new Uint8Array(buffer);
+        var len = bytes.byteLength;
+        for (var i = 0; i < len; i++) {
+            binary += String.fromCharCode(bytes[i]);
+        }
+        return window.btoa(binary);
+    }
+
+
+    var ViewComments = function (DocNo) {
+
+        $('#myModalLabel').text("Document Comments");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            data: { DocNo: DocNo }, // no need to JSON.stringify for simple string
+            url: '/Common/DocumentApprovalComments',
+            success: function (data) {
+                $("#modalBody").html(data); // ✅ insert HTML
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (xhr, status, error) {
+                HideProgress();
+                Swal.fire('Warning', error || "An unexpected error occurred", 'warning');
+            }
+        });
+    };
+
+
+</script>

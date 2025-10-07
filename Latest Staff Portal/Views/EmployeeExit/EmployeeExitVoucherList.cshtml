@@ -1,0 +1,376 @@
+﻿@{
+    ViewBag.Title = "EmployeeExitVoucherList";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 8px;
+        font-size: 12px;
+    }
+</style>
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/Dashboard/Dashboard">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active">Employee Exit Voucher List</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<hr />
+<br />
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-6"><h4>Employee Exit Voucher List</h4></div>
+            <div class="col-md-6" style="text-align:right">
+                <a href="#" onclick="NewExitVoucher();" class="btn btn-primary BtnPadding action-buttons2">New Exit Voucher</a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div id="divRegList"></div>
+    </div>
+
+</div>
+@*//////////////////////New Exit Voucher Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <label id="labelF">New Exit Voucher</label>
+                </h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-primary action-buttons" value="Submit" onclick="SubmitExitVoucherRequest();" />
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadExitVoucherList();
+        var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+        var Errormsg = '@Request.RequestContext.HttpContext.Session["ErrorMsg"]';
+        if (Successmsg != "") {
+            Swal.fire('Success', Successmsg, 'success',true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+        if (Errormsg != "") {
+            Swal.fire('Warning', Errormsg, 'warning',true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+    });
+    var LoadExitVoucherList = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: "/EmployeeExit/EmployeeExitVoucherListPartialView",
+            success: function (data) {
+                $("#divRegList").html(data);
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+
+    var ViewDoc = function (DocumentNo) {
+        ShowProgress();
+        var form = $('<form>', {
+            action: '/EmployeeExit/EmployeeExitVoucherDocumentView',
+            method: 'POST'
+        }).append($('<input>', {
+            type: 'hidden',
+            name: 'DocumentNo',
+            value: DocumentNo
+        }));
+        form.appendTo('body').submit();
+    };
+
+
+
+    var NewExitVoucher = function () {
+        $("#labelF").text("New Employee Exit Voucher Request");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/EmployeeExit/NewExitVoucherRequest',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var SubmitExitVoucherRequest = function () {
+        var Description = $("#Description").val();
+        var ExitMethod = $("#ExitMethod").val();
+        var Reason = $("#ReasonsCode").val();
+        var lastWorkingDate = $("#lastWorkingDate").val();
+        var noticeDate = $("#noticeDate").val();
+        var emplExitDate = $("#emplExitDate").val();
+      
+
+         var isValid = true;
+
+         //validations
+        if (!Description) {
+            Swal.fire('Warning', 'Enter Description', 'warning');
+             var isValid = false;
+         }
+
+        if (!ExitMethod) {
+            Swal.fire('Warning', 'Select Exit Method', 'warning');
+             var isValid = false;
+         }
+
+        if (!Reason) {
+            Swal.fire('Warning', 'Select Reason', 'warning');
+             var isValid = false;
+         }
+
+       
+
+         if (!isValid) {
+             return
+         }
+
+         var issueData = {
+             Description: Description,
+             ExitMethod: ExitMethod,
+             ReasonsCode: Reason,
+             LastworkingDate: lastWorkingDate,
+             NoticeDate: noticeDate,
+             EmployeeExitDate: emplExitDate
+         };
+
+         // Show progress indicator
+         ShowProgress();
+
+         // Send data via AJAX
+         $.ajax({
+             type: "POST",
+             url: "/EmployeeExit/SubmitExitVoucherRequest",
+             data: JSON.stringify(issueData),
+             contentType: "application/json; charset=utf-8",
+             dataType: "json",
+             success: function (data) {
+                 HideProgress();
+                 if (data.success) {
+                     console.log(data.succes)
+                     /*ViewDoc(data.message);*/
+                     Swal.fire('Success', 'Record submitted successfully.', 'success');
+                     window.location.reload();
+                 } else {
+                     Swal.fire('Warning', data.message, 'warning');
+                 }
+             },
+             error: function (err) {
+                 HideProgress();
+                 Swal.fire('Error', 'An error occurred while submitting the request.', 'error');
+             }
+         });
+    }
+
+    function getB64Str(buffer) {
+        var binary = '';
+        var bytes = new Uint8Array(buffer);
+        var len = bytes.byteLength;
+        for (var i = 0; i < len; i++) {
+            binary += String.fromCharCode(bytes[i]);
+        }
+        return window.btoa(binary);
+    }
+    var CancelRequest = function (DocNo) {
+        $("#labelF").text("Cancel Remarks");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            data: JSON.stringify({ DocNo: DocNo }),
+            url: '/ICT/CancelICTRequestForm',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    };
+    var SubmitCancelrequestRequisition = function (DocNo) {
+        var Remarks = $("#txtCancelR").val();
+
+        if (Remarks == "") {
+            Swal.fire('error', 'Enter cancel remarks for this issue', 'error');
+            return;
+        }
+        else {
+            ShowProgress();
+            $.ajax({
+                type: "post",
+                url: "/ICT/CancelICTRequest",
+                data: JSON.stringify({ DocNo: DocNo, CancelR: Remarks }),
+                contentType: "application/json; charset = utf-8",
+                success: function (data) {
+                    if (data.success == true) {
+                        HideProgress();
+                        LoadICTReqList();
+                        $("#myModal").modal("hide");
+                        Swal.fire('Success', data.message, 'success');
+                    }
+                    else {
+                        HideProgress();
+                        Swal.fire('error', data.message, 'error');
+                    }
+                },
+                error: function () {
+                    HideProgress();
+                    Swal.fire('error', data.message, 'error');
+                }
+            });
+        }
+    }
+    var ConfirmRequest = function (DocNo) {
+        $("#labelF").text("Confirmation Remarks");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            data: JSON.stringify({ DocNo: DocNo }),
+            url: '/ICT/ConfirmICTRequestForm',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    };
+    var SubmitConfirmationrequest = function (DocNo) {
+        var Remarks = $("#txtConfirmR").val();
+        var Resolved = $("#ddlResolved").children("option:selected").val();
+        if (Resolved == "") {
+            Swal.fire('error', 'State whether issue resolved or escalated', 'error');
+            return;
+        }
+        if (Remarks == "") {
+            Swal.fire('error', 'Enter Remarks', 'error');
+            return;
+        }
+        else {
+            ShowProgress();
+            $.ajax({
+                type: "post",
+                url: "/ICT/ConfirmICTRequest",
+                data: JSON.stringify({ DocNo: DocNo, Resolved: Resolved, ConfirmR: Remarks }),
+                contentType: "application/json; charset = utf-8",
+                success: function (data) {
+                    if (data.success == true) {
+                        HideProgress();
+                        LoadICTReqList();
+                        $("#myModal").modal("hide");
+                        Swal.fire('Success', data.message, 'success');
+                    }
+                    else {
+                        HideProgress();
+                        Swal.fire('error', data.message, 'error');
+                    }
+                },
+                error: function () {
+                    HideProgress();
+                    Swal.fire('error', data.message, 'error');
+                }
+            });
+        }
+    }
+    var ICTResolveRequest = function (DocNo) {
+        var Remarks = $("#txtConfirmR").val();
+        var Resolved = $("#ddlResolved").children("option:selected").val();
+        if (Resolved == "") {
+            Swal.fire('error', 'State whether issue resolved or escalated', 'error');
+            return;
+        }
+        if (Remarks == "") {
+            Swal.fire('error', 'Enter Remarks', 'error');
+            return;
+        }
+        else {
+            ShowProgress();
+            $.ajax({
+                type: "post",
+                url: "/ICT/ResolveICTRequest",
+                data: JSON.stringify({ DocNo: DocNo, Resolved: Resolved, ConfirmR: Remarks }),
+                contentType: "application/json; charset = utf-8",
+                success: function (data) {
+                    if (data.success == true) {
+                        HideProgress();
+                        LoadICTReqList();
+                        $("#myModal").modal("hide");
+                        Swal.fire('Success', data.message, 'success');
+                    }
+                    else {
+                        HideProgress();
+                        Swal.fire('error', data.message, 'error');
+                    }
+                },
+                error: function () {
+                    HideProgress();
+                    Swal.fire('error', data.message, 'error');
+                }
+            });
+        }
+    }
+</script>

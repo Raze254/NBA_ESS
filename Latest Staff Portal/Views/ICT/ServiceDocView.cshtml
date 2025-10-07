@@ -1,0 +1,69 @@
+﻿@model Latest_Staff_Portal.ViewModel.ICTServiceRequest
+
+<div class="row">
+    <div class="col-md-6">
+        <b>Document No</b>
+        @Html.TextBoxFor(m => m.DocNo, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        <b>Date Created</b>
+        @Html.TextBoxFor(m => m.Date, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Asset No</b>
+        @Html.TextBoxFor(m => m.Asset, new { @class = "form-control", @readonly = "readonly", rows = 5 })
+    </div>
+    <div class="col-md-6">
+        <b>Asset Description</b>
+        @Html.TextBoxFor(m => m.Description, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Service Date</b>
+        @Html.TextBoxFor(m => m.ServiceDate, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="col-md-6">
+        <b>Category</b>
+        @Html.TextBoxFor(m => m.Category, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <b>Last Service Date</b>
+        @Html.TextBoxFor(m => m.ServiceDate, new { @class = "form-control", id = "txtLastServiceDate" })
+    </div>
+    <div class="col-md-6">
+        <b>Next Serice Date</b>
+        @Html.TextBoxFor(m => m.Category, new { @class = "form-control", id = "txtNxtServiceDate" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <b>Remarks</b>
+        @Html.TextBoxFor(m => m.Remarks, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+</div>
+<hr/>
+<div align="center">
+    <input type="button" class="btn btn-primary waves-effect waves-light" value="Update Data" onclick="UpdateDoc('@Model.DocNo');"/>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#txtLastServiceDate,#txtNxtServiceDate').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-0:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy',
+            minDate: 0
+        });
+        $(window).resize(function () {
+            $('#txtLastServiceDate,#txtNxtServiceDate').datepicker('hide');
+            $('#txtLastServiceDate,#txtNxtServiceDate').blur();
+        });
+    });
+</script>

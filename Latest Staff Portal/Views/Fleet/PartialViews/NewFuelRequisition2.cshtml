@@ -1,0 +1,180 @@
+﻿@model Latest_Staff_Portal.ViewModel.FuelCard
+
+@{
+    ViewBag.Title = "NewFuelRequisition";
+}
+
+
+<div class="row">
+
+    @* <div class="form-group">
+            @Html.LabelFor(model => model.No, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.No, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.No, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    *@
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Registration_No, htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.DropDownListFor(model => model.Registration_No, Model.ListOfVehicleReg, "Select Option", new { @class = "form-control", @id= "Registration_No2" })
+            @Html.ValidationMessageFor(model => model.Registration_No, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    @*<div class="form-group">
+            @Html.LabelFor(model => model.Make, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Make, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Make, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Model, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Model, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Model, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Card Type", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.DropDownListFor(model => model.Card_Type, Model.ListOfCardTypes, "Select Option", new { @class = "form-control", @id = "Card_Type2" })
+            @Html.ValidationMessageFor(model => model.Card_Type, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    @* <div class="form-group">
+            @Html.LabelFor(model => model.lowerlimit, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.lowerlimit, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.lowerlimit, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Total_Allocated_Limit, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Total_Allocated_Limit, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Total_Allocated_Limit, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    *@
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Start Date", htmlAttributes: new { @class = "control-label col-md-2" })
+            <input type="datetime" class="form-control" placeholder="dd/mm/yyyy" id="Start_Date2" onkeydown="return false;" autocomplete="off" />
+          @*  @Html.EditorFor(model => model.Start_Date, new { htmlAttributes = new { @class = "form-control", @id = "Start_Date2" } })*@
+            @Html.ValidationMessageFor(model => model.Start_Date, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    @*    <div class="form-group">
+            @Html.LabelFor(model => model.Requisition_Interval, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Requisition_Interval, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Requisition_Interval, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.End_Date, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.End_Date, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.End_Date, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    *@
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Fuel Card No", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Fuel_Card_No, new { htmlAttributes = new { @class = "form-control", @id = "Fuel_Card_No2" } })
+            @Html.ValidationMessageFor(model => model.Fuel_Card_No, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+
+
+    @*<div class="form-group">
+            @Html.LabelFor(model => model.Total_Amount_Spend, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Total_Amount_Spend, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Total_Amount_Spend, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Total_Balance, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Total_Balance, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Total_Balance, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Allocated_Vehicle_Limit, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Allocated_Vehicle_Limit, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Allocated_Vehicle_Limit, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Total_Amt_Spend_per_Vehicle, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Total_Amt_Spend_per_Vehicle, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Total_Amt_Spend_per_Vehicle, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Vehicle_Balance, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Vehicle_Balance, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Vehicle_Balance, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+</div>
+<div align="center">
+    <input type="button" class="btn btn-primary action-buttons" value="Submit Record" onclick="SubmitFuelRequisition();" />
+</div>
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#dtPicker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-0:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy',
+            minDate: 0
+        });
+        $('#Start_Date2').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-0:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy',
+            minDate: 0
+        });
+        $(window).resize(function () {
+            $('#dtPicker').datepicker('hide');
+            $('#dtPicker').blur();
+            $('#Start_Date').datepicker('hide');
+            $('#Start_Date').blur();
+
+        });
+       
+    });
+</script>

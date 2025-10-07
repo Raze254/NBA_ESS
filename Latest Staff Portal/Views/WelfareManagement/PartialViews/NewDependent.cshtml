@@ -1,0 +1,115 @@
+﻿@model Latest_Staff_Portal.ViewModel.DependentList
+
+<style>
+    .readonly-input {
+        background-color: #808080;
+        cursor: not-allowed;
+    }
+
+</style>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("PJ NO", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @*<input type="text" class="form-control readonly-input" id="employeeCode" value="@Model.Employee_Code" readonly />*@
+                <input type="text" class="form-control" id="txtEmployeeNo" readonly style="background-color: #dedebd;" value="@Model.Employee_Code">
+
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Relationship", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @*<input type="text" class="form-control readonly-input" id="txtRelationship" value="@Model.Relationship" readonly />*@
+                <input type="text" class="form-control" id="txtEmployeeNo" readonly style="background-color: #dedebd;" value="@Model.Relationship">
+
+            </div>
+        </div>
+    </div>
+    @*<div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Relationship", htmlAttributes: new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(m => m.Relationship, new SelectList(Model.ListOfRelationships, "Value", "Text", Model.Relationship), "--Select Relationship--", new { @id = "ddlRelationship", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Relationship, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>*@
+
+</div>
+
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <div class="form-group">
+                @Html.Label("Surname", new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    <input type="text" class="form-control" id="txtSurname"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <div class="form-group">
+                @Html.Label("Other Names", new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    <input type="text" class="form-control" id="txtOtherNames"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Date of Birth", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="text" class="form-control" placeholder="dd/mm/yyyy" id="txtDate" onkeydown="return false;" autocomplete="off"/>
+                <div class="a"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <div class="form-group">
+                @Html.Label("ID No/Passport No/Birth Certificate No/Birth Notification", new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    <input type="text" class="form-control" id="txtOtherNames"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<hr/>
+<div align="center">
+    <input type="button" class="btn btn-primary waves-effect waves-light" value="Submit Request" onclick="SubmitDependent();"/>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#txtDate').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-1:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy'
+        });
+        $("#txtDate").focus(function () {
+            $("#ui-datepicker-div").position({
+                my: "left top",
+                at: "left bottom",
+                of: $(this)
+            });
+        });
+        $("#ddlDim1,#ddlVehicles,#ddlAuthorizedBy,#ddlCostCentre").select2({
+            width: '100%'
+        });
+        //document.getElementById("ddlDim2").disabled = true;
+        //document.getElementById("ddlDim1").disabled = true;
+        //document.getElementById("ddlDim3").disabled = true;
+    });
+</script>

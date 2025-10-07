@@ -1,0 +1,97 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.ICTRequest>
+<div class="pre-scrollable">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+        <tr>
+            <th>No</th>
+            <th>Date</th>
+            <th>Category</th>
+            <th>Directorate</th>
+            <th>Department</th>
+            <th>Description</th>
+            <th>Urgency</th>
+            <th>Required Date</th>
+            <th>Status</th>
+            <th>Requested By</th>
+            <th>Resolution Remarks</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        @{
+            if (Model != null && Model.Count() > 0)
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.No)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ReqCat)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Directorate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Department)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Urgency)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RequiredDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Status)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Assignee)
+                        </td>
+                        <td>
+
+                            @* @Html.DisplayFor(modelItem => item.Resoltion_Remarks) *@
+                        </td>
+                        <td>
+                            @* @if (item.Status == "Submitted")
+        {
+            <button class="btn btn-danger btn-sm" onclick="CancelRequest('@item.No');">Cancel</button>
+        }
+        else*@
+                            @if (item.Status == "Submitted")
+                            {
+                                <button class="btn btn-danger btn-sm" onclick="ConfirmRequest('@item.No', '@item.Status');">Resolve Issue</button>
+                            }
+                            else
+                            {
+                                <span class="text-danger badge badge-info">No Action</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="7" style="color:red">
+                        No Records Found
+                    </td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#datatable").DataTable(), $("#datatable-buttons").DataTable({
+            lengthChange: !1
+        }).buttons().container().appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)")
+    });
+</script>

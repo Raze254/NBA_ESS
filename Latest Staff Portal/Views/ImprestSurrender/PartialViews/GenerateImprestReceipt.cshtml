@@ -1,0 +1,108 @@
+﻿@model Latest_Staff_Portal.ViewModel.DepositReceipts
+
+@{
+    var DocumentNumber = ViewBag.DocumentNumber;
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="docNo">Document Number</label>
+                <input type="text" class="form-control" id="docNo" name="docNo" maxlength="20" value="@Model.No" readonly; style="background-color: #f2f2f2">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="documentDate">Document Date</label>
+                <input class="form-control" id="documentDate" name="documentDate" value="@Model.Date" readonly; style="background-color: #f2f2f2">
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Payment Mode</label>
+                @if (ViewBag.Activities != null && ViewBag.Activities.Count > 0)
+                {
+                    @Html.DropDownList("payMode", new SelectList(ViewBag.Activities, "Value", "Text"), "--Select--", new { @class = "form-control select2", @id = "payMode" })
+                }
+                else
+                {
+                    <select id="payMode" name="payMode" class="form-control" style="background-color:#dedebd">
+                        <option value="">--Select--</option>
+                    </select>
+                }
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="payRef">Payment Reference</label>
+                <input type="text" class="form-control" id="payRef" name="payRef" maxlength="100" placeholder="Enter Payment Reference" value="@Model.PaymentReference" required>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea class="form-control" id="description" name="description" maxlength="400" rows="3" placeholder="Enter Description" required></textarea>
+            </div>
+        </div>
+
+
+        @* <div class="col-md-6">
+            <div class="form-group">
+                <label for="post">Posting Date</label>
+                <input class="form-control" id="post" value="@Model.PostedDate">
+            </div>
+        </div>*@
+
+        <div class="col-md-12">
+            File Upload
+            <input type="file" class="form-control" id="AttachmentFile" />
+        </div>
+    </div>
+    <div class="row mt-5">
+
+        @if (Model.Status == "Open")
+        {
+            <div class="col-md-12 text-center">
+                <button type="submit" class="btn btn-primary action-buttons" style="text-align:center" onclick="SubmitReceipt('@Model.Status')">Submit and Send For Approval</button>
+            </div>
+        }
+        else if (Model.Status != "Released")
+        {
+            <div class="col-md-12 text-center">
+                <button type="submit" class="btn btn-primary action-buttons" style="text-align:center" onclick="SubmitReceipt('@Model.Status')">Submit Receipt</button>
+            </div>
+        }
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#myModal').on('shown.bs.modal', function () {
+            setTimeout(function () {
+                $("#divItems").show();
+                $('.select2').select2({
+                    dropdownParent: $('#myModal'),
+                    width: '100%'
+                });
+            }, 100);
+        });
+        $('#documentDate, #post').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-100:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy'
+        });
+        $("#documentDate,#post").focus(function () {
+            $("#ui-datepicker-div").position({
+                my: "left top",
+                at: "left bottom",
+                of: $(this)
+            });
+        });
+    });
+</script>

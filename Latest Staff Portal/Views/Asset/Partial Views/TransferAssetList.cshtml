@@ -1,0 +1,55 @@
+﻿@model  IEnumerable<Latest_Staff_Portal.ViewModel.AssetTransfer>
+<div class="table-responsive">
+    <table class="table table-centered table-nowrap" id="PassengerLines">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>No</th>
+            <th>Asset Number</th>
+            <th>From Location</th>
+            <th>To Employee</th>
+            <th>To Location</th>
+        </tr>
+        </thead>
+        <tbody>
+        @{
+            if (Model != null && Model.Count() > 0)
+            {
+                var i = 1;
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @i
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.No)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AssettoTransfer)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FromLocation)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ToResponsibleEmployee)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ToLocation)
+                        </td>
+                    </tr>
+                    i++;
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="4" style="color:red">
+                        No Records Found
+                    </td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,50 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.ApprovalEntries>
+<table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+    <thead style="background-color:black;color:white">
+        <tr>
+            <th>Doc No</th>
+            <th>Approver ID</th>
+            <th>Approver Name</th>
+            <th>Date Sent for Approval</th>
+            @* <th>Date Approved</th> *@
+            <th>Sequence No.</th>
+            <th>Status</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            if (Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DocNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateSendForApproval)
+                    </td>
+                    @* <td> *@
+                    @*     @Html.DisplayFor(modelItem => item.DueDate) *@
+                    @* </td> *@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Sequence)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+
+                </tr>
+                }
+            }
+        }
+    </tbody>
+</table>
+

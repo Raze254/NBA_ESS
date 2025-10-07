@@ -1,0 +1,408 @@
+﻿@model Latest_Staff_Portal.ViewModel.DependantChangeRequests
+
+
+@{
+    ViewBag.Title = "DependentsChangeDocumentView";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+
+<style>
+	thead {
+		background-color: black;
+		color: white;
+	}
+
+	hr {
+		margin: 4px;
+	}
+
+	.BtnPadding {
+		padding: 1px;
+		font-size: 12px;
+	}
+</style>
+
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#" onclick="DependantsChangeRequest();">Dependant Change Requests</a>
+                </li>
+                <li class="breadcrumb-item active">Request (@Model.No)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    @*<hr />*@
+    @*<div style="text-align:right" id="HideEditButton">
+			<input type="button" class="btn btn-danger BtnPadding" id="btnEdit" value="Edit Header" onclick="EditDocument();" />
+			<hr />
+		</div>*@
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <b>Document No</b>
+                @Html.TextBoxFor(m => m.No, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+            <div class="col-md-6">
+                <b>Date</b>
+                @Html.TextBoxFor(m => m.DocumentDate, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <b>Employee No</b>
+                @Html.TextBoxFor(m => m.EmployeeNo, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+            <div class="col-md-6">
+                <b>Employee Name</b>
+                @Html.TextBoxFor(m => m.EmployeeName, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <b>Description</b>
+                @Html.TextBoxFor(m => m.Description, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+            <div class="col-md-6">
+                <b>Status</b>
+                @Html.TextBoxFor(m => m.Status, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+        </div>
+        <hr style="border:1px solid black"/>
+        <b>Dependents List</b>
+        <div id="divDependentsList"></div>
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" ke aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myModalLabel">
+                    <label id="labelF"></label>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script src="~/assets/js/pdfobject.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadDependentsList(`@Model.No`);
+        var status = `@Model.Status`;
+        HideHeaderEditInput(status);
+
+        var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+        if (Successmsg != "") {
+            Swal.fire('Success', Successmsg, 'success', true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+        document.getElementById("ddlDim2").disabled = true;
+        document.getElementById("ddlDim1").disabled = true;
+        document.getElementById("ddlDim3").disabled = true;
+    });
+    var LoadDependentsList = function (DocNo) {
+        ShowProgress();
+
+        $.ajax({
+            async: true,
+            type: "POST",
+            dataType: "html",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({ documentNo: DocNo }),
+            url: "/WelfareManagement/DependentsList",
+            success: function (data) {
+
+                $("#divDependentsList").html(data);
+
+                HideProgress();
+
+                GetDocumentAttachments();
+            },
+            error: function () {
+
+                HideProgress();
+
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    };
+
+
+    var GetDocumentAttachments = function () {
+        ShowProgress();
+        var DocNo = `@Model.No`;
+        var Status = `@Model.Status`;
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+			data: JSON.stringify({ DocNo: DocNo, TableID: 65054, Status: Status}),
+            url: "/Common/DocumentAttachments",
+            success: function (data) {
+                HideProgress();
+                $("#divAttachDocs").html(data);
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    };
+    var AddDependent = function () {
+        $("#labelF").text("New Dependent");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/WelfareManagement/DependentRequirements',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+
+    };
+
+  
+
+
+    var EditDocument = function () {
+         var status = `@Model.Status`;
+        if ($("#btnEdit").val() == "Edit Header") {
+            $("#btnEdit").val("Clear Header Edit");
+            $("#ddlDim2,#ddlDim1,#ddlDim3").select2({
+                width: '100%'
+            });
+            ShowHeaderEditInput();
+        }
+        else {
+            HideHeaderEditInput(status);
+            $("#btnEdit").val("Edit Header");
+        }
+    }
+    var HideHeaderEditInput = function (Status) {
+        if (Status == "Open") {
+            $("#HideEditButton").show();
+            $("#HideLineButton").show();
+            $("#DivSendForApproval").show();
+        }
+        else {
+            $("#HideEditButton").hide();
+            $("#HideLineButton").hide();
+            $("#DivSendForApproval").hide();
+        }
+        $("#DivUpdateButton").hide();
+        $("#dtPicker,#txtPurpose,#ddlDim2,#ddlDim1,#ddlDim3").css("background-color", "#dedebd");
+        $("#txtPurpose,#dtPicker,#txtPurpose,#ddlDim2,#ddlDim1,#ddlDim3").attr("readonly", true);
+
+    }
+    var ShowHeaderEditInput = function () {
+        $("#DivUpdateButton").show();
+        $("#dtPicker,#txtPurpose,#ddlDim2,#ddlDim1,#ddlDim3").css("background-color", "white");
+        $("#txtPurpose,#dtPicker,#txtPurpose,#ddlDim2,#ddlDim1,#ddlDim3").attr("readonly", false);
+    }
+    @*var SubmitWorkTicketLines = function () {
+
+        var transportRequisitionNo = $("#ddlTrans").children("option:selected").val();
+        var driversNo = $("#ddlDriversNo").children("option:selected").val();
+        var mthDate = $("#mthDate").val();
+        var journeyDetails = $("#txtJourneyDetails").val();
+        var oilDrawLitres = $("#txtOilDrawLitres").val();
+        var fuelDrawnLitres = $("#txtFuelDrawnLitres").val();
+        var timeOut = $("#txtTimeOut").val();
+        var timeIn = $("#txtTimeIn").val();
+        var receiptNo = $("#txtReceiptNo").val();
+        var fuelCarriedForward = $("#txtFuelCarriedForward").val();
+        var openingOdometerReading = $("#txtOpeningOdometerReading").val();
+        var authorizedBy = $("#ddlAuthorizedBy").children("option:selected").val();
+
+        var authorizedbyotherGOKOfficer = $("#txtAuthorizedbyotherGOKOfficer").val();
+        var defect = $("#txtDefect").val();
+        var defectDate = $("#dtDefectDate").val();
+        var actionTakenReported = $("#txtActionTakenReported").val();
+        var designation = $("#txtDesignation").val();
+        var totalKilometers = $("#txtTotalKilometers").val();
+        var totalMilesPerLtr_Oil = $("#txtTotalMilesPerLtr_Oil").val();
+
+
+        if (transportRequisitionNo == "") {
+            Swal.fire('Warning', "Select Transport Requisition No", 'warning');
+            return;
+        }
+        else if (driversNo == "") {
+            Swal.fire('Warning', "Select Drivers No", 'warning');
+            return;
+        }
+        else if (mthDate == "") {
+            Swal.fire('Warning', "Enter Month Date", 'warning');
+            return;
+        }
+        else if (journeyDetails == "") {
+            Swal.fire('Warning', "Enter Details of Journey and Route", 'warning');
+            return;
+        }
+        else if (oilDrawLitres == "") {
+            Swal.fire('Warning', "Enter Oil Draw (Litres)", 'warning');
+            return;
+        }
+        else if (fuelDrawnLitres == "") {
+            Swal.fire('Warning', "Enter Fuel Drawn (Litres)", 'warning');
+            return;
+        }
+        else if (timeOut == "") {
+            Swal.fire('Warning', "Enter Time Out", 'warning');
+            return;
+        }
+        else if (timeIn == "") {
+            Swal.fire('Warning', "Enter Time In", 'warning');
+            return;
+        }
+        else if (receiptNo == "") {
+            Swal.fire('Warning', "Enter Receipt No", 'warning');
+            return;
+        }
+        else if (fuelCarriedForward == "") {
+            Swal.fire('Warning', "Enter Fuel Carried Forward", 'warning');
+            return;
+        }
+        else if (openingOdometerReading == "") {
+            Swal.fire('Warning', "Enter Opening Odometer Reading", 'warning');
+            return;
+        }
+        else if (authorizedBy == "") {
+            Swal.fire('Warning', "Select Authorized By", 'warning');
+            return;
+        }
+
+
+        else {
+            WorkTicketLines.TransportRequisitionNo = transportRequisitionNo;
+            WorkTicketLines.DriverNo = driversNo;
+            WorkTicketLines.MonthDate = mthDate;
+            WorkTicketLines.JourneyDetails = journeyDetails;
+            WorkTicketLines.OilDrawLitres = oilDrawLitres;
+            WorkTicketLines.FuelDrawnLitres = fuelDrawnLitres;
+            WorkTicketLines.TimeOut = timeOut;
+            WorkTicketLines.TimeIn = timeIn;
+            WorkTicketLines.ReceiptNo = receiptNo;
+            WorkTicketLines.FuelCarriedForward = fuelCarriedForward;
+            WorkTicketLines.OpeningOdometerReading = openingOdometerReading;
+            WorkTicketLines.AuthorizedBy = authorizedBy;
+            WorkTicketLines.AuthorizedByOtherGOKOfficer = authorizedbyotherGOKOfficer;
+            WorkTicketLines.Defect = defect;
+            WorkTicketLines.DefectDate = defectDate;
+            WorkTicketLines.ActionTakenReported = actionTakenReported;
+            WorkTicketLines.Designation = designation;
+            WorkTicketLines.TotalKilometers = totalKilometers;
+            WorkTicketLines.TotalMilesPerLtr_Oil = totalMilesPerLtr_Oil;
+
+            ShowProgress();
+            //Send the JSON array to Controller using AJAX.
+            $.ajax({
+                type: "POST",
+                url: "/Transport/SubmitWorkTicketLines",
+                data: JSON.stringify({ workTicketLines: WorkTicketLines, docNo:@Model.WorkTicketNo  }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    if (data.success) {
+                        HideProgress();
+                        HideHeaderEditInput("Open");
+                        $("#bApplication_NonEdit").val("Edit Header");
+                        $("#txtPurpose").val(Remarks);
+                        Swal.fire('Success', data.message, 'success');
+                    }
+                    else {
+                        Swal.fire('Warning', data.message, 'warning');
+                        HideProgress();
+                    }
+                },
+                error: function (err) {
+                    HideProgress();
+                    Swal.fire('Warning', err, 'warning');
+                }
+            });
+        };
+    }*@
+    function getB64Str(buffer) {
+        var binary = '';
+        var bytes = new Uint8Array(buffer);
+        var len = bytes.byteLength;
+        for (var i = 0; i < len; i++) {
+            binary += String.fromCharCode(bytes[i]);
+        }
+        return window.btoa(binary);
+    }
+    var ViewAttachment = function (tbl, No, Id, fName, ext) {
+        $.ajaxSetup({ cache: false });
+        ShowProgress();
+        $.ajax({
+            cache: false,
+            url: '/Common/DocumentAttachmentview',
+            type: "POST",
+            datatype: "json",
+            cache: false,
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ tblID: tbl, No: No, ID: Id, fileName: fName, ext: ext }),
+            success: function (data) {
+                if (data.success == true) {
+                    if (data.view == true) {
+                        var viewer = $("#modalAttachmentBody");
+                        if (ext == "pdf") {
+                            PDFObject.embed("data:application/" + ext + ";base64," + data.message + "", viewer);
+                        }
+                        if (ext == "png" || ext == "jpg") {
+                            PDFObject.embed("data:image/" + ext + ";base64," + data.message + "", viewer);
+                        }
+                        $("#myModalAttachment").modal("show");
+                        HideProgress();
+                    }
+                    else {
+                        window.location = '/Common/AttachmentDownload?fileName=' + data.message;
+                        Swal.fire('Success', 'Document Downloaded successfully', 'success');
+                        HideProgress();
+                    }
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    };
+
+
+</script>

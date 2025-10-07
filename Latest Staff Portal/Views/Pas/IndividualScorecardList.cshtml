@@ -1,0 +1,224 @@
+
+@{
+    ViewBag.Title = "IndividualScorecardList";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#" onclick="HumanResourceLink();">Dashboard</a></li>
+                <li class="breadcrumb-item active">My Scorecard List</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="card ">
+    <div class="card-body">
+        <div class="card-header d-flex justify-content-between align-items-center mb-2 p-1">
+            <h5 class="m-0">Performance Appraisal System List</h5>
+
+
+
+
+            @{
+
+                if (ViewBag.PASDocStage != "Evaluation")
+                {
+                    if (ViewBag.HasScoreCardData)
+                    {
+                        <a href="#" class="btn btn-secondary action-buttons2 disabled" style="color: white !important;"
+                           data-toggle="tooltip" title="Delete existing documents to create new one">
+                            <i class="fa fa-plus-circle pr-2" aria-hidden="true"></i> New
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="#" onclick="NewAppraisalDoc();" class="btn btn-primary action-buttons2" style="color: white !important;">
+                            <i class="fa fa-plus-circle pr-2" aria-hidden="true"></i> New
+                        </a>
+                    }
+                }
+            }
+        </div>
+
+
+        <div id="divAppraisalList"></div>
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title"><label id="labelF"></label></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadAppraisalReqList();
+    });
+    var LoadAppraisalReqList = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: "/Pas/IndividualScorecardListPartialView",
+            success: function (data) {
+                HideProgress();
+                $("#divAppraisalList").html(data);
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request.", "Please try after some time", "warning");
+            }
+        });
+    }
+    var NewAppraisalDoc = function () {
+    var yearCode = '@ViewBag.CurrentYearCode';
+    var title = "Performance Appraisal System - " + yearCode;
+    $("#labelF").text(title);
+    ShowProgress();
+    $.ajax({
+        async: true,
+        type: "POST",
+        datatype: "json",
+        contentType: "application/json; charset = utf-8",
+        processData: false,
+        url: '/Pas/NewIndividualScorecard',
+        success: function (data) {
+            $("#modalBody").html(data);
+            HideProgress();
+            $("#myModal").modal("show");
+        },
+        error: function (err) {
+            HideProgress();
+            Swal.fire('Warning', err, 'warning');
+        }
+    });
+}
+
+
+    var SubmitAppraisalRequisition = function () {
+
+        var Department = $('#ddlDim2').val();
+        var Strategy_Plan_ID = $('#ddlPMMU').val();
+        var FromDate = $('#dtFrom').val();
+        var ToDate = $('#dtTo').val();
+
+
+        if (!Department) {
+            Swal.fire('Warning', 'Please select a Directorate/Department.', 'warning');
+            return;
+        }
+
+        if (!Strategy_Plan_ID) {
+            Swal.fire('Warning', 'Please select a PMMU.', 'warning');
+            return;
+        }
+
+        if (!FromDate) {
+            Swal.fire('Warning', 'Please select a From Date.', 'warning');
+            return;
+        }
+
+        if (!ToDate) {
+            Swal.fire('Warning', 'Please select a To Date.', 'warning');
+            return;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "Pas/SubmitIndividualScorecard",
+            data: { Department: Department, Strategy_Plan_ID: Strategy_Plan_ID, FromDate: FromDate, ToDate: ToDate },
+            success: function (response) {
+                if (response.success) {
+                    Swal.fire('Success', response.message, 'success');
+                } else {
+                    Swal.fire('Error', response.message, 'error');
+                }
+            },
+            error: function (xhr, status, error) {
+                Swal.fire('Error', 'Failed to submit data. Please try again.', 'error');
+            }
+        });
+    }
+
+
+    /*var ViewDoc = function (DocNo) {
+        ShowProgress();
+        window.location = "/Pas/ViewIndividualScorecard?DocNo=" + DocNo;
+    }
+    */
+
+    var ViewDoc = function (DocNo) {
+        ShowProgress();
+        var form = $('<form>', {
+            action: '/Pas/ViewIndividualScorecard',
+            method: 'POST'
+        }).append($('<input>', {
+            type: 'hidden',
+            name: 'DocNo',
+            value: DocNo
+        }));
+        form.appendTo('body').submit();
+    };
+
+    var DiableButtons = function () {
+        $("#ViewDoc").addClass("disabled");
+        $("#SendDocAppr").addClass("disabled");
+        $("#CancelDocAppr").addClass("disabled");
+        $("#AppTrail").addClass("disabled");
+        $('table tbody tr').siblings().removeClass("selectedTableRow");
+    }
+
+    function NewItem(title, url) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: url,
+            success: function (data) {
+                $("#labelF").html(title);
+                $("#modalBody").html(data);
+                $("#myModal").modal('show');
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+            Swal.fire("There is some problem to process your request. Please try after some time", "warning");
+            }
+        });
+    }
+
+</script>

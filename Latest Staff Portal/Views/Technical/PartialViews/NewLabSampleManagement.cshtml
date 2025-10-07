@@ -1,0 +1,75 @@
+﻿@model Latest_Staff_Portal.ViewModel.LabSampleManagement
+
+@{
+    ViewBag.Title = "NewLabSampleManagement";
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @id = "Description" } })
+            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Received At", htmlAttributes: new { @class = "control-label col-md-2" })
+            <input type="text" class="form-control" placeholder="dd/mm/yyyy" id="Received_At" onkeydown="return false;" autocomplete="off" />
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Analysed At", htmlAttributes: new { @class = "control-label col-md-2" })
+            <input type="text" class="form-control" placeholder="dd/mm/yyyy" id="Analysed_At" onkeydown="return false;" autocomplete="off" />
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Exported_At", htmlAttributes: new { @class = "control-label col-md-2" })
+            <input type="text" class="form-control" placeholder="dd/mm/yyyy" id="Exported_At" onkeydown="return false;" autocomplete="off" />
+        </div>
+    </div>
+
+</div>
+<div class="text-center">
+    <button class="btn btn-primary action-buttons" onclick="SubmitLabSample();"> Submit </button>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        // Common selector for all date fields
+        var $dateFields = $('#Received_At, #Analysed_At, #Exported_At');
+
+        // Initialize datepickers
+        $dateFields.datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-1:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy'
+        });
+
+        // Adjust the position of the datepicker for all fields
+        $dateFields.focus(function () {
+            $("#ui-datepicker-div").position({
+                my: "left top",
+                at: "left bottom",
+                of: $(this)
+            });
+        });
+
+        // Set default value to today's date
+        //var today = new Date();
+        //var day = ("0" + today.getDate()).slice(-2);
+        //var month = ("0" + (today.getMonth() + 1)).slice(-2);
+        //var todayFormatted = day + "/" + month + "/" + today.getFullYear();
+
+        //$dateFields.val(todayFormatted);
+    });
+</script>
+

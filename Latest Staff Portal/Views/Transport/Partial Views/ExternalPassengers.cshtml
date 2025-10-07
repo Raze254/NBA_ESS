@@ -1,0 +1,64 @@
+﻿@model Latest_Staff_Portal.ViewModel.ExternalPassengerList
+<div class="table-responsive">
+    <table class="table table-centered table-nowrap" id="PassengerLines">
+        <thead>
+        <tr>
+
+            <th>No</th>
+            <th>Names</th>
+            <th>Organization</th>
+            @*<th style="text-align:center" class="tdAction">Action</th>*@
+        </tr>
+        </thead>
+        <tbody>
+        @{
+            if (Model.ListOfExternalPassengers != null && Model.ListOfExternalPassengers.Count() > 0)
+            {
+                foreach (var item in Model.ListOfExternalPassengers)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LineNo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Names)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Organization)
+                        </td>
+
+                        @*<td style="text-align:center" class="tdAction">
+                                <a href="javascript:void(0);" class="mr-3 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" onclick="EditItem('@item.LineNo');"><i class="mdi mdi-pencil font-size-16"></i></a>
+                                <a href="javascript:void(0);" class="text-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" onclick="RemoveItem('@item.LineNo');"><i class="mdi mdi-close font-size-16"></i></a>
+                            </td>*@
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5" style="color:red">
+                        No Records Found
+                    </td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>
+<div align="right" class="HideLineButton">
+    <input type="button" value="Add External Passengers" class="btn btn-danger BtnPadding" onclick="AddExternalPassengerLines();"/>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var status = '@Model.Status';
+        if (status == "Open") {
+            $(".tdAction").show();
+            $(".HideLineButton").show();
+        }
+        else {
+            $(".tdAction").hide();
+            $(".HideLineButton").hide();
+        }
+    });
+</script>

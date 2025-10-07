@@ -1,0 +1,36 @@
+﻿@model List<Latest_Staff_Portal.ViewModel.NoticeBoard>
+@{
+    var noticeCounter = 1;
+    var memocounter = 1;
+}
+
+<div>
+    @if (Model != null && Model.Count > 0)
+    {
+        <ul>
+            @foreach (var notice in Model)
+            {
+                <li>
+                    <a href="#" onclick="openNotice(@notice.No)">
+                        <strong>@noticeCounter</strong> @notice.Title<br/>
+                    </a>
+                    <hr/>
+                    noticeCounter++;
+
+
+                    <div id="memos" style="display:none">
+                        <a href="#" onclick="openNotice(@notice.No)">
+                            <strong>@memocounter</strong> @notice.Title<br/>
+                        </a>
+                        <hr/>
+                    </div>
+                    counter++;
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No FAQs available.</p>
+    }
+</div>

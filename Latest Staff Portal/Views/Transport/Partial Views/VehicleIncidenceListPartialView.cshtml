@@ -1,0 +1,63 @@
+﻿@model List<Latest_Staff_Portal.ViewModel.VehicleIncident>
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap">
+        <thead>
+        <tr>
+            <th>Action</th>
+            <th>Incident No</th>
+            <th>Incident Date</th>
+            <th>Incident Time</th>
+            <th>Incident Description</th>
+            <th>Driver ID</th>
+            <th>Driver Name</th>
+            <th>Location</th>
+            <th>Recommendations</th>
+            <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        @if (Model != null && Model.Count() > 0)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <input type="button" onclick="SelectedRow('@item.IncidentNo','@item.Status');" style="background: #162f25; color:whitesmoke; border-radius:10px" value="Select"/>
+                    </td>
+                    <td>@item.IncidentNo</td>
+                    <td>@item.IncidentDate.ToShortDateString()</td>
+                    <td>@item.IncidentTime.ToString(@"hh\:mm\:ss")</td>
+                    <td>@item.IncidentDescription</td>
+                    <td>@item.DriverID</td>
+                    <td>@item.DriverName</td>
+                    <td>@item.Location</td>
+                    <td>@item.Recommendations</td>
+                    <td>@item.Status</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="10" style="color:red">
+                    No Records Found
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+<script type="text/javascript">
+    @*$(document).ready(function () {
+        var status = '@Model.Status';
+        if (status == "Open") {
+            $(".tdAction").show();
+            $(".HideLineButton").show();
+        }
+        else {
+            $(".tdAction").hide();
+            $(".HideLineButton").hide();
+        }
+    });*@
+</script>

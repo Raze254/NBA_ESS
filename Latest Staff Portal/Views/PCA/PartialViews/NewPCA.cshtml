@@ -1,0 +1,133 @@
+﻿@model Latest_Staff_Portal.ViewModel.PayChangeAdvice
+
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("PJ No", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(m => m.EmployeeCode, new SelectList(Model.EmployeesList, "Value", "Text", Model.EmployeeCode), "--Select Employee PJ No--", new { id = "ddlpjNo", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.EmployeeCode, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Payroll Period", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(m => m.PayrollPeriod, new SelectList(Model.PayrollPrds, "Value", "Text", Model.PayrollPeriod), "--Select Payroll Period--", new { id = "ddlPrd", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.EmployeeCode, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    @*<div class="col-md-6">
+            <div class="form-group">
+                <div class="form-group">
+                    @Html.Label("Employee Name", htmlAttributes: new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        <input type="text" class="form-control" id="txtEmployeeName" />
+                    </div>
+                </div>
+            </div>
+        </div>*@
+</div>
+
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Effective Date ", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="text" class="form-control" placeholder="dd/mm/yyyy" id="txtDate" onkeydown="return false;" autocomplete="off"/>
+                <div class="a"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <div class="form-group">
+                @Html.Label("Subject", new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    <input type="text" class="form-control" id="txtSubject"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Source Document", new { @class = "control-label col-md-12" })
+
+            <div class="col-md-12">
+                @Html.DropDownListFor(m => m.Source_Document, new SelectList(new[]
+                {
+                    new SelectListItem { Text = "Mobility", Value = "1" },
+                    new SelectListItem { Text = "Recruitment", Value = "2" },
+                    new SelectListItem { Text = "Disciplinary", Value = "3" },
+                    new SelectListItem { Text = "Training", Value = "4" },
+                    new SelectListItem { Text = "Records", Value = "5" },
+                    new SelectListItem { Text = "Salaries", Value = "6" },
+                    new SelectListItem { Text = "Welfare", Value = "7" }
+                }, "Value", "Text", Model.Source_Document), "--Select Source Document--", new { id = "ddlSource", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Source_Document, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Reference Details", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @*@Html.DropDownListFor(m => m.Source_Document, new SelectList(new[] {
+            new SelectListItem { Text = "", Value = "1" }
+
+        }, "Value", "Text", Model.Source_Document), "--Select Reference Details--", new { @id = "ddlSource", @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Source_Document, "", new { @class = "text-danger" })*@
+                <input type="text" class="form-control" id="ddlSource"/>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Description", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <textarea class="form-control" id="txtDescription"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<hr/>
+<div align="center">
+    <input type="button" class="btn btn-primary waves-effect waves-light" value="Submit Request" onclick="SubmitPCARequisition();"/>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#txtDate').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-1:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy'
+        });
+        $("#txtDate").focus(function () {
+            $("#ui-datepicker-div").position({
+                my: "left top",
+                at: "left bottom",
+                of: $(this)
+            });
+        });
+        $("#ddlpjNo,#ddlVehicles,#ddlAuthorizedBy,#ddlCostCentre").select2({
+            width: '100%'
+        });
+        //document.getElementById("ddlDim2").disabled = true;
+        //document.getElementById("ddlDim1").disabled = true;
+        //document.getElementById("ddlDim3").disabled = true;
+    });
+</script>

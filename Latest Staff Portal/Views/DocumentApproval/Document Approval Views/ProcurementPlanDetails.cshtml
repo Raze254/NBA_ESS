@@ -1,0 +1,301 @@
+﻿@model Latest_Staff_Portal.ViewModel.ProcurementPlan
+
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Code, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.Code, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ConsolidatedProcurementPlan, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.ConsolidatedProcurementPlan, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.ConsolidatedProcurementPlan, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DocumentDate, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.DocumentDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.DocumentDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CorporateStrategicPlanID, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.CorporateStrategicPlanID, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.CorporateStrategicPlanID, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.FinancialBudgetID, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.FinancialBudgetID, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.FinancialBudgetID, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.FinancialYearCode, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.FinancialYearCode, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.FinancialYearCode, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.GlobalDimension1Code, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.GlobalDimension1Code, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.GlobalDimension1Code, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.GlobalDimension2Code, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.GlobalDimension2Code, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.GlobalDimension2Code, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TotalBudgetGoods, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.TotalBudgetGoods, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.TotalBudgetGoods, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TotalBudgetWorks, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.TotalBudgetWorks, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.TotalBudgetWorks, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TotalBudgetServices, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.TotalBudgetServices, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.TotalBudgetServices, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TotalBudgetedSpend, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.TotalBudgetedSpend, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.TotalBudgetedSpend, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ApprovalStatus, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.ApprovalStatus, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.ApprovalStatus, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CreatedBy, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.CreatedBy, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.CreatedBy, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DateCreated, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.DateCreated, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.DateCreated, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TimeCreated, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.TimeCreated, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd;" } })
+                    @Html.ValidationMessageFor(model => model.TimeCreated, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <hr />
+    @*<div align="center" id="DivUpdateButton">
+            <input type="button" class="btn btn-primary waves-effect waves-light" value="Update Header" onclick="UpdatePCAHeader();" />
+        </div>*@
+    <div id="DivPPLines">
+        <hr style="border:1px solid black" />
+        <b>Procurement Plan Lines</b>
+        <hr />
+        <div id="divProcurementPlanLines"></div>
+        <hr style="border:1px solid black" />
+    </div>
+
+
+
+</div>
+
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script src="~/assets/js/pdfobject.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadProcurementPlanLines(`@Model.Code`,`@Model.ApprovalStatus`);
+        HideHeaderEditInput();
+        var status = `@Model.ApprovalStatus`;
+        //if (status == "Pending") {
+        //    $("#HideEditButton").show();
+        //    $("#HideLineButton").show();
+        //    $("#DivSendForApproval").show();
+        //}
+        //else {
+        //    $("#HideEditButton").hide();
+        //    $("#HideLineButton").hide();
+        //    $("#DivSendForApproval").hide();
+        //}
+        var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+        if (Successmsg != "") {
+            Swal.fire('Success', Successmsg, 'success',true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+    });
+    var LoadProcurementPlanLines = function (DocNo, Status) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ DocNo: DocNo, Status: Status }),
+            url: "/Purchase/ProcurementPlanLines",
+            success: function (data) {
+                $("#divProcurementPlanLines").html(data);
+                if (Status != "Open") {
+                    $("#addPCALine").hide();
+                }
+                HideProgress();
+                GetDocumentAttachments();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    };
+    var GetDocumentAttachments = function () {
+        ShowProgress();
+        var DocNo = `@Model.Code`;
+        var Status = `@Model.ApprovalStatus`;
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ DocNo: DocNo, TableID: 50763, Status: Status}),
+            url: "/Common/DocumentAttachments",
+            success: function (data) {
+                HideProgress();
+                $("#divAttachDocs").html(data);
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    };
+
+    var ViewAttachment = function (tbl, No, Id,fName, ext) {
+        $.ajaxSetup({ cache: false });
+        ShowProgress();
+        $.ajax({
+            cache: false,
+            url: '/Common/DocumentAttachmentview',
+            type: "POST",
+            datatype: "json",
+            cache: false,
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ tblID: tbl, No: No, ID: Id, fileName: fName, ext: ext }),
+            success: function (data) {
+                if (data.success == true) {
+                    if (data.view == true) {
+                        var viewer = $("#modalAttachmentBody");
+                        if (ext == "pdf") {
+                            PDFObject.embed("data:application/" + ext + ";base64," + data.message + "", viewer);
+                        }
+                        if (ext == "png" || ext == "jpg") {
+                            PDFObject.embed("data:image/" + ext + ";base64," + data.message + "", viewer);
+                        }
+                        $("#myModalAttachment").modal("show");
+                        HideProgress();
+                    }
+                    else {
+                        window.location = '/Common/AttachmentDownload?fileName=' + data.message;
+                        Swal.fire('Success', 'Document Downloaded successfully', 'success');
+                        HideProgress();
+                    }
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    };
+
+
+</script>

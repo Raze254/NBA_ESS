@@ -1,0 +1,241 @@
+﻿@model Latest_Staff_Portal.ViewModel.MaintenanceRequisition
+<div class="card">
+<div class="card-title">Maintenance Requisition Document Details(@Model.No)</div>
+<hr/>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <div class="col-md-12">
+                @Html.Label("Document No", new { @class = "control-label col-md-12" })
+                @Html.TextBoxFor(m => m.No, Model.No, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <div class="col-md-12">
+                @Html.Label("Date Requested", new { @class = "control-label col-md-12" })
+                @Html.TextBoxFor(m => m.Date_Requested, Model.Date_Requested, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "dtPicker", onkeydown = "return false;", autocomplete = "off" })
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Donor", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(m => m.Department, new SelectList(Model.ListOfDepartment, "Value", "Text", Model.Department), "--Select Donor--", new { id = "ddlDim1", @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                @Html.ValidationMessageFor(model => model.Department, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <div class="form-group">
+                @Html.Label("Project", new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    @Html.DropDownListFor(m => m.Directorate, new SelectList(Model.ListOfDirectorate, "Value", "Text", Model.Directorate), "--Select Di--", new { id = "ddlDim2", @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                    @Html.ValidationMessageFor(model => model.Directorate, "", new { @class = "text-danger" })
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Type of Maintenance", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(model => model.TypeofMaintenance, new List<SelectListItem>
+                {
+                    new SelectListItem { Text = "Repair", Value = "1" },
+                    new SelectListItem { Text = "Scheduled Service", Value = "2" },
+                    new SelectListItem { Text = "Tyre", Value = "3" }
+                }, new { @class = "form-control", id = "DdlMaintenceType", @readonly = "readonly" })
+                @Html.ValidationMessageFor(model => model.TypeofMaintenance, "", new { @class = "text-danger" })
+
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Last Service Date", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.TextBoxFor(m => m.LastServiceDate, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "dtPicker", onkeydown = "return false;", autocomplete = "off" })
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <div class="col-md-12">
+                @Html.Label("Status", new { @class = "control-label col-md-12" })
+                @Html.TextBoxFor(m => m.Status, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Driver", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(m => m.Driver, new SelectList(Model.ListOfDrivers, "Value", "Text", Model.Driver), "--Select Driver--", new { id = "ddlDriver", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Driver, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Vehicle", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(m => m.Vehicle, new SelectList(Model.ListOfVehicles, "Value", "Text", Model.Vehicle), "--Select Vehicle--", new { id = "ddlVehicle", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Vehicle, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Vendor (Dealer)", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(m => m.Vendors, new SelectList(Model.ListOfVendors, "Value", "Text", Model.Vendors), "--Select Vendors--", new { id = "ddlVendor", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Vendors, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Responsibility Centre", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(model => model.RespC, Model.ListOfResponsibility, "--select Reponsibility Centre--", new { @class = "form-control", id = "ddlRespC" })
+                @Html.ValidationMessageFor(model => model.RespC, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Odometer Reading::", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.TextBoxFor(m => m.Odometer_Reading, new { @class = "form-control", @readonly = "readonly", id = "txtOdometer", style = "background-color:#dedebd" })
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Remarks", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.TextAreaFor(m => m.MaintenanceDescription, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtDescription" })
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Remarks", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.TextAreaFor(m => m.Description, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtRemarks" })
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Maintenance Cost", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.TextBoxFor(m => m.Price_per_Litre, new { @class = "form-control", id = "txtCost", placeholder = "0.0" })
+                @Html.ValidationMessageFor(model => model.Price_per_Litre, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr/>
+
+<b>Other Costs</b>
+<hr style="border:1px solid black"/>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Coolant", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.TextBoxFor(m => m.Coolant, new { @class = "form-control", id = "txtCoolant", placeholder = "0.0" })
+                @Html.ValidationMessageFor(model => model.Coolant, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Battery Water", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.TextBoxFor(m => m.BatteryWater, new { @class = "form-control", id = "txtBatteryWater", placeholder = "0.0" })
+                @Html.ValidationMessageFor(model => model.BatteryWater, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Wheel Alignment", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.TextBoxFor(m => m.WheelAlignment, new { @class = "form-control", id = "txtWheelAlignment", placeholder = "0.0" })
+                @Html.ValidationMessageFor(model => model.WheelAlignment, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Wheel Balancing", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.TextBoxFor(m => m.WheelBalancing, new { @class = "form-control", id = "txtWheelBalancing", placeholder = "0.0" })
+                @Html.ValidationMessageFor(model => model.WheelBalancing, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#dtFrom,#dtTo').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-0:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy',
+            minDate: 0
+        });
+        $("#dtFrom,#dtTo").focus(function () {
+            $("#ui-datepicker-div").position({
+                my: "left top",
+                at: "left bottom",
+                of: $(this)
+            });
+        });
+        $("#ddlDim2,#ddlDim1,#ddlDriver,#ddlRespC,#ddlVendor,#ddlVehicle").select2({
+            width: '100%'
+        });
+        document.getElementById("ddlDim2").disabled = true;
+        document.getElementById("ddlDim1").disabled = true;
+
+    });
+</script>
